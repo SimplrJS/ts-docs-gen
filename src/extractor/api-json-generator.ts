@@ -1,6 +1,5 @@
 import { ApiJsonGenerator as Generator, Extractor } from "@microsoft/api-extractor";
-
-export type ExtractedApiJson = {};
+import { ExtractedApiJson } from "./api-json-contracts";
 
 export class ApiJsonGenerator extends Generator {
     public GetFileContents(extractor: Extractor): ExtractedApiJson {
@@ -8,6 +7,6 @@ export class ApiJsonGenerator extends Generator {
 
         // TODO: Add JSON validation scheme.
 
-        return this.jsonOutput;
+        return this.jsonOutput as ExtractedApiJson;
     }
 }

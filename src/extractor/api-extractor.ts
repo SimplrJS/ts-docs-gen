@@ -1,6 +1,7 @@
 import * as ts from "typescript";
 import { Extractor, ApiErrorHandler } from "@microsoft/api-extractor";
-import { ApiJsonGenerator, ExtractedApiJson } from "./api-json-generator";
+import { ApiJsonGenerator } from "./api-json-generator";
+import { ApiJson } from "./api-json-contracts";
 
 export class APIExtractor {
     private extractor: Extractor;
@@ -34,7 +35,7 @@ export class APIExtractor {
     /**
      * Generates JSON.
      */
-    public GetJSON(): ExtractedApiJson {
+    public GetJSON(): ApiJson {
         const apiJsonGenerator = new ApiJsonGenerator();
         return apiJsonGenerator.GetFileContents(this.extractor);
     }

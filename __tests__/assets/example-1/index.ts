@@ -11,6 +11,7 @@ export interface Foo {
  */
 export interface Bar extends Foo {
     Email: string;
+    GetCode(id: number): string;
 }
 
 /**
@@ -19,11 +20,62 @@ export interface Bar extends Foo {
 export class FooBar {
     private bar: Bar;
 
+    public readonly Foo: string = "Hello";
+
     public GetSomething(): string {
         return "Something";
     }
 
+    /**
+     * Summary of SetBar method.
+     */
     public SetBar(bar: Bar): void {
         this.bar = bar;
     }
+}
+
+/**
+ * @public
+ */
+export enum Test {
+    None = 0,
+    Warning = 8,
+    Error = 100
+}
+
+/**
+ * @public
+ */
+export enum EventType {
+    Live = "live",
+    Test = "test"
+}
+
+/**
+ * Sum function.
+ * @public
+ */
+export function Sum(a: number, b: number): number {
+    return a + b;
+}
+
+/**
+ * Package version.
+ * @public
+ */
+export const version = 2.11;
+
+/**
+ * @public
+ */
+export namespace CoolStuff {
+    /**
+     * Yet another sum function.
+     * @public
+     */
+    export function YetAnotherSumFunc(x: number, y: number): number {
+        return x + y;
+    }
+
+    export const a: string = "aa";
 }
