@@ -1,11 +1,11 @@
 import * as ts from "typescript";
-import { Extractor } from "@microsoft/api-extractor";
+import { Extractor, ApiErrorHandler } from "@microsoft/api-extractor";
 import { ApiJsonGenerator, ExtractedApiJson } from "./api-json-generator";
 
 export class APIExtractor {
     private extractor: Extractor;
 
-    constructor(private compilerOptions: ts.CompilerOptions) {
+    constructor(private compilerOptions: ts.CompilerOptions, apiErrorHandler?: ApiErrorHandler) {
         /**
          * We need to ignore @types in these tests
          * @see https://github.com/Microsoft/web-build-tools/wiki/API-Extractor-~-Enabling-for-your-project
@@ -13,7 +13,8 @@ export class APIExtractor {
         this.compilerOptions.typeRoots = ["./"];
 
         this.extractor = new Extractor({
-            compilerOptions: this.compilerOptions
+            compilerOptions: this.compilerOptions,
+            errorHandler: apiErrorHandler
         });
     }
 
@@ -30,7 +31,10 @@ export class APIExtractor {
         });
     }
 
-    public JSONGenerator(): ExtractedApiJson {
+    /**
+     * Generates JSON.
+     */
+    public GetJSON(): ExtractedApiJson {
         const apiJsonGenerator = new ApiJsonGenerator();
         return apiJsonGenerator.GetFileContents(this.extractor);
     }

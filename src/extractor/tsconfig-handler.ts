@@ -2,12 +2,12 @@ import * as fs from "mz/fs";
 import * as path from "path";
 import * as ts from "typescript";
 
-import { ParseConfigHost } from "./parse-config-host";
+// TODO: Fool proof.
+export async function GetCompilerOptions(fileLocation: string): Promise<ts.CompilerOptions> {
+    const rawContent = await fs.readFile(fileLocation, "utf-8");
+    const json = JSON.parse(rawContent);
 
-export async function ReadTsconfig(fileLocation: string): Promise<ts.ParsedCommandLine> {
-    const rawContent = fs.readFile(fileLocation, "utf-8");
-    const parseConfigHost = new ParseConfigHost();
-    const configContent = ts.parseJsonConfigFileContent(rawContent, parseConfigHost, path.dirname(fileLocation));
+    const compilerOptions = ts.convertCompilerOptionsFromJson(json.compilerOptions, path.dirname(fileLocation));
 
-    return configContent;
+    return compilerOptions.options;
 }

@@ -3,27 +3,30 @@
         "module": "commonjs",
         "target": "es5",
         "removeComments": false,
-        "outDir": "dist",
-        "rootDir": "src",
-        "sourceMap": false,
+        "noEmit": true,
+        "rootDir": "./",
+        "jsx": "react",
+        "sourceMap": true,
         "skipDefaultLibCheck": true,
         "declaration": true,
         "pretty": true,
         "strict": true,
-        "forceConsistentCasingInFileNames": true,
+        "noEmitHelpers": true,
+        "importHelpers": true,
         "lib": [
-            "es5",
-            "es2015.promise",
-            "dom"
+            "dom",
+            "dom.iterable",
+            "es6"
         ],
         "typeRoots": [
-            "./node_modules/@types"
+            "../../../node_modules/@types"
         ]
     },
     "exclude": [
         "node_modules",
         "dist",
         "@types",
-        "__tests__"
+        "__tests__",
+        "tools"
     ]
 }
