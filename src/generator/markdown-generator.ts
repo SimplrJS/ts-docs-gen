@@ -4,12 +4,14 @@ import {
     ApiJson,
     Members,
     MemberList,
-    MemberInterface
+    MemberInterface,
+    MemberEnum
 } from "../extractor/api-json-contracts";
 
 import { HelpersGenerator } from "./helpers-generator";
 
 import { InterfaceGenerator } from "./interface-generator";
+import { EnumGenerator } from "./enum-generator";
 
 type MembersDict = {
     [key in keyof MemberList]: { [key: string]: MemberList[key] };
@@ -47,6 +49,7 @@ export class MarkdownGenerator {
         }
 
         this.markdown = this.markdown.concat(this.renderInterfaces(dict.interface));
+        this.markdown = this.markdown.concat(this.renderEnums(dict.enum));
     }
 
     private renderPackage(pckg: ApiJson): void {
@@ -67,6 +70,10 @@ export class MarkdownGenerator {
     }
 
     private renderInterfaces(interfaces: { [key: string]: MemberInterface }): json2md.DataObject[] {
+        if (Object.keys(interfaces).length === 0) {
+            return [];
+        }
+
         let md: json2md.DataObject[] = [
             {
                 h2: "Interfaces"
@@ -77,6 +84,27 @@ export class MarkdownGenerator {
             if (interfaces.hasOwnProperty(interfaceKey)) {
                 const memberInterface = interfaces[interfaceKey];
                 md = md.concat(InterfaceGenerator.RenderInterface(interfaceKey, memberInterface));
+            }
+        }
+
+        return md;
+    }
+
+    private renderEnums(enums: { [key: string]: MemberEnum }): json2md.DataObject[] {
+        if (Object.keys(enums).length === 0) {
+            return [];
+        }
+
+        let md: json2md.DataObject[] = [
+            {
+                h2: "Enums"
+            }
+        ];
+
+        for (const enumKey in enums) {
+            if (enums.hasOwnProperty(enumKey)) {
+                const memberEnum = enums[enumKey];
+                md = md.concat(EnumGenerator.RenderEnum(enumKey, memberEnum));
             }
         }
 

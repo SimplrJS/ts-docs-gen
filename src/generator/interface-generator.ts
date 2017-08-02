@@ -1,11 +1,7 @@
 import * as json2md from "json2md";
 import { MemberInterface, InterfaceMembers } from "../extractor/api-json-contracts";
 import { HelpersGenerator } from "./helpers-generator";
-
-interface Table extends json2md.DefaultConverters.TableInput {
-    headers: string[];
-    rows: string[][];
-}
+import { Table } from "./generator-contracts";
 
 export namespace InterfaceGenerator {
     export function RenderInterface(name: string, memberInterface: MemberInterface): json2md.DataObject[] {
