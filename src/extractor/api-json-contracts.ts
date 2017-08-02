@@ -25,14 +25,24 @@ export interface ItemValue {
     value: string;
 }
 
+export interface MemberList {
+    "interface": MemberInterface;
+    "property": MemberProperty;
+    "namespace": MemberNamespace;
+    "enum": MemberEnum;
+    "class": MemberClass;
+    "function": MemberFunction;
+}
+
 export type Members = MemberInterface | MemberProperty | MemberNamespace | MemberEnum | MemberClass | MemberFunction;
+export type InterfaceMembers = MemberProperty | MemberMethod;
 
 export interface MemberInterface extends DefaultInfo {
     kind: "interface";
     extends: string;
     implements: string;
     typeParameters: any[];
-    members: { [member: string]: MemberProperty | MemberMethod };
+    members: { [member: string]: InterfaceMembers };
 }
 
 export interface MemberProperty extends DefaultInfo {

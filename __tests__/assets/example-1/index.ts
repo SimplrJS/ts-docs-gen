@@ -11,6 +11,10 @@ export interface Foo {
  */
 export interface Bar extends Foo {
     Email: string;
+    /**
+     * Get Bar model code by id.
+     * Another line of summary.
+     */
     GetCode(id: number): string;
 }
 
