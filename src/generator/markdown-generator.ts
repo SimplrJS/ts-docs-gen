@@ -7,7 +7,8 @@ import {
     MemberInterface,
     MemberEnum,
     MemberProperty,
-    MemberFunction
+    MemberFunction,
+    MemberClass
 } from "../extractor/api-json-contracts";
 
 import { HelpersGenerator } from "./helpers-generator";
@@ -16,6 +17,7 @@ import { InterfaceGenerator } from "./interface-generator";
 import { EnumGenerator } from "./enum-generator";
 import { PropertyGenerator } from "./property-generator";
 import { FunctionGenerator } from "./function-generator";
+import { ClassGenerator } from "./class-generator";
 
 type MembersDict = {
     [key in keyof MemberList]: { [key: string]: MemberList[key] };
@@ -55,6 +57,7 @@ export class MarkdownGenerator {
         this.markdown = this.markdown.concat(this.renderInterfaces(dict.interface));
         this.markdown = this.markdown.concat(this.renderEnums(dict.enum));
         this.markdown = this.markdown.concat(this.renderFunctions(dict.function));
+        this.markdown = this.markdown.concat(this.renderClass(dict.class));
     }
 
     private renderPackage(pckg: ApiJson): void {
@@ -131,6 +134,28 @@ export class MarkdownGenerator {
             if (functions.hasOwnProperty(functionKey)) {
                 const memberFunction = functions[functionKey];
                 md = md.concat(FunctionGenerator.RenderFunction(functionKey, memberFunction));
+            }
+        }
+
+        return md;
+    }
+
+    private renderClass(classes: { [key: string]: MemberClass }): json2md.DataObject[] {
+        const names = Object.keys(classes);
+        if (names.length === 0) {
+            return [];
+        }
+
+        let md: json2md.DataObject[] = [
+            {
+                h2: "Classes"
+            }
+        ];
+
+        for (const className in classes) {
+            if (classes.hasOwnProperty(className)) {
+                const memberClass = classes[className];
+                md = md.concat(ClassGenerator.RenderClass(className, memberClass));
             }
         }
 

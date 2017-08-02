@@ -24,7 +24,10 @@ export interface Bar extends Foo {
 export class FooBar {
     private bar: Bar;
 
-    public readonly Foo: string = "Hello";
+    /**
+     * Hello Foo summary
+     */
+    public Foo: string = "Hello";
 
     public GetSomething(): string {
         return "Something";

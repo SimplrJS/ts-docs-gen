@@ -6,7 +6,7 @@ export namespace PropertyGenerator {
     export function RenderProperty(name: string, memberProperty: MemberProperty): json2md.DataObject[] {
         const md: json2md.DataObject[] = [
             {
-                h3: name
+                h5: name
             }
         ];
 
@@ -24,10 +24,14 @@ export namespace PropertyGenerator {
             });
         }
 
+        const staticProperty = (memberProperty.isStatic ? "static " : "");
+        const readOnly = (memberProperty.isReadOnly ? "readonly " : "");
+        const optional = (memberProperty.isOptional ? "?" : "");
+
         md.push({
             code: {
                 language: "ts",
-                content: ""
+                content: `${staticProperty}${readOnly}${name}${optional}: ${memberProperty.type};`
             }
         });
 

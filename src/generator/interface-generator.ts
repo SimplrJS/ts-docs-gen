@@ -64,7 +64,7 @@ export namespace InterfaceGenerator {
                         row = [
                             memberName,
                             // TODO: Return type description
-                            (member.returnType != null ? member.returnType.type : "void"),
+                            (member.returnValue != null ? member.returnValue.type : "void"),
                             member.summary.map(x => x.value).join(".")
                         ];
                         break;

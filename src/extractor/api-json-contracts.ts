@@ -74,11 +74,8 @@ export interface MemberMethod extends DefaultInfo {
     accessModifier: string;
     isOptional: boolean;
     isStatic: boolean;
-    returnType: ReturnValue;
-    parameters: {
-        type: string;
-        description: any[];
-    };
+    returnValue: ReturnValue;
+    parameters: { [key: string]: Param };
 }
 
 export interface MemberNamespace extends DefaultInfo {

@@ -8,16 +8,16 @@ import {
     MemberMethod
 } from "../extractor/api-json-contracts";
 import { HelpersGenerator } from "./helpers-generator";
+import { PropertyGenerator } from "./property-generator";
+import { MethodGenerator } from "./method-generator";
 
 export namespace ClassGenerator {
-    export function renderClass(name: string, memberClass: MemberClass): json2md.DataObject[] {
+    export function RenderClass(name: string, memberClass: MemberClass): json2md.DataObject[] {
         let md: json2md.DataObject[] = [
             {
                 h3: name
             }
         ];
-
-        // TODO: IsBeta
 
         // Summary
         if (memberClass.summary.length !== 0) {
@@ -58,6 +58,59 @@ export namespace ClassGenerator {
                 }
             }
         }
+
+        md = md.concat(renderProperties(properties));
+        md = md.concat(renderMethods(methods));
+
+        return md;
+    }
+
+    function renderProperties(properties: { [name: string]: MemberProperty }): json2md.DataObject[] {
+        let md: json2md.DataObject[] = [
+            {
+                h4: "Properties"
+            }
+        ];
+
+        let list: json2md.DataObject[] = [];
+
+        for (const propertyName in properties) {
+            if (properties.hasOwnProperty(propertyName)) {
+                const memberProperty = properties[propertyName];
+                list = list.concat(PropertyGenerator.RenderProperty(propertyName, memberProperty));
+            }
+        }
+
+        if (list.length === 0) {
+            return [];
+        }
+
+        md = md.concat(list);
+
+        return md;
+    }
+
+    function renderMethods(methods: { [name: string]: MemberMethod }): json2md.DataObject[] {
+        let md: json2md.DataObject[] = [
+            {
+                h4: "Methods"
+            }
+        ];
+
+        let list: json2md.DataObject[] = [];
+
+        for (const methodName in methods) {
+            if (methods.hasOwnProperty(methodName)) {
+                const memberMethod = methods[methodName];
+                list = list.concat(MethodGenerator.RenderMethod(methodName, memberMethod));
+            }
+        }
+
+        if (list.length === 0) {
+            return [];
+        }
+
+        md = md.concat(list);
 
         return md;
     }

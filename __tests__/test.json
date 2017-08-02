@@ -34,7 +34,13 @@
                         "type": "string",
                         "description": []
                     },
-                    "parameters": {},
+                    "parameters": {
+                        "id": {
+                            "isOptional": false,
+                            "isSpread": false,
+                            "type": "number"
+                        }
+                    },
                     "deprecatedMessage": [],
                     "summary": [
                         {
@@ -141,7 +147,12 @@
                     "isStatic": false,
                     "type": "string",
                     "deprecatedMessage": [],
-                    "summary": [],
+                    "summary": [
+                        {
+                            "kind": "textDocElement",
+                            "value": "Hello Foo summary"
+                        }
+                    ],
                     "remarks": [],
                     "isBeta": false
                 },
@@ -171,7 +182,13 @@
                         "type": "void",
                         "description": []
                     },
-                    "parameters": {},
+                    "parameters": {
+                        "bar": {
+                            "isOptional": false,
+                            "isSpread": false,
+                            "type": "Bar"
+                        }
+                    },
                     "deprecatedMessage": [],
                     "summary": [
                         {
@@ -197,11 +214,25 @@
             },
             "parameters": {
                 "a": {
+                    "name": "a",
+                    "description": [
+                        {
+                            "kind": "textDocElement",
+                            "value": "First number"
+                        }
+                    ],
                     "isOptional": false,
                     "isSpread": false,
                     "type": "number"
                 },
                 "b": {
+                    "name": "b",
+                    "description": [
+                        {
+                            "kind": "textDocElement",
+                            "value": "Second number"
+                        }
+                    ],
                     "isOptional": false,
                     "isSpread": false,
                     "type": "number"

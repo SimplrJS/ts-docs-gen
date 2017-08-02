@@ -7,7 +7,7 @@ __Extends__ `Foo`
 Name | Type | Summary
 --- | --- | ---
 Email `*` | string | 
-GetCode `*` | void | Get Bar model code by id. Another line of summary.
+GetCode `*` | string | Get Bar model code by id. Another line of summary.
 ### Foo
 Name | Type | Summary
 --- | --- | ---
@@ -40,3 +40,36 @@ function Sum(a: number, b: number): number
 #### Returns
 
 `number` Return summary.
+
+## Classes
+### FooBar
+#### Properties
+##### Foo
+
+Hello Foo summary
+
+```ts
+Foo: string;
+```
+#### Methods
+##### GetSomething
+```ts
+GetSomething(): string
+```
+###### Returns
+
+`string` 
+
+##### SetBar
+
+Summary of SetBar method.
+
+```ts
+SetBar(bar: Bar): void
+```
+###### Parameters
+
+ - bar: `Bar`
+###### Returns
+
+`void` 

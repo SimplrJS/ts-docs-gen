@@ -27,4 +27,8 @@ export namespace HelpersGenerator {
         }
         return `\`${text}\``;
     }
+
+    export function BreakLine(): string {
+        return "--------------------------------";
+    }
 }

@@ -6,6 +6,9 @@ import ApiJsonFile from "@microsoft/api-extractor/lib/generators/ApiJsonFile";
 import { IReturn, IParam } from "@microsoft/api-extractor/lib/IDocElement";
 
 import { ApiJson } from "./api-json-contracts";
+import { ApiItemKind } from "@microsoft/api-extractor/lib/definitions/ApiItem";
+import ApiMethod from "@microsoft/api-extractor/lib/definitions/ApiMethod";
+import { AccessModifier } from "@microsoft/api-extractor/lib/definitions/ApiMember";
 
 export class ApiJsonGenerator extends Generator {
     public GetFileContents(extractor: Extractor): ApiJson {
@@ -21,13 +24,13 @@ export class ApiJsonGenerator extends Generator {
             return;
         }
 
-        const parameters: { [key: string]: IParam } = {};
-
         for (const param of apiFunction.params) {
             // FIXME: any
-            parameters[param.name] = {} as any;
+            if (apiFunction.documentation.parameters[param.name] == null) {
+                apiFunction.documentation.parameters[param.name] = {} as any;
+            }
 
-            this.visitApiParam(param, parameters[param.name]);
+            this.visitApiParam(param, apiFunction.documentation.parameters[param.name]);
         }
         const returnValueNode: IReturn = {
             type: apiFunction.returnType,
@@ -37,7 +40,7 @@ export class ApiJsonGenerator extends Generator {
         const newNode: Object = {
             kind: ApiJsonFile.convertKindToJson(apiFunction.kind),
             returnValue: returnValueNode,
-            parameters: parameters,
+            parameters: apiFunction.documentation.parameters,
             deprecatedMessage: apiFunction.documentation.deprecatedMessage || [],
             summary: apiFunction.documentation.summary || [],
             remarks: apiFunction.documentation.remarks || [],
@@ -46,6 +49,55 @@ export class ApiJsonGenerator extends Generator {
 
         if (refObject != null) {
             refObject[apiFunction.name] = newNode;
+        }
+    }
+
+    protected visitApiMethod(apiMethod: ApiMethod, refObject?: { [key: string]: any }): void {
+        if (!apiMethod.supportedName) {
+            return;
+        }
+
+        for (const param of apiMethod.params) {
+            if (apiMethod.documentation.parameters[param.name] == null) {
+                apiMethod.documentation.parameters[param.name] = {} as any;
+            }
+
+            this.visitApiParam(param, apiMethod.documentation.parameters[param.name]);
+        }
+
+        let newNode: Object;
+        if (apiMethod.name === "__constructor") {
+            newNode = {
+                kind: ApiJsonFile.convertKindToJson(ApiItemKind.Constructor),
+                signature: apiMethod.getDeclarationLine(),
+                parameters: apiMethod.documentation.parameters || {},
+                deprecatedMessage: apiMethod.documentation.deprecatedMessage || [],
+                summary: apiMethod.documentation.summary || [],
+                remarks: apiMethod.documentation.remarks || []
+            };
+        } else {
+            const returnValueNode: IReturn = {
+                type: apiMethod.returnType,
+                description: apiMethod.documentation.returnsMessage
+            };
+
+            newNode = {
+                kind: ApiJsonFile.convertKindToJson(apiMethod.kind),
+                signature: apiMethod.getDeclarationLine(),
+                accessModifier: apiMethod.accessModifier ? AccessModifier[apiMethod.accessModifier].toLowerCase() : "",
+                isOptional: !!apiMethod.isOptional,
+                isStatic: !!apiMethod.isStatic,
+                returnValue: returnValueNode,
+                parameters: apiMethod.documentation.parameters,
+                deprecatedMessage: apiMethod.documentation.deprecatedMessage || [],
+                summary: apiMethod.documentation.summary || [],
+                remarks: apiMethod.documentation.remarks || [],
+                isBeta: apiMethod.documentation.releaseTag === ReleaseTag.Beta
+            };
+        }
+
+        if (refObject != null) {
+            refObject[apiMethod.name] = newNode;
         }
     }
 }
