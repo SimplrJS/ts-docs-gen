@@ -27,7 +27,6 @@ export class ApiJsonGenerator extends Generator {
         }
 
         for (const param of apiFunction.params) {
-            // FIXME: any
             if (apiFunction.documentation.parameters[param.name] == null) {
                 apiFunction.documentation.parameters[param.name] = {} as any;
             }
