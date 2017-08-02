@@ -28,7 +28,8 @@ export namespace MethodGenerator {
         md.push({
             code: {
                 language: "ts",
-                content: renderMethodCode(name, memberMethod, memberMethod.returnValue)
+                content: memberMethod.declarationLine
+                //content: renderMethodCode(name, memberMethod, memberMethod.returnValue)
             }
         });
 
@@ -47,26 +48,6 @@ export namespace MethodGenerator {
         ]);
 
         return md;
-    }
-
-    function renderMethodCode(name: string, memberMethod: MemberMethod, returnValue?: ReturnValue): string {
-        const params: string[] = [];
-        let returnValueString: string = "";
-
-        if (returnValue != null) {
-            returnValueString += `: ${returnValue.type}`;
-        }
-
-        for (const parameterName in memberMethod.parameters) {
-            if (memberMethod.parameters.hasOwnProperty(parameterName)) {
-                const parameter = memberMethod.parameters[parameterName];
-                const optional = (parameter.isOptional ? "?" : "");
-                params.push(`${parameterName}${optional}: ${parameter.type}`);
-            }
-        }
-
-        const staticString = (memberMethod.isStatic ? "static " : "");
-        return `${staticString}${name}(${params.join(", ")})${returnValueString}`;
     }
 
     function renderMethodParameters(parameters: { [key: string]: Param }): json2md.DataObject[] {

@@ -53,6 +53,7 @@ export interface MemberInterface extends DefaultInfo {
 
 export interface MemberProperty extends DefaultInfo {
     kind: "property";
+    declarationLine: string;
     /**
      * Examples: "string", "void"
      */
@@ -64,6 +65,7 @@ export interface MemberProperty extends DefaultInfo {
 
 export interface MemberMethod extends DefaultInfo {
     kind: "method";
+    declarationLine: string;
     /**
      * Example: 'public Method(arg: string): void;'
      */
@@ -104,6 +106,7 @@ export interface MemberClass extends DefaultInfo {
 
 export interface MemberFunction extends DefaultInfo {
     kind: "function";
+    declarationLine: string;
     returnValue: ReturnValue;
     parameters: { [name: string]: Param };
 }

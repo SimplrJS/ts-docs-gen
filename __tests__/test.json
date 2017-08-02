@@ -15,6 +15,7 @@
             "members": {
                 "Email": {
                     "kind": "property",
+                    "declarationLine": "Email: string;",
                     "isOptional": false,
                     "isReadOnly": false,
                     "isStatic": false,
@@ -25,6 +26,7 @@
                     "isBeta": false
                 },
                 "GetCode": {
+                    "declarationLine": "GetCode ?(id: number): string;",
                     "kind": "method",
                     "signature": "GetCode ?(id: number): string;",
                     "accessModifier": "",
@@ -96,6 +98,30 @@
             "remarks": [],
             "isBeta": false
         },
+        "FancyFooBar": {
+            "kind": "class",
+            "extends": "FooBar",
+            "implements": "",
+            "typeParameters": [],
+            "deprecatedMessage": [],
+            "summary": [],
+            "remarks": [],
+            "isBeta": false,
+            "members": {
+                "Bar": {
+                    "kind": "property",
+                    "declarationLine": "public readonly Bar: Bar;",
+                    "isOptional": false,
+                    "isReadOnly": true,
+                    "isStatic": false,
+                    "type": "Bar",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                }
+            }
+        },
         "Foo": {
             "kind": "interface",
             "extends": "",
@@ -108,6 +134,7 @@
             "members": {
                 "Name": {
                     "kind": "property",
+                    "declarationLine": "Name: string;",
                     "isOptional": false,
                     "isReadOnly": false,
                     "isStatic": false,
@@ -119,6 +146,7 @@
                 },
                 "Surname": {
                     "kind": "property",
+                    "declarationLine": "Surname: string;",
                     "isOptional": false,
                     "isReadOnly": false,
                     "isStatic": false,
@@ -142,6 +170,7 @@
             "members": {
                 "Foo": {
                     "kind": "property",
+                    "declarationLine": "public Foo: string;",
                     "isOptional": false,
                     "isReadOnly": false,
                     "isStatic": false,
@@ -157,6 +186,7 @@
                     "isBeta": false
                 },
                 "GetSomething": {
+                    "declarationLine": "public GetSomething(): string;",
                     "kind": "method",
                     "signature": "public GetSomething(): string;",
                     "accessModifier": "public",
@@ -172,7 +202,20 @@
                     "remarks": [],
                     "isBeta": false
                 },
+                "LocalBar": {
+                    "kind": "property",
+                    "declarationLine": "protected LocalBar: Bar;",
+                    "isOptional": false,
+                    "isReadOnly": false,
+                    "isStatic": false,
+                    "type": "Bar",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                },
                 "SetBar": {
+                    "declarationLine": "public SetBar(bar: Bar): void;",
                     "kind": "method",
                     "signature": "public SetBar(bar: Bar): void;",
                     "accessModifier": "public",
@@ -203,6 +246,7 @@
         },
         "Sum": {
             "kind": "function",
+            "declarationLine": "export function Sum(a: number, b: number): number;",
             "returnValue": {
                 "type": "number",
                 "description": [

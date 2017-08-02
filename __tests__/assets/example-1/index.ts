@@ -22,7 +22,7 @@ export interface Bar extends Foo {
  * @public
  */
 export class FooBar {
-    private bar: Bar;
+    protected LocalBar: Bar;
 
     /**
      * Hello Foo summary
@@ -37,7 +37,16 @@ export class FooBar {
      * Summary of SetBar method.
      */
     public SetBar(bar: Bar): void {
-        this.bar = bar;
+        this.LocalBar = bar;
+    }
+}
+
+/**
+ * @public
+ */
+export class FancyFooBar extends FooBar {
+    public get Bar(): Bar {
+        return this.LocalBar;
     }
 }
 

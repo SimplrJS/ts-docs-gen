@@ -24,14 +24,10 @@ export namespace PropertyGenerator {
             });
         }
 
-        const staticProperty = (memberProperty.isStatic ? "static " : "");
-        const readOnly = (memberProperty.isReadOnly ? "readonly " : "");
-        const optional = (memberProperty.isOptional ? "?" : "");
-
         md.push({
             code: {
                 language: "ts",
-                content: `${staticProperty}${readOnly}${name}${optional}: ${memberProperty.type};`
+                content: memberProperty.declarationLine
             }
         });
 

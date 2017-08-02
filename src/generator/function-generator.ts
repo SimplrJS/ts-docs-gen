@@ -28,7 +28,7 @@ export namespace FunctionGenerator {
         md.push({
             code: {
                 language: "ts",
-                content: renderFunctionCode(name, memberFunction.parameters, memberFunction.returnValue)
+                content: memberFunction.declarationLine.replace("export ", "")
             }
         });
 
@@ -49,24 +49,7 @@ export namespace FunctionGenerator {
         return md;
     }
 
-    function renderFunctionCode(name: string, parameters: { [key: string]: Param }, returnValue?: ReturnValue): string {
-        const params: string[] = [];
-        let returnValueString: string = "";
 
-        if (returnValue != null) {
-            returnValueString += `: ${returnValue.type}`;
-        }
-
-        for (const parameterName in parameters) {
-            if (parameters.hasOwnProperty(parameterName)) {
-                const parameter = parameters[parameterName];
-                const optional = (parameter.isOptional ? "?" : "");
-                params.push(`${parameterName}${optional}: ${parameter.type}`);
-            }
-        }
-
-        return `function ${name}(${params.join(", ")})${returnValueString}`;
-    }
 
     function renderFunctionParameters(parameters: { [key: string]: Param }): json2md.DataObject[] {
         const md: json2md.DataObject[] = [

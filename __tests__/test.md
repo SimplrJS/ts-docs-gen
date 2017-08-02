@@ -31,7 +31,7 @@ Error | 100 |
 Sum summary
 
 ```ts
-function Sum(a: number, b: number): number
+function Sum(a: number, b: number): number;
 ```
 #### Parameters
 
@@ -42,6 +42,15 @@ function Sum(a: number, b: number): number
 `number` Return summary.
 
 ## Classes
+### FancyFooBar
+
+__Extends__ `FooBar`
+
+#### Properties
+##### Bar
+```ts
+public readonly Bar: Bar;
+```
 ### FooBar
 #### Properties
 ##### Foo
@@ -49,12 +58,16 @@ function Sum(a: number, b: number): number
 Hello Foo summary
 
 ```ts
-Foo: string;
+public Foo: string;
+```
+##### LocalBar
+```ts
+protected LocalBar: Bar;
 ```
 #### Methods
 ##### GetSomething
 ```ts
-GetSomething(): string
+public GetSomething(): string;
 ```
 ###### Returns
 
@@ -65,7 +78,7 @@ GetSomething(): string
 Summary of SetBar method.
 
 ```ts
-SetBar(bar: Bar): void
+public SetBar(bar: Bar): void;
 ```
 ###### Parameters
 
