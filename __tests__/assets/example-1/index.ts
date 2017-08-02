@@ -15,7 +15,7 @@ export interface Bar extends Foo {
      * Get Bar model code by id.
      * Another line of summary.
      */
-    GetCode(id: number): string;
+    GetCode?(id: number): string;
 }
 
 /**

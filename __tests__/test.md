@@ -6,13 +6,13 @@ __Extends__ `Foo`
 
 Name | Type | Summary
 --- | --- | ---
-Email `*` | string | 
-GetCode `*` | string | Get Bar model code by id. Another line of summary.
+Email* | string | 
+GetCode?(id: `number`)  | string | Get Bar model code by id. Another line of summary.
 ### Foo
 Name | Type | Summary
 --- | --- | ---
-Name `*` | string | 
-Surname `*` | string | 
+Name* | string | 
+Surname* | string | 
 ## Enums
 ### EventType
 Name | Value | Summary

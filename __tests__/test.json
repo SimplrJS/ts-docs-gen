@@ -26,9 +26,9 @@
                 },
                 "GetCode": {
                     "kind": "method",
-                    "signature": "GetCode(id: number): string;",
+                    "signature": "GetCode ?(id: number): string;",
                     "accessModifier": "",
-                    "isOptional": false,
+                    "isOptional": true,
                     "isStatic": false,
                     "returnValue": {
                         "type": "string",

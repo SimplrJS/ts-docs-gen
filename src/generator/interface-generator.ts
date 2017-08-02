@@ -1,5 +1,5 @@
 import * as json2md from "json2md";
-import { MemberInterface, InterfaceMembers } from "../extractor/api-json-contracts";
+import { MemberInterface, InterfaceMembers, MemberMethod } from "../extractor/api-json-contracts";
 import { HelpersGenerator } from "./helpers-generator";
 import { Table } from "./generator-contracts";
 
@@ -49,20 +49,17 @@ export namespace InterfaceGenerator {
             rows: []
         };
 
-        for (const memberKey in members) {
-            if (members.hasOwnProperty(memberKey)) {
-                const member = members[memberKey];
+        for (const memberName in members) {
+            if (members.hasOwnProperty(memberName)) {
+                const member = members[memberName];
                 let row: string[] = [];
-                let memberName = memberKey;
-                if (!member.isOptional) {
-                    memberName += " " + HelpersGenerator.InlineCode("*");
-                }
+                const optional = (member.isOptional ? "" : "*");
 
                 // TODO: Add remarks
                 switch (member.kind) {
                     case "method":
                         row = [
-                            memberName,
+                            `${renderMethodString(memberName, member)}${optional}`,
                             // TODO: Return type description
                             (member.returnValue != null ? member.returnValue.type : "void"),
                             member.summary.map(x => x.value).join(".")
@@ -70,7 +67,7 @@ export namespace InterfaceGenerator {
                         break;
                     case "property":
                         row = [
-                            memberName,
+                            `${memberName}${optional}`,
                             member.type,
                             member.summary.map(x => x.value).join(".")
                         ];
@@ -82,5 +79,27 @@ export namespace InterfaceGenerator {
         }
 
         return table;
+    }
+
+    function renderMethodString(name: string, method: MemberMethod): string {
+        const parametersList: string[] = [];
+        const optionalName = (method.isOptional ? "?" : "");
+
+        for (const parameterName in method.parameters) {
+            if (method.parameters.hasOwnProperty(parameterName)) {
+                const parameter = method.parameters[parameterName];
+                const optional = (parameter.isOptional ? "?" : "");
+                const line: string = `${parameterName}${optional}: ${HelpersGenerator.InlineCode(parameter.type)}`;
+
+                // FIXME: When there is description on this param.
+                // if (parameter.description != null) {
+                //     // line += ` - ${parameter.description.map(x => x.}` 
+                // }
+
+                parametersList.push(line);
+            }
+        }
+
+        return `${name}${optionalName}(${parametersList.join(", ")}) `;
     }
 }
