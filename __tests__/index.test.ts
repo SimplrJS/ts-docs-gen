@@ -17,6 +17,8 @@ it("Generate JSON", async done => {
 
         expect(json).toBeDefined();
         expect(stubCallback.called).toBe(false);
+
+        await fs.writeFile(path.join(__dirname, "./test.json"), JSON.stringify(json, undefined, 4), "utf8");
     } catch (error) {
         done.fail(error);
         return;

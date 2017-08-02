@@ -5,13 +5,17 @@ import {
     Members,
     MemberList,
     MemberInterface,
-    MemberEnum
+    MemberEnum,
+    MemberProperty,
+    MemberFunction
 } from "../extractor/api-json-contracts";
 
 import { HelpersGenerator } from "./helpers-generator";
 
 import { InterfaceGenerator } from "./interface-generator";
 import { EnumGenerator } from "./enum-generator";
+import { PropertyGenerator } from "./property-generator";
+import { FunctionGenerator } from "./function-generator";
 
 type MembersDict = {
     [key in keyof MemberList]: { [key: string]: MemberList[key] };
@@ -32,12 +36,12 @@ export class MarkdownGenerator {
 
     private renderMembers(members: { [key: string]: Members }): void {
         const dict: MembersDict = {
-            class: {},
             enum: {},
-            function: {},
             interface: {},
-            namespace: {},
-            property: {}
+            function: {},
+            property: {},
+            class: {},
+            namespace: {}
         };
 
         // Filter
@@ -50,6 +54,7 @@ export class MarkdownGenerator {
 
         this.markdown = this.markdown.concat(this.renderInterfaces(dict.interface));
         this.markdown = this.markdown.concat(this.renderEnums(dict.enum));
+        this.markdown = this.markdown.concat(this.renderFunctions(dict.function));
     }
 
     private renderPackage(pckg: ApiJson): void {
@@ -110,4 +115,46 @@ export class MarkdownGenerator {
 
         return md;
     }
+
+    private renderFunctions(functions: { [key: string]: MemberFunction }): json2md.DataObject[] {
+        if (Object.keys(functions).length === 0) {
+            return [];
+        }
+
+        let md: json2md.DataObject[] = [
+            {
+                h2: "Functions"
+            }
+        ];
+
+        for (const functionKey in functions) {
+            if (functions.hasOwnProperty(functionKey)) {
+                const memberFunction = functions[functionKey];
+                md = md.concat(FunctionGenerator.RenderFunction(functionKey, memberFunction));
+            }
+        }
+
+        return md;
+    }
+
+    // private renderProperties(properties: { [key: string]: MemberProperty }): json2md.DataObject[] {
+    //     if (Object.keys(properties).length === 0) {
+    //         return [];
+    //     }
+
+    //     let md: json2md.DataObject[] = [
+    //         {
+    //             h2: "Properties"
+    //         }
+    //     ];
+
+    //     for (const enumKey in properties) {
+    //         if (properties.hasOwnProperty(enumKey)) {
+    //             const memberProperty = properties[enumKey];
+    //             md = md.concat(PropertyGenerator.RenderProperty(enumKey, memberProperty));
+    //         }
+    //     }
+
+    //     return md;
+    // }
 }

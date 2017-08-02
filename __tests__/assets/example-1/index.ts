@@ -56,7 +56,10 @@ export enum EventType {
 }
 
 /**
- * Sum function.
+ * Sum summary
+ * @param a - First number
+ * @param b - Second number
+ * @returns Return summary.
  * @public
  */
 export function Sum(a: number, b: number): number {

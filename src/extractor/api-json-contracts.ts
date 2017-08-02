@@ -1,3 +1,9 @@
+import { IReturn, IParam as Param } from "@microsoft/api-extractor/lib/IDocElement";
+
+export {
+    Param
+};
+
 export interface ApiJson {
     kind: "package";
     summary: ItemValue[];
@@ -17,7 +23,7 @@ export interface ReturnValue {
      * Examples: "string", "void"
      */
     type: string;
-    description: string[];
+    description: ItemValue[];
 }
 
 export interface ItemValue {
@@ -102,5 +108,5 @@ export interface MemberClass extends DefaultInfo {
 export interface MemberFunction extends DefaultInfo {
     kind: "function";
     returnValue: ReturnValue;
-    parameters: any[];
+    parameters: { [name: string]: Param };
 }

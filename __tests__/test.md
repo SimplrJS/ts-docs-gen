@@ -25,3 +25,18 @@ Name | Value | Summary
 None | 0 | 
 Warning | 8 | 
 Error | 100 | 
+## Functions
+### Sum
+
+Sum summary
+
+```ts
+function Sum(a: number, b: number): number
+```
+#### Parameters
+
+ - a: `number`
+ - b: `number`
+#### Returns
+
+`number` Return summary.

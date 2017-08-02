@@ -1,0 +1,254 @@
+{
+    "kind": "package",
+    "summary": [],
+    "remarks": [],
+    "exports": {
+        "Bar": {
+            "kind": "interface",
+            "extends": "Foo",
+            "implements": "",
+            "typeParameters": [],
+            "deprecatedMessage": [],
+            "summary": [],
+            "remarks": [],
+            "isBeta": false,
+            "members": {
+                "Email": {
+                    "kind": "property",
+                    "isOptional": false,
+                    "isReadOnly": false,
+                    "isStatic": false,
+                    "type": "string",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                },
+                "GetCode": {
+                    "kind": "method",
+                    "signature": "GetCode(id: number): string;",
+                    "accessModifier": "",
+                    "isOptional": false,
+                    "isStatic": false,
+                    "returnValue": {
+                        "type": "string",
+                        "description": []
+                    },
+                    "parameters": {},
+                    "deprecatedMessage": [],
+                    "summary": [
+                        {
+                            "kind": "textDocElement",
+                            "value": "Get Bar model code by id. Another line of summary."
+                        }
+                    ],
+                    "remarks": [],
+                    "isBeta": false
+                }
+            }
+        },
+        "CoolStuff": {
+            "kind": "namespace",
+            "deprecatedMessage": [],
+            "summary": [],
+            "remarks": [],
+            "isBeta": false,
+            "exports": {
+                "a": {
+                    "kind": "module variable",
+                    "type": "string",
+                    "value": "\"aa\"",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                }
+            }
+        },
+        "EventType": {
+            "kind": "enum",
+            "values": {
+                "Live": {
+                    "kind": "enum value",
+                    "value": "\"live\"",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                },
+                "Test": {
+                    "kind": "enum value",
+                    "value": "\"test\"",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                }
+            },
+            "deprecatedMessage": [],
+            "summary": [],
+            "remarks": [],
+            "isBeta": false
+        },
+        "Foo": {
+            "kind": "interface",
+            "extends": "",
+            "implements": "",
+            "typeParameters": [],
+            "deprecatedMessage": [],
+            "summary": [],
+            "remarks": [],
+            "isBeta": false,
+            "members": {
+                "Name": {
+                    "kind": "property",
+                    "isOptional": false,
+                    "isReadOnly": false,
+                    "isStatic": false,
+                    "type": "string",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                },
+                "Surname": {
+                    "kind": "property",
+                    "isOptional": false,
+                    "isReadOnly": false,
+                    "isStatic": false,
+                    "type": "string",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                }
+            }
+        },
+        "FooBar": {
+            "kind": "class",
+            "extends": "",
+            "implements": "",
+            "typeParameters": [],
+            "deprecatedMessage": [],
+            "summary": [],
+            "remarks": [],
+            "isBeta": false,
+            "members": {
+                "Foo": {
+                    "kind": "property",
+                    "isOptional": false,
+                    "isReadOnly": false,
+                    "isStatic": false,
+                    "type": "string",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                },
+                "GetSomething": {
+                    "kind": "method",
+                    "signature": "public GetSomething(): string;",
+                    "accessModifier": "public",
+                    "isOptional": false,
+                    "isStatic": false,
+                    "returnValue": {
+                        "type": "string",
+                        "description": []
+                    },
+                    "parameters": {},
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                },
+                "SetBar": {
+                    "kind": "method",
+                    "signature": "public SetBar(bar: Bar): void;",
+                    "accessModifier": "public",
+                    "isOptional": false,
+                    "isStatic": false,
+                    "returnValue": {
+                        "type": "void",
+                        "description": []
+                    },
+                    "parameters": {},
+                    "deprecatedMessage": [],
+                    "summary": [
+                        {
+                            "kind": "textDocElement",
+                            "value": "Summary of SetBar method."
+                        }
+                    ],
+                    "remarks": [],
+                    "isBeta": false
+                }
+            }
+        },
+        "Sum": {
+            "kind": "function",
+            "returnValue": {
+                "type": "number",
+                "description": [
+                    {
+                        "kind": "textDocElement",
+                        "value": "Return summary."
+                    }
+                ]
+            },
+            "parameters": {
+                "a": {
+                    "isOptional": false,
+                    "isSpread": false,
+                    "type": "number"
+                },
+                "b": {
+                    "isOptional": false,
+                    "isSpread": false,
+                    "type": "number"
+                }
+            },
+            "deprecatedMessage": [],
+            "summary": [
+                {
+                    "kind": "textDocElement",
+                    "value": "Sum summary"
+                }
+            ],
+            "remarks": [],
+            "isBeta": false
+        },
+        "Test": {
+            "kind": "enum",
+            "values": {
+                "Error": {
+                    "kind": "enum value",
+                    "value": "100",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                },
+                "None": {
+                    "kind": "enum value",
+                    "value": "0",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                },
+                "Warning": {
+                    "kind": "enum value",
+                    "value": "8",
+                    "deprecatedMessage": [],
+                    "summary": [],
+                    "remarks": [],
+                    "isBeta": false
+                }
+            },
+            "deprecatedMessage": [],
+            "summary": [],
+            "remarks": [],
+            "isBeta": false
+        }
+    }
+}

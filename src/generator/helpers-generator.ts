@@ -21,7 +21,10 @@ export namespace HelpersGenerator {
         return `__${text}__`;
     }
 
-    export function InlineCode(text: string): string {
+    export function InlineCode(text?: string): string {
+        if (text == null) {
+            return "";
+        }
         return `\`${text}\``;
     }
 }
