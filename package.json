@@ -10,7 +10,10 @@
   },
   "author": "",
   "dependencies": {
-    "typescript": "^2.6.1"
+    "typescript": "^2.6.1",
+    "fs-extra": "^4.0.2",
+    "@types/fs-extra": "^4.0.5",
+    "ts-extractor": "^0.1.0"
   },
   "devDependencies": {
     "@types/jest": "^21.1.6",
