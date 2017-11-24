@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "removeComments": false,
+        "outDir": "dist",
+        "rootDir": ".",
+        "sourceMap": false,
+        "skipDefaultLibCheck": true,
+        "declaration": true,
+        "pretty": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": [
+            "es6",
+            "dom"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+        "@types",
+        "__tests__"
+    ]
+}

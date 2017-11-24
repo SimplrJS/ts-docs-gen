@@ -1,0 +1,6 @@
+{
+    "name": "simple",
+    "dependencies": {
+        "react": "^15.6.1"
+    }
+}

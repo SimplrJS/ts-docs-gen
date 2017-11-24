@@ -1,29 +1,40 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es5",
+        "target": "es6",
         "removeComments": false,
         "outDir": "dist",
         "rootDir": "src",
-        "sourceMap": false,
+        "inlineSourceMap": true,
+        "inlineSources": true,
         "skipDefaultLibCheck": true,
         "declaration": true,
         "pretty": true,
         "strict": true,
         "forceConsistentCasingInFileNames": true,
+        "noUnusedLocals": true,
         "lib": [
-            "es5",
-            "es2015.promise",
-            "dom"
+            "es6",
+            "es2017.object"
+        ],
+        "types": [
+            "node"
         ],
         "typeRoots": [
             "./node_modules/@types"
-        ]
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "@types/*"
+            ]
+        }
     },
     "exclude": [
         "node_modules",
         "dist",
         "@types",
-        "__tests__"
+        "tests",
+        "examples"
     ]
 }

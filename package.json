@@ -8,19 +8,20 @@
     "test-watch": "jest --watchAll",
     "build": "tsc -p ."
   },
+  "engine": "node >= 7.5.0",
   "author": "",
   "dependencies": {
-    "typescript": "^2.6.1",
-    "fs-extra": "^4.0.2",
     "@types/fs-extra": "^4.0.5",
-    "ts-extractor": "^0.1.0"
+    "fs-extra": "^4.0.2",
+    "ts-extractor": "^1.0.0",
+    "typescript": "^2.6.1"
   },
   "devDependencies": {
     "@types/jest": "^21.1.6",
     "@types/sinon": "^4.0.0",
     "jest": "^21.2.1",
     "sinon": "^4.1.2",
-    "ts-jest": "^21.2.2"
+    "ts-jest": "^21.2.3"
   },
   "jest": {
     "transform": {
