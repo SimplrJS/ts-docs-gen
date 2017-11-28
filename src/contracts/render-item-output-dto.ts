@@ -1,6 +1,6 @@
 import { Contracts } from "ts-extractor";
 
-export interface RenderOutputDto {
+export interface RenderItemOutputDto {
     References: string[];
     RenderOutput: string[];
     ApiItem: Contracts.ApiItemDto;

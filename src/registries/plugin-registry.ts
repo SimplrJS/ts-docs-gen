@@ -3,7 +3,8 @@ import { Contracts } from "ts-extractor";
 import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
 import { SupportedApiItemKindType, ApiItemKindsAdditional } from "../contracts/supported-api-item-kind-type";
 
-export class PluginManager {
+// TODO: Rename to PluginRegistry.
+export class PluginRegistry {
     constructor() {
 
         // Initialize Plugins map.
@@ -13,6 +14,10 @@ export class PluginManager {
     }
 
     private registeredPlugins: Map<Contracts.ApiItemKinds, ApiItemPluginBase[]> = new Map();
+
+    private isSupportedKindsHasAny(kinds: SupportedApiItemKindType[]): kinds is ApiItemKindsAdditional[] {
+        return Boolean(kinds.find(x => x === ApiItemKindsAdditional.Any));
+    }
 
     public Register(plugin: ApiItemPluginBase): void {
         const supportedKinds = plugin.SupportedApiItemsKinds();
@@ -31,7 +36,7 @@ export class PluginManager {
         }
     }
 
-    private isSupportedKindsHasAny(kinds: SupportedApiItemKindType[]): kinds is ApiItemKindsAdditional[] {
-        return Boolean(kinds.find(x => x === ApiItemKindsAdditional.Any));
+    public GetPluginsByKind(kind: Contracts.ApiItemKinds): ApiItemPluginBase[] {
+        return this.registeredPlugins.get(kind) || [];
     }
 }

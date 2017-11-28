@@ -1,12 +1,11 @@
 import { ExtractDto } from "ts-extractor";
 
 import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
-import { PluginManager } from "../managers/plugin-manager";
+import { PluginRegistry } from "../registries/plugin-registry";
 
 export interface GeneratorConfiguration {
     OutputDirectory: string;
-    EntryFiles: string[];
-    PluginManager: PluginManager;
+    PluginManager: PluginRegistry;
     ExtractedData: ExtractDto;
 }
 

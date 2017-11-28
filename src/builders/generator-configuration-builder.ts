@@ -5,10 +5,9 @@ import { Extractor, GetCompilerOptions } from "ts-extractor";
 import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
 import { GeneratorConfiguration, WorkingGeneratorConfiguration } from "../contracts/generator-configuration";
 
-import { PluginManager } from "../managers/plugin-manager";
+import { PluginRegistry } from "../registries/plugin-registry";
 
 // TODO: Add method to read compiler options from tsconfig.
-// TODO: Configuration Updater.
 export class GeneratorConfigurationBuilder {
     constructor(private projectDirectory: string) { }
 
@@ -53,7 +52,7 @@ export class GeneratorConfigurationBuilder {
 
     public async Build(entryFiles: string[]): Promise<GeneratorConfiguration> {
         // Register all plugins.
-        const pluginManager = new PluginManager();
+        const pluginManager = new PluginRegistry();
         if (this.configuration.Plugins != null) {
             // TODO: Register default plugins.
             // Registering given plugins.
@@ -78,17 +77,9 @@ export class GeneratorConfigurationBuilder {
         const outputDirectory = this.configuration.OutputDirectory || path.join(this.projectDirectory, "/docs/");
 
         return {
-            EntryFiles: entryFiles,
             PluginManager: pluginManager,
             ExtractedData: extractor.Extract(entryFiles),
             OutputDirectory: outputDirectory
         };
     }
 }
-
-
-const output = new GeneratorConfigurationBuilder("./")
-    .AddPlugins([])
-    .OverrideCompilerOptions({ typeRoots: ["."] })
-    .SetOutputDirectory("./docs")
-    .Build(["./src/index.ts", "./src/contracts.ts"]);
