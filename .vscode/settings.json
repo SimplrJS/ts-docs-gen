@@ -1,0 +1,12 @@
+{
+    "eslint.enable": false,
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "tests/**/__tests__/**/*.test.ts": true
+    }
+}

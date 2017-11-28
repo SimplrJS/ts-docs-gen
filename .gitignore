@@ -267,3 +267,5 @@ package-lock.json
 **/webpack.config.js
 
 **/*.js.map
+
+_src
