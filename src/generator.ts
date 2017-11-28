@@ -2,12 +2,19 @@ import { GeneratorConfiguration } from "./contracts/generator-configuration";
 import { RenderItemOutputDto } from "./contracts/render-item-output-dto";
 import { Contracts } from "ts-extractor";
 
+// TODO: Move to contracts.
+export type RenderedItems = Map<string, RenderItemOutputDto>;
+
+export interface RenderedDto {
+    RenderedItems: RenderedItems;
+    EntryFiles: Contracts.ApiSourceFileDto[];
+}
+
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) { }
 
     private renderedItems: Map<string, RenderItemOutputDto> = new Map();
-    private renderedData: any | undefined;
-
+    private renderedData: RenderedDto | undefined;
 
     private renderApiItem(apiItem: Contracts.ApiItemDto): RenderItemOutputDto {
         const plugins = this.configuration.PluginManager.GetPluginsByKind(apiItem.ApiKind);
@@ -35,18 +42,23 @@ export class Generator {
         return this.renderedItems.get(itemId)!;
     }
 
-    private onRenderData(): void {
-        const { Registry } = this.configuration.ExtractedData;
+    private onRenderData(): RenderedDto {
+        const { Registry, EntryFiles } = this.configuration.ExtractedData;
 
-        for (const [itemKey,] of Object.entries(Registry)) {
+        for (const [itemKey] of Object.entries(Registry)) {
             if (!this.renderedItems.has(itemKey)) {
                 this.getRenderedItemById(itemKey);
             }
         }
+
+        return {
+            EntryFiles: EntryFiles,
+            RenderedItems: this.renderedItems
+        };
     }
 
-    public GetRenderedData(): any {
-        let data: any = this.renderedData;
+    public GetRenderedData(): RenderedDto {
+        let data: RenderedDto | undefined = this.renderedData;
         if (data == null) {
             data = this.onRenderData();
         }
