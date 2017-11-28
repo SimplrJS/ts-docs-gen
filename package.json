@@ -13,7 +13,7 @@
   "dependencies": {
     "@types/fs-extra": "^4.0.5",
     "fs-extra": "^4.0.2",
-    "ts-extractor": "^1.0.0",
+    "ts-extractor": "^1.1.1",
     "typescript": "^2.6.1"
   },
   "devDependencies": {
