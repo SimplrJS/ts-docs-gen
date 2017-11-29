@@ -11,6 +11,7 @@
   "engine": "node >= 7.5.0",
   "author": "",
   "dependencies": {
+    "@simplrjs/markdown": "0.1.0-beta",
     "@types/fs-extra": "^4.0.5",
     "fs-extra": "^4.0.2",
     "ts-extractor": "^1.1.1",

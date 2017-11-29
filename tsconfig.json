@@ -29,6 +29,8 @@
         "dist",
         "@types",
         "tests",
-        "examples"
+        "examples",
+        "_src",
+        "__tests__"
     ]
 }
