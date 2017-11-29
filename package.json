@@ -4,9 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test-watch": "jest --watchAll",
-    "build": "tsc -p ."
+    "pretest": "npm run build -- --noEmit && npm run build-tests",
+    "test": "npm run tslint && jest && echo All tests passed successfully.",
+    "test-watch": "start npm run build-tests -- --watchAll && jest --watchAll",
+    "jest": "jest --maxWorkers=4",
+    "tslint": "tslint --project . --config ./tslint.json && echo Successfully passed tslint test.",
+    "build": "tsc -p .",
+    "build-tests": "cd tests && ts-node ./build-tests.ts -p ./"
   },
   "engine": "node >= 7.5.0",
   "author": "",
@@ -23,7 +27,8 @@
     "@types/sinon": "^4.0.0",
     "jest": "^21.2.1",
     "sinon": "^4.1.2",
-    "ts-jest": "^21.2.3"
+    "ts-jest": "^21.2.3",
+    "ts-node": "^3.3.0"
   },
   "jest": {
     "transform": {
