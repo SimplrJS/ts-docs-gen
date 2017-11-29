@@ -11,23 +11,23 @@ async function StartWatcher(dirName: string): Promise<fs.FSWatcher> {
     return fs.watch(`./${dirName}/`, async (event, fileName) => {
         if (fileName.indexOf(TESTS_DIR_NAME) === -1) {
             Logger.Info(`Test file was changed in "${dirName}/${fileName}".`);
-            const startBuild = Logger.Info(`Building tests for "${dirName}"...`);
+            const startBuild = Logger.Info(`Generating tests for "${dirName}"...`);
             await TestsGenerator(dirName, __dirname);
-            Logger.Debug(`Builded tests after ${(Date.now() - startBuild)}ms`);
+            Logger.Debug(`Generated tests after ${(Date.now() - startBuild)}ms`);
         }
     });
 }
 
 (async (dirNames: string[]) => {
-    Logger.Info("Starting test builder...");
+    Logger.Info("Starting test generator...");
     for (const dirName of dirNames) {
         const startRemove = Logger.Info(`Removing old tests from "${dirName}"...`);
         await TestsCleanup(dirName);
         Logger.Debug(`Removed old tests after ${(Date.now() - startRemove)}ms`);
 
-        const startBuild = Logger.Info(`Building tests for "${dirName}"...`);
+        const startBuild = Logger.Info(`Generating tests for "${dirName}"...`);
         await TestsGenerator(dirName, __dirname);
-        Logger.Debug(`Builded tests after ${(Date.now() - startBuild)}ms`);
+        Logger.Debug(`Generated tests after ${(Date.now() - startBuild)}ms`);
 
         if (process.argv.indexOf("--watchAll") !== -1) {
             Logger.Info(`Started watching "${dirName}" tests.`);
