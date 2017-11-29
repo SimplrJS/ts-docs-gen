@@ -33,10 +33,25 @@
     "tslint": "^5.8.0"
   },
   "jest": {
+    "collectCoverage": true,
+    "mapCoverage": true,
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true,
+        "tsConfigFile": "tests/tsconfig.json"
+      }
+    },
     "testRegex": "/__tests__/.*\\.(test|spec).(ts|tsx|js)$",
+    "moduleNameMapper": {
+      "@src/(.*)": "<rootDir>/src/$1"
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
