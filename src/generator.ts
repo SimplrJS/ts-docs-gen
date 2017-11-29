@@ -1,6 +1,9 @@
+import { Contracts } from "ts-extractor";
+
 import { GeneratorConfiguration } from "./contracts/generator-configuration";
 import { RenderItemOutputDto } from "./contracts/render-item-output-dto";
-import { Contracts } from "ts-extractor";
+
+import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
 
 // TODO: Move to contracts.
 export type RenderedItems = Map<string, RenderItemOutputDto>;
@@ -25,8 +28,8 @@ export class Generator {
             }
         }
 
-        // FIXME: Implement default plugin.
-        return undefined as any;
+        const defaultPlugin = new ApiDefaultPlugin();
+        return defaultPlugin.Render(apiItem, this.getRenderedItemById);
     }
 
     // TODO: Check for infinity loop.
