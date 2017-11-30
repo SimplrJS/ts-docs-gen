@@ -269,3 +269,4 @@ package-lock.json
 **/*.js.map
 
 _src
+coverage
