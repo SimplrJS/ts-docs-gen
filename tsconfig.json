@@ -22,19 +22,15 @@
         ],
         "typeRoots": [
             "./node_modules/@types"
-        ],
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "@types/*"
-            ]
-        }
+        ]
     },
     "exclude": [
         "node_modules",
         "dist",
         "@types",
         "tests",
-        "examples"
+        "examples",
+        "_src",
+        "__tests__"
     ]
 }

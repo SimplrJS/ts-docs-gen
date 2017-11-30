@@ -15,12 +15,13 @@
   "engine": "node >= 7.5.0",
   "author": "",
   "dependencies": {
+    "@simplrjs/markdown": "0.1.0-beta",
     "@types/fs-extra": "^4.0.5",
     "fast-glob": "^1.0.1",
     "fs-extra": "^4.0.2",
     "simplr-logger": "^1.0.0",
     "ts-extractor": "^1.1.1",
-    "typescript": "^2.6.1"
+    "typescript": "^2.6.2"
   },
   "devDependencies": {
     "@types/jest": "^21.1.6",
