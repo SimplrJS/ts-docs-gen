@@ -72,7 +72,7 @@ export class Generator {
     public PrintToFiles(): void {
         // =====================================
         //
-        // First step: Preparing to what files we want to write. 
+        // First step: Preparing to what files we want to write.
         // P.S. move this into separate file.
         //
         // =====================================
