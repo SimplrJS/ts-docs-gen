@@ -13,6 +13,10 @@ export const EXTRACTOR_COMPILER_OPTIONS: ts.CompilerOptions = {
     skipDefaultLibCheck: true
 };
 
+export interface Configuration {
+    EntryFiles: string[];
+}
+
 export async function TestsGenerator(dirName: string, cwd: string): Promise<void> {
     const filesList = await fastGlob([
         `./${dirName}/**/*.ts`,
@@ -20,30 +24,27 @@ export async function TestsGenerator(dirName: string, cwd: string): Promise<void
     ]);
 
     for (const file of filesList) {
-        const { dir, name, base, ext } = path.parse(file);
+        const { dir, name, base, ext, root } = path.parse(file);
 
         const moduleName = FixSep(path.join(dir, base));
-
+        const projectDirectory = FixSep(path.join(cwd, dir, "."));
+        const testConfigPath = FixSep(path.join(projectDirectory, "test-config.json"));
+        const testConfig = await fs.readJSON(testConfigPath) as Configuration;
         const testDescribe = [
-            `import { Extractor } from "@src/extractor";`,
+            `import { Generator } from "@src/generator";`,
             "",
             `test("${name}", () => {`,
-            Tab(1) + `const moduleName = "./${moduleName}";`,
-            Tab(1) + `const projectDirectory = "${FixSep(cwd)}";`,
+            Tab(1) + `const projectDirectory = "${projectDirectory}";`,
+            Tab(1) + `const entryFiles  = ${JSON.stringify(testConfig.EntryFiles)};`,
             "",
-            Tab(1) + `const extractor = new Extractor({`,
-            Tab(2) + `CompilerOptions: ${JSON.stringify(EXTRACTOR_COMPILER_OPTIONS, undefined, Tab(3))},`,
-            Tab(2) + `ProjectDirectory: projectDirectory`,
-            Tab(1) + `});`,
-            "",
-            Tab(1) + `expect(extractor.Extract([moduleName])).toMatchSnapshot();`,
+            Tab(1) + `expect(true).toBe(true);`,
             `});`,
             ""
         ].join(os.EOL);
 
-        const targetDirectory = path.join(dir, "__tests__");
+        const targetDirectory = path.join(dir, "..", "__tests__");
         await fs.ensureDir(targetDirectory);
-        const targetFilePathname = path.join(targetDirectory, `${name}.test${ext}`);
+        const targetFilePathname = path.join(targetDirectory, `${path.parse(dir).name}.test${ext}`);
         await fs.writeFile(targetFilePathname, testDescribe);
     }
 }
