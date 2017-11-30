@@ -2,7 +2,11 @@
   "name": "ts-docs-gen-repo",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript documentation generation repository.",
+  "description": "Generating documentation for TypeScript code.",
+  "scripts": {
+    "rush-install": "rush install",
+    "rush-test": "rush test"
+  },
   "devDependencies": {
     "@microsoft/rush": "^4.0.1"
   }
