@@ -1,5 +1,5 @@
 {
-  "name": "@simplr/ts-docs-gen",
+  "name": "ts-docs-gen",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

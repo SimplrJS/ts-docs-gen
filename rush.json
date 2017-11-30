@@ -1,0 +1,12 @@
+{
+    "$schema": "./schemas/rush.schema.json",
+    "npmVersion": "4.5.0",
+    "rushVersion": "4.0.1",
+    "projects": [
+        {
+            "packageName": "ts-docs-gen",
+            "projectFolder": "packages/ts-docs-gen",
+            "shouldPublish": false
+        }
+    ]
+}
