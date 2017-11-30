@@ -12,8 +12,7 @@ async function Main(): Promise<void> {
     const config = await configPromise;
 
     const generator = new Generator(config);
-    const renderedData = generator.GetRenderedData();
-    console.log(renderedData);
+    generator.PrintToFiles();
     debugger;
 }
 
