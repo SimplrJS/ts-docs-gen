@@ -1,18 +1,18 @@
 import { Contracts } from "ts-extractor";
+import * as path from "path";
 
 import { GeneratorConfiguration } from "./contracts/generator-configuration";
 import { RenderItemOutputDto } from "./contracts/render-item-output-dto";
+import { RenderedDto } from "./contracts/rendered-dto";
 
 import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
 
-// TODO: Move to contracts.
-export type RenderedItems = Map<string, RenderItemOutputDto>;
-
-export interface RenderedDto {
-    RenderedItems: RenderedItems;
-    EntryFiles: Contracts.ApiSourceFileDto[];
-}
-
+/**
+ * TODO: Aliasias like
+ * ```ts
+ * import { Contracts as ExtractorContracts } from "ts-extractor";
+ * ```
+ */
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) { }
 
@@ -70,6 +70,72 @@ export class Generator {
     }
 
     public PrintToFiles(): void {
-        throw new Error("Not yet implemented!");
+        // =====================================
+        //
+        // First step: Preparing to what files we want to write. 
+        // P.S. move this into separate file.
+        //
+        // =====================================
+        interface PrinterFileData {
+            /**
+             * Relative file location to `OutDir` path.
+             */
+            Location: string;
+            Items: RenderItemOutputDto[];
+        }
+
+        const data = this.GetRenderedData();
+        const list: PrinterFileData[] = [];
+
+        for (const entryFile of data.EntryFiles) {
+            const printerFile: PrinterFileData = {
+                Location: path.basename(entryFile.Name) + ".md",
+                Items: this.getItems(data, entryFile, entryFile.Members)
+            };
+
+            list.push(printerFile);
+        }
+    }
+
+    private getItems(
+        data: RenderedDto,
+        entryFile: Contracts.ApiSourceFileDto,
+        itemsReference: Contracts.ApiItemReferenceTuple
+    ): RenderItemOutputDto[] {
+        let items: RenderItemOutputDto[] = [];
+
+        for (const [, references] of itemsReference) {
+            for (const reference of references) {
+                // Check if item is ExportSpecifier or ExportDeclaration.
+                const apiItem = this.configuration.ExtractedData.Registry[reference];
+
+                switch (apiItem.ApiKind) {
+                    case Contracts.ApiItemKinds.Export: {
+                        const exporterItems = this.getItems(data, entryFile, apiItem.Members);
+                        items = [...items, ...exporterItems];
+                        break;
+                    }
+                    case Contracts.ApiItemKinds.ExportSpecifier: {
+                        if (apiItem.ApiItems == null) {
+                            console.warn(`ApiItems are missing in "${apiItem.Name}"?`);
+                            break;
+                        }
+                        const exporterItems = this.getItems(data, entryFile, [[apiItem.Name, apiItem.ApiItems]]);
+                        items = [...items, ...exporterItems];
+                        break;
+                    }
+                    default: {
+                        const renderedItem = data.RenderedItems.get(reference);
+                        if (renderedItem != null) {
+                            items.push(renderedItem);
+                        } else {
+                            console.warn(`Reference "${reference}" is missing in ${entryFile.Name}?`);
+                        }
+                    }
+                }
+            }
+        }
+
+        return items;
     }
 }
