@@ -1,0 +1,12 @@
+{
+    "$schema": "../../schemas/command-line.schema.json",
+    "customCommands": [
+        {
+            "name": "test",
+            "documentation": "Testing packages",
+            "parallelized": true,
+            "summary": "Testing packages"
+        }
+    ],
+    "customOptions": {}
+}

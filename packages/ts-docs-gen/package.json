@@ -1,0 +1,62 @@
+{
+  "name": "ts-docs-gen",
+  "version": "0.1.0",
+  "description": "Generating documentation for TypeScript code",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "npm run build -- --noEmit && npm run build-tests",
+    "test": "npm run tslint && jest && echo All tests passed successfully.",
+    "test-watch": "start npm run build-tests -- --watchAll && jest --watchAll",
+    "jest": "jest --maxWorkers=4",
+    "tslint": "tslint --project . --config ./tslint.json && echo Successfully passed tslint test.",
+    "build": "tsc -p .",
+    "build-tests": "cd tests && ts-node ./build-tests.ts -p ./"
+  },
+  "engine": "node >= 7.5.0",
+  "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
+  "dependencies": {
+    "@simplrjs/markdown": "0.1.0-beta",
+    "@types/fs-extra": "^4.0.5",
+    "fast-glob": "^1.0.1",
+    "fs-extra": "^4.0.2",
+    "simplr-logger": "^1.0.0",
+    "ts-extractor": "^1.1.1",
+    "typescript": "^2.6.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^21.1.6",
+    "@types/sinon": "^4.0.0",
+    "jest": "^21.2.1",
+    "simplr-tslint": "0.0.1",
+    "sinon": "^4.1.2",
+    "ts-jest": "^21.2.3",
+    "ts-node": "^3.3.0",
+    "tslint": "^5.8.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "mapCoverage": true,
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true,
+        "tsConfigFile": "tests/tsconfig.json"
+      }
+    },
+    "testRegex": "/__tests__/.*\\.(test|spec).(ts|tsx|js)$",
+    "moduleNameMapper": {
+      "@src/(.*)": "<rootDir>/src/$1"
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
+  }
+}

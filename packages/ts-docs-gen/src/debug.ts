@@ -13,6 +13,7 @@ async function Main(): Promise<void> {
 
     const generator = new Generator(config);
     generator.PrintToFiles();
+    // tslint:disable-next-line:no-debugger
     debugger;
 }
 
