@@ -2,6 +2,8 @@
 
 ## Kintamasis
 
+First const variable in the exported items.
+
 ```ts
 const Kintamasis: "Hello World!";
 ```
@@ -13,12 +15,12 @@ const Kintamasis: "Hello World!";
 ## Kintamasis2
 
 ```ts
-const Kintamasis2: "Hello World!";
+const Kintamasis2: "World, Hello!";
 ```
 
 ### Type
 
-`"Hello World!"`
+`"World, Hello!"`
 
 ## Kintamasis3
 
