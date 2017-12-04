@@ -1,7 +1,7 @@
 import { Contracts } from "ts-extractor";
 
 import { GeneratorConfiguration } from "./contracts/generator-configuration";
-import { DefaultPrinter } from "./printers/default-printer";
+import { FileManager } from "./file-manager";
 import { RenderItemOutputDto } from "./contracts/render-item-output-dto";
 import { ReferenceTuple } from "./contracts/reference-tuple";
 import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
@@ -11,7 +11,7 @@ import { FileOutputDto } from "./contracts/file-output-dto";
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
-        this.printer = new DefaultPrinter();
+        this.fileManager = new FileManager();
         const { ExtractedData } = this.configuration;
 
         for (const entryFile of this.configuration.ExtractedData.EntryFiles) {
@@ -19,15 +19,15 @@ export class Generator {
 
             for (const reference of referenceTuples) {
                 const renderedItem = this.getRenderedItemByReference(entryFile, reference);
-                this.printer.AddItem(entryFile, renderedItem);
+                this.fileManager.AddItem(entryFile, renderedItem);
             }
         }
 
-        this.outputData = this.printer.ToFilesOutput();
+        this.outputData = this.fileManager.ToFilesOutput();
     }
 
     private renderedItems: Map<ReferenceTuple, RenderItemOutputDto> = new Map();
-    private printer: DefaultPrinter;
+    private fileManager: FileManager;
     private outputData: FileOutputDto[];
 
     public get OutputData(): ReadonlyArray<FileOutputDto> {

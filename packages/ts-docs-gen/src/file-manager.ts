@@ -1,11 +1,11 @@
+import { Contracts } from "ts-extractor";
 import * as path from "path";
 
-import { PrinterBase } from "../abstractions/printer-base";
-import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
-import { FileOutputDto } from "../contracts/file-output-dto";
-import { Contracts } from "ts-extractor";
+import { FileManagerBaseBase } from "./abstractions/file-manager-base";
+import { RenderItemOutputDto } from "./contracts/render-item-output-dto";
+import { FileOutputDto } from "./contracts/file-output-dto";
 
-export class DefaultPrinter extends PrinterBase {
+export class FileManager extends FileManagerBaseBase {
     private filesList: Map<string, RenderItemOutputDto[]> = new Map();
 
     public AddItem(entryFile: Contracts.ApiSourceFileDto, item: RenderItemOutputDto): void {
