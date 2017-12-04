@@ -38,4 +38,10 @@ export namespace ExtractorHelpers {
 
         return list;
     }
+
+    export function ApiVariableToString(item: Contracts.ApiVariableDto, alias?: string): string {
+        const name = alias != null ? alias : item.Name;
+
+        return `${item.VariableDeclarationType} ${name}: ${item.Type.Text};`;
+    }
 }

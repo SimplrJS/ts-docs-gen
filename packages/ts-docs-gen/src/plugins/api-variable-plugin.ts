@@ -5,6 +5,7 @@ import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
 import { SupportedApiItemKindType } from "../contracts/supported-api-item-kind-type";
 import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
 import { PluginData } from "../contracts/plugin-data";
+import { ExtractorHelpers } from "../extractor-helpers";
 
 export class ApiVariablePlugin extends ApiItemPluginBase {
     public SupportedApiItemsKinds(): SupportedApiItemKindType[] {
@@ -17,9 +18,11 @@ export class ApiVariablePlugin extends ApiItemPluginBase {
         const output: string[] = [
             MarkdownGenerator.header(alias, 2),
             "",
+            ...MarkdownGenerator.code(ExtractorHelpers.ApiVariableToString(apiItem), { lang: "ts" }),
+            "",
             MarkdownGenerator.header("Type", 3),
             "",
-            apiItem.Type.Text
+            MarkdownGenerator.inlineCode(apiItem.Type.Text)
         ];
 
         return {

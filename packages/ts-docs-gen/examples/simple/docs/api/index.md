@@ -2,8 +2,12 @@
 
 ## Hello
 
+```ts
+const Hello: "World";
+```
+
 ### Type
 
-"World"
+`"World"`
 
 ## function: GetFoo
