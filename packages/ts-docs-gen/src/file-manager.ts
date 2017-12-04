@@ -5,6 +5,7 @@ import * as path from "path";
 import { FileManagerBaseBase } from "./abstractions/file-manager-base";
 import { RenderItemOutputDto } from "./contracts/render-item-output-dto";
 import { FileOutputDto } from "./contracts/file-output-dto";
+import { Helpers } from "./utils/helpers";
 
 interface OutputData {
     RenderOutput: string[];
@@ -35,11 +36,11 @@ export class FileManager extends FileManagerBaseBase {
 
     public ToFilesOutput(): FileOutputDto[] {
         const output: FileOutputDto[] = [];
+
         for (const [fileLocation, items] of this.filesList) {
             output.push({
                 FileLocation: fileLocation,
-                // There should be a cleaner way to flatten array.
-                Output: [].concat.apply([], items.map(x => [x.RenderOutput, ""]))
+                Output: Helpers.Flatten(items.map(x => [x.RenderOutput, ""]))
             });
         }
 

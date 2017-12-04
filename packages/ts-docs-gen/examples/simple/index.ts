@@ -2,6 +2,8 @@
 
 // import { MyInterface } from "./my-types";
 
+export const Hello = "World";
+
 // export function Foo(): string {
 //     return "foo";
 // }

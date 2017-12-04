@@ -1,7 +1,19 @@
 # exported-const-variables
 
-## variable: Kintamasis
+## Kintamasis
 
-## variable: Kintamasis2
+### Type
 
-## variable: Kintamasis3
+"Hello World!"
+
+## Kintamasis2
+
+### Type
+
+"Hello World!"
+
+## Kintamasis3
+
+### Type
+
+"Not imported!"
