@@ -12,7 +12,7 @@ async function Main(): Promise<void> {
     const config = await configPromise;
 
     const generator = new Generator(config);
-    generator.GetFilesOutput();
+    console.log(generator.OutputData);
     // tslint:disable-next-line:no-debugger
     debugger;
 }

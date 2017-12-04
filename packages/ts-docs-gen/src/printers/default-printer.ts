@@ -3,14 +3,9 @@ import * as path from "path";
 import { PrinterBase } from "../abstractions/printer-base";
 import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
 import { FileOutputDto } from "../contracts/file-output-dto";
-import { GeneratorConfiguration } from "../contracts/generator-configuration";
 import { Contracts } from "ts-extractor";
 
 export class DefaultPrinter extends PrinterBase {
-    constructor(protected Configuration: GeneratorConfiguration) {
-        super();
-    }
-
     private filesList: Map<string, RenderItemOutputDto[]> = new Map();
 
     public AddItem(entryFile: Contracts.ApiSourceFileDto, item: RenderItemOutputDto): void {
