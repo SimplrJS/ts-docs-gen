@@ -14,6 +14,7 @@ async function Main(): Promise<void> {
     const generator = new Generator(config);
     console.log(generator.OutputData);
     // tslint:disable-next-line:no-debugger
+    await generator.WriteToFiles();
     debugger;
 }
 

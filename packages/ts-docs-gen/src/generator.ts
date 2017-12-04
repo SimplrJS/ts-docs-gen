@@ -1,4 +1,6 @@
 import { Contracts } from "ts-extractor";
+import * as path from "path";
+import * as fs from "fs-extra";
 
 import { GeneratorConfiguration } from "./contracts/generator-configuration";
 import { FileManager } from "./file-manager";
@@ -32,6 +34,22 @@ export class Generator {
 
     public get OutputData(): ReadonlyArray<FileOutputDto> {
         return this.outputData;
+    }
+
+    public async WriteToFiles(): Promise<void> {
+        debugger;
+        for (const item of this.outputData) {
+            const fullLocation = path.join(this.configuration.OutputDirectory, "api", item.FileLocation);
+
+            try {
+                // Ensure output directory
+                await fs.ensureDir(path.dirname(fullLocation));
+                // Output file
+                await fs.writeFile(fullLocation, item.Output.join("\n"));
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
 
     private getRenderedItemByReference = (entryFile: Contracts.ApiSourceFileDto, reference: ReferenceTuple): RenderItemOutputDto => {
