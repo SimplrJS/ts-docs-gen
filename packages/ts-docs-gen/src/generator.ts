@@ -1,5 +1,6 @@
 import { Contracts } from "ts-extractor";
 import * as path from "path";
+import * as fs from "fs-extra";
 
 import { GeneratorConfiguration } from "./contracts/generator-configuration";
 import { RenderItemOutputDto } from "./contracts/render-item-output-dto";
@@ -69,7 +70,7 @@ export class Generator {
         return data;
     }
 
-    public PrintToFiles(): void {
+    public async PrintToFiles(): Promise<void> {
         // =====================================
         //
         // Preparing files we want to write / output / fill.
@@ -94,6 +95,27 @@ export class Generator {
             };
 
             list.push(printerFile);
+        }
+
+        // TODO: Collect references too :C
+
+        // =====================================
+        //
+        // Third step: Write to actually files.
+        //
+        // =====================================
+
+        for (const item of list) {
+            const fullLocation = path.join(this.configuration.OutputDirectory, "api", item.Location);
+
+            try {
+                // Ensure output directory
+                await fs.ensureDir(path.dirname(fullLocation));
+                // Output file
+                await fs.writeFile(fullLocation, item.Items.map(x => x.RenderOutput.join("\n")).join("\n"));
+            } catch (error) {
+                console.error(error);
+            }
         }
     }
 
