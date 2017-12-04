@@ -15,5 +15,8 @@ export abstract class ApiItemPluginBase {
         return true;
     }
 
-    public abstract Render(item: Contracts.ApiItemDto, getItem: (itemId: string) => RenderItemOutputDto): RenderItemOutputDto;
+    public abstract Render(
+        item: Contracts.ApiItemDto,
+        getItem: (itemId: string, alias: string) => RenderItemOutputDto
+    ): RenderItemOutputDto;
 }

@@ -10,7 +10,7 @@ export class ApiDefaultPlugin extends ApiItemPluginBase {
         return [this.SupportKind.Any];
     }
 
-    public Render(item: Contracts.ApiItemDto, getItem: (itemId: string) => RenderItemOutputDto): RenderItemOutputDto {
+    public Render(item: Contracts.ApiItemDto, getItem: (itemId: string, alias: string) => RenderItemOutputDto): RenderItemOutputDto {
         const output: string[] = [
             MarkdownGenerator.header(`${item.Name}: ${item.ApiKind.toUpperCase()}`, 2)
         ];

@@ -4,6 +4,7 @@ import { PrinterBase } from "../abstractions/printer-base";
 import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
 import { FileOutputDto } from "../contracts/file-output-dto";
 import { GeneratorConfiguration } from "../contracts/generator-configuration";
+import { Contracts } from "ts-extractor";
 
 export class DefaultPrinter extends PrinterBase {
     constructor(private configuration: GeneratorConfiguration) {
@@ -12,12 +13,13 @@ export class DefaultPrinter extends PrinterBase {
 
     private filesList: Map<string, RenderItemOutputDto[]> = new Map();
 
-    public AddItem(item: RenderItemOutputDto): void {
-        const fileName = path.basename(item.ApiItem.Name) + ".md";
+    public AddItem(entryFile: Contracts.ApiSourceFileDto, item: RenderItemOutputDto): void {
+        const fileName = path.basename(entryFile.Name) + ".md";
         const fileLocation = path.join(this.configuration.OutputDirectory, "api", fileName);
         const items = this.filesList.get(fileLocation) || [];
+        items.push(item);
 
-        this.filesList.set(fileLocation, [item, ...items]);
+        this.filesList.set(fileLocation, items);
     }
 
     public ToFilesOutput(): FileOutputDto[] {

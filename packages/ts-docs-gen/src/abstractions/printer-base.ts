@@ -1,8 +1,9 @@
+import { Contracts } from "ts-extractor";
 import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
 import { FileOutputDto } from "../contracts/file-output-dto";
 
 export abstract class PrinterBase {
-    public abstract AddItem(item: RenderItemOutputDto): void;
+    public abstract AddItem(entryFile: Contracts.ApiSourceFileDto, item: RenderItemOutputDto): void;
 
     public abstract ToFilesOutput(): FileOutputDto[];
 }
