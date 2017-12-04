@@ -1,140 +1,83 @@
 import { Contracts } from "ts-extractor";
-import * as path from "path";
-import * as fs from "fs-extra";
 
 import { GeneratorConfiguration } from "./contracts/generator-configuration";
+import { DefaultPrinter } from "./printers/default-printer";
 import { RenderItemOutputDto } from "./contracts/render-item-output-dto";
-import { RenderedDto } from "./contracts/rendered-dto";
-
+import { ReferenceTuple } from "./contracts/reference-tuple";
 import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
+import { FileOutputDto } from "./contracts/file-output-dto";
 
-/**
- * TODO: Aliasias like
- * ```ts
- * import { Contracts as ExtractorContracts } from "ts-extractor";
- * ```
- */
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) { }
 
-    private renderedItems: Map<string, RenderItemOutputDto> = new Map();
-    private renderedData: RenderedDto | undefined;
+    private renderedItems: Map<ReferenceTuple, RenderItemOutputDto> = new Map();
 
-    private renderApiItem(apiItem: Contracts.ApiItemDto): RenderItemOutputDto {
+    public GetFilesOutput(): FileOutputDto[] {
+        const printer = new DefaultPrinter(this.configuration);
+
+        for (const entryFile of this.configuration.ExtractedData.EntryFiles) {
+            const referenceTuples = this.getReferenceTuples(entryFile, entryFile.Members);
+
+            for (const reference of referenceTuples) {
+                const renderedItem = this.getRenderedItemByReference(entryFile, reference);
+                printer.AddItem(entryFile, renderedItem);
+            }
+        }
+
+        return printer.ToFilesOutput();
+    }
+
+    private renderApiItem(
+        reference: ReferenceTuple,
+        entryFile: Contracts.ApiSourceFileDto,
+        apiItem: Contracts.ApiItemDto
+    ): RenderItemOutputDto {
         const plugins = this.configuration.PluginManager.GetPluginsByKind(apiItem.ApiKind);
 
         for (const plugin of plugins) {
             if (plugin.CheckApiItem(apiItem)) {
-                return plugin.Render(apiItem, this.getRenderedItemById);
+                return plugin.Render(reference, apiItem, {
+                    EntryFile: entryFile,
+                    GetItem: this.getRenderedItemByReference
+                });
             }
         }
 
         const defaultPlugin = new ApiDefaultPlugin();
-        return defaultPlugin.Render(apiItem, this.getRenderedItemById);
+        return defaultPlugin.Render(reference, apiItem, {
+            EntryFile: entryFile,
+            GetItem: this.getRenderedItemByReference
+        });
     }
 
-    // TODO: Check for infinity loop.
-    private getRenderedItemById = (itemId: string): RenderItemOutputDto => {
-        if (!this.renderedItems.has(itemId)) {
+    private getRenderedItemByReference = (entryFile: Contracts.ApiSourceFileDto, reference: ReferenceTuple): RenderItemOutputDto => {
+        const [referenceId] = reference;
+        if (!this.renderedItems.has(reference)) {
             const { Registry } = this.configuration.ExtractedData;
-            const renderedData = this.renderApiItem(Registry[itemId]);
-            this.renderedItems.set(itemId, renderedData);
+            const renderedData = this.renderApiItem(reference, entryFile, Registry[referenceId]);
+            this.renderedItems.set(reference, renderedData);
 
             return renderedData;
         }
 
-        return this.renderedItems.get(itemId)!;
+        return this.renderedItems.get(reference)!;
     }
 
-    private onRenderData(): RenderedDto {
-        const { Registry, EntryFiles } = this.configuration.ExtractedData;
-
-        for (const [itemKey] of Object.entries(Registry)) {
-            if (!this.renderedItems.has(itemKey)) {
-                this.getRenderedItemById(itemKey);
-            }
-        }
-
-        return {
-            EntryFiles: EntryFiles,
-            RenderedItems: this.renderedItems
-        };
-    }
-
-    public GetRenderedData(): RenderedDto {
-        let data: RenderedDto | undefined = this.renderedData;
-        if (data == null) {
-            data = this.onRenderData();
-        }
-
-        return data;
-    }
-
-    public async PrintToFiles(): Promise<void> {
-        // =====================================
-        //
-        // Preparing files we want to write / output / fill.
-        // P.S. move this into separate file.
-        //
-        // =====================================
-        interface PrinterFileData {
-            /**
-             * Relative file location to `OutDir` path.
-             */
-            Location: string;
-            Items: RenderItemOutputDto[];
-        }
-
-        const data = this.GetRenderedData();
-        const list: PrinterFileData[] = [];
-
-        for (const entryFile of data.EntryFiles) {
-            const printerFile: PrinterFileData = {
-                Location: path.basename(entryFile.Name) + ".md",
-                Items: this.getItems(data, entryFile, entryFile.Members)
-            };
-
-            list.push(printerFile);
-        }
-
-        // TODO: Collect references too :C
-
-        // =====================================
-        //
-        // Third step: Write to actually files.
-        //
-        // =====================================
-
-        for (const item of list) {
-            const fullLocation = path.join(this.configuration.OutputDirectory, "api", item.Location);
-
-            try {
-                // Ensure output directory
-                await fs.ensureDir(path.dirname(fullLocation));
-                // Output file
-                await fs.writeFile(fullLocation, item.Items.map(x => x.RenderOutput.join("\n")).join("\n"));
-            } catch (error) {
-                console.error(error);
-            }
-        }
-    }
-
-    private getItems(
-        data: RenderedDto,
+    private getReferenceTuples(
         entryFile: Contracts.ApiSourceFileDto,
         itemsReference: Contracts.ApiItemReferenceTuple
-    ): RenderItemOutputDto[] {
-        let items: RenderItemOutputDto[] = [];
+    ): ReferenceTuple[] {
+        const list: ReferenceTuple[] = [];
 
-        for (const [, references] of itemsReference) {
-            for (const reference of references) {
+        for (const [alias, references] of itemsReference) {
+            for (const referenceId of references) {
                 // Check if item is ExportSpecifier or ExportDeclaration.
-                const apiItem = this.configuration.ExtractedData.Registry[reference];
+                const apiItem = this.configuration.ExtractedData.Registry[referenceId];
 
                 switch (apiItem.ApiKind) {
                     case Contracts.ApiItemKinds.Export: {
-                        const exporterItems = this.getItems(data, entryFile, apiItem.Members);
-                        items = [...items, ...exporterItems];
+                        const referenceTuples = this.getReferenceTuples(entryFile, apiItem.Members);
+                        list.concat(referenceTuples);
                         break;
                     }
                     case Contracts.ApiItemKinds.ExportSpecifier: {
@@ -142,22 +85,17 @@ export class Generator {
                             console.warn(`ApiItems are missing in "${apiItem.Name}"?`);
                             break;
                         }
-                        const exporterItems = this.getItems(data, entryFile, [[apiItem.Name, apiItem.ApiItems]]);
-                        items = [...items, ...exporterItems];
+                        const referenceTuples = this.getReferenceTuples(entryFile, [[apiItem.Name, apiItem.ApiItems]]);
+                        list.concat(referenceTuples);
                         break;
                     }
                     default: {
-                        const renderedItem = data.RenderedItems.get(reference);
-                        if (renderedItem != null) {
-                            items.push(renderedItem);
-                        } else {
-                            console.warn(`Reference "${reference}" is missing in ${entryFile.Name}?`);
-                        }
+                        list.push([referenceId, alias]);
                     }
                 }
             }
         }
 
-        return items;
+        return list;
     }
 }

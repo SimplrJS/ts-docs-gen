@@ -2,6 +2,8 @@ import { Contracts } from "ts-extractor";
 
 import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
 import { SupportedApiItemKindType, ApiItemKindsAdditional } from "../contracts/supported-api-item-kind-type";
+import { PluginOptions } from "../contracts/plugin-options";
+import { ReferenceTuple } from "../contracts/reference-tuple";
 
 export abstract class ApiItemPluginBase {
     // TODO: Clarify naming.
@@ -15,8 +17,5 @@ export abstract class ApiItemPluginBase {
         return true;
     }
 
-    public abstract Render(
-        item: Contracts.ApiItemDto,
-        getItem: (itemId: string, alias: string) => RenderItemOutputDto
-    ): RenderItemOutputDto;
+    public abstract Render(reference: ReferenceTuple, item: Contracts.ApiItemDto, options: PluginOptions): RenderItemOutputDto;
 }

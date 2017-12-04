@@ -7,19 +7,18 @@ import { GeneratorConfiguration } from "../contracts/generator-configuration";
 import { Contracts } from "ts-extractor";
 
 export class DefaultPrinter extends PrinterBase {
-    constructor(private configuration: GeneratorConfiguration) {
+    constructor(protected Configuration: GeneratorConfiguration) {
         super();
     }
 
     private filesList: Map<string, RenderItemOutputDto[]> = new Map();
 
     public AddItem(entryFile: Contracts.ApiSourceFileDto, item: RenderItemOutputDto): void {
-        const fileName = path.basename(entryFile.Name) + ".md";
-        const fileLocation = path.join(this.configuration.OutputDirectory, "api", fileName);
-        const items = this.filesList.get(fileLocation) || [];
+        const fileName = path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
+        const items = this.filesList.get(fileName) || [];
         items.push(item);
 
-        this.filesList.set(fileLocation, items);
+        this.filesList.set(fileName, items);
     }
 
     public ToFilesOutput(): FileOutputDto[] {
@@ -28,7 +27,7 @@ export class DefaultPrinter extends PrinterBase {
             output.push({
                 FileLocation: fileLocation,
                 // There should be a cleaner way to flatten array.
-                Output: [].concat.apply([], ...items.map(x => x.RenderOutput))
+                Output: [].concat.apply([], items.map(x => x.RenderOutput))
             });
         }
 
