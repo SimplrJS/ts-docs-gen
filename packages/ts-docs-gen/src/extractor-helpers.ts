@@ -7,7 +7,7 @@ export namespace ExtractorHelpers {
         entryFile: Contracts.ApiSourceFileDto,
         itemsReference: Contracts.ApiItemReferenceTuple
     ): ReferenceTuple[] {
-        const list: ReferenceTuple[] = [];
+        let list: ReferenceTuple[] = [];
 
         for (const [alias, references] of itemsReference) {
             for (const referenceId of references) {
@@ -17,7 +17,7 @@ export namespace ExtractorHelpers {
                 switch (apiItem.ApiKind) {
                     case Contracts.ApiItemKinds.Export: {
                         const referenceTuples = GetReferenceTuples(extractedData, entryFile, apiItem.Members);
-                        list.concat(referenceTuples);
+                        list = list.concat(referenceTuples);
                         break;
                     }
                     case Contracts.ApiItemKinds.ExportSpecifier: {
@@ -26,7 +26,7 @@ export namespace ExtractorHelpers {
                             break;
                         }
                         const referenceTuples = GetReferenceTuples(extractedData, entryFile, [[apiItem.Name, apiItem.ApiItems]]);
-                        list.concat(referenceTuples);
+                        list = list.concat(referenceTuples);
                         break;
                     }
                     default: {
