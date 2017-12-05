@@ -4,7 +4,7 @@ import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
 import { SupportedApiItemKindType, ApiItemKindsAdditional } from "../contracts/supported-api-item-kind-type";
 import { PluginData } from "../contracts/plugin-data";
 
-export abstract class ApiItemPluginBase {
+export abstract class ApiItemPluginBase<TKind = Contracts.ApiItemDto> {
     // TODO: Clarify naming.
     protected get SupportKind(): typeof Contracts.ApiItemKinds & typeof ApiItemKindsAdditional {
         return Object.assign(Contracts.ApiItemKinds, ApiItemKindsAdditional);
@@ -16,5 +16,5 @@ export abstract class ApiItemPluginBase {
         return true;
     }
 
-    public abstract Render(data: PluginData): RenderItemOutputDto;
+    public abstract Render(data: PluginData<TKind>): RenderItemOutputDto;
 }
