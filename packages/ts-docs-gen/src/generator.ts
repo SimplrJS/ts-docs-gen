@@ -1,3 +1,4 @@
+
 import { Contracts } from "ts-extractor";
 import * as path from "path";
 import * as fs from "fs-extra";
@@ -78,6 +79,7 @@ export class Generator {
         for (const plugin of plugins) {
             if (plugin.CheckApiItem(apiItem)) {
                 return plugin.Render({
+                    ExtractedData: this.configuration.ExtractedData,
                     Reference: reference,
                     ApiItem: apiItem,
                     GetItem: this.getRenderedItemByReference
@@ -87,6 +89,7 @@ export class Generator {
 
         const defaultPlugin = new ApiDefaultPlugin();
         return defaultPlugin.Render({
+            ExtractedData: this.configuration.ExtractedData,
             Reference: reference,
             ApiItem: apiItem,
             GetItem: this.getRenderedItemByReference
