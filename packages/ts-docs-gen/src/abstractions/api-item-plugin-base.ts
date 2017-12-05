@@ -16,5 +16,5 @@ export abstract class ApiItemPluginBase {
         return true;
     }
 
-    public abstract Render(options: PluginData): RenderItemOutputDto;
+    public abstract Render(data: PluginData): RenderItemOutputDto;
 }
