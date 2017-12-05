@@ -55,7 +55,9 @@ export class Generator {
 
     private getRenderedItemByReference = (entryFile: Contracts.ApiSourceFileDto, reference: ReferenceTuple): RenderItemOutputDto => {
         const [referenceId] = reference;
-        if (!this.renderedItems.has(reference)) {
+        const renderedItem = this.renderedItems.get(reference);
+
+        if (renderedItem == null) {
             const { Registry } = this.configuration.ExtractedData;
             const renderedData = this.renderApiItem(reference, entryFile, Registry[referenceId]);
             this.renderedItems.set(reference, renderedData);
@@ -63,7 +65,7 @@ export class Generator {
             return renderedData;
         }
 
-        return this.renderedItems.get(reference)!;
+        return renderedItem;
     }
 
     private renderApiItem(
