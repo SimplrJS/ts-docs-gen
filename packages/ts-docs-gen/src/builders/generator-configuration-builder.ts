@@ -6,6 +6,7 @@ import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
 import { GeneratorConfiguration, WorkingGeneratorConfiguration } from "../contracts/generator-configuration";
 
 import { PluginRegistry } from "../registries/plugin-registry";
+import { DefaultPlugins } from "../default-plugins";
 
 // TODO: Add method to read compiler options from tsconfig.
 export class GeneratorConfigurationBuilder {
@@ -53,6 +54,11 @@ export class GeneratorConfigurationBuilder {
     public async Build(entryFiles: string[]): Promise<GeneratorConfiguration> {
         // Register all plugins.
         const pluginManager = new PluginRegistry();
+        // Register default plugins
+        for (const item of DefaultPlugins) {
+            pluginManager.Register(item);
+        }
+
         if (this.configuration.Plugins != null) {
             // TODO: Register default plugins.
             // Registering given plugins.

@@ -32,13 +32,24 @@ export async function TestsGenerator(dirName: string, cwd: string): Promise<void
         const testConfig = await fs.readJSON(testConfigPath) as Configuration;
         const testDescribe = [
             `import { Generator } from "@src/generator";`,
+            `import { GeneratorConfigurationBuilder } from "@src/builders/generator-configuration-builder";`,
             "",
-            `test("${name}", () => {`,
+            `test("${name}", async done => {`,
             Tab(1) + `const projectDirectory = "${projectDirectory}";`,
             Tab(1) + `const entryFiles  = ${JSON.stringify(testConfig.EntryFiles)};`,
             "",
-            Tab(1) + `expect(true).toBe(true);`,
-            `});`,
+            Tab(1) + "try {",
+            Tab(2) + "const configuration = await new GeneratorConfigurationBuilder(projectDirectory)",
+            Tab(3) + ".Build(entryFiles);",
+            "",
+            Tab(2) + "const generator = new Generator(configuration);",
+            "",
+            Tab(2) + "expect(generator.OutputData).toMatchSnapshot();",
+            Tab(2) + "done();",
+            Tab(1) + "} catch (error) {",
+            Tab(2) + "done.fail(error);",
+            Tab(1) + "}",
+            "});",
             ""
         ].join(os.EOL);
 
