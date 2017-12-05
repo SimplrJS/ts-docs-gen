@@ -2,7 +2,9 @@
 
 // import { MyInterface } from "./my-types";
 
-export const Hello = "World";
+export class World { }
+
+export const Hello = new World();
 
 // export function Foo(): string {
 //     return "foo";

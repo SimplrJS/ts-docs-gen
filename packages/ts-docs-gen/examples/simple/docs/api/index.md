@@ -1,13 +1,15 @@
 # index
 
+## class: World
+
 ## Hello
 
 ```ts
-const Hello: "World";
+const Hello: World;
 ```
 
 ### Type
 
-`"World"`
+[World][ClassDeclaration-0]
 
 ## function: GetFoo

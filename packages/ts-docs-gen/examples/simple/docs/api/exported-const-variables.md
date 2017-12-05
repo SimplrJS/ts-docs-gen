@@ -10,7 +10,7 @@ const Kintamasis: "Hello World!";
 
 ### Type
 
-`"Hello World!"`
+"Hello World!"
 
 ## Kintamasis2
 
@@ -20,7 +20,7 @@ const Kintamasis2: "World, Hello!";
 
 ### Type
 
-`"World, Hello!"`
+"World, Hello!"
 
 ## Kintamasis3
 
@@ -30,4 +30,4 @@ const Kintamasis3: "Not imported!";
 
 ### Type
 
-`"Not imported!"`
+"Not imported!"

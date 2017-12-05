@@ -33,7 +33,7 @@ export namespace GeneratorHelpers {
                 references.push(type.ReferenceId);
 
                 // Link to definition
-                text = `\`${MarkdownGenerator.link(type.Name || "???", type.ReferenceId, true)}\``;
+                text = `${MarkdownGenerator.link(type.Name || "???", type.ReferenceId, true)}`;
 
                 // Generics
                 if (type.Generics != null) {
@@ -60,7 +60,7 @@ export namespace GeneratorHelpers {
 
         return {
             References: references,
-            Text: MarkdownGenerator.inlineCode(text)
+            Text: text
         };
     }
 }
