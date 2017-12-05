@@ -6,7 +6,8 @@ import { Generator } from "./generator";
 
 async function Main(): Promise<void> {
     const projectDirectory = path.join(process.cwd(), "./examples/simple/");
-    const entryFiles = ["./index.ts", "./exported-const-variables.ts", "./exported-functions.ts"];
+    // const entryFiles = ["./index.ts", "./exported-const-variables.ts", "./exported-functions.ts"];
+    const entryFiles = ["./index.ts", "./exported-functions.ts"];
 
     const configPromise = new GeneratorConfigurationBuilder(projectDirectory).Build(entryFiles);
     const config = await configPromise;

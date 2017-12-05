@@ -20,8 +20,10 @@ export class Generator {
             const referenceTuples = ExtractorHelpers.GetReferenceTuples(ExtractedData, entryFile, entryFile.Members);
 
             for (const reference of referenceTuples) {
+                const [referenceId] = reference;
+
                 const renderedItem = this.getRenderedItemByReference(entryFile, reference);
-                this.fileManager.AddItem(entryFile, renderedItem);
+                this.fileManager.AddItem(entryFile, renderedItem, referenceId);
             }
         }
 

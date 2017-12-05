@@ -8,7 +8,7 @@ export namespace GeneratorHelpers {
     }
 
     export function TypeDtoToMarkdownString(type: Contracts.TypeDto): TypeToStringDto {
-        const references: string[] = [];
+        let references: string[] = [];
         let text: string = "";
 
         switch (type.ApiTypeKind) {
@@ -19,7 +19,7 @@ export namespace GeneratorHelpers {
                 type.Types
                     .map(TypeDtoToMarkdownString)
                     .forEach(typeItem => {
-                        references.concat(typeItem.References);
+                        references = references.concat(typeItem.References);
 
                         if (text === "") {
                             text = typeItem.Text;
@@ -38,7 +38,7 @@ export namespace GeneratorHelpers {
                 // Generics
                 if (type.Generics != null) {
                     const generics = type.Generics.map(TypeDtoToMarkdownString);
-                    references.concat(...generics.map(x => x.References));
+                    references = references.concat(...generics.map(x => x.References));
 
                     text += `<${generics.map(x => x.Text).join(", ")}>`;
                 }
@@ -51,7 +51,7 @@ export namespace GeneratorHelpers {
                 // Generics
                 if (type.Name != null && type.Generics != null) {
                     const generics = type.Generics.map(TypeDtoToMarkdownString);
-                    references.concat(...generics.map(x => x.References));
+                    references = references.concat(...generics.map(x => x.References));
 
                     text += `<${generics.map(x => x.Text).join(", ")}>`;
                 }

@@ -1,10 +1,13 @@
 // tslint:disable
 
-// import { MyInterface } from "./my-types";
+import { Foo } from "./exported-functions";
 
 export class World { }
+export class Earth { }
 
-export const Hello = new World();
+export declare const Hello: World & Earth;
+
+export const FooFunc = Foo;
 
 // export function Foo(): string {
 //     return "foo";
@@ -95,9 +98,9 @@ export const Hello = new World();
 //     Type: TType;
 // }
 
-export async function GetFoo(): Promise<void> {
-    return;
-}
+// export async function GetFoo(): Promise<void> {
+//     return;
+// }
 
 // export interface Bar extends Foo<number>, Boo {
 //     OtherStuff: string[];

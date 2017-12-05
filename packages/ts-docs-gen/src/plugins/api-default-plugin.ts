@@ -12,11 +12,13 @@ export class ApiDefaultPlugin extends ApiItemPluginBase {
 
     public Render(data: PluginData): RenderItemOutputDto {
         const [, alias] = data.Reference;
+        const heading = `${data.ApiItem.ApiKind}: ${alias}`;
         const output: string[] = [
-            MarkdownGenerator.header(`${data.ApiItem.ApiKind}: ${alias}`, 2)
+            MarkdownGenerator.header(heading, 2)
         ];
 
         return {
+            Heading: heading,
             ApiItem: data.ApiItem,
             References: [],
             RenderOutput: output

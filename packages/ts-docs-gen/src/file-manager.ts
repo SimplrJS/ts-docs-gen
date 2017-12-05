@@ -11,8 +11,11 @@ interface OutputData {
     RenderOutput: string[];
 }
 
+type RenderedItem = Array<RenderItemOutputDto | OutputData>;
+
 export class FileManager extends FileManagerBaseBase {
-    private filesList: Map<string, Array<RenderItemOutputDto | OutputData>> = new Map();
+    private filesList: Map<string, RenderedItem> = new Map();
+    private referenceToFile: Map<string, string> = new Map();
 
     private fileHeader(entryFile: Contracts.ApiSourceFileDto): OutputData {
         const heading = path.basename(entryFile.Name, path.extname(entryFile.Name));
@@ -26,10 +29,23 @@ export class FileManager extends FileManagerBaseBase {
         };
     }
 
-    public AddItem(entryFile: Contracts.ApiSourceFileDto, item: RenderItemOutputDto): void {
+    private getDefaultEntryFile(entryFile: Contracts.ApiSourceFileDto): RenderedItem {
+        return [
+            this.fileHeader(entryFile)
+        ];
+    }
+
+    private renderItemIsItemOutputDto(item: RenderItemOutputDto | OutputData): item is RenderItemOutputDto {
+        return (item as RenderItemOutputDto).ApiItem != null;
+    }
+
+    public AddItem(entryFile: Contracts.ApiSourceFileDto, item: RenderItemOutputDto, referenceId: string): void {
         const fileName = path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
-        const items = this.filesList.get(fileName) || [this.fileHeader(entryFile)];
+        const items = this.filesList.get(fileName) || this.getDefaultEntryFile(entryFile);
         items.push(item);
+
+        // Add reference link.
+        this.referenceToFile.set(referenceId, `${fileName}#${Helpers.HeadingToAnchor(item.Heading)}`);
 
         this.filesList.set(fileName, items);
     }
@@ -38,9 +54,23 @@ export class FileManager extends FileManagerBaseBase {
         const output: FileOutputDto[] = [];
 
         for (const [fileLocation, items] of this.filesList) {
+            // Link definitions to file location.
+            const references: string[] = [];
+            for (const item of items) {
+                if (this.renderItemIsItemOutputDto(item)) {
+                    item.References
+                        .forEach(x =>
+                            references.push(MarkdownGenerator.linkDefinition(x, this.referenceToFile.get(x) || "???"))
+                        );
+                }
+            }
+
             output.push({
                 FileLocation: fileLocation,
-                Output: Helpers.Flatten(items.map(x => [x.RenderOutput, ""]))
+                Output: [
+                    ...references,
+                    ...Helpers.Flatten(items.map(x => [x.RenderOutput, ""]))
+                ]
             });
         }
 

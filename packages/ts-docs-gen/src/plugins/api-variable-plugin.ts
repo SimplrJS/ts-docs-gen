@@ -16,7 +16,8 @@ export class ApiVariablePlugin extends ApiItemPluginBase {
     public Render(data: PluginData): RenderItemOutputDto {
         const [, alias] = data.Reference;
         const apiItem = data.ApiItem as Contracts.ApiVariableDto;
-        const references: string[] = [];
+        let references: string[] = [];
+        const heading = alias;
 
         let documentationComment: string[] = [];
         if (apiItem.Metadata.DocumentationComment.length > 0) {
@@ -27,13 +28,13 @@ export class ApiVariablePlugin extends ApiItemPluginBase {
         }
 
         const typeStringDto = GeneratorHelpers.TypeDtoToMarkdownString(apiItem.Type);
-        references.concat(typeStringDto.References);
+        references = references.concat(typeStringDto.References);
 
         const output: string[] = [
-            MarkdownGenerator.header(alias, 2),
+            MarkdownGenerator.header(heading, 2),
             "",
             ...documentationComment,
-            ...MarkdownGenerator.code(ExtractorHelpers.ApiVariableToString(apiItem), { lang: "ts" }),
+            ...MarkdownGenerator.code(ExtractorHelpers.ApiVariableToString(apiItem), { lang: "typescript" }),
             "",
             MarkdownGenerator.header("Type", 3),
             "",
@@ -41,8 +42,9 @@ export class ApiVariablePlugin extends ApiItemPluginBase {
         ];
 
         return {
+            Heading: heading,
             ApiItem: data.ApiItem,
-            References: [],
+            References: references,
             RenderOutput: output
         };
     }
