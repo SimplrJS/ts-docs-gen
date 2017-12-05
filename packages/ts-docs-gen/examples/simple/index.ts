@@ -1,13 +1,13 @@
 // tslint:disable
 
-import { Foo } from "./exported-functions";
+// import { Foo } from "./exported-functions";
 
-export class World { }
-export class Earth { }
+// export class World { }
+// export class Earth { }
 
-export declare const Hello: World & Earth;
+// export declare const Hello: World & Earth;
 
-export const FooFunc = Foo;
+// export const FooFunc = Foo;
 
 // export function Foo(): string {
 //     return "foo";
@@ -71,22 +71,65 @@ export const FooFunc = Foo;
 //     export const name = "some-kind-of-module";
 // }
 
-// export enum Uogos {
-//     Jokie = "jokie",
-//     Braskes = "braskes"
-// }
+/**
+ * Some information.
+ * 2nd line of some information.
+ * @summary Some summary about this package version.
+ * @summary 2nd of some summary about this package version.
+ * @deprecated
+ * @beta
+ */
+export enum Uogos {
+    Jokie = "jokie",
+    Braskes = "braskes"
+}
 
-// export enum Skaiciai {
-//     Nulis = 0,
-//     Vienas = 1,
-//     Du = 2
-// }
+export enum Skaiciai {
+    Nulis = 0,
+    Vienas = 1,
+    Du = 2
+}
 
-// export enum Sarasas {
-//     Pirmas,
-//     Antras,
-//     Trecias
-// }
+export enum Sarasas {
+    /**
+     * Pirmo description'as
+     */
+    Pirmas,
+    /**
+     * Antro description'as
+     */
+    Antras,
+    /**
+     * Trečio description'as
+     */
+    Trecias
+}
+
+export const enum ConstSkaiciai {
+    PirmasC = 0,
+    AntrasC = 1,
+    TreciasC = 2
+}
+
+export const enum ConstSarasas {
+    /**
+     * Pirmo description'as
+     */
+    PirmasC,
+    /**
+     * Antro description'as
+     */
+    AntrasC,
+    /**
+     * Trečio description'as
+     */
+    TreciasC
+}
+
+export const enum ConstUogos {
+    Jokie = "jokie",
+    Braskes = "braskes"
+}
 
 // export interface Boo {
 //     Boos: string[];
