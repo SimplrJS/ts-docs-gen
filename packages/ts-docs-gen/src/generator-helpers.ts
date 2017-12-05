@@ -17,7 +17,7 @@ export namespace GeneratorHelpers {
                 const symbol = type.ApiTypeKind === Contracts.TypeKinds.Union ? "|" : "&";
 
                 type.Types
-                    .map(x => TypeDtoToMarkdownString(type))
+                    .map(TypeDtoToMarkdownString)
                     .forEach(typeItem => {
                         references.concat(typeItem.References);
 
