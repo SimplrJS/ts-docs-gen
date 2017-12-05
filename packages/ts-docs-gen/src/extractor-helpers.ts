@@ -44,4 +44,16 @@ export namespace ExtractorHelpers {
 
         return `${item.VariableDeclarationType} ${name}: ${item.Type.Text};`;
     }
+
+    // TODO: reconsider location
+    const TAB_STRING = "    ";
+
+    export function Tab(size: number = 1): string {
+        let result: string = "";
+        for (let i = 0; i < size; i++) {
+            result += TAB_STRING;
+        }
+        return result;
+    }
+    // ---------------------------------------------------
 }
