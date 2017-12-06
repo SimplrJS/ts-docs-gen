@@ -44,4 +44,60 @@ export namespace ExtractorHelpers {
 
         return `${item.VariableDeclarationType} ${name}: ${item.Type.Text};`;
     }
+
+    export function ReconstructEnumCode(alias: string, memberItems: Contracts.ApiEnumMemberDto[]): string[] {
+        // Constructing enum body.
+        const membersStrings = memberItems.map((memberItem, index, array) => {
+            // Add an enum name
+            let memberString = `${ExtractorHelpers.Tab()} ${memberItem.Name}`;
+
+            // Add an enum member value if it exists.
+            if (memberItem.Value) {
+                memberString += ` = ${memberItem.Value}`;
+            }
+
+            // Add a comma if current item is not the last item
+            if (index !== memberItems.length - 1) {
+                memberString += ",";
+            }
+
+            return memberString;
+        });
+
+        // Construct enum code output
+        return [
+            `enum ${alias} {`,
+            ...membersStrings,
+            "}"
+        ];
+    }
+
+    // TODO: reconsider location
+    const TAB_STRING = "    ";
+
+    export function Tab(size: number = 1): string {
+        let result: string = "";
+        for (let i = 0; i < size; i++) {
+            result += TAB_STRING;
+        }
+        return result;
+    }
+    // ---------------------------------------------------
+
+    export const DEFAULT_CODE_OPTIONS = {
+        lang: "typescript"
+    };
+
+    export function FixSentence(sentence: string, punctuationMark: string = "."): string {
+        const trimmedSentence = sentence.trim();
+        const punctuationMarks = ".!:;,-";
+
+        const lastSymbol = trimmedSentence[trimmedSentence.length - 1];
+
+        if (punctuationMarks.indexOf(lastSymbol) !== -1) {
+            return trimmedSentence;
+        }
+
+        return trimmedSentence + punctuationMark;
+    }
 }

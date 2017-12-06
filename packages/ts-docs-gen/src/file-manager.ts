@@ -21,7 +21,7 @@ export class FileManager extends FileManagerBaseBase {
         const heading = path.basename(entryFile.Name, path.extname(entryFile.Name));
 
         const output: string[] = [
-            MarkdownGenerator.header(`${heading}`, 1)
+            MarkdownGenerator.Header(`${heading}`, 1)
         ];
 
         return {
@@ -61,7 +61,7 @@ export class FileManager extends FileManagerBaseBase {
                     item.References
                         .forEach(referenceId =>
                             references.push(
-                                MarkdownGenerator.linkDefinition(referenceId, this.referenceToFile.get(referenceId) || "#__error")
+                                MarkdownGenerator.LinkDefinition(referenceId, this.referenceToFile.get(referenceId) || "#__error")
                             )
                         );
                 }
