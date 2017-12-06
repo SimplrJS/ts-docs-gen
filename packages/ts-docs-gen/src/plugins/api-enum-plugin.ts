@@ -13,56 +13,52 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         return [this.SupportKind.Enum];
     }
 
-    // TODO: implement @deprecated and @beta.
     private resolveDocumentationComment(metaData: Contracts.ApiMetadataDto): string[] {
         if (metaData.DocumentationComment.length === 0) {
             return [];
         }
 
-        return metaData.DocumentationComment.map(commentItem => commentItem.text);
+        // TODO: implement ExtractorHelpers.FixSentence when comments separation implemented in `ts-extractor`.
+        return metaData.DocumentationComment.map(commentItem => ExtractorHelpers.FixSentence(commentItem.text));
     }
 
-    // TODO: move to extractor helpers.
-    private reconstructEnumCode(alias: string, memberItems: Contracts.ApiEnumMemberDto[]): string[] {
-        const membersStrings = memberItems.map((memberItem, index, array) => {
-            let memberString = `${ExtractorHelpers.Tab()} ${memberItem.Name}`;
+    /**
+     * Resolves "@beta" and "@deprecated" JSDocTags.
+     */
+    private resolveJSDocTags(metaData: Contracts.ApiMetadataDto): string[] {
+        return metaData.JSDocTags
+            .filter(tag => tag.name === "deprecated" || tag.name === "beta")
+            .map<string>(tag => {
+                if (tag.text) {
+                    return `${tag.name} - ${tag.text}`;
+                }
 
-            if (memberItem.Value) {
-                memberString += ` = ${memberItem.Value}`;
-            }
-
-            // Checking if current item is not the last item
-            if (index !== memberItems.length - 1) {
-                memberString += ",";
-            }
-
-            return memberString;
-        });
-
-        return [
-            `enum ${alias} {`,
-            ...membersStrings,
-            "}"
-        ];
+                return tag.name;
+            });
     }
 
     private constructEnumTable(members: Contracts.ApiEnumMemberDto[]): string[] {
+        // Table header.
         const header = ["Name", "Value"];
 
+        // Assuming that enum members are not described separately.
         let descriptionFound = false;
+
+        // Generating table content.
         const content = members.map<string[]>(member => {
             const row: string[] = [member.Name, member.Value];
             const comments = member.Metadata.DocumentationComment;
 
+            // Handling enum member comments.
             if (comments.length > 0) {
                 descriptionFound = true;
 
                 const commentSeparator = " ";
                 let description = "";
 
-                // TODO: add '.' if needed.
+                // Reducing comments into a single description.
                 comments.forEach((comment, index, array) => {
-                    description += comment.text;
+                    description += ExtractorHelpers.FixSentence(comment.text);
 
                     if (index !== array.length - 1) {
                         description += commentSeparator;
@@ -75,6 +71,7 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
             return row;
         });
 
+        // Add description cell in header if at least one enum member have comment.
         if (descriptionFound) {
             header.push("Description");
         }
@@ -103,13 +100,14 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
 
         const enumMembers = this.getEnumMembers(data.ApiItem.Members, data.ExtractedData);
 
-        // TODO: move MarkdownGenerator code option to helpers.
         const output: string[] = [
             heading,
             "",
             ...this.resolveDocumentationComment(data.ApiItem.Metadata),
             "",
-            ...MarkdownGenerator.code(this.reconstructEnumCode(alias, enumMembers), { lang: "typescript" }),
+            ...this.resolveJSDocTags(data.ApiItem.Metadata),
+            "",
+            ...MarkdownGenerator.code(ExtractorHelpers.ReconstructEnumCode(alias, enumMembers), ExtractorHelpers.DEFAULT_CODE_OPTIONS),
             "",
             ...this.constructEnumTable(enumMembers)
         ];

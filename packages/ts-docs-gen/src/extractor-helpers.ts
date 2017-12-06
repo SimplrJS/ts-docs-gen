@@ -45,6 +45,29 @@ export namespace ExtractorHelpers {
         return `${item.VariableDeclarationType} ${name}: ${item.Type.Text};`;
     }
 
+    export function ReconstructEnumCode(alias: string, memberItems: Contracts.ApiEnumMemberDto[]): string[] {
+        const membersStrings = memberItems.map((memberItem, index, array) => {
+            let memberString = `${ExtractorHelpers.Tab()} ${memberItem.Name}`;
+
+            if (memberItem.Value) {
+                memberString += ` = ${memberItem.Value}`;
+            }
+
+            // Checking if current item is not the last item
+            if (index !== memberItems.length - 1) {
+                memberString += ",";
+            }
+
+            return memberString;
+        });
+
+        return [
+            `enum ${alias} {`,
+            ...membersStrings,
+            "}"
+        ];
+    }
+
     // TODO: reconsider location
     const TAB_STRING = "    ";
 
@@ -56,4 +79,21 @@ export namespace ExtractorHelpers {
         return result;
     }
     // ---------------------------------------------------
+
+    export const DEFAULT_CODE_OPTIONS = {
+        lang: "typescript"
+    };
+
+    export function FixSentence(sentence: string, punctuationMark: string = "."): string {
+        const trimmedSentence = sentence.trim();
+        const punctuationMarks = ".!:;,-";
+
+        const lastSymbol = trimmedSentence[trimmedSentence.length - 1];
+
+        if (punctuationMarks.indexOf(lastSymbol) !== -1) {
+            return trimmedSentence;
+        }
+
+        return trimmedSentence + punctuationMark;
+    }
 }
