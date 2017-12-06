@@ -19,7 +19,7 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         }
 
         // TODO: implement ExtractorHelpers.FixSentence when comments separation implemented in `ts-extractor`.
-        return metaData.DocumentationComment.map(commentItem => ExtractorHelpers.FixSentence(commentItem.text));
+        return metaData.DocumentationComment.map(commentItem => commentItem.text);
     }
 
     // TODO: improve output text of @beta and @deprecated JSDocTags.
@@ -80,6 +80,9 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         return MarkdownGenerator.table(header, content);
     }
 
+    /**
+     * Resolve api items of an enum from ApiItemReferenceTuple.
+     */
     private getEnumMembers(members: Contracts.ApiItemReferenceTuple, extractedData: ExtractDto): Contracts.ApiEnumMemberDto[] {
         const apiItems: Contracts.ApiEnumMemberDto[] = [];
 

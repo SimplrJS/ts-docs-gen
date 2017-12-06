@@ -46,14 +46,17 @@ export namespace ExtractorHelpers {
     }
 
     export function ReconstructEnumCode(alias: string, memberItems: Contracts.ApiEnumMemberDto[]): string[] {
+        // Constructing enum body.
         const membersStrings = memberItems.map((memberItem, index, array) => {
+            // Add an enum name
             let memberString = `${ExtractorHelpers.Tab()} ${memberItem.Name}`;
 
+            // Add an enum member value if it exists.
             if (memberItem.Value) {
                 memberString += ` = ${memberItem.Value}`;
             }
 
-            // Checking if current item is not the last item
+            // Add a comma if current item is not the last item
             if (index !== memberItems.length - 1) {
                 memberString += ",";
             }
@@ -61,6 +64,7 @@ export namespace ExtractorHelpers {
             return memberString;
         });
 
+        // Construct enum code output
         return [
             `enum ${alias} {`,
             ...membersStrings,
