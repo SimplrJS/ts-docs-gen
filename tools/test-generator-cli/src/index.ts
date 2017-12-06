@@ -1,11 +1,10 @@
-import * as os from "os";
 import * as process from "process";
 import * as fs from "fs-extra";
-import { Logger } from "../src/utils/logger";
+import { Logger } from "./utils/logger";
 
-import { TestsGenerator } from "./scripts/tests-generator";
-import { TestsCleanup } from "./scripts/tests-cleanup";
-import { TESTS_DIR_NAME } from "./scripts/tests-helpers";
+import { TestsGenerator } from "./tests-generator";
+import { TestsCleanup } from "./tests-cleanup";
+import { TESTS_DIR_NAME } from "./tests-helpers";
 
 async function StartWatcher(dirName: string): Promise<fs.FSWatcher> {
     return fs.watch(`./${dirName}/`, async (event, fileName) => {

@@ -24,9 +24,8 @@ export async function TestsGenerator(dirName: string, cwd: string): Promise<void
     ]);
 
     for (const file of filesList) {
-        const { dir, name, base, ext, root } = path.parse(file);
+        const { dir, name, base, ext } = path.parse(file);
 
-        const moduleName = FixSep(path.join(dir, base));
         const projectDirectory = FixSep(path.join(cwd, dir, "."));
         const testConfigPath = FixSep(path.join(projectDirectory, "test-config.json"));
         const testConfig = await fs.readJSON(testConfigPath) as Configuration;

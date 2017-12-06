@@ -1,8 +1,7 @@
-import * as path from "path";
 import * as fs from "fs-extra";
 import fastGlob from "fast-glob";
 
-import { TESTS_DIR_NAME, TESTS_SNAPSHOTS_DIR_NAME } from "../scripts/tests-helpers";
+import { TESTS_DIR_NAME, TESTS_SNAPSHOTS_DIR_NAME } from "./tests-helpers";
 
 export async function TestsCleanup(dirName: string): Promise<void> {
     const oldTestFiles = await fastGlob([
