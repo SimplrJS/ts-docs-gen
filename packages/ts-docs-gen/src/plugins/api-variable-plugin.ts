@@ -33,7 +33,7 @@ export class ApiVariablePlugin extends ApiItemPluginBase<Contracts.ApiVariableDt
             MarkdownGenerator.header(heading, 2),
             "",
             ...documentationComment,
-            ...MarkdownGenerator.code(ExtractorHelpers.ApiVariableToString(data.ApiItem), { lang: "typescript" }),
+            ...MarkdownGenerator.code(ExtractorHelpers.ApiVariableToString(data.ApiItem), ExtractorHelpers.DEFAULT_CODE_OPTIONS),
             "",
             MarkdownGenerator.header("Type", 3),
             "",
