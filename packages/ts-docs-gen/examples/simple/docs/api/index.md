@@ -1,28 +1,42 @@
-[ClassDeclaration-0]: index.md#class-world
-[ClassDeclaration-1]: index.md#class-earth
-[FunctionDeclaration-0]: exported-functions.md#function-foo
 # index
 
-## class: World
+## Uogos
 
-## class: Earth
+Some information
+2nd line of some information
+3rd line of some information
+4th line of some information
+5th line of some information.
 
-## Hello
-
-```typescript
-const Hello: World & Earth;
-```
-
-### Type
-
-[World][ClassDeclaration-0] & [Earth][ClassDeclaration-1]
-
-## FooFunc
+deprecated
+beta
 
 ```typescript
-const FooFunc: () => string;
+enum Uogos {
+     Jokie = "jokie",
+     Braskes = "braskes"
+}
 ```
 
-### Type
+| Name    | Value     |
+| ------- | --------- |
+| Jokie   | "jokie"   |
+| Braskes | "braskes" |
 
-[Foo][FunctionDeclaration-0]
+## Sarasas
+
+
+
+```typescript
+enum Sarasas {
+     Pirmas = 0,
+     Antras = 1,
+     Trecias = 2
+}
+```
+
+| Name    | Value | Description            |
+| ------- | ----- | ---------------------- |
+| Pirmas  | 0     | Pirmo description'as.  |
+| Antras  | 1     | Antro description'as.  |
+| Trecias | 2     | Trečio description'as. |

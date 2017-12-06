@@ -51,12 +51,12 @@
 //     <TValue>(param1: TValue, param2: TValue): boolean;
 // }
 
-/**
- * Some JSdoc information.
- * 2nd line of some JSdoc information.
- * @summary Some summary about this package version.
- * @summary 2nd of some summary about this package version.
- */
+// /**
+//  * Some JSdoc information.
+//  * 2nd line of some JSdoc information.
+//  * @summary Some summary about this package version.
+//  * @summary 2nd of some summary about this package version.
+//  */
 // export const itemsList: string[] = ["a"];
 
 // export function Ok(isIt: boolean): boolean {
@@ -72,8 +72,11 @@
 // }
 
 /**
- * Some information.
- * 2nd line of some information.
+ * Some information
+ * 2nd line of some information
+ * 3rd line of some information
+ * 4th line of some information
+ * 5th line of some information
  * @summary Some summary about this package version.
  * @summary 2nd of some summary about this package version.
  * @deprecated
