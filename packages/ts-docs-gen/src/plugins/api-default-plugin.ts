@@ -14,7 +14,7 @@ export class ApiDefaultPlugin extends ApiItemPluginBase {
         const [, alias] = data.Reference;
         const heading = `${data.ApiItem.ApiKind}: ${alias}`;
         const output: string[] = [
-            MarkdownGenerator.header(heading, 2)
+            MarkdownGenerator.Header(heading, 2)
         ];
 
         return {

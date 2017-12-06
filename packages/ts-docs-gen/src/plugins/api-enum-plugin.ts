@@ -1,5 +1,5 @@
 import { Contracts, ExtractDto } from "ts-extractor";
-import { MarkdownGenerator } from "@simplrjs/markdown";
+import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
 
 import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
 import { SupportedApiItemKindType } from "../contracts/supported-api-item-kind-type";
@@ -77,7 +77,7 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
             header.push("Description");
         }
 
-        return MarkdownGenerator.table(header, content);
+        return MarkdownGenerator.Table(header, content);
     }
 
     /**
@@ -99,28 +99,23 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
 
     public Render(data: PluginData<Contracts.ApiEnumDto>): RenderItemOutputDto {
         const [, alias] = data.Reference;
-
-        const heading = MarkdownGenerator.header(alias, 2);
-
         const enumMembers = this.getEnumMembers(data.ApiItem.Members, data.ExtractedData);
-
-        const output: string[] = [
-            heading,
-            "",
-            ...this.resolveDocumentationComment(data.ApiItem.Metadata),
-            "",
-            ...this.resolveJSDocTags(data.ApiItem.Metadata),
-            "",
-            ...MarkdownGenerator.code(ExtractorHelpers.ReconstructEnumCode(alias, enumMembers), ExtractorHelpers.DEFAULT_CODE_OPTIONS),
-            "",
-            ...this.constructEnumTable(enumMembers)
-        ];
+        const builder = new MarkdownBuilder()
+            .Header(alias, 2)
+            .EmptyLine()
+            .Text(this.resolveDocumentationComment(data.ApiItem.Metadata))
+            .EmptyLine()
+            .Text(this.resolveJSDocTags(data.ApiItem.Metadata))
+            .EmptyLine()
+            .Code(ExtractorHelpers.ReconstructEnumCode(alias, enumMembers), ExtractorHelpers.DEFAULT_CODE_OPTIONS)
+            .EmptyLine()
+            .Text(this.constructEnumTable(enumMembers));
 
         return {
             Heading: "Enum",
             ApiItem: data.ApiItem,
             References: [],
-            RenderOutput: output
+            RenderOutput: builder.GetOutput()
         };
     }
 }
