@@ -22,6 +22,7 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         return metaData.DocumentationComment.map(commentItem => ExtractorHelpers.FixSentence(commentItem.text));
     }
 
+    // TODO: improve output text of @beta and @deprecated JSDocTags.
     /**
      * Resolves "@beta" and "@deprecated" JSDocTags.
      */
