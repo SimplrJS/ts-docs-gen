@@ -104,6 +104,6 @@ export namespace ExtractorHelpers {
     export function ApiTypeToString(item: Contracts.ApiTypeDto, alias?: string): string {
         const name = alias != null ? alias : item.Name;
 
-        return `type ${name} = ${item.Type.Text}`;
+        return `type ${name} = ${item.Type.Text};`;
     }
 }

@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-// import { MarkdownGenerator } from "@simplrjs/markdown";
+import { MarkdownGenerator } from "@simplrjs/markdown";
 
 export namespace GeneratorHelpers {
     export interface TypeToStringDto {
@@ -7,7 +7,6 @@ export namespace GeneratorHelpers {
         Text: string;
     }
 
-    // TODO: Resolve reference.
     export function TypeDtoToMarkdownString(type: Contracts.TypeDto): TypeToStringDto {
         let references: string[] = [];
         let text: string = "";
@@ -16,6 +15,12 @@ export namespace GeneratorHelpers {
             case Contracts.TypeKinds.Union:
             case Contracts.TypeKinds.Intersection: {
                 const symbol = type.ApiTypeKind === Contracts.TypeKinds.Union ? "|" : "&";
+
+                if (type.ReferenceId != null) {
+                    text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
+                    references.push(type.ReferenceId);
+                    break;
+                }
 
                 type.Types
                     .map(TypeDtoToMarkdownString)
@@ -32,14 +37,20 @@ export namespace GeneratorHelpers {
             }
             case Contracts.TypeKinds.Basic:
             default: {
-                text = type.Name || type.Text;
-
                 // Generics
                 if (type.Name != null && type.Generics != null) {
                     const generics = type.Generics.map(TypeDtoToMarkdownString);
                     references = references.concat(...generics.map(x => x.References));
 
                     text += `<${generics.map(x => x.Text).join(", ")}>`;
+                }
+
+                // Basic type with reference.
+                if (type.ReferenceId != null) {
+                    text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
+                    references.push(type.ReferenceId);
+                } else {
+                    text = type.Name || type.Text;
                 }
             }
         }
