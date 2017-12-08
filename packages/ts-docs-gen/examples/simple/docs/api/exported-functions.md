@@ -1,27 +1,15 @@
 # exported-functions
 
-## function Foo(): string
-
-
-TODO: is deprecated or beta
-
-### Type parameters
-
-
-### Parameters
-
+## Foo()
 
 ### Return type
 
-## function Bar(): string
+string
 
 
-TODO: is deprecated or beta
-
-### Type parameters
-
-
-### Parameters
-
+## Bar()
 
 ### Return type
+
+string
+

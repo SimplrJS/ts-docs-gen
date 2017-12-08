@@ -1,244 +1,221 @@
+[ClassDeclaration-1]: index.md#class-earth
+[ClassDeclaration-0]: index.md#class-world
 [EnumDeclaration-0]: index.md#uogos
 # index
 
 ## class: World
 
-<<<<<<< HEAD
 ## class: Earth
 
-## function FunctionWithMultipleTypeParameters<T extends Object, P>(parameter1: T, parameter2: P): string
+## FunctionWithMultipleTypeParameters(parameter1, parameter2)
 
 Bla bla
 
-TODO: is deprecated or beta
-
 ### Type parameters
 
+| Name | Constraint type |
+| ---- | --------------- |
+| T    | Object          |
+| P    |                 |
 
 ### Parameters
 
-| Name       | Type                 | Description |
-| ---------- | -------------------- | ----------- |
-| parameter1 | [T][TypeParameter-0] |             |
-| parameter2 | [P][TypeParameter-1] |             |
+| Name       | Type                 |
+| ---------- | -------------------- |
+| parameter1 | [T][TypeParameter-0] |
+| parameter2 | [P][TypeParameter-1] |
 
 ### Return type
 
-## function FunctionWithTypeParameterDefault<T extends Object = __type>(parameter1: string, parameter2: T): string
+string
+
+
+## FunctionWithTypeParameterDefault(parameter1, parameter2)
 
 Some general comment about AnotherBar function.
 
-TODO: is deprecated or beta
-
 ### Type parameters
 
+| Name | Constraint type | Default type |
+| ---- | --------------- | ------------ |
+| T    | Object          | __type       |
 
 ### Parameters
 
-| Name       | Type                 | Description |
-| ---------- | -------------------- | ----------- |
-| parameter1 | string               |             |
-| parameter2 | [T][TypeParameter-2] |             |
+| Name       | Type                 |
+| ---------- | -------------------- |
+| parameter1 | string               |
+| parameter2 | [T][TypeParameter-2] |
 
 ### Return type
 
-## function FunctionWithTypeParameterConstraint<T extends Object>(parameter1: string, parameter2: T): string
+string
+
+
+## FunctionWithTypeParameterConstraint(parameter1, parameter2)
 
 Some general comment about AnotherBar function.
 
-TODO: is deprecated or beta
-
 ### Type parameters
 
+| Name | Constraint type |
+| ---- | --------------- |
+| T    | Object          |
 
 ### Parameters
 
-| Name       | Type                 | Description |
-| ---------- | -------------------- | ----------- |
-| parameter1 | string               |             |
-| parameter2 | [T][TypeParameter-3] |             |
+| Name       | Type                 |
+| ---------- | -------------------- |
+| parameter1 | string               |
+| parameter2 | [T][TypeParameter-3] |
 
 ### Return type
 
-## function AnotherFoo<T extends Array<T>>(parameter1: string, parameter2: Promise<T>): string
+string
 
 
-TODO: is deprecated or beta
+## AnotherFoo(parameter1, parameter2)
 
 ### Type parameters
 
+| Name | Constraint type |
+| ---- | --------------- |
+| T    | Array           |
 
 ### Parameters
 
-| Name       | Type                          | Description |
-| ---------- | ----------------------------- | ----------- |
-| parameter1 | string                        |             |
-| parameter2 | Promise<[T][TypeParameter-4]> |             |
+| Name       | Type    |
+| ---------- | ------- |
+| parameter1 | string  |
+| parameter2 | Promise |
 
 ### Return type
 
-## function FunctionWithOneParameter(parameter: string): void
+string
 
 
-TODO: is deprecated or beta
-
-### Type parameters
-
+## FunctionWithOneParameter(parameter)
 
 ### Parameters
 
-| Name      | Type   | Description |
-| --------- | ------ | ----------- |
-| parameter | string |             |
+| Name      | Type   |
+| --------- | ------ |
+| parameter | string |
 
 ### Return type
 
-## function FunctionWithNoParameters(): void
+void
 
 
-TODO: is deprecated or beta
+## FunctionWithNoParameters()
 
-### Type parameters
+### Return type
 
+void
+
+
+## FunctionWithMultipleParameters(parameter1, parameter2)
 
 ### Parameters
 
+| Name       | Type   |
+| ---------- | ------ |
+| parameter1 | string |
+| parameter2 | number |
 
 ### Return type
 
-## function FunctionWithMultipleParameters(parameter1: string, parameter2: number): void
+void
 
 
-TODO: is deprecated or beta
-
-### Type parameters
-
-
-### Parameters
-
-| Name       | Type   | Description |
-| ---------- | ------ | ----------- |
-| parameter1 | string |             |
-| parameter2 | number |             |
+## Foo()
 
 ### Return type
 
-## function Foo(): string
+string
 
 
-TODO: is deprecated or beta
+## Bar(parameter1, parameter2)
 
-### Type parameters
+<span style="color: #d2d255;">Warning: Beta!</span>
 
-
-### Parameters
-
-
-### Return type
-
-## function Bar(parameter1: string, parameter2: number): string
+<span style="color: red;">Deprecated!</span>
 
 Some general comment about Bar function.
 
-TODO: is deprecated or beta
-
-### Type parameters
-
-
 ### Parameters
 
-| Name       | Type   | Description |
-| ---------- | ------ | ----------- |
-| parameter1 | string |             |
-| parameter2 | number |             |
+| Name       | Type   |
+| ---------- | ------ |
+| parameter1 | string |
+| parameter2 | number |
 
 ### Return type
 
-## function FunctionWithoutReturnType<T extends Array<T>>(parameter1: string, parameter2: Promise<T>): string
+string
 
 
-TODO: is deprecated or beta
-
-### Type parameters
-
-
-### Parameters
-
-| Name       | Type                          | Description |
-| ---------- | ----------------------------- | ----------- |
-| parameter1 | string                        |             |
-| parameter2 | Promise<[T][TypeParameter-5]> |             |
-
-### Return type
-
-## function FunctionWithGenericReturnType(): Array<string>
-
-
-TODO: is deprecated or beta
+## FunctionWithoutReturnType(parameter1, parameter2)
 
 ### Type parameters
 
+| Name | Constraint type |
+| ---- | --------------- |
+| T    | Array           |
 
 ### Parameters
 
+| Name       | Type    |
+| ---------- | ------- |
+| parameter1 | string  |
+| parameter2 | Promise |
 
 ### Return type
 
-## function FunctionWithPrimitiveReturnType(): true | false
+string
 
 
-TODO: is deprecated or beta
-
-### Type parameters
-
-
-### Parameters
-
+## FunctionWithGenericReturnType()
 
 ### Return type
 
-## function FunctionWithUnionReturnType(): "something" | "nothing"
+Array
 
 
-TODO: is deprecated or beta
-
-### Type parameters
-
-
-### Parameters
-
+## FunctionWithPrimitiveReturnType()
 
 ### Return type
 
-## function FunctionWithIntersectionReturnType(): Earth & World
+true | false
 
 
-TODO: is deprecated or beta
-
-### Type parameters
-
-
-### Parameters
-
+## FunctionWithUnionReturnType()
 
 ### Return type
 
-=======
->>>>>>> origin/dev
+"something" | "nothing"
+
+
+## FunctionWithIntersectionReturnType()
+
+### Return type
+
+[Earth][ClassDeclaration-1] & [World][ClassDeclaration-0]
+
+
 ## Uogos
 
 <span style="color: #d2d255;">Warning: Beta!</span>
+
+<span style="color: red;">Deprecated!</span>
 
 Some information
 2nd line of some information
 3rd line of some information
 4th line of some information
 5th line of some information
-<<<<<<< HEAD
-=======
 
 > Some summary about this package version.
->>>>>>> origin/dev
 
 
 ```typescript
