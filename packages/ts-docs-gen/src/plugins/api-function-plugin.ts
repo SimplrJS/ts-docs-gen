@@ -55,16 +55,25 @@ export class ApiFunctionPlugin extends ApiItemPluginBase<Contracts.ApiFunctionDt
         return metaData.DocumentationComment.map(commentItem => commentItem.text);
     }
 
-    // private resolveFunctionParameters(): string[] {
-    //     const builder = new MarkdownBuilder();
-    //     return builder.GetOutput();
-    // }
+    private resolveFunctionParameters(parameters: Contracts.ApiParameterDto[]): string[] {
+        if (parameters.length === 0) {
+            return [];
+        }
+
+        const builder = new MarkdownBuilder();
+        const header = ["Name", "Type", "Description"];
+        const content = parameters.map(parameter => [parameter.Name, GeneratorHelpers.TypeDtoToMarkdownString(parameter.Type).Text]);
+
+        return builder
+            .Table(header, content)
+            .GetOutput();
+    }
 
     private resolveFunctionTypeParameters(typeParameters: Contracts.ApiTypeParameterDto[]): string[] {
         const builder = new MarkdownBuilder();
 
         // typeParameters.map(parameter => {
-        //     console.log(parameter);
+        //     return [];
         // });
 
         return builder.GetOutput();
@@ -76,8 +85,6 @@ export class ApiFunctionPlugin extends ApiItemPluginBase<Contracts.ApiFunctionDt
             data.ApiItem.Parameters,
             data.ExtractedData
         );
-
-        console.log(data.ApiItem.Metadata);
 
         const typeParameters = ExtractorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiTypeParameterDto>(
             data.ApiItem.TypeParameters,
@@ -98,7 +105,7 @@ export class ApiFunctionPlugin extends ApiItemPluginBase<Contracts.ApiFunctionDt
             .EmptyLine()
             .Header("Parameters", 3)
             .EmptyLine()
-            .Text("TODO")
+            .Text(this.resolveFunctionParameters(parameters))
             .EmptyLine()
             .Header("Return type", 3);
 

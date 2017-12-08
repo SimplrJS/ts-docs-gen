@@ -4,6 +4,24 @@
 
 ## class: Earth
 
+## function FunctionWithMultipleTypeParameters<T extends Object, P>(parameter1: T, parameter2: P): string
+
+Bla bla
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+
+### Parameters
+
+| Name       | Type                 | Description |
+| ---------- | -------------------- | ----------- |
+| parameter1 | [T][TypeParameter-0] |             |
+| parameter2 | [P][TypeParameter-1] |             |
+
+### Return type
+
 ## function FunctionWithTypeParameterDefault<T extends Object = __type>(parameter1: string, parameter2: T): string
 
 Some general comment about AnotherBar function.
@@ -12,11 +30,13 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
+| Name       | Type                 | Description |
+| ---------- | -------------------- | ----------- |
+| parameter1 | string               |             |
+| parameter2 | [T][TypeParameter-2] |             |
 
 ### Return type
 
@@ -28,11 +48,13 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
+| Name       | Type                 | Description |
+| ---------- | -------------------- | ----------- |
+| parameter1 | string               |             |
+| parameter2 | [T][TypeParameter-3] |             |
 
 ### Return type
 
@@ -43,11 +65,13 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
+| Name       | Type                          | Description |
+| ---------- | ----------------------------- | ----------- |
+| parameter1 | string                        |             |
+| parameter2 | Promise<[T][TypeParameter-4]> |             |
 
 ### Return type
 
@@ -58,11 +82,12 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
+| Name      | Type   | Description |
+| --------- | ------ | ----------- |
+| parameter | string |             |
 
 ### Return type
 
@@ -73,11 +98,9 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
 
 ### Return type
 
@@ -88,11 +111,13 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
+| Name       | Type   | Description |
+| ---------- | ------ | ----------- |
+| parameter1 | string |             |
+| parameter2 | number |             |
 
 ### Return type
 
@@ -103,11 +128,9 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
 
 ### Return type
 
@@ -119,11 +142,13 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
+| Name       | Type   | Description |
+| ---------- | ------ | ----------- |
+| parameter1 | string |             |
+| parameter2 | number |             |
 
 ### Return type
 
@@ -134,11 +159,13 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
+| Name       | Type                          | Description |
+| ---------- | ----------------------------- | ----------- |
+| parameter1 | string                        |             |
+| parameter2 | Promise<[T][TypeParameter-5]> |             |
 
 ### Return type
 
@@ -149,11 +176,9 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
 
 ### Return type
 
@@ -164,11 +189,9 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
 
 ### Return type
 
@@ -179,11 +202,9 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
 
 ### Return type
 
@@ -194,11 +215,9 @@ TODO: is deprecated or beta
 
 ### Type parameters
 
-TODO
 
 ### Parameters
 
-TODO
 
 ### Return type
 
