@@ -82,8 +82,8 @@ export namespace GeneratorHelpers {
                 .EmptyLine();
         }
 
-        if (deprecated != null && Boolean(deprecated.text)) {
-            const message = `: ${deprecated.text}`;
+        if (deprecated != null) {
+            const message = Boolean(deprecated.text) ? `: ${deprecated.text}` : "";
             builder
                 .Text(`<span style="color: red;">Deprecated${message}!</span>`)
                 .EmptyLine();
