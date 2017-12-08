@@ -1,4 +1,7 @@
+[EnumDeclaration-0]: index.md#uogos
 # index
+
+## class: World
 
 ## Uogos
 
@@ -6,7 +9,7 @@ Some information
 2nd line of some information
 3rd line of some information
 4th line of some information
-5th line of some information.
+5th line of some information
 
 deprecated
 beta
@@ -24,6 +27,7 @@ enum Uogos {
 | Braskes | "braskes" |
 
 ## Skaiciai
+
 
 
 
@@ -45,6 +49,7 @@ enum Skaiciai {
 
 
 
+
 ```typescript
 enum Sarasas {
      Pirmas = 0,
@@ -53,13 +58,14 @@ enum Sarasas {
 }
 ```
 
-| Name    | Value | Description            |
-| ------- | ----- | ---------------------- |
-| Pirmas  | 0     | Pirmo description'as.  |
-| Antras  | 1     | Antro description'as.  |
-| Trecias | 2     | Trečio description'as. |
+| Name    | Value | Description           |
+| ------- | ----- | --------------------- |
+| Pirmas  | 0     | Pirmo description'as  |
+| Antras  | 1     | Antro description'as  |
+| Trecias | 2     | Trečio description'as |
 
 ## ConstSkaiciai
+
 
 
 
@@ -81,6 +87,7 @@ enum ConstSkaiciai {
 
 
 
+
 ```typescript
 enum ConstSarasas {
      PirmasC = 0,
@@ -89,13 +96,14 @@ enum ConstSarasas {
 }
 ```
 
-| Name     | Value | Description            |
-| -------- | ----- | ---------------------- |
-| PirmasC  | 0     | Pirmo description'as.  |
-| AntrasC  | 1     | Antro description'as.  |
-| TreciasC | 2     | Trečio description'as. |
+| Name     | Value | Description           |
+| -------- | ----- | --------------------- |
+| PirmasC  | 0     | Pirmo description'as  |
+| AntrasC  | 1     | Antro description'as  |
+| TreciasC | 2     | Trečio description'as |
 
 ## ConstUogos
+
 
 
 
@@ -110,3 +118,13 @@ enum ConstUogos {
 | ------- | --------- |
 | Jokie   | "jokie"   |
 | Braskes | "braskes" |
+
+## Hello
+
+```typescript
+type Hello = Uogos;
+```
+
+### Type
+
+[Uogos][EnumDeclaration-0]

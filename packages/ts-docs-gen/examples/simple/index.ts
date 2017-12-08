@@ -2,7 +2,7 @@
 
 // import { Foo } from "./exported-functions";
 
-// export class World { }
+export class World { }
 // export class Earth { }
 
 // export declare const Hello: World & Earth;
@@ -168,3 +168,5 @@ export const enum ConstUogos {
 
 //     public abstract Bar(): string;
 // }
+
+export type Hello = Uogos;
