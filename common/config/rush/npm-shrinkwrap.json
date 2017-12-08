@@ -8,9 +8,9 @@
       "resolved": "file:projects\\ts-docs-gen.tgz"
     },
     "@simplrjs/markdown": {
-      "version": "1.0.0",
-      "from": "@simplrjs/markdown@>=1.0.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/@simplrjs/markdown/-/markdown-1.0.0.tgz"
+      "version": "1.0.1",
+      "from": "@simplrjs/markdown@>=1.0.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/@simplrjs/markdown/-/markdown-1.0.1.tgz"
     },
     "@types/fs-extra": {
       "version": "4.0.5",
