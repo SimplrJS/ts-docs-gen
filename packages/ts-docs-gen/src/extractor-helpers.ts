@@ -1,7 +1,16 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { ReferenceTuple } from "./contracts/reference-tuple";
+import { Contracts as MarkdownContracts } from "@simplrjs/markdown";
 
 export namespace ExtractorHelpers {
+    export const DEFAULT_CODE_OPTIONS = {
+        lang: "typescript"
+    };
+
+    export const DEFAULT_TABLE_OPTIONS: MarkdownContracts.TableOptions = {
+        removeColumnIfEmpty: true
+    };
+
     export function GetReferenceTuples(
         extractedData: ExtractDto,
         entryFile: Contracts.ApiSourceFileDto,
@@ -81,10 +90,6 @@ export namespace ExtractorHelpers {
         return result;
     }
 
-    export const DEFAULT_CODE_OPTIONS = {
-        lang: "typescript"
-    };
-
     export function FixSentence(sentence: string, punctuationMark: string = "."): string {
         const trimmedSentence = sentence.trim();
         const punctuationMarks = ".!:;,-";
@@ -120,5 +125,18 @@ export namespace ExtractorHelpers {
         const name = alias != null ? alias : item.Name;
 
         return `type ${name} = ${item.Type.Text};`;
+    }
+
+    export function ApiFunctionToString(
+        alias: string,
+        apiItem: Contracts.ApiFunctionDto,
+        parametersApiItems: Contracts.ApiParameterDto[]
+    ): string {
+        const name = alias || apiItem.Name;
+        const parametersString = parametersApiItems
+            .map(x => x.Name)
+            .join(", ");
+
+        return `${name}(${parametersString})`;
     }
 }
