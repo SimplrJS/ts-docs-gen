@@ -13,109 +13,141 @@ export class ApiFunctionPlugin extends ApiItemPluginBase<Contracts.ApiFunctionDt
         return [this.SupportKind.Function];
     }
 
-    private resolveFunctionHeader(
-        alias: string,
-        parametersApiItems: Contracts.ApiParameterDto[],
-        typeParametersApiItems: Contracts.ApiTypeParameterDto[],
-        apiItem: Contracts.ApiFunctionDto
-    ): string {
-        let functionHeader = `function ${apiItem.Name}`;
-
-        // Resolving type parameters
-        if (typeParametersApiItems.length > 0) {
-            const typeParameters = typeParametersApiItems
-                .map(GeneratorHelpers.TypeParameterToString)
-                .join(", ");
-
-            functionHeader += `<${typeParameters}>`;
-        }
-
-        // Resolving parameters
-        const parametersString = parametersApiItems
-            .map(parameter => `${parameter.Name}: ${GeneratorHelpers.TypeDtoToString(parameter.Type)}`)
-            .join(", ");
-
-        functionHeader += `(${parametersString})`;
-
-        // Resolving return type
-        // Ask @Martynas for cases where function have no return type.
-        if (apiItem.ReturnType != null) {
-            functionHeader += ": " + GeneratorHelpers.TypeDtoToString(apiItem.ReturnType);
-        }
-
-        return functionHeader;
-    }
-
-    private resolveDocumentationComment(metaData: Contracts.ApiMetadataDto): string[] {
-        if (metaData.DocumentationComment.length === 0) {
-            return [];
-        }
-
-        // TODO: implement ExtractorHelpers.FixSentence when comments separation implemented in `ts-extractor`.
-        return metaData.DocumentationComment.map(commentItem => commentItem.text);
-    }
-
-    private resolveFunctionParameters(parameters: Contracts.ApiParameterDto[]): string[] {
+    // TODO: add description from @param jsdoc tag.
+    private resolveFunctionParameters(parameters: Contracts.ApiParameterDto[]): GeneratorHelpers.ReferenceDto<string[]> {
         if (parameters.length === 0) {
-            return [];
+            return {
+                References: [],
+                Text: []
+            };
         }
 
-        const builder = new MarkdownBuilder();
+        let referenceIds: string[] = [];
         const header = ["Name", "Type", "Description"];
-        const content = parameters.map(parameter => [parameter.Name, GeneratorHelpers.TypeDtoToMarkdownString(parameter.Type).Text]);
 
-        return builder
-            .Table(header, content)
+        const content = parameters.map(parameter => {
+            const parameterTypeDto = GeneratorHelpers.TypeDtoToMarkdownString(parameter.Type);
+
+            referenceIds = referenceIds.concat(parameterTypeDto.References);
+
+            return [parameter.Name, parameterTypeDto.Text];
+        });
+
+        const text = new MarkdownBuilder()
+            .Header("Parameters", 3)
+            .EmptyLine()
+            .Table(header, content, ExtractorHelpers.DEFAULT_TABLE_OPTIONS)
+            .EmptyLine()
             .GetOutput();
+
+        return {
+            Text: text,
+            References: referenceIds
+        };
     }
 
-    private resolveFunctionTypeParameters(typeParameters: Contracts.ApiTypeParameterDto[]): string[] {
-        const builder = new MarkdownBuilder();
+    // TODO: add description from @template jsdoc tag.
+    private resolveFunctionTypeParameters(typeParameters: Contracts.ApiTypeParameterDto[]): GeneratorHelpers.ReferenceDto<string[]> {
+        let referenceIds: string[] = [];
 
-        // typeParameters.map(parameter => {
-        //     return [];
-        // });
+        if (typeParameters.length === 0) {
+            return {
+                References: [],
+                Text: []
+            };
+        }
 
-        return builder.GetOutput();
+        const header = ["Name", "Constraint type", "Default type"];
+        const content = typeParameters.map(typeParameter => {
+            let constraintType: string = "";
+            let defaultType: string = "";
+
+            if (typeParameter.ConstraintType) {
+                const parsedConstraintType = GeneratorHelpers.TypeDtoToMarkdownString(typeParameter.ConstraintType);
+
+                referenceIds = referenceIds.concat(parsedConstraintType.References);
+                constraintType = parsedConstraintType.Text;
+            }
+
+            if (typeParameter.DefaultType) {
+                const parsedDefaultType = GeneratorHelpers.TypeDtoToMarkdownString(typeParameter.DefaultType);
+
+                referenceIds = referenceIds.concat(parsedDefaultType.References);
+                defaultType = parsedDefaultType.Text;
+            }
+
+            return [typeParameter.Name, constraintType, defaultType];
+        });
+
+        const text = new MarkdownBuilder()
+            .Header("Type parameters", 3)
+            .EmptyLine()
+            .Table(header, content, ExtractorHelpers.DEFAULT_TABLE_OPTIONS)
+            .EmptyLine()
+            .GetOutput();
+
+        return {
+            References: referenceIds,
+            Text: text
+        };
+    }
+
+    private resolveReturnType(typeDto?: Contracts.TypeDto): GeneratorHelpers.ReferenceDto<string[]> {
+        if (typeDto == null) {
+            return {
+                References: [],
+                Text: []
+            };
+        }
+
+        const parsedReturnType = GeneratorHelpers.TypeDtoToMarkdownString(typeDto);
+
+        const text = new MarkdownBuilder()
+            .Header("Return type", 3)
+            .EmptyLine()
+            .Text(parsedReturnType.Text)
+            .EmptyLine()
+            .GetOutput();
+
+        return {
+            Text: text,
+            References: parsedReturnType.References
+        };
     }
 
     public Render(data: PluginData<Contracts.ApiFunctionDto>): RenderItemOutputDto {
         const [, alias] = data.Reference;
+
         const parameters = ExtractorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiParameterDto>(
             data.ApiItem.Parameters,
             data.ExtractedData
         );
+        const resolvedParametersDto = this.resolveFunctionParameters(parameters);
 
         const typeParameters = ExtractorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiTypeParameterDto>(
             data.ApiItem.TypeParameters,
             data.ExtractedData
         );
+        const resolvedTypeParametersDto = this.resolveFunctionTypeParameters(typeParameters);
 
-        const headerString = this.resolveFunctionHeader(alias, parameters, typeParameters, data.ApiItem);
+        const resolvedReturnTypeDto = this.resolveReturnType(data.ApiItem.ReturnType);
+
         const builder = new MarkdownBuilder()
-            .Header(headerString, 2)
+            .Header(ExtractorHelpers.ApiFunctionToString(alias, data.ApiItem, parameters), 2)
             .EmptyLine()
-            .Text(this.resolveDocumentationComment(data.ApiItem.Metadata))
-            .EmptyLine()
-            .Text("TODO: is deprecated or beta")
-            .EmptyLine()
-            .Header("Type parameters", 3)
-            .EmptyLine()
-            .Text(this.resolveFunctionTypeParameters(typeParameters))
-            .EmptyLine()
-            .Header("Parameters", 3)
-            .EmptyLine()
-            .Text(this.resolveFunctionParameters(parameters))
-            .EmptyLine()
-            .Header("Return type", 3);
-
-        // const returnTypeDto = GeneratorHelpers.TypeDtoToMarkdownString(data.ApiItem.ReturnType!);
-        // console.log(returnTypeDto);
+            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
+            .Text(resolvedTypeParametersDto.Text)
+            .Text(resolvedParametersDto.Text)
+            .Text(resolvedReturnTypeDto.Text);
 
         return {
             Heading: alias,
             ApiItem: data.ApiItem,
-            References: [],
+            References: [
+                ...resolvedParametersDto.References,
+                ...resolvedTypeParametersDto.References,
+                ...resolvedReturnTypeDto.References
+            ],
             RenderOutput: builder.GetOutput()
         };
     }
