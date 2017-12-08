@@ -25,7 +25,7 @@ export class ApiTypePlugin extends ApiItemPluginBase<Contracts.ApiTypeDto> {
 
         // Metadata
         if (data.ApiItem.Metadata.DocumentationComment.length > 0) {
-            builder.Text(data.ApiItem.Metadata.DocumentationComment.map(x => x.text));
+            builder.Text(data.ApiItem.Metadata.DocumentationComment);
         }
 
         // Text and Type.

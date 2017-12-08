@@ -23,7 +23,7 @@ export class ApiVariablePlugin extends ApiItemPluginBase<Contracts.ApiVariableDt
             .EmptyLine();
 
         if (data.ApiItem.Metadata.DocumentationComment.length > 0) {
-            builder.Text(data.ApiItem.Metadata.DocumentationComment.map(x => x.text));
+            builder.Text(data.ApiItem.Metadata.DocumentationComment);
         }
 
         builder

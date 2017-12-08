@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { MarkdownGenerator } from "@simplrjs/markdown";
+// import { MarkdownGenerator } from "@simplrjs/markdown";
 
 export namespace GeneratorHelpers {
     export interface TypeToStringDto {
@@ -7,6 +7,7 @@ export namespace GeneratorHelpers {
         Text: string;
     }
 
+    // TODO: Resolve reference.
     export function TypeDtoToMarkdownString(type: Contracts.TypeDto): TypeToStringDto {
         let references: string[] = [];
         let text: string = "";
@@ -27,21 +28,6 @@ export namespace GeneratorHelpers {
                             text += ` ${symbol} ${typeItem.Text}`;
                         }
                     });
-                break;
-            }
-            case Contracts.TypeKinds.Reference: {
-                references.push(type.ReferenceId);
-
-                // Link to definition
-                text = `${MarkdownGenerator.Link(type.Name || "???", type.ReferenceId, true)}`;
-
-                // Generics
-                if (type.Generics != null) {
-                    const generics = type.Generics.map(TypeDtoToMarkdownString);
-                    references = references.concat(...generics.map(x => x.References));
-
-                    text += `<${generics.map(x => x.Text).join(", ")}>`;
-                }
                 break;
             }
             case Contracts.TypeKinds.Basic:

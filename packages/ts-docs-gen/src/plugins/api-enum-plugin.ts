@@ -13,13 +13,13 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         return [this.SupportKind.Enum];
     }
 
-    private resolveDocumentationComment(metaData: Contracts.ApiMetadataDto): string[] {
+    private resolveDocumentationComment(metaData: Contracts.ApiMetadataDto): string {
         if (metaData.DocumentationComment.length === 0) {
-            return [];
+            return "";
         }
 
         // TODO: implement ExtractorHelpers.FixSentence when comments separation implemented in `ts-extractor`.
-        return metaData.DocumentationComment.map(commentItem => commentItem.text);
+        return metaData.DocumentationComment;
     }
 
     // TODO: improve output text of @beta and @deprecated JSDocTags.
@@ -40,42 +40,8 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
 
     private constructEnumTable(members: Contracts.ApiEnumMemberDto[]): string[] {
         // Table header.
-        const header = ["Name", "Value"];
-
-        // Assuming that enum members are not described separately.
-        let descriptionFound = false;
-
-        // Generating table content.
-        const content = members.map<string[]>(member => {
-            const row: string[] = [member.Name, member.Value];
-            const comments = member.Metadata.DocumentationComment;
-
-            // Handling enum member comments.
-            if (comments.length > 0) {
-                descriptionFound = true;
-
-                const commentSeparator = " ";
-                let description = "";
-
-                // Reducing comments into a single description.
-                comments.forEach((comment, index, array) => {
-                    description += ExtractorHelpers.FixSentence(comment.text);
-
-                    if (index !== array.length - 1) {
-                        description += commentSeparator;
-                    }
-                });
-
-                row.push(description);
-            }
-
-            return row;
-        });
-
-        // Add description cell in header if at least one enum member have comment.
-        if (descriptionFound) {
-            header.push("Description");
-        }
+        const header = ["Name", "Value", "Description"];
+        const content = members.map(x => [x.Name, x.Value, x.Metadata.DocumentationComment]);
 
         return MarkdownGenerator.Table(header, content);
     }
