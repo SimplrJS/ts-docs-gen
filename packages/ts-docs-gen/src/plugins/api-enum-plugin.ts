@@ -43,7 +43,7 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         const header = ["Name", "Value", "Description"];
         const content = members.map(x => [x.Name, x.Value, x.Metadata.DocumentationComment]);
 
-        return MarkdownGenerator.Table(header, content);
+        return MarkdownGenerator.Table(header, content, { removeColumnIfEmpty: true });
     }
 
     /**
@@ -78,7 +78,7 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
             .Text(this.constructEnumTable(enumMembers));
 
         return {
-            Heading: "Enum",
+            Heading: alias,
             ApiItem: data.ApiItem,
             References: [],
             RenderOutput: builder.GetOutput()
