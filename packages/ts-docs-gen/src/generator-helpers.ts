@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { MarkdownGenerator } from "@simplrjs/markdown";
+import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
 
 export namespace GeneratorHelpers {
     export interface TypeToStringDto {
@@ -59,5 +59,48 @@ export namespace GeneratorHelpers {
             References: references,
             Text: text
         };
+    }
+
+    export enum JSDocTags {
+        Beta = "beta",
+        Deprecated = "deprecated",
+        Summary = "summary"
+    }
+
+    export function RenderApiItemMetadata(apiItem: Contracts.ApiItemDto): string[] {
+        const builder = new MarkdownBuilder();
+
+        // Optimise?
+        const isBeta = apiItem.Metadata.JSDocTags.findIndex(x => x.name.toLowerCase() === JSDocTags.Beta) !== -1;
+        const deprecated = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Deprecated);
+        const summary = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Summary);
+        const jSDocComment = apiItem.Metadata.DocumentationComment;
+
+        if (isBeta) {
+            builder
+                .Text(`<span style="color: yellow;">Warning: Beta!</span>`)
+                .EmptyLine();
+        }
+
+        if (deprecated != null && deprecated.text != null) {
+            const message = `: ${deprecated.text}`;
+            builder
+                .Text(`<span style="color: yellow;">Deprecated${message}!</span>`)
+                .EmptyLine();
+        }
+
+        if (summary != null && summary.text != null) {
+            builder
+                .Blockquote(summary.text.split("\n"))
+                .EmptyLine();
+        }
+
+        if (jSDocComment.length > 0) {
+            builder
+                .Text(jSDocComment)
+                .EmptyLine();
+        }
+
+        return builder.GetOutput();
     }
 }
