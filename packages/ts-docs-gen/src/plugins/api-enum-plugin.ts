@@ -6,36 +6,12 @@ import { SupportedApiItemKindType } from "../contracts/supported-api-item-kind-t
 import { PluginData } from "../contracts/plugin-data";
 import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
 import { ExtractorHelpers } from "../extractor-helpers";
+import { GeneratorHelpers } from "../generator-helpers";
 
 // TODO: const enums implementation.
 export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
     public SupportedApiItemsKinds(): SupportedApiItemKindType[] {
         return [this.SupportKind.Enum];
-    }
-
-    private resolveDocumentationComment(metaData: Contracts.ApiMetadataDto): string {
-        if (metaData.DocumentationComment.length === 0) {
-            return "";
-        }
-
-        // TODO: implement ExtractorHelpers.FixSentence when comments separation implemented in `ts-extractor`.
-        return metaData.DocumentationComment;
-    }
-
-    // TODO: improve output text of @beta and @deprecated JSDocTags.
-    /**
-     * Resolves "@beta" and "@deprecated" JSDocTags.
-     */
-    private resolveJSDocTags(metaData: Contracts.ApiMetadataDto): string[] {
-        return metaData.JSDocTags
-            .filter(tag => tag.name === "deprecated" || tag.name === "beta")
-            .map<string>(tag => {
-                if (tag.text) {
-                    return `${tag.name} - ${tag.text}`;
-                }
-
-                return tag.name;
-            });
     }
 
     private constructEnumTable(members: Contracts.ApiEnumMemberDto[]): string[] {
@@ -69,9 +45,7 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         const builder = new MarkdownBuilder()
             .Header(alias, 2)
             .EmptyLine()
-            .Text(this.resolveDocumentationComment(data.ApiItem.Metadata))
-            .EmptyLine()
-            .Text(this.resolveJSDocTags(data.ApiItem.Metadata))
+            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .EmptyLine()
             .Code(ExtractorHelpers.ReconstructEnumCode(alias, enumMembers), ExtractorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()

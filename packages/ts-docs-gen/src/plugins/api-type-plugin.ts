@@ -21,15 +21,8 @@ export class ApiTypePlugin extends ApiItemPluginBase<Contracts.ApiTypeDto> {
         // Header
         const builder = new MarkdownBuilder()
             .Header(heading, 2)
-            .EmptyLine();
-
-        // Metadata
-        if (data.ApiItem.Metadata.DocumentationComment.length > 0) {
-            builder.Text(data.ApiItem.Metadata.DocumentationComment);
-        }
-
-        // Text and Type.
-        builder
+            .EmptyLine()
+            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Code(ExtractorHelpers.ApiTypeToString(data.ApiItem), ExtractorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
             .Header("Type", 3)

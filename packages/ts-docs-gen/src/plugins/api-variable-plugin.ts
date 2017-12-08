@@ -20,13 +20,8 @@ export class ApiVariablePlugin extends ApiItemPluginBase<Contracts.ApiVariableDt
 
         const builder = new MarkdownBuilder()
             .Header(heading, 2)
-            .EmptyLine();
-
-        if (data.ApiItem.Metadata.DocumentationComment.length > 0) {
-            builder.Text(data.ApiItem.Metadata.DocumentationComment);
-        }
-
-        builder
+            .EmptyLine()
+            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Code(ExtractorHelpers.ApiVariableToString(data.ApiItem), ExtractorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
             .Header("Type", 3)
