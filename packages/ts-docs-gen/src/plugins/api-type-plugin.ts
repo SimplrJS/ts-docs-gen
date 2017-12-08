@@ -8,21 +8,22 @@ import { PluginData } from "../contracts/plugin-data";
 import { ExtractorHelpers } from "../extractor-helpers";
 import { GeneratorHelpers } from "../generator-helpers";
 
-export class ApiVariablePlugin extends ApiItemPluginBase<Contracts.ApiVariableDto> {
+export class ApiTypePlugin extends ApiItemPluginBase<Contracts.ApiTypeDto> {
     public SupportedApiItemsKinds(): SupportedApiItemKindType[] {
-        return [this.SupportKind.Variable];
+        return [this.SupportKind.Type];
     }
 
-    public Render(data: PluginData<Contracts.ApiVariableDto>): RenderItemOutputDto {
+    public Render(data: PluginData<Contracts.ApiTypeDto>): RenderItemOutputDto {
         const [, alias] = data.Reference;
         const heading = alias;
         const typeStringDto = GeneratorHelpers.TypeDtoToMarkdownString(data.ApiItem.Type);
 
+        // Header
         const builder = new MarkdownBuilder()
             .Header(heading, 2)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
-            .Code(ExtractorHelpers.ApiVariableToString(data.ApiItem), ExtractorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(ExtractorHelpers.ApiTypeToString(data.ApiItem), ExtractorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
             .Header("Type", 3)
             .EmptyLine()

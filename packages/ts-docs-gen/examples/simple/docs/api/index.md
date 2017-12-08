@@ -1,7 +1,9 @@
+[EnumDeclaration-0]: index.md#uogos
 # index
 
 ## class: World
 
+<<<<<<< HEAD
 ## class: Earth
 
 ## function FunctionWithMultipleTypeParameters<T extends Object, P>(parameter1: T, parameter2: P): string
@@ -221,16 +223,23 @@ TODO: is deprecated or beta
 
 ### Return type
 
+=======
+>>>>>>> origin/dev
 ## Uogos
+
+<span style="color: #d2d255;">Warning: Beta!</span>
 
 Some information
 2nd line of some information
 3rd line of some information
 4th line of some information
 5th line of some information
+<<<<<<< HEAD
+=======
 
-deprecated
-beta
+> Some summary about this package version.
+>>>>>>> origin/dev
+
 
 ```typescript
 enum Uogos {
@@ -245,7 +254,6 @@ enum Uogos {
 | Braskes | "braskes" |
 
 ## Skaiciai
-
 
 
 ```typescript
@@ -265,7 +273,6 @@ enum Skaiciai {
 ## Sarasas
 
 
-
 ```typescript
 enum Sarasas {
      Pirmas = 0,
@@ -274,14 +281,13 @@ enum Sarasas {
 }
 ```
 
-| Name    | Value | Description            |
-| ------- | ----- | ---------------------- |
-| Pirmas  | 0     | Pirmo description'as.  |
-| Antras  | 1     | Antro description'as.  |
-| Trecias | 2     | Trečio description'as. |
+| Name    | Value | Description           |
+| ------- | ----- | --------------------- |
+| Pirmas  | 0     | Pirmo description'as  |
+| Antras  | 1     | Antro description'as  |
+| Trecias | 2     | Trečio description'as |
 
 ## ConstSkaiciai
-
 
 
 ```typescript
@@ -301,7 +307,6 @@ enum ConstSkaiciai {
 ## ConstSarasas
 
 
-
 ```typescript
 enum ConstSarasas {
      PirmasC = 0,
@@ -310,14 +315,13 @@ enum ConstSarasas {
 }
 ```
 
-| Name     | Value | Description            |
-| -------- | ----- | ---------------------- |
-| PirmasC  | 0     | Pirmo description'as.  |
-| AntrasC  | 1     | Antro description'as.  |
-| TreciasC | 2     | Trečio description'as. |
+| Name     | Value | Description           |
+| -------- | ----- | --------------------- |
+| PirmasC  | 0     | Pirmo description'as  |
+| AntrasC  | 1     | Antro description'as  |
+| TreciasC | 2     | Trečio description'as |
 
 ## ConstUogos
-
 
 
 ```typescript
@@ -331,3 +335,15 @@ enum ConstUogos {
 | ------- | --------- |
 | Jokie   | "jokie"   |
 | Braskes | "braskes" |
+
+## Hello
+
+<span style="color: red;">Deprecated: Use uogos instead ;)!</span>
+
+```typescript
+type Hello = Uogos;
+```
+
+### Type
+
+[Uogos][EnumDeclaration-0]

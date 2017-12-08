@@ -72,9 +72,7 @@ export namespace ExtractorHelpers {
         ];
     }
 
-    // TODO: reconsider location
     const TAB_STRING = "    ";
-
     export function Tab(size: number = 1): string {
         let result: string = "";
         for (let i = 0; i < size; i++) {
@@ -82,7 +80,6 @@ export namespace ExtractorHelpers {
         }
         return result;
     }
-    // ---------------------------------------------------
 
     export const DEFAULT_CODE_OPTIONS = {
         lang: "typescript"
@@ -117,5 +114,11 @@ export namespace ExtractorHelpers {
         }
 
         return apiItems;
+    }
+
+    export function ApiTypeToString(item: Contracts.ApiTypeDto, alias?: string): string {
+        const name = alias != null ? alias : item.Name;
+
+        return `type ${name} = ${item.Type.Text};`;
     }
 }
