@@ -2,11 +2,14 @@ import { Contracts } from "ts-extractor";
 import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
 
 export namespace GeneratorHelpers {
-    export interface TypeToStringDto {
+    export type TypeToStringDto = ReferenceDto<string>;
+
+    export interface ReferenceDto<T = string | string[]> {
         References: string[];
-        Text: string;
+        Text: T;
     }
 
+    // TODO: implement type literal and function type.
     export function TypeDtoToMarkdownString(type: Contracts.TypeDto): TypeToStringDto {
         let references: string[] = [];
         let text: string = "";
@@ -59,79 +62,6 @@ export namespace GeneratorHelpers {
             References: references,
             Text: text
         };
-    }
-
-    export function TypeDtoToString(type: Contracts.TypeDto): string {
-        let text: string = "";
-
-        switch (type.ApiTypeKind) {
-            case Contracts.TypeKinds.Union:
-            case Contracts.TypeKinds.Intersection: {
-                const symbol = type.ApiTypeKind === Contracts.TypeKinds.Union ? "|" : "&";
-
-                if (type.ReferenceId != null) {
-                    text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
-                    break;
-                }
-
-                type.Types
-                    .map(TypeDtoToMarkdownString)
-                    .forEach(typeItem => {
-                        if (text === "") {
-                            text = typeItem.Text;
-                        } else {
-                            text += ` ${symbol} ${typeItem.Text}`;
-                        }
-                    });
-                break;
-            }
-            case Contracts.TypeKinds.Basic:
-            default: {
-                // Generics
-                if (type.Name != null && type.Generics != null) {
-                    const generics = type.Generics.map(TypeDtoToMarkdownString);
-                    text += `<${generics.map(x => x.Text).join(", ")}>`;
-                }
-
-                // Basic type with reference.
-                if (type.ReferenceId != null) {
-                    text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
-                } else {
-                    text = type.Name || type.Text;
-                }
-            }
-        }
-
-        return text;
-    }
-
-    export function TypeParameterToString(typeParameter: Contracts.ApiTypeParameterDto): string {
-        let output = typeParameter.Name;
-
-        if (typeParameter.ConstraintType != null) {
-            output += ` extends ${TypeDtoToString(typeParameter.ConstraintType)}`;
-        }
-
-        if (typeParameter.DefaultType != null) {
-            output += ` = ${TypeDtoToString(typeParameter.DefaultType)}`;
-        }
-
-        return output;
-    }
-
-    // TODO: implement.
-    export function TypeParameterToMarkdownString(typeParameter: Contracts.ApiTypeParameterDto): string {
-        let output = typeParameter.Name;
-
-        if (typeParameter.ConstraintType != null) {
-            output += ` extends ${TypeDtoToString(typeParameter.ConstraintType)}`;
-        }
-
-        if (typeParameter.DefaultType != null) {
-            output += ` = ${TypeDtoToString(typeParameter.DefaultType)}`;
-        }
-
-        return output;
     }
 
     export enum JSDocTags {
