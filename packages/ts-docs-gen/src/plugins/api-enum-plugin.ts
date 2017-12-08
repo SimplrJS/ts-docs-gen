@@ -1,4 +1,4 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
 
 import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
@@ -8,6 +8,7 @@ import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
 import { ExtractorHelpers } from "../extractor-helpers";
 
 // TODO: const enums implementation.
+// TODO: add summary jsdoc support.
 export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
     public SupportedApiItemsKinds(): SupportedApiItemKindType[] {
         return [this.SupportKind.Enum];
@@ -38,6 +39,7 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
             });
     }
 
+    // TODO: simplify. Markdown removes empty columns automatically.
     private constructEnumTable(members: Contracts.ApiEnumMemberDto[]): string[] {
         // Table header.
         const header = ["Name", "Value"];
@@ -80,26 +82,12 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         return MarkdownGenerator.Table(header, content);
     }
 
-    /**
-     * Resolve api items of an enum from ApiItemReferenceTuple.
-     */
-    private getEnumMembers(members: Contracts.ApiItemReferenceTuple, extractedData: ExtractDto): Contracts.ApiEnumMemberDto[] {
-        const apiItems: Contracts.ApiEnumMemberDto[] = [];
-
-        for (const memberReferences of members) {
-            const [, references] = memberReferences;
-            for (const reference of references) {
-                const apiItem = extractedData.Registry[reference] as Contracts.ApiEnumMemberDto;
-                apiItems.push(apiItem);
-            }
-        }
-
-        return apiItems;
-    }
-
     public Render(data: PluginData<Contracts.ApiEnumDto>): RenderItemOutputDto {
         const [, alias] = data.Reference;
-        const enumMembers = this.getEnumMembers(data.ApiItem.Members, data.ExtractedData);
+        const enumMembers = ExtractorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiEnumMemberDto>(
+            data.ApiItem.Members,
+            data.ExtractedData
+        );
         const builder = new MarkdownBuilder()
             .Header(alias, 2)
             .EmptyLine()
@@ -112,7 +100,7 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
             .Text(this.constructEnumTable(enumMembers));
 
         return {
-            Heading: "Enum",
+            Heading: alias,
             ApiItem: data.ApiItem,
             References: [],
             RenderOutput: builder.GetOutput()
