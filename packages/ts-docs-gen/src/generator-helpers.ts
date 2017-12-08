@@ -63,4 +63,79 @@ export namespace GeneratorHelpers {
             Text: text
         };
     }
+
+    export function TypeDtoToString(type: Contracts.TypeDto): string {
+        let text: string = "";
+
+        switch (type.ApiTypeKind) {
+            case Contracts.TypeKinds.Union:
+            case Contracts.TypeKinds.Intersection: {
+                const symbol = type.ApiTypeKind === Contracts.TypeKinds.Union ? "|" : "&";
+
+                type.Types
+                    .map(TypeDtoToString)
+                    .forEach(typeString => {
+                        if (text === "") {
+                            text = typeString;
+                        } else {
+                            text += ` ${symbol} ${typeString}`;
+                        }
+                    });
+                break;
+            }
+            case Contracts.TypeKinds.Reference: {
+                text = type.Name || "???";
+
+                // Generics
+                if (type.Generics != null) {
+                    const generics = type.Generics.map(TypeDtoToString);
+
+                    text += `<${generics.join(", ")}>`;
+                }
+                break;
+            }
+            case Contracts.TypeKinds.Basic:
+            default: {
+                text = type.Name || type.Text;
+
+                // Generics
+                if (type.Name != null && type.Generics != null) {
+                    const generics = type.Generics.map(TypeDtoToString);
+
+                    text += `<${generics.join(", ")}>`;
+                }
+            }
+        }
+
+        return text;
+    }
+
+    export function TypeParameterToString(typeParameter: Contracts.ApiTypeParameterDto): string {
+        let output = typeParameter.Name;
+
+        if (typeParameter.ConstraintType != null) {
+            output += ` extends ${TypeDtoToString(typeParameter.ConstraintType)}`;
+        }
+
+        if (typeParameter.DefaultType != null) {
+            output += ` = ${TypeDtoToString(typeParameter.DefaultType)}`;
+        }
+
+        return output;
+    }
+
+    // TODO: implement.
+    export function TypeParameterToMarkdownString(typeParameter: Contracts.ApiTypeParameterDto): string {
+        let output = typeParameter.Name;
+
+        if (typeParameter.ConstraintType != null) {
+            output += ` extends ${TypeDtoToString(typeParameter.ConstraintType)}`;
+        }
+
+        if (typeParameter.DefaultType != null) {
+            output += ` = ${TypeDtoToString(typeParameter.DefaultType)}`;
+        }
+
+        return output;
+    }
 }
