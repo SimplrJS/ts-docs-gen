@@ -100,4 +100,22 @@ export namespace ExtractorHelpers {
 
         return trimmedSentence + punctuationMark;
     }
+
+    export function GetApiItemsFromReferenceTuple<T extends Contracts.ApiItemDto>(
+        items: Contracts.ApiItemReferenceTuple,
+        extractedData: ExtractDto
+    ): T[] {
+        const apiItems: T[] = [];
+
+        for (const itemReferences of items) {
+            const [, references] = itemReferences;
+
+            for (const reference of references) {
+                const apiItem = extractedData.Registry[reference] as T;
+                apiItems.push(apiItem);
+            }
+        }
+
+        return apiItems;
+    }
 }
