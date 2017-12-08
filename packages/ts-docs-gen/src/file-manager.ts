@@ -59,11 +59,13 @@ export class FileManager extends FileManagerBaseBase {
             for (const item of items) {
                 if (this.renderItemIsItemOutputDto(item)) {
                     item.References
-                        .forEach(referenceId =>
-                            references.push(
-                                MarkdownGenerator.LinkDefinition(referenceId, this.referenceToFile.get(referenceId) || "#__error")
-                            )
-                        );
+                        .forEach(referenceId => {
+                            const referenceString = this.referenceToFile.get(referenceId);
+
+                            if (referenceString) {
+                                references.push(MarkdownGenerator.LinkDefinition(referenceId, referenceString));
+                            }
+                        });
                 }
             }
 
