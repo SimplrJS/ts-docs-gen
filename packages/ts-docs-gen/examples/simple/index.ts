@@ -2,20 +2,98 @@
 
 // import { Foo } from "./exported-functions";
 
-// export class World { }
-// export class Earth { }
+export class World { }
+export class Earth { }
 
 // export declare const Hello: World & Earth;
 
 // export const FooFunc = Foo;
 
-// export function Foo(): string {
-//     return "foo";
-// }
+//---------------------------------------------------------
 
-// export function Bar(): string {
-//     return "bar";
-// }
+// #region Type parameters (generics)
+// /**
+//  * Some general comment about function.
+
+/**
+ * Bla bla
+ * 
+ * @template T something wwegweg
+ * @template P something wegweg
+ * @param parameter1 wegweg
+ * @param parameter2 wegweweg
+ * @returns wegweg
+ */
+export function FunctionWithMultipleTypeParameters<T extends Object, P>(parameter1: T, parameter2: P): string {
+    return "bar";
+}
+
+/**
+ * Some general comment about AnotherBar function.
+ */
+export function FunctionWithTypeParameterDefault<T extends Object = {}>(parameter1: string, parameter2: T): string {
+    return "bar";
+}
+
+/**
+ * Some general comment about AnotherBar function.
+ */
+export function FunctionWithTypeParameterConstraint<T extends Object>(parameter1: string, parameter2: T): string {
+    return "bar";
+}
+
+export function AnotherFoo<T extends Array<T>>(parameter1: string, parameter2: Promise<T>): string {
+    return "bar";
+}
+// #endregion Type parameters (generics)
+
+
+
+// #region Parameters
+export function FunctionWithOneParameter(parameter: string) { }
+
+export function FunctionWithNoParameters() { }
+
+export function FunctionWithMultipleParameters(parameter1: string, parameter2: number) { }
+// #endregion Parameters
+
+export function Foo(): string {
+    return "foo";
+}
+
+/**
+ * Some general comment about Bar function.
+ * 
+ * @beta Some comment on beta.
+ * @deprecated
+ */
+export function Bar(parameter1: string, parameter2: number): string {
+    return "bar";
+}
+
+// #region Return types
+export function FunctionWithoutReturnType<T extends Array<T>>(parameter1: string, parameter2: Promise<T>) {
+    return "bar";
+}
+
+export function FunctionWithGenericReturnType(): Array<string> {
+    return [];
+}
+
+export function FunctionWithPrimitiveReturnType(): boolean {
+    return true;
+}
+
+export function FunctionWithUnionReturnType(): "something" | "nothing" {
+    return "nothing";
+}
+
+export function FunctionWithIntersectionReturnType(): Earth & World {
+    return {};
+}
+// #endregion Return types
+
+// ------------------------------------------------------
 
 // export * from "./exported-functions";
 // export { Kintamasis as Pakeistas } from "./exported-const-variables";

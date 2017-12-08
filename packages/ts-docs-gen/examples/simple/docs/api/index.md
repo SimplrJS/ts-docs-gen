@@ -1,12 +1,214 @@
 # index
 
+## class: World
+
+## class: Earth
+
+## function FunctionWithTypeParameterDefault<T extends Object = __type>(parameter1: string, parameter2: T): string
+
+Some general comment about AnotherBar function.
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function FunctionWithTypeParameterConstraint<T extends Object>(parameter1: string, parameter2: T): string
+
+Some general comment about AnotherBar function.
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function AnotherFoo<T extends Array<T>>(parameter1: string, parameter2: Promise<T>): string
+
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function FunctionWithOneParameter(parameter: string): void
+
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function FunctionWithNoParameters(): void
+
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function FunctionWithMultipleParameters(parameter1: string, parameter2: number): void
+
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function Foo(): string
+
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function Bar(parameter1: string, parameter2: number): string
+
+Some general comment about Bar function.
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function FunctionWithoutReturnType<T extends Array<T>>(parameter1: string, parameter2: Promise<T>): string
+
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function FunctionWithGenericReturnType(): Array<string>
+
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function FunctionWithPrimitiveReturnType(): true | false
+
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function FunctionWithUnionReturnType(): "something" | "nothing"
+
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
+## function FunctionWithIntersectionReturnType(): Earth & World
+
+
+TODO: is deprecated or beta
+
+### Type parameters
+
+TODO
+
+### Parameters
+
+TODO
+
+### Return type
+
 ## Uogos
 
 Some information
 2nd line of some information
 3rd line of some information
 4th line of some information
-5th line of some information.
+5th line of some information
 
 deprecated
 beta
