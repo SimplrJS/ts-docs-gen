@@ -169,4 +169,7 @@ export const enum ConstUogos {
 //     public abstract Bar(): string;
 // }
 
+/**
+ * @deprecated Use uogos instead ;)
+ */
 export type Hello = Uogos;

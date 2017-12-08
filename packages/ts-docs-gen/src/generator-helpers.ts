@@ -78,26 +78,26 @@ export namespace GeneratorHelpers {
 
         if (isBeta) {
             builder
-                .Text(`<span style="color: yellow;">Warning: Beta!</span>`)
+                .Text(`<span style="color: #d2d255;">Warning: Beta!</span>`)
                 .EmptyLine();
         }
 
-        if (deprecated != null && deprecated.text != null) {
+        if (deprecated != null && Boolean(deprecated.text)) {
             const message = `: ${deprecated.text}`;
             builder
-                .Text(`<span style="color: yellow;">Deprecated${message}!</span>`)
-                .EmptyLine();
-        }
-
-        if (summary != null && summary.text != null) {
-            builder
-                .Blockquote(summary.text.split("\n"))
+                .Text(`<span style="color: red;">Deprecated${message}!</span>`)
                 .EmptyLine();
         }
 
         if (jSDocComment.length > 0) {
             builder
                 .Text(jSDocComment)
+                .EmptyLine();
+        }
+
+        if (summary != null && Boolean(summary.text)) {
+            builder
+                .Blockquote(summary.text!.split("\n"))
                 .EmptyLine();
         }
 

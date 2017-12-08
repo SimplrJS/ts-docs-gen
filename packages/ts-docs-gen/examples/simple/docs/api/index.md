@@ -5,14 +5,16 @@
 
 ## Uogos
 
+<span style="color: #d2d255;">Warning: Beta!</span>
+
 Some information
 2nd line of some information
 3rd line of some information
 4th line of some information
 5th line of some information
 
-deprecated
-beta
+> Some summary about this package version.
+
 
 ```typescript
 enum Uogos {
@@ -27,8 +29,6 @@ enum Uogos {
 | Braskes | "braskes" |
 
 ## Skaiciai
-
-
 
 
 ```typescript
@@ -48,8 +48,6 @@ enum Skaiciai {
 ## Sarasas
 
 
-
-
 ```typescript
 enum Sarasas {
      Pirmas = 0,
@@ -65,8 +63,6 @@ enum Sarasas {
 | Trecias | 2     | Trečio description'as |
 
 ## ConstSkaiciai
-
-
 
 
 ```typescript
@@ -86,8 +82,6 @@ enum ConstSkaiciai {
 ## ConstSarasas
 
 
-
-
 ```typescript
 enum ConstSarasas {
      PirmasC = 0,
@@ -105,8 +99,6 @@ enum ConstSarasas {
 ## ConstUogos
 
 
-
-
 ```typescript
 enum ConstUogos {
      Jokie = "jokie",
@@ -120,6 +112,8 @@ enum ConstUogos {
 | Braskes | "braskes" |
 
 ## Hello
+
+<span style="color: red;">Deprecated: Use uogos instead ;)!</span>
 
 ```typescript
 type Hello = Uogos;
