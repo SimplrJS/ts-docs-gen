@@ -4,7 +4,10 @@
   "version": "0.1.0",
   "description": "Generating tests.",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -w"
+  },
   "keywords": [],
   "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
   "dependencies": {
