@@ -13,6 +13,7 @@
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "noUnusedLocals": true,
+        "skipLibCheck": true,
         "lib": [
             "es6",
             "es2017.object"
