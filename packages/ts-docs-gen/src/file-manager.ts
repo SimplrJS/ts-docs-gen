@@ -45,20 +45,29 @@ export class FileManager extends FileManagerBaseBase {
         return (item as RenderItemOutputDto).ApiItem != null;
     }
 
-
     public AddItem(item: RenderItemOutputDto, referenceId: string, entryFile?: Contracts.ApiSourceFileDto): void {
-        if (entryFile != null) {
-            const fileName = path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
-            const items = this.filesList.get(fileName) || this.getDefaultEntryFileHeader(entryFile);
-            items.push(item);
+        let fileName: string | undefined;
+        let items: RenderedItemList = [];
+        if (entryFile != null && item.ParentId == null) {
+            fileName = path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
+            items = this.filesList.get(fileName) || this.getDefaultEntryFileHeader(entryFile);
+        } else if (item.ParentId != null) {
+            const parentFileName = this.referenceToFile.get(item.ParentId);
 
+            if (parentFileName != null) {
+                const baseName = path.basename(parentFileName, path.extname(parentFileName));
+                fileName = path.join(path.dirname(parentFileName), baseName, item.ApiItem.Name + ".md");
+            }
+        }
+
+        if (fileName != null) {
+            items.push(item);
 
             // Add reference link.
             this.referenceToFile.set(referenceId, `${fileName}#${Helpers.HeadingToAnchor(item.Heading)}`);
 
             this.filesList.set(fileName, items);
         }
-        // kind class | namespace
     }
 
     public ToFilesOutput(): FileOutputDto[] {
