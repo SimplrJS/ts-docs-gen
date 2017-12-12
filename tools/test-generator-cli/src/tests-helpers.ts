@@ -1,4 +1,5 @@
 import * as path from "path";
+import * as handlebars from "handlebars";
 
 const TAB_STRING = "    ";
 
@@ -12,6 +13,13 @@ export function Tab(size: number = 1): string {
         result += TAB_STRING;
     }
     return result;
+}
+
+export function RegisterJSONStringifyHandlebarHelper(): void {
+    handlebars.registerHelper("json", (value: any) =>
+        new handlebars.SafeString(
+            JSON.stringify(value)
+        ));
 }
 
 export const TESTS_DIR_NAME = "tests";
