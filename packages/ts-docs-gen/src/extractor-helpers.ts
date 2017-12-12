@@ -4,7 +4,6 @@ import { ReferenceTuple } from "./contracts/reference-tuple";
 export namespace ExtractorHelpers {
     export function GetReferenceTuples(
         extractedData: ExtractDto,
-        entryFile: Contracts.ApiSourceFileDto,
         itemsReference: Contracts.ApiItemReferenceTuple
     ): ReferenceTuple[] {
         let list: ReferenceTuple[] = [];
@@ -16,7 +15,7 @@ export namespace ExtractorHelpers {
 
                 switch (apiItem.ApiKind) {
                     case Contracts.ApiItemKinds.Export: {
-                        const referenceTuples = GetReferenceTuples(extractedData, entryFile, apiItem.Members);
+                        const referenceTuples = GetReferenceTuples(extractedData, apiItem.Members);
                         list = list.concat(referenceTuples);
                         break;
                     }
@@ -25,7 +24,7 @@ export namespace ExtractorHelpers {
                             console.warn(`ApiItems are missing in "${apiItem.Name}"?`);
                             break;
                         }
-                        const referenceTuples = GetReferenceTuples(extractedData, entryFile, [[apiItem.Name, apiItem.ApiItems]]);
+                        const referenceTuples = GetReferenceTuples(extractedData, [[apiItem.Name, apiItem.ApiItems]]);
                         list = list.concat(referenceTuples);
                         break;
                     }
