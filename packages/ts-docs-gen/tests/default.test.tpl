@@ -3,7 +3,8 @@ import { GeneratorConfigurationBuilder } from "@src/builders/generator-configura
 
 test("{{caseName}}", async done => {
     const projectDirectory = "{{projectDirectory}}";
-    const entryFiles = {{{json entryFiles}}};
+    const testConfig = {{{json testConfig}}};
+    const entryFiles = testConfig.EntryFiles;
 
     try {
         const configuration = await new GeneratorConfigurationBuilder(projectDirectory)
