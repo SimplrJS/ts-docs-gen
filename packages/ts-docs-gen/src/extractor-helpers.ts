@@ -1,12 +1,12 @@
 import { Contracts, ExtractDto } from "ts-extractor";
-import { ReferenceTuple } from "./contracts/reference-tuple";
+import { ApiItemReference } from "./contracts/api-item-reference";
 
 export namespace ExtractorHelpers {
-    export function GetReferenceTuples(
+    export function GetApiItemReferences(
         extractedData: ExtractDto,
         itemsReference: Contracts.ApiItemReferenceTuple
-    ): ReferenceTuple[] {
-        let list: ReferenceTuple[] = [];
+    ): ApiItemReference[] {
+        let list: ApiItemReference[] = [];
 
         for (const [alias, references] of itemsReference) {
             for (const referenceId of references) {
@@ -15,7 +15,7 @@ export namespace ExtractorHelpers {
 
                 switch (apiItem.ApiKind) {
                     case Contracts.ApiItemKinds.Export: {
-                        const referenceTuples = GetReferenceTuples(extractedData, apiItem.Members);
+                        const referenceTuples = GetApiItemReferences(extractedData, apiItem.Members);
                         list = list.concat(referenceTuples);
                         break;
                     }
@@ -24,12 +24,15 @@ export namespace ExtractorHelpers {
                             console.warn(`ApiItems are missing in "${apiItem.Name}"?`);
                             break;
                         }
-                        const referenceTuples = GetReferenceTuples(extractedData, [[apiItem.Name, apiItem.ApiItems]]);
+                        const referenceTuples = GetApiItemReferences(extractedData, [[apiItem.Name, apiItem.ApiItems]]);
                         list = list.concat(referenceTuples);
                         break;
                     }
                     default: {
-                        list.push([referenceId, alias]);
+                        list.push({
+                            Id: referenceId,
+                            Alias: alias
+                        });
                     }
                 }
             }

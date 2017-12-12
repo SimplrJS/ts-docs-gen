@@ -35,6 +35,10 @@ export interface PluginResult<TKind = Contracts.ApiItemDto> {
      */
     Headings: PluginHeading[];
     /**
+     * References that were used in rendering `Result`.
+     */
+    UsedReferences: string[];
+    /**
      * Plugin rendered result.
      */
     Result: string[];

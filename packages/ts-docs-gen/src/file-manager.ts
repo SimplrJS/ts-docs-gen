@@ -1,19 +1,19 @@
 import { MarkdownGenerator } from "@simplrjs/markdown";
 import * as path from "path";
 
-import { FileManagerBaseBase } from "./abstractions/file-manager-base";
-import { RenderItemOutputDto } from "./contracts/render-item-output-dto";
-import { FileOutputDto } from "./contracts/file-output-dto";
+import { FileManager as FileManagerInterface } from "./contracts/file-manager";
 import { Helpers } from "./utils/helpers";
+import { PluginResult } from "./contracts/plugin";
+import { FileResult } from "./contracts/file-result";
 
 interface OutputData {
-    RenderOutput: string[];
-    References: string[];
+    Result: string[];
+    UsedReferences: string[];
 }
 
-type RenderedItemList = Array<RenderItemOutputDto | OutputData>;
+type RenderedItemList = Array<PluginResult | OutputData>;
 
-export class FileManager extends FileManagerBaseBase {
+export class FileManager implements FileManagerInterface {
     /**
      * <FileLocation, RenderedItems>
      */
@@ -23,32 +23,32 @@ export class FileManager extends FileManagerBaseBase {
      */
     private referenceToFile: Map<string, string> = new Map();
 
-    public AddItem(item: RenderItemOutputDto, referenceId: string, filePath: string): void {
+    public AddItem(itemResult: PluginResult, filePath: string): void {
         const items = this.filesList.get(filePath) || [];
-        items.push(item);
+        items.push(itemResult);
         this.filesList.set(filePath, items);
-        this.referenceToFile.set(referenceId, filePath);
+        this.referenceToFile.set(itemResult.Reference.Id, filePath);
 
         // HeadingsMap
 
-        if (item.Members != null) {
-            for (const member of item.Members) {
+        if (itemResult.Members != null) {
+            for (const member of itemResult.Members) {
                 const baseName = path.basename(filePath, path.extname(filePath));
-                const targetFileNPath = path.join(path.dirname(filePath), baseName, member.Rendered.ApiItem.Name + ".md").toLowerCase();
+                const targetFileNPath = path.join(path.dirname(filePath), baseName, member.PluginResult.ApiItem.Name + ".md").toLowerCase();
 
-                this.AddItem(member.Rendered, member.ReferenceId, targetFileNPath);
+                this.AddItem(member.PluginResult, targetFileNPath);
             }
         }
     }
 
-    public ToFilesOutput(): FileOutputDto[] {
-        const output: FileOutputDto[] = [];
+    public ToFilesOutput(): FileResult[] {
+        const files: FileResult[] = [];
 
         for (const [fileLocation, items] of this.filesList) {
             // Link definitions to file location.
             const linkDefinitions: string[] = [];
             for (const item of items) {
-                item.References
+                item.UsedReferences
                     .forEach(referenceId => {
                         const filePath = path.dirname(fileLocation);
                         const resolvePath = path.relative(filePath, this.referenceToFile.get(referenceId) || "#__error");
@@ -58,15 +58,17 @@ export class FileManager extends FileManagerBaseBase {
                     });
             }
 
-            output.push({
+            const itemsResult = Helpers.Flatten(items.map(x => [x.Result, ""]));
+
+            files.push({
                 FileLocation: fileLocation,
-                Output: [
+                Result: [
                     ...linkDefinitions,
-                    ...Helpers.Flatten(items.map(x => [x.RenderOutput, ""]))
+                    ...itemsResult
                 ]
             });
         }
 
-        return output;
+        return files;
     }
 }

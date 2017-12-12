@@ -20,7 +20,7 @@ export class ApiNamespacePlugin extends ApiItemPluginBase<Contracts.ApiNamespace
     }
 
     private renderItems(data: PluginData<Contracts.ApiNamespaceDto>): RenderItems {
-        const referenceTuples = ExtractorHelpers.GetReferenceTuples(data.ExtractedData, data.ApiItem.Members);
+        const referenceTuples = ExtractorHelpers.GetApiItemReferences(data.ExtractedData, data.ApiItem.Members);
         let references: string[] = [];
         const members: RenderMember[] = [];
         const builder = new MarkdownBuilder();
