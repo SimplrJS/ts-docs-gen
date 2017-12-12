@@ -24,7 +24,7 @@ export class Generator {
                 const [referenceId] = reference;
 
                 const renderedItem = this.getRenderedItemByReference(reference);
-                this.fileManager.AddItem(renderedItem, referenceId, entryFile);
+                this.fileManager.AddItem(renderedItem, referenceId, this.getFilePathFromEntryFile(entryFile));
             }
         }
 
@@ -34,6 +34,10 @@ export class Generator {
     private renderedItems: Map<ReferenceTuple, RenderItemOutputDto> = new Map();
     private fileManager: FileManager;
     private outputData: FileOutputDto[];
+
+    private getFilePathFromEntryFile(entryFile: Contracts.ApiSourceFileDto): string {
+        return path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
+    }
 
     public get OutputData(): ReadonlyArray<FileOutputDto> {
         return this.outputData;
@@ -69,12 +73,6 @@ export class Generator {
         return renderedItem;
     }
 
-    private addItemToFileManager = (reference: ReferenceTuple, apiItem: Contracts.ApiItemDto, parentId: string) => {
-        const [referenceId] = reference;
-        const renderedItem = this.renderApiItem(reference, apiItem, parentId);
-        this.fileManager.AddItem(renderedItem, referenceId);
-    }
-
     private renderApiItem(
         reference: ReferenceTuple,
         apiItem: Contracts.ApiItemDto,
@@ -87,7 +85,6 @@ export class Generator {
             Reference: reference,
             ApiItem: apiItem,
             GetItem: this.getRenderedItemByReference,
-            AddItem: this.addItemToFileManager,
             ParentId: parentId
         };
 

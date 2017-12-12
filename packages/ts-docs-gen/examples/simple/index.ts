@@ -1,181 +1,183 @@
-// tslint:disable
+// // tslint:disable
 
-// import { Foo } from "./exported-functions";
+// // import { Foo } from "./exported-functions";
 
-export class World { }
-// export class Earth { }
+// export class World { }
+// // export class Earth { }
 
-// export declare const Hello: World & Earth;
+// // export declare const Hello: World & Earth;
 
-// export const FooFunc = Foo;
+// // export const FooFunc = Foo;
 
-// export function Foo(): string {
-//     return "foo";
-// }
+// // export function Foo(): string {
+// //     return "foo";
+// // }
 
-// export function Bar(): string {
-//     return "bar";
-// }
+// // export function Bar(): string {
+// //     return "bar";
+// // }
 
-// export * from "./exported-functions";
-// export { Kintamasis as Pakeistas } from "./exported-const-variables";
-// export type A<TValue> = number & { ok(): TValue };
+// // export * from "./exported-functions";
+// // export { Kintamasis as Pakeistas } from "./exported-const-variables";
+// // export type A<TValue> = number & { ok(): TValue };
 
-// Two types have a one common field
-// export type OneCommonField1 = {
-//     BarName: string;
-//     FooName: string;
-// };
+// // Two types have a one common field
+// // export type OneCommonField1 = {
+// //     BarName: string;
+// //     FooName: string;
+// // };
 
-// export type OneCommonField2 = {
-//     BarName: string;
-//     BazName: string;
-// };
+// // export type OneCommonField2 = {
+// //     BarName: string;
+// //     BazName: string;
+// // };
 
-// export type OneCommonFieldTypeIntersection = OneCommonField1 | OneCommonField2;
+// // export type OneCommonFieldTypeIntersection = OneCommonField1 | OneCommonField2;
 
-// export interface MyConstraintType {
-//     myProperty: string;
-// }
-// export interface MyDefaultType extends MyConstraintType {
-//     anotherProperty: number;
-// }
+// // export interface MyConstraintType {
+// //     myProperty: string;
+// // }
+// // export interface MyDefaultType extends MyConstraintType {
+// //     anotherProperty: number;
+// // }
 
-// export function Funkcija<T extends MyConstraintType = MyDefaultType>(): T {
-//     return {
-//         myProperty: "asd"
-//     } as T;
-// }
+// // export function Funkcija<T extends MyConstraintType = MyDefaultType>(): T {
+// //     return {
+// //         myProperty: "asd"
+// //     } as T;
+// // }
 
-// export interface MyInterface {
-//     <TValue>(param1: TValue, param2: TValue): boolean;
-// }
+// // export interface MyInterface {
+// //     <TValue>(param1: TValue, param2: TValue): boolean;
+// // }
+
+// // /**
+// //  * Some JSdoc information.
+// //  * 2nd line of some JSdoc information.
+// //  * @summary Some summary about this package version.
+// //  * @summary 2nd of some summary about this package version.
+// //  */
+// // export const itemsList: string[] = ["a"];
+
+// // export function Ok(isIt: boolean): boolean {
+// //     return isIt;
+// // }
+
+// // export function OkWithoutReturnType(isIt: boolean) {
+// //     return isIt;
+// // }
+
+// // export namespace SomeKindOfModule {
+// //     export const name = "some-kind-of-module";
+// // }
 
 // /**
-//  * Some JSdoc information.
-//  * 2nd line of some JSdoc information.
+//  * Some information
+//  * 2nd line of some information
+//  * 3rd line of some information
+//  * 4th line of some information
+//  * 5th line of some information
 //  * @summary Some summary about this package version.
 //  * @summary 2nd of some summary about this package version.
+//  * @deprecated
+//  * @beta
 //  */
-// export const itemsList: string[] = ["a"];
-
-// export function Ok(isIt: boolean): boolean {
-//     return isIt;
+// export enum Uogos {
+//     Jokie = "jokie",
+//     Braskes = "braskes"
 // }
 
-// export function OkWithoutReturnType(isIt: boolean) {
-//     return isIt;
+// export enum Skaiciai {
+//     Nulis = 0,
+//     Vienas = 1,
+//     Du = 2
 // }
 
-// export namespace SomeKindOfModule {
-//     export const name = "some-kind-of-module";
+// export enum Sarasas {
+//     /**
+//      * Pirmo description'as
+//      */
+//     Pirmas,
+//     /**
+//      * Antro description'as
+//      */
+//     Antras,
+//     /**
+//      * Trečio description'as
+//      */
+//     Trecias
 // }
 
-/**
- * Some information
- * 2nd line of some information
- * 3rd line of some information
- * 4th line of some information
- * 5th line of some information
- * @summary Some summary about this package version.
- * @summary 2nd of some summary about this package version.
- * @deprecated
- * @beta
- */
-export enum Uogos {
-    Jokie = "jokie",
-    Braskes = "braskes"
-}
-
-export enum Skaiciai {
-    Nulis = 0,
-    Vienas = 1,
-    Du = 2
-}
-
-export enum Sarasas {
-    /**
-     * Pirmo description'as
-     */
-    Pirmas,
-    /**
-     * Antro description'as
-     */
-    Antras,
-    /**
-     * Trečio description'as
-     */
-    Trecias
-}
-
-export const enum ConstSkaiciai {
-    PirmasC = 0,
-    AntrasC = 1,
-    TreciasC = 2
-}
-
-export const enum ConstSarasas {
-    /**
-     * Pirmo description'as
-     */
-    PirmasC,
-    /**
-     * Antro description'as
-     */
-    AntrasC,
-    /**
-     * Trečio description'as
-     */
-    TreciasC
-}
-
-export const enum ConstUogos {
-    Jokie = "jokie",
-    Braskes = "braskes"
-}
-
-// export interface Boo {
-//     Boos: string[];
+// export const enum ConstSkaiciai {
+//     PirmasC = 0,
+//     AntrasC = 1,
+//     TreciasC = 2
 // }
 
-// export interface Foo<TType> {
-//     Name: string;
-//     Surname: string;
-//     Type: TType;
+// export const enum ConstSarasas {
+//     /**
+//      * Pirmo description'as
+//      */
+//     PirmasC,
+//     /**
+//      * Antro description'as
+//      */
+//     AntrasC,
+//     /**
+//      * Trečio description'as
+//      */
+//     TreciasC
 // }
 
-// export async function GetFoo(): Promise<void> {
-//     return;
+// export const enum ConstUogos {
+//     Jokie = "jokie",
+//     Braskes = "braskes"
 // }
 
-// export interface Bar extends Foo<number>, Boo {
-//     OtherStuff: string[];
-// }
+// // export interface Boo {
+// //     Boos: string[];
+// // }
 
-// export interface A {
-//     (aa: boolean): string;
-// }
+// // export interface Foo<TType> {
+// //     Name: string;
+// //     Surname: string;
+// //     Type: TType;
+// // }
 
-// export abstract class Foo {
-//     public Name: string;
+// // export async function GetFoo(): Promise<void> {
+// //     return;
+// // }
 
-//     private somePrivateProperty: any;
+// // export interface Bar extends Foo<number>, Boo {
+// //     OtherStuff: string[];
+// // }
 
-//     public GetName(ok: string): string;
-//     public GetName(ok: string, ok2?: string): string {
-//         return this.Name;
-//     }
+// // export interface A {
+// //     (aa: boolean): string;
+// // }
 
-//     public abstract Bar(): string;
-// }
+// // export abstract class Foo {
+// //     public Name: string;
 
-/**
- * @deprecated Use uogos instead ;)
- */
-export type Hello = Uogos;
+// //     private somePrivateProperty: any;
+
+// //     public GetName(ok: string): string;
+// //     public GetName(ok: string, ok2?: string): string {
+// //         return this.Name;
+// //     }
+
+// //     public abstract Bar(): string;
+// // }
+
+// /**
+//  * @deprecated Use uogos instead ;)
+//  */
+// export type Hello = Uogos;
 
 export namespace FooNamespace {
     export namespace BooNamespace {
-        export const Hello = "World!";
+        export namespace BooNamespace2 {
+            export const Hello = "World!";
+        }
     }
 }

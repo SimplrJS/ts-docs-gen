@@ -1,5 +1,10 @@
 import { Contracts } from "ts-extractor";
 
+export interface RenderMember {
+    ReferenceId: string;
+    Rendered: RenderItemOutputDto;
+}
+
 export interface RenderItemOutputDto {
     References: string[];
     /**
@@ -9,4 +14,5 @@ export interface RenderItemOutputDto {
     ParentId: string | undefined;
     RenderOutput: string[];
     ApiItem: Contracts.ApiItemDto;
+    Members?: RenderMember[];
 }
