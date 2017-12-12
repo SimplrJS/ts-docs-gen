@@ -1,36 +1,44 @@
-import * as process from "process";
 import * as fs from "fs-extra";
+import * as path from "path";
+
 import { Logger } from "./utils/logger";
-
 import { TestsGenerator } from "./tests-generator";
+import { FixSep, TESTS_DIR_NAME, CASES_DIR_NAME } from "./tests-helpers";
 import { TestsCleanup } from "./tests-cleanup";
-import { TESTS_DIR_NAME } from "./tests-helpers";
+import { CLIHandler } from "./cli-arguments";
+import { CLIArgumentsObject } from "./cli-contracts";
 
-async function StartWatcher(dirName: string): Promise<fs.FSWatcher> {
-    return fs.watch(`./${dirName}/`, async (event, fileName) => {
+async function StartWatcher(testsCasesPath: string): Promise<fs.FSWatcher> {
+    return fs.watch(`${testsCasesPath}/`, async (event, fileName) => {
         if (fileName.indexOf(TESTS_DIR_NAME) === -1) {
-            Logger.Info(`Test file was changed in "${dirName}/${fileName}".`);
-            const startBuild = Logger.Info(`Generating tests for "${dirName}"...`);
-            await TestsGenerator(dirName, __dirname);
+            Logger.Info(`Test file was changed in "${testsCasesPath}/${fileName}".`);
+            const startBuild = Logger.Info(`Generating tests for "${testsCasesPath}"...`);
+            await TestsGenerator(testsCasesPath);
             Logger.Debug(`Generated tests after ${(Date.now() - startBuild)}ms`);
         }
     });
 }
 
-(async (dirNames: string[]) => {
-    Logger.Info("Starting test generator...");
-    for (const dirName of dirNames) {
-        const startRemove = Logger.Info(`Removing old tests from "${dirName}"...`);
-        await TestsCleanup(dirName);
-        Logger.Debug(`Removed old tests after ${(Date.now() - startRemove)}ms`);
-
-        const startBuild = Logger.Info(`Generating tests for "${dirName}"...`);
-        await TestsGenerator(dirName, __dirname);
-        Logger.Debug(`Generated tests after ${(Date.now() - startBuild)}ms`);
-
-        if (process.argv.indexOf("--watchAll") !== -1) {
-            Logger.Info(`Started watching "${dirName}" tests.`);
-            StartWatcher(dirName);
-        }
+(async (argumentsObject: CLIArgumentsObject) => {
+    let cwd: string;
+    if (argumentsObject.path != null) {
+        cwd = argumentsObject.path;
+    } else {
+        cwd = process.cwd();
     }
-})(["cases"]);
+    const testsCasesPath = FixSep(path.join(cwd, TESTS_DIR_NAME, CASES_DIR_NAME));
+
+    Logger.Info("Starting test generator...");
+    const startRemove = Logger.Info(`Removing old tests from "${testsCasesPath}"...`);
+    await TestsCleanup(testsCasesPath);
+    Logger.Debug(`Removed old tests after ${(Date.now() - startRemove)}ms`);
+
+    const startBuild = Logger.Info(`Generating tests for "${testsCasesPath}"...`);
+    await TestsGenerator(testsCasesPath);
+    Logger.Debug(`Generated tests after ${(Date.now() - startBuild)}ms`);
+
+    if (process.argv.indexOf("--watchAll") !== -1) {
+        Logger.Info(`Started watching "${testsCasesPath}" tests.`);
+        StartWatcher(testsCasesPath);
+    }
+})(CLIHandler);
