@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { MarkdownGenerator } from "@simplrjs/markdown";
+import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
 import * as path from "path";
 
 import { FileManagerBaseBase } from "./abstractions/file-manager-base";
@@ -9,6 +9,7 @@ import { Helpers } from "./utils/helpers";
 
 interface OutputData {
     RenderOutput: string[];
+    References: string[];
 }
 
 type RenderedItemList = Array<RenderItemOutputDto | OutputData>;
@@ -31,7 +32,8 @@ export class FileManager extends FileManagerBaseBase {
         ];
 
         return {
-            RenderOutput: output
+            RenderOutput: output,
+            References: []
         };
     }
 
@@ -41,33 +43,77 @@ export class FileManager extends FileManagerBaseBase {
         ];
     }
 
-    private renderItemIsItemOutputDto(item: RenderItemOutputDto | OutputData): item is RenderItemOutputDto {
-        return (item as RenderItemOutputDto).ApiItem != null;
+    private addItemToEntryFile(item: RenderItemOutputDto, referenceId: string, entryFile: Contracts.ApiSourceFileDto): void {
+        const itemKind = item.ApiItem.ApiKind;
+        const fileName = path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
+        const items = this.filesList.get(fileName) || this.getDefaultEntryFileHeader(entryFile);
+
+        if (itemKind === Contracts.ApiItemKinds.Namespace || itemKind === Contracts.ApiItemKinds.Class) {
+            this.addItemToNewFile(item, referenceId, fileName);
+
+            // Add link to the item
+            const builder = new MarkdownBuilder()
+                .Text(md => `${md.Header(md.Link(item.ApiItem.Name, referenceId, true), 2)}`)
+                .EmptyLine();
+
+            items.push({
+                RenderOutput: builder.GetOutput(),
+                References: [referenceId]
+            });
+
+            return;
+        }
+
+        items.push(item);
+
+        this.filesList.set(fileName, items);
+        this.referenceToFile.set(referenceId, fileName);
+    }
+
+    private addItemToNewFile(item: RenderItemOutputDto, referenceId: string, parentFileName: string): void {
+        const baseName = path.basename(parentFileName, path.extname(parentFileName));
+        const fileName = path.join(path.dirname(parentFileName), baseName, item.ApiItem.Name + ".md").toLowerCase();
+
+        const items = this.filesList.get(fileName) || [];
+        items.push(item);
+        this.filesList.set(fileName, items);
+        this.referenceToFile.set(referenceId, fileName);
     }
 
     public AddItem(item: RenderItemOutputDto, referenceId: string, entryFile?: Contracts.ApiSourceFileDto): void {
-        let fileName: string | undefined;
-        let items: RenderedItemList = [];
-        if (entryFile != null && item.ParentId == null) {
-            fileName = path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
-            items = this.filesList.get(fileName) || this.getDefaultEntryFileHeader(entryFile);
+        if (entryFile != null) {
+            this.addItemToEntryFile(item, referenceId, entryFile);
         } else if (item.ParentId != null) {
-            const parentFileName = this.referenceToFile.get(item.ParentId);
+            const fileName = this.referenceToFile.get(item.ParentId);
 
-            if (parentFileName != null) {
-                const baseName = path.basename(parentFileName, path.extname(parentFileName));
-                fileName = path.join(path.dirname(parentFileName), baseName, item.ApiItem.Name + ".md");
+            if (fileName != null) {
+                this.addItemToNewFile(item, referenceId, fileName);
             }
         }
 
-        if (fileName != null) {
-            items.push(item);
+        // let fileName: string | undefined;
+        // let items: RenderedItemList = [];
 
-            // Add reference link.
-            this.referenceToFile.set(referenceId, `${fileName}#${Helpers.HeadingToAnchor(item.Heading)}`);
+        // if (entryFile != null && item.ParentId == null) {
+        //     fileName = path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
+        //     items = this.filesList.get(fileName) || this.getDefaultEntryFileHeader(entryFile);
+        // } else if (item.ParentId != null) {
+        //     const parentFileName = this.referenceToFile.get(item.ParentId);
 
-            this.filesList.set(fileName, items);
-        }
+        //     if (parentFileName != null) {
+        //         const baseName = path.basename(parentFileName, path.extname(parentFileName));
+        //         fileName = path.join(path.dirname(parentFileName), baseName, item.ApiItem.Name + ".md");
+        //     }
+        // }
+
+        // if (fileName != null) {
+        //     items.push(item);
+
+        //     // Add reference link.
+        //     this.referenceToFile.set(referenceId, `${fileName}#${Helpers.HeadingToAnchor(item.Heading)}`);
+
+        //     this.filesList.set(fileName, items);
+        // }
     }
 
     public ToFilesOutput(): FileOutputDto[] {
@@ -77,14 +123,12 @@ export class FileManager extends FileManagerBaseBase {
             // Link definitions to file location.
             const linkDefinitions: string[] = [];
             for (const item of items) {
-                if (this.renderItemIsItemOutputDto(item)) {
-                    item.References
-                        .forEach(referenceId =>
-                            linkDefinitions.push(
-                                MarkdownGenerator.LinkDefinition(referenceId, this.referenceToFile.get(referenceId) || "#__error")
-                            )
-                        );
-                }
+                item.References
+                    .forEach(referenceId =>
+                        linkDefinitions.push(
+                            MarkdownGenerator.LinkDefinition(referenceId, this.referenceToFile.get(referenceId) || "#__error")
+                        )
+                    );
             }
 
             output.push({

@@ -59,14 +59,12 @@ export class ApiNamespacePlugin extends ApiItemPluginBase<Contracts.ApiNamespace
         const renderedItems = this.renderItems(data);
         const references: string[] = renderedItems.References;
 
-
         // Header
         const builder = new MarkdownBuilder()
             .Header(heading, 1)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Text(renderedItems.Output);
-
 
         return {
             Heading: heading,

@@ -1,0 +1,2 @@
+# FooNamespace
+
