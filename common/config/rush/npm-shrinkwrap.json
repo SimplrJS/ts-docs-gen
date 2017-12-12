@@ -23,9 +23,9 @@
     },
     "@rush-temp/ts-docs-gen": {
       "version": "file:projects/ts-docs-gen.tgz",
-      "integrity": "sha1-Gs963LEz8L5XPV8LNHtyO1u9ZIU=",
+      "integrity": "sha1-q5PE2Czi6RYJoEbNl8S7rSkODP4=",
       "requires": {
-        "@simplrjs/markdown": "0.1.0-beta",
+        "@simplrjs/markdown": "1.0.1",
         "@types/fs-extra": "4.0.6",
         "@types/jest": "21.1.8",
         "@types/sinon": "4.1.1",
@@ -35,18 +35,18 @@
         "simplr-logger": "1.0.1",
         "simplr-tslint": "0.0.1",
         "sinon": "4.1.3",
-        "ts-extractor": "1.1.1",
+        "ts-extractor": "2.0.0",
         "ts-jest": "21.2.4",
         "tslint": "5.8.0",
         "typescript": "2.6.2"
       }
     },
     "@simplrjs/markdown": {
-      "version": "0.1.0-beta",
-      "resolved": "https://registry.npmjs.org/@simplrjs/markdown/-/markdown-0.1.0-beta.tgz",
-      "integrity": "sha512-4XcPCuwrFqyMdDigSRjbo1yjY9STSAlg4B8MrG1GK5Y5Bt1CVKUvLoj8HGimFuL5x+z5/XLpu5TLI3jFJFlzzw==",
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/@simplrjs/markdown/-/markdown-1.0.1.tgz",
+      "integrity": "sha512-5cRr5I/CVRwo8bLJOmui8Jf9iwXgVcr81+9rO93IyLutm5GBrkSA8ZSwzovVuWlgA36sml9Dklrl1xP4GQEurA==",
       "requires": {
-        "@types/string": "0.0.28",
+        "@types/string": "0.0.29",
         "string": "3.3.3"
       }
     },
@@ -79,9 +79,9 @@
       "integrity": "sha512-4TaA0fxqXNhx8ph+cylpN/hBrkxru0LviHlfZU6Yljl6ztUL7enUFnJ3XMYruSsyycnZgfGqOiw1kiynKlXLNw=="
     },
     "@types/string": {
-      "version": "0.0.28",
-      "resolved": "https://registry.npmjs.org/@types/string/-/string-0.0.28.tgz",
-      "integrity": "sha1-cnCNFgx7H93+go7s/ZDHyVlLHmo="
+      "version": "0.0.29",
+      "resolved": "https://registry.npmjs.org/@types/string/-/string-0.0.29.tgz",
+      "integrity": "sha512-p8YTvb6vTWL38JxSe1rCduwP2l0jNRZpHlDUWqLt5A3F4SOc7yBPPd3jBiSk3b66urjs2tFM2QOhf4yEzz9wiQ=="
     },
     "@types/yargs": {
       "version": "10.0.0",
@@ -4407,25 +4407,15 @@
       "integrity": "sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM="
     },
     "ts-extractor": {
-      "version": "1.1.1",
-      "resolved": "https://registry.npmjs.org/ts-extractor/-/ts-extractor-1.1.1.tgz",
-      "integrity": "sha512-SWdWxeXhYHQh6/fZzYrsfQnoudL1hqh6DH1oOuyFPy2sJ7IdjhV5SCARSylWHnVX6A1069PGNHJCgCLJXwG06Q==",
+      "version": "2.0.0",
+      "resolved": "https://registry.npmjs.org/ts-extractor/-/ts-extractor-2.0.0.tgz",
+      "integrity": "sha512-snSSnVkhc/jDo0ppJa8t3/aIbMcI3qg6HsB/iC0UdG+5KzAKHGQBuM5QwaFng6O7KKbk/Ljb8RgwN5uwd1DYHA==",
       "requires": {
         "@types/fs-extra": "4.0.6",
         "fs-extra": "4.0.3",
         "read-package-json": "2.0.12",
-        "simplr-logger": "0.4.0",
+        "simplr-logger": "1.0.1",
         "typescript": "2.6.2"
-      },
-      "dependencies": {
-        "simplr-logger": {
-          "version": "0.4.0",
-          "resolved": "https://registry.npmjs.org/simplr-logger/-/simplr-logger-0.4.0.tgz",
-          "integrity": "sha512-Vihv/dqeDfjowBu6bNuMy1LpBiRfhlQeiHrYg8XpKhinVqVW1rxVerZgpm2ceBwQLaHPy/jCW0DenAhbOVJ/Uw==",
-          "requires": {
-            "tslib": "1.8.1"
-          }
-        }
       }
     },
     "ts-jest": {

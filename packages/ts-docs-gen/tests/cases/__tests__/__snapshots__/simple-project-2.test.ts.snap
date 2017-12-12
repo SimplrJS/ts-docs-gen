@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`index 1`] = `
+Array [
+  Object {
+    "FileLocation": "index.md",
+    "Output": Array [
+      "# index",
+      "",
+      "## class: Foo",
+      "",
+      "## class: FooStart",
+      "",
+    ],
+  },
+  Object {
+    "FileLocation": "foo.md",
+    "Output": Array [
+      "# foo",
+      "",
+      "## class: Foo",
+      "",
+    ],
+  },
+]
+`;
