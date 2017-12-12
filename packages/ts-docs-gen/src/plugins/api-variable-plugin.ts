@@ -31,6 +31,7 @@ export class ApiVariablePlugin extends ApiItemPluginBase<Contracts.ApiVariableDt
         return {
             Heading: heading,
             ApiItem: data.ApiItem,
+            ParentId: data.ParentId,
             References: typeStringDto.References,
             RenderOutput: builder.GetOutput()
         };

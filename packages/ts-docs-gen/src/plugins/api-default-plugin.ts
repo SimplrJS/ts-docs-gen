@@ -20,6 +20,7 @@ export class ApiDefaultPlugin extends ApiItemPluginBase {
         return {
             Heading: heading,
             ApiItem: data.ApiItem,
+            ParentId: data.ParentId,
             References: [],
             RenderOutput: output
         };

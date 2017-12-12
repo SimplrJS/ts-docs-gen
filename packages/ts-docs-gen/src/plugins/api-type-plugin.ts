@@ -32,6 +32,7 @@ export class ApiTypePlugin extends ApiItemPluginBase<Contracts.ApiTypeDto> {
         return {
             Heading: heading,
             ApiItem: data.ApiItem,
+            ParentId: data.ParentId,
             References: typeStringDto.References,
             RenderOutput: builder.GetOutput()
         };

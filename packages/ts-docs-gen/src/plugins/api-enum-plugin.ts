@@ -54,6 +54,7 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         return {
             Heading: alias,
             ApiItem: data.ApiItem,
+            ParentId: data.ParentId,
             References: [],
             RenderOutput: builder.GetOutput()
         };
