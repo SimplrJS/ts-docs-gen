@@ -54,13 +54,13 @@ export class Generator {
         }
     }
 
-    private getRenderedItemByReference = (entryFile: Contracts.ApiSourceFileDto, reference: ReferenceTuple): RenderItemOutputDto => {
+    private getRenderedItemByReference = (reference: ReferenceTuple): RenderItemOutputDto => {
         const [referenceId] = reference;
         const renderedItem = this.renderedItems.get(reference);
 
         if (renderedItem == null) {
             const { Registry } = this.configuration.ExtractedData;
-            const renderedData = this.renderApiItem(reference, entryFile, Registry[referenceId]);
+            const renderedData = this.renderApiItem(reference, Registry[referenceId]);
             this.renderedItems.set(reference, renderedData);
 
             return renderedData;
@@ -71,7 +71,6 @@ export class Generator {
 
     private renderApiItem(
         reference: ReferenceTuple,
-        entryFile: Contracts.ApiSourceFileDto,
         apiItem: Contracts.ApiItemDto
     ): RenderItemOutputDto {
         const plugins = this.configuration.PluginManager.GetPluginsByKind(apiItem.ApiKind);

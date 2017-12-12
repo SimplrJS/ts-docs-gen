@@ -7,5 +7,6 @@ export interface PluginData<TKind = Contracts.ApiItemDto> {
     Reference: ReferenceTuple;
     ApiItem: TKind;
     ExtractedData: ExtractDto;
-    GetItem(entryFile: Contracts.ApiSourceFileDto, reference: ReferenceTuple): RenderItemOutputDto;
+    ParentId?: string;
+    GetItem(reference: ReferenceTuple): RenderItemOutputDto;
 }
