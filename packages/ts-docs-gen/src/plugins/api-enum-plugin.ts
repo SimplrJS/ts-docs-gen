@@ -10,8 +10,8 @@ import { GeneratorHelpers } from "../generator-helpers";
 
 // TODO: const enums implementation.
 export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
-    public SupportedApiItemsKinds(): SupportedApiItemKindType[] {
-        return [this.SupportKind.Enum];
+    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
+        return [this.ApiItemKinds.Enum];
     }
 
     private constructEnumTable(members: Contracts.ApiEnumMemberDto[]): string[] {

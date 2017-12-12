@@ -6,8 +6,8 @@ import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
 import { PluginData } from "../contracts/plugin-data";
 
 export class ApiDefaultPlugin extends ApiItemPluginBase {
-    public SupportedApiItemsKinds(): SupportedApiItemKindType[] {
-        return [this.SupportKind.Any];
+    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
+        return [this.ApiItemKinds.Any];
     }
 
     public Render(data: PluginData): RenderItemOutputDto {

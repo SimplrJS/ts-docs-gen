@@ -20,7 +20,7 @@ export class PluginRegistry {
     }
 
     public Register(plugin: ApiItemPluginBase): void {
-        const supportedKinds = plugin.SupportedApiItemsKinds();
+        const supportedKinds = plugin.SupportedApiItemKinds();
 
         if (this.isSupportedKindsHasAny(supportedKinds)) {
             for (const [key, value] of this.registeredPlugins) {

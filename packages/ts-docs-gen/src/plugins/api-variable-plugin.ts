@@ -9,8 +9,8 @@ import { ExtractorHelpers } from "../extractor-helpers";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export class ApiVariablePlugin extends ApiItemPluginBase<Contracts.ApiVariableDto> {
-    public SupportedApiItemsKinds(): SupportedApiItemKindType[] {
-        return [this.SupportKind.Variable];
+    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
+        return [this.ApiItemKinds.Variable];
     }
 
     public Render(data: PluginData<Contracts.ApiVariableDto>): RenderItemOutputDto {

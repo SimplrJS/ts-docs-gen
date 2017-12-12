@@ -5,12 +5,14 @@ import { SupportedApiItemKindType, ApiItemKindsAdditional } from "../contracts/s
 import { PluginData } from "../contracts/plugin-data";
 
 export abstract class ApiItemPluginBase<TKind = Contracts.ApiItemDto> {
-    // TODO: Clarify naming.
-    protected get SupportKind(): typeof Contracts.ApiItemKinds & typeof ApiItemKindsAdditional {
+    /**
+     * Supported Api Item kinds.
+     */
+    protected get ApiItemKinds(): typeof Contracts.ApiItemKinds & typeof ApiItemKindsAdditional {
         return Object.assign(Contracts.ApiItemKinds, ApiItemKindsAdditional);
     }
 
-    public abstract SupportedApiItemsKinds(): SupportedApiItemKindType[];
+    public abstract SupportedApiItemKinds(): SupportedApiItemKindType[];
 
     public CheckApiItem(item: Contracts.ApiItemDto): boolean {
         return true;

@@ -11,10 +11,16 @@ interface OutputData {
     RenderOutput: string[];
 }
 
-type RenderedItem = Array<RenderItemOutputDto | OutputData>;
+type RenderedItemList = Array<RenderItemOutputDto | OutputData>;
 
 export class FileManager extends FileManagerBaseBase {
-    private filesList: Map<string, RenderedItem> = new Map();
+    /**
+     * <FileLocation, RenderedItems>
+     */
+    private filesList: Map<string, RenderedItemList> = new Map();
+    /**
+     * <ReferenceId, FileLocation>
+     */
     private referenceToFile: Map<string, string> = new Map();
 
     private fileHeader(entryFile: Contracts.ApiSourceFileDto): OutputData {
@@ -29,7 +35,7 @@ export class FileManager extends FileManagerBaseBase {
         };
     }
 
-    private getDefaultEntryFile(entryFile: Contracts.ApiSourceFileDto): RenderedItem {
+    private getDefaultEntryFileHeader(entryFile: Contracts.ApiSourceFileDto): RenderedItemList {
         return [
             this.fileHeader(entryFile)
         ];
@@ -41,8 +47,10 @@ export class FileManager extends FileManagerBaseBase {
 
     public AddItem(entryFile: Contracts.ApiSourceFileDto, item: RenderItemOutputDto, referenceId: string): void {
         const fileName = path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
-        const items = this.filesList.get(fileName) || this.getDefaultEntryFile(entryFile);
+        const items = this.filesList.get(fileName) || this.getDefaultEntryFileHeader(entryFile);
         items.push(item);
+
+        // kind class | namespace
 
         // Add reference link.
         this.referenceToFile.set(referenceId, `${fileName}#${Helpers.HeadingToAnchor(item.Heading)}`);
@@ -55,12 +63,12 @@ export class FileManager extends FileManagerBaseBase {
 
         for (const [fileLocation, items] of this.filesList) {
             // Link definitions to file location.
-            const references: string[] = [];
+            const linkDefinitions: string[] = [];
             for (const item of items) {
                 if (this.renderItemIsItemOutputDto(item)) {
                     item.References
                         .forEach(referenceId =>
-                            references.push(
+                            linkDefinitions.push(
                                 MarkdownGenerator.LinkDefinition(referenceId, this.referenceToFile.get(referenceId) || "#__error")
                             )
                         );
@@ -70,7 +78,7 @@ export class FileManager extends FileManagerBaseBase {
             output.push({
                 FileLocation: fileLocation,
                 Output: [
-                    ...references,
+                    ...linkDefinitions,
                     ...Helpers.Flatten(items.map(x => [x.RenderOutput, ""]))
                 ]
             });
