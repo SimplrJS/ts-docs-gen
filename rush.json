@@ -1,6 +1,6 @@
 {
     "$schema": "./common/schemas/rush.schema.json",
-    "npmVersion": "4.5.0",
+    "npmVersion": "5.3.0",
     "rushVersion": "4.0.1",
     "projects": [
         {
