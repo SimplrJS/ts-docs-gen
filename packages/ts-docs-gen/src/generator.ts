@@ -1,4 +1,3 @@
-
 import { Contracts } from "ts-extractor";
 import * as path from "path";
 import * as fs from "fs-extra";
@@ -11,6 +10,7 @@ import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
 
 import { ExtractorHelpers } from "./extractor-helpers";
 import { FileOutputDto } from "./contracts/file-output-dto";
+import { PluginData } from "./contracts/plugin-data";
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
@@ -18,13 +18,13 @@ export class Generator {
         const { ExtractedData } = this.configuration;
 
         for (const entryFile of this.configuration.ExtractedData.EntryFiles) {
-            const referenceTuples = ExtractorHelpers.GetReferenceTuples(ExtractedData, entryFile, entryFile.Members);
+            const referenceTuples = ExtractorHelpers.GetReferenceTuples(ExtractedData, entryFile.Members);
 
             for (const reference of referenceTuples) {
                 const [referenceId] = reference;
 
-                const renderedItem = this.getRenderedItemByReference(entryFile, reference);
-                this.fileManager.AddItem(entryFile, renderedItem, referenceId);
+                const renderedItem = this.getRenderedItemByReference(reference);
+                this.fileManager.AddItem(renderedItem, referenceId, entryFile);
             }
         }
 
@@ -69,29 +69,35 @@ export class Generator {
         return renderedItem;
     }
 
+    private addItemToFileManager = (reference: ReferenceTuple, apiItem: Contracts.ApiItemDto, parentId: string) => {
+        const [referenceId] = reference;
+        const renderedItem = this.renderApiItem(reference, apiItem, parentId);
+        this.fileManager.AddItem(renderedItem, referenceId);
+    }
+
     private renderApiItem(
         reference: ReferenceTuple,
-        apiItem: Contracts.ApiItemDto
+        apiItem: Contracts.ApiItemDto,
+        parentId?: string
     ): RenderItemOutputDto {
         const plugins = this.configuration.PluginManager.GetPluginsByKind(apiItem.ApiKind);
 
+        const pluginData: PluginData = {
+            ExtractedData: this.configuration.ExtractedData,
+            Reference: reference,
+            ApiItem: apiItem,
+            GetItem: this.getRenderedItemByReference,
+            AddItem: this.addItemToFileManager,
+            ParentId: parentId
+        };
+
         for (const plugin of plugins) {
             if (plugin.CheckApiItem(apiItem)) {
-                return plugin.Render({
-                    ExtractedData: this.configuration.ExtractedData,
-                    Reference: reference,
-                    ApiItem: apiItem,
-                    GetItem: this.getRenderedItemByReference
-                });
+                return plugin.Render(pluginData);
             }
         }
 
         const defaultPlugin = new ApiDefaultPlugin();
-        return defaultPlugin.Render({
-            ExtractedData: this.configuration.ExtractedData,
-            Reference: reference,
-            ApiItem: apiItem,
-            GetItem: this.getRenderedItemByReference
-        });
+        return defaultPlugin.Render(pluginData);
     }
 }

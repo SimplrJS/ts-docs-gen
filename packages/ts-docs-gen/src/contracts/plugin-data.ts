@@ -9,4 +9,5 @@ export interface PluginData<TKind = Contracts.ApiItemDto> {
     ExtractedData: ExtractDto;
     ParentId?: string;
     GetItem(reference: ReferenceTuple): RenderItemOutputDto;
+    AddItem(reference: ReferenceTuple, apiItem: Contracts.ApiItemDto, parentId: string): void;
 }
