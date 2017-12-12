@@ -1,15 +1,20 @@
 import * as fs from "fs-extra";
+import * as path from "path";
 import fastGlob from "fast-glob";
 
-import { TESTS_DIR_NAME, TESTS_SNAPSHOTS_DIR_NAME } from "./tests-helpers";
+import {
+    GENERATED_TESTS_DIR_NAME,
+    TESTS_SNAPSHOTS_DIR_NAME,
+    FixSep
+} from "./tests-helpers";
 
-export async function TestsCleanup(dirName: string): Promise<void> {
-    const oldTestFiles = await fastGlob([
-        `./${dirName}/${TESTS_DIR_NAME}/*.*`,
-        `./${dirName}/${TESTS_DIR_NAME}/**/`,
-        `!./${dirName}/**/${TESTS_SNAPSHOTS_DIR_NAME}/`,
-        `!./${dirName}/${TESTS_DIR_NAME}/`
-    ]);
+export async function TestsCleanup(testsCasesPath: string): Promise<void> {
+    const generatedTestsDirPath = FixSep(path.join(testsCasesPath, GENERATED_TESTS_DIR_NAME));
+
+    const oldTestFiles = await fastGlob(`${generatedTestsDirPath}/**/*`, {
+        onlyFiles: true,
+        ignore: [`**/${TESTS_SNAPSHOTS_DIR_NAME}/**`]
+    });
 
     for (const pathname of oldTestFiles) {
         await fs.remove(pathname);
