@@ -6,7 +6,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p .",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "pretest": "npm run build -- --noEmit",
+    "test": "npm run tslint",
+    "tslint": "tslint --project . --config ./tslint.json && echo Successfully passed tslint test."
   },
   "keywords": [],
   "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
