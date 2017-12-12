@@ -55,7 +55,7 @@ export async function TestsGenerator(testsCasesPath: string): Promise<void> {
         const data = {
             "caseName": name,
             "projectDirectory": caseDirPath,
-            "entryFiles": testConfig.EntryFiles
+            "testConfig": testConfig
         };
         const testDescribe = template(data);
 
