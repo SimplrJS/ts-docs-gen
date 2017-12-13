@@ -6,10 +6,10 @@ import { GeneratorConfiguration } from "./contracts/generator-configuration";
 import { FileManager } from "./file-manager";
 import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
 
-import { ExtractorHelpers } from "./extractor-helpers";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { PluginResult, PluginOptions, GetItemPluginResultHandler } from "./contracts/plugin";
 import { FileResult } from "./contracts/file-result";
+import { GeneratorHelpers } from "./generator-helpers";
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
@@ -17,7 +17,7 @@ export class Generator {
         const { ExtractedData } = this.configuration;
 
         for (const entryFile of this.configuration.ExtractedData.EntryFiles) {
-            const apiItemsReferences = ExtractorHelpers.GetApiItemReferences(ExtractedData, entryFile.Members);
+            const apiItemsReferences = GeneratorHelpers.GetApiItemReferences(ExtractedData, entryFile.Members);
 
             for (const reference of apiItemsReferences) {
                 const renderedItem = this.getItemPluginResult(reference);
