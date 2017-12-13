@@ -40,16 +40,17 @@ export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
     }
 
     public Render(data: PluginOptions<Contracts.ApiEnumDto>): PluginResult {
+        const heading: string = data.Reference.Alias;
         const headings: PluginHeading[] = [
             {
                 ApiItemId: data.Reference.Id,
-                Heading: data.Reference.Alias
+                Heading: heading
             }
         ];
 
         const enumMembers = this.getEnumMembers(data.ApiItem.Members, data.ExtractedData);
         const builder = new MarkdownBuilder()
-            .Header(data.Reference.Alias, 2)
+            .Header(heading, 2)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .EmptyLine()

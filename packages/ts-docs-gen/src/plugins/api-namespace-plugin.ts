@@ -62,7 +62,7 @@ export class ApiNamespacePlugin implements Plugin<Contracts.ApiNamespaceDto> {
     }
 
     public Render(data: PluginOptions<Contracts.ApiNamespaceDto>): PluginResult {
-        const heading = data.Reference.Id;
+        const heading = data.Reference.Alias;
         const headings: PluginHeading[] = [
             {
                 Heading: heading,
