@@ -5,6 +5,7 @@ import { FileManager as FileManagerInterface } from "./contracts/file-manager";
 import { Helpers } from "./utils/helpers";
 import { PluginResult } from "./contracts/plugin";
 import { FileResult } from "./contracts/file-result";
+import { GeneratorHelpers } from "./generator-helpers";
 
 interface OutputData {
     Result: string[];
@@ -27,14 +28,20 @@ export class FileManager implements FileManagerInterface {
         const items = this.filesList.get(filePath) || [];
         items.push(itemResult);
         this.filesList.set(filePath, items);
-        this.referenceToFile.set(itemResult.Reference.Id, filePath);
+        // Adding headings.
+        for (const heading of itemResult.Headings) {
+            this.referenceToFile.set(heading.ApiItemId, `${filePath}#${Helpers.HeadingToAnchor(heading.Heading)}`);
+        }
 
         // HeadingsMap
-
         if (itemResult.Members != null) {
             for (const member of itemResult.Members) {
                 const baseName = path.basename(filePath, path.extname(filePath));
-                const targetFileNPath = path.join(path.dirname(filePath), baseName, member.PluginResult.ApiItem.Name + ".md").toLowerCase();
+                const targetFileNPath = path.join(
+                    path.dirname(filePath),
+                    baseName,
+                    member.PluginResult.ApiItem.Name + GeneratorHelpers.MARKDOWN_EXT
+                ).toLowerCase();
 
                 this.AddItem(member.PluginResult, targetFileNPath);
             }

@@ -4,6 +4,8 @@ import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional } from "./contracts/plugin";
 
 export namespace GeneratorHelpers {
+    export const MARKDOWN_EXT = ".md";
+
     export const ApiItemKinds: typeof ApiItemKindsAdditional & typeof Contracts.ApiItemKinds =
         Object.assign(ApiItemKindsAdditional, Contracts.ApiItemKinds);
 

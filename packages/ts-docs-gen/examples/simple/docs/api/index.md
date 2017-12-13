@@ -1,5 +1,5 @@
-[EnumDeclaration-0]: index.md
-[ModuleDeclaration-1]: index\boonamespace.md
+[EnumDeclaration-0]: index.md#uogos
+[ModuleDeclaration-1]: index\boonamespace.md#boonamespace
 ## class: World
 
 ## Uogos
