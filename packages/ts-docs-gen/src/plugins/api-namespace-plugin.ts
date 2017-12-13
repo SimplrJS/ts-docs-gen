@@ -1,70 +1,75 @@
 import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
-import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
-import { SupportedApiItemKindType } from "../contracts/supported-api-item-kind-type";
-import { RenderItemOutputDto, RenderMember } from "../contracts/render-item-output-dto";
-import { PluginData } from "../contracts/plugin-data";
 import { GeneratorHelpers } from "../generator-helpers";
-import { ExtractorHelpers } from "../extractor-helpers";
+import { PluginMember, Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginHeading } from "../contracts/plugin";
 
 interface RenderItems {
     References: string[];
     Output: string[];
-    Members: RenderMember[];
+    Members: PluginMember[];
 }
 
-export class ApiNamespacePlugin extends ApiItemPluginBase<Contracts.ApiNamespaceDto> {
+export class ApiNamespacePlugin implements Plugin<Contracts.ApiNamespaceDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [this.ApiItemKinds.Namespace];
+        return [GeneratorHelpers.ApiItemKinds.Namespace];
     }
 
-    private renderItems(data: PluginData<Contracts.ApiNamespaceDto>): RenderItems {
-        const referenceTuples = ExtractorHelpers.GetApiItemReferences(data.ExtractedData, data.ApiItem.Members);
-        let references: string[] = [];
-        const members: RenderMember[] = [];
+    public CheckApiItem(item: Contracts.ApiItemDto): boolean {
+        return true;
+    }
+
+    private renderItems(data: PluginOptions<Contracts.ApiNamespaceDto>): RenderItems {
+        const references = GeneratorHelpers.GetApiItemReferences(data.ExtractedData, data.ApiItem.Members);
+        const referencesList: string[] = [];
+        const members: PluginMember[] = [];
         const builder = new MarkdownBuilder();
 
-        for (const reference of referenceTuples) {
-            const [itemId] = reference;
-            const apiItem = data.ExtractedData.Registry[itemId];
+        for (const reference of references) {
+            const apiItem = data.ExtractedData.Registry[reference.Id];
 
             switch (apiItem.ApiKind) {
                 case Contracts.ApiItemKinds.Namespace:
                 case Contracts.ApiItemKinds.Class: {
 
-                    const renderedItem = data.GetItem(reference);
+                    const renderedItem = data.GetItemPluginResult(reference);
                     members.push({
-                        ReferenceId: itemId,
-                        Rendered: renderedItem
+                        Reference: reference,
+                        PluginResult: renderedItem
                     });
 
                     builder
-                        .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, itemId, true), 2))
+                        .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, reference.Id, true), 2))
                         .EmptyLine();
-                    references.push(itemId);
+                    referencesList.push(reference.Id);
                     break;
                 }
                 default: {
-                    const renderedItem = data.GetItem(reference);
+                    const renderedItem = data.GetItemPluginResult(reference);
                     // Something to do with heading. Maybe heading reference registry?
                     builder
-                        .Text(renderedItem.RenderOutput)
+                        .Text(renderedItem.Result)
                         .EmptyLine();
                 }
             }
         }
 
         return {
-            References: references,
+            References: referencesList,
             Output: builder.GetOutput(),
             Members: members
         };
     }
 
-    public Render(data: PluginData<Contracts.ApiNamespaceDto>): RenderItemOutputDto {
-        const [, alias] = data.Reference;
-        const heading = alias;
+    public Render(data: PluginOptions<Contracts.ApiNamespaceDto>): PluginResult {
+        const heading = data.Reference.Id;
+        const headings: PluginHeading[] = [
+            {
+                Heading: heading,
+                ApiItemId: data.Reference.Id
+            }
+        ];
+
         const renderedItems = this.renderItems(data);
         const references: string[] = renderedItems.References;
 
@@ -76,11 +81,11 @@ export class ApiNamespacePlugin extends ApiItemPluginBase<Contracts.ApiNamespace
             .Text(renderedItems.Output);
 
         return {
-            Heading: heading,
             ApiItem: data.ApiItem,
-            ParentId: data.ParentId,
-            References: references,
-            RenderOutput: builder.GetOutput(),
+            Reference: data.Reference,
+            Headings: headings,
+            UsedReferences: references,
+            Result: builder.GetOutput(),
             Members: renderedItems.Members
         };
     }

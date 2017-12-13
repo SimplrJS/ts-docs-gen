@@ -6,7 +6,7 @@ export enum ApiItemKindsAdditional {
     Any = "any"
 }
 
-export type PluginSupportedApiItemKindType = Contracts.ApiItemKinds | ApiItemKindsAdditional;
+export type SupportedApiItemKindType = Contracts.ApiItemKinds | ApiItemKindsAdditional;
 
 export interface PluginHeading {
     Heading: string;
@@ -46,7 +46,7 @@ export interface PluginResult<TKind = Contracts.ApiItemDto> {
 }
 
 export interface Plugin<TKind = Contracts.ApiItemDto> {
-    SupportedApiItemKinds(): PluginSupportedApiItemKindType[];
+    SupportedApiItemKinds(): SupportedApiItemKindType[];
     CheckApiItem(item: TKind): boolean;
     Render(options: PluginOptions<TKind>): PluginResult;
 }

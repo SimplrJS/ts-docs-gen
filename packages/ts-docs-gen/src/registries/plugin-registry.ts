@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { Plugin, PluginSupportedApiItemKindType, ApiItemKindsAdditional } from "../contracts/plugin";
+import { Plugin, SupportedApiItemKindType, ApiItemKindsAdditional } from "../contracts/plugin";
 
 export class PluginRegistry {
     constructor() {
@@ -12,7 +12,7 @@ export class PluginRegistry {
 
     private registeredPlugins: Map<Contracts.ApiItemKinds, Plugin[]> = new Map();
 
-    private isSupportedKindsHasAny(kinds: PluginSupportedApiItemKindType[]): kinds is ApiItemKindsAdditional[] {
+    private isSupportedKindsHasAny(kinds: SupportedApiItemKindType[]): kinds is ApiItemKindsAdditional[] {
         return Boolean(kinds.find(x => x === ApiItemKindsAdditional.Any));
     }
 

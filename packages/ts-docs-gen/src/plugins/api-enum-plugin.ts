@@ -1,17 +1,17 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
 
-import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
-import { SupportedApiItemKindType } from "../contracts/supported-api-item-kind-type";
-import { PluginData } from "../contracts/plugin-data";
-import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
-import { ExtractorHelpers } from "../extractor-helpers";
 import { GeneratorHelpers } from "../generator-helpers";
+import { Plugin, SupportedApiItemKindType, PluginResult, PluginOptions, PluginHeading } from "../contracts/plugin";
 
 // TODO: const enums implementation.
-export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
+export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [this.ApiItemKinds.Enum];
+        return [GeneratorHelpers.ApiItemKinds.Enum];
+    }
+
+    public CheckApiItem(item: Contracts.ApiItemDto): boolean {
+        return true;
     }
 
     private constructEnumTable(members: Contracts.ApiEnumMemberDto[]): string[] {
@@ -39,24 +39,30 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         return apiItems;
     }
 
-    public Render(data: PluginData<Contracts.ApiEnumDto>): RenderItemOutputDto {
-        const [, alias] = data.Reference;
+    public Render(data: PluginOptions<Contracts.ApiEnumDto>): PluginResult {
+        const headings: PluginHeading[] = [
+            {
+                ApiItemId: data.Reference.Id,
+                Heading: data.Reference.Alias
+            }
+        ];
+
         const enumMembers = this.getEnumMembers(data.ApiItem.Members, data.ExtractedData);
         const builder = new MarkdownBuilder()
-            .Header(alias, 2)
+            .Header(data.Reference.Alias, 2)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .EmptyLine()
-            .Code(ExtractorHelpers.ReconstructEnumCode(alias, enumMembers), ExtractorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(GeneratorHelpers.ReconstructEnumCode(data.Reference.Alias, enumMembers), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
             .Text(this.constructEnumTable(enumMembers));
 
         return {
-            Heading: alias,
             ApiItem: data.ApiItem,
-            ParentId: data.ParentId,
-            References: [],
-            RenderOutput: builder.GetOutput()
+            Reference: data.Reference,
+            Headings: headings,
+            UsedReferences: [],
+            Result: builder.GetOutput()
         };
     }
 }
