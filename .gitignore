@@ -290,3 +290,7 @@ coverage
 /common/rush-link.json
 /common/rush-recycler
 package-deps.json
+
+# Tests
+*/__tests__/*
+!*/__tests__/**/__snapshots__
