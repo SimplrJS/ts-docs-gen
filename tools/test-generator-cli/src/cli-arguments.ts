@@ -13,9 +13,9 @@ export const CLIHandler = yargs
     .version(`Current version: ${GetVersion()}`)
     .alias("v", "version")
     // CLI options
-    .option("path", {
+    .option("project", {
         describe: "Project directory path.",
         type: "string"
     })
-    .alias("p", "path")
+    .alias("p", "project")
     .argv as CLIArgumentsObject;
