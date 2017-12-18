@@ -24,9 +24,11 @@ export async function TestsGenerator(testsCasesPath: string): Promise<void> {
         return;
     }
 
-    const casesDirPaths = await fastGlob([
-        `${testsCasesPath}/*`
-    ], {
+    const casesDirPaths = await fastGlob(
+        [
+            `${testsCasesPath}/*`
+        ],
+        {
             onlyDirs: true,
             ignore: [`**/${GENERATED_TESTS_DIR_NAME}/**`]
         });
