@@ -1,9 +1,6 @@
 import { Contracts } from "ts-extractor";
+import { Plugin, SupportedApiItemKindType, ApiItemKindsAdditional } from "../contracts/plugin";
 
-import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
-import { SupportedApiItemKindType, ApiItemKindsAdditional } from "../contracts/supported-api-item-kind-type";
-
-// TODO: Rename to PluginRegistry.
 export class PluginRegistry {
     constructor() {
 
@@ -13,14 +10,14 @@ export class PluginRegistry {
         }
     }
 
-    private registeredPlugins: Map<Contracts.ApiItemKinds, ApiItemPluginBase[]> = new Map();
+    private registeredPlugins: Map<Contracts.ApiItemKinds, Plugin[]> = new Map();
 
     private isSupportedKindsHasAny(kinds: SupportedApiItemKindType[]): kinds is ApiItemKindsAdditional[] {
         return Boolean(kinds.find(x => x === ApiItemKindsAdditional.Any));
     }
 
-    public Register(plugin: ApiItemPluginBase): void {
-        const supportedKinds = plugin.SupportedApiItemsKinds();
+    public Register(plugin: Plugin): void {
+        const supportedKinds = plugin.SupportedApiItemKinds();
 
         if (this.isSupportedKindsHasAny(supportedKinds)) {
             for (const [key, value] of this.registeredPlugins) {
@@ -36,7 +33,7 @@ export class PluginRegistry {
         }
     }
 
-    public GetPluginsByKind(kind: Contracts.ApiItemKinds): ApiItemPluginBase[] {
+    public GetPluginsByKind(kind: Contracts.ApiItemKinds): Plugin[] {
         return this.registeredPlugins.get(kind) || [];
     }
 }

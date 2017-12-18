@@ -1,16 +1,15 @@
-
 import { Contracts } from "ts-extractor";
 import * as path from "path";
 import * as fs from "fs-extra";
 
 import { GeneratorConfiguration } from "./contracts/generator-configuration";
 import { FileManager } from "./file-manager";
-import { RenderItemOutputDto } from "./contracts/render-item-output-dto";
-import { ReferenceTuple } from "./contracts/reference-tuple";
 import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
 
-import { ExtractorHelpers } from "./extractor-helpers";
-import { FileOutputDto } from "./contracts/file-output-dto";
+import { ApiItemReference } from "./contracts/api-item-reference";
+import { PluginResult, PluginOptions, GetItemPluginResultHandler } from "./contracts/plugin";
+import { FileResult } from "./contracts/file-result";
+import { GeneratorHelpers } from "./generator-helpers";
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
@@ -18,24 +17,29 @@ export class Generator {
         const { ExtractedData } = this.configuration;
 
         for (const entryFile of this.configuration.ExtractedData.EntryFiles) {
-            const referenceTuples = ExtractorHelpers.GetReferenceTuples(ExtractedData, entryFile, entryFile.Members);
+            const apiItemsReferences = GeneratorHelpers.GetApiItemReferences(ExtractedData, entryFile.Members);
 
-            for (const reference of referenceTuples) {
-                const [referenceId] = reference;
-
-                const renderedItem = this.getRenderedItemByReference(entryFile, reference);
-                this.fileManager.AddItem(entryFile, renderedItem, referenceId);
+            for (const reference of apiItemsReferences) {
+                const renderedItem = this.getItemPluginResult(reference);
+                this.fileManager.AddItem(renderedItem, this.getFilePathFromEntryFile(entryFile));
             }
         }
 
         this.outputData = this.fileManager.ToFilesOutput();
     }
 
-    private renderedItems: Map<ReferenceTuple, RenderItemOutputDto> = new Map();
+    /**
+     * Reference check.... how Map Works here.
+     */
+    private renderedItems: Map<ApiItemReference, PluginResult> = new Map();
     private fileManager: FileManager;
-    private outputData: FileOutputDto[];
+    private outputData: FileResult[];
 
-    public get OutputData(): ReadonlyArray<FileOutputDto> {
+    private getFilePathFromEntryFile(entryFile: Contracts.ApiSourceFileDto): string {
+        return path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
+    }
+
+    public get OutputData(): ReadonlyArray<FileResult> {
         return this.outputData;
     }
 
@@ -47,21 +51,20 @@ export class Generator {
                 // Ensure output directory
                 await fs.ensureDir(path.dirname(fullLocation));
                 // Output file
-                await fs.writeFile(fullLocation, item.Output.join("\n"));
+                await fs.writeFile(fullLocation, item.Result.join("\n"));
             } catch (error) {
                 console.error(error);
             }
         }
     }
 
-    private getRenderedItemByReference = (entryFile: Contracts.ApiSourceFileDto, reference: ReferenceTuple): RenderItemOutputDto => {
-        const [referenceId] = reference;
-        const renderedItem = this.renderedItems.get(reference);
+    private getItemPluginResult: GetItemPluginResultHandler = (apiItemReference: ApiItemReference): PluginResult => {
+        const renderedItem = this.renderedItems.get(apiItemReference);
 
         if (renderedItem == null) {
             const { Registry } = this.configuration.ExtractedData;
-            const renderedData = this.renderApiItem(reference, entryFile, Registry[referenceId]);
-            this.renderedItems.set(reference, renderedData);
+            const renderedData = this.renderApiItem(apiItemReference, Registry[apiItemReference.Id]);
+            this.renderedItems.set(apiItemReference, renderedData);
 
             return renderedData;
         }
@@ -70,29 +73,25 @@ export class Generator {
     }
 
     private renderApiItem(
-        reference: ReferenceTuple,
-        entryFile: Contracts.ApiSourceFileDto,
+        apiItemReference: ApiItemReference,
         apiItem: Contracts.ApiItemDto
-    ): RenderItemOutputDto {
+    ): PluginResult {
         const plugins = this.configuration.PluginManager.GetPluginsByKind(apiItem.ApiKind);
+
+        const pluginOptions: PluginOptions = {
+            ExtractedData: this.configuration.ExtractedData,
+            Reference: apiItemReference,
+            ApiItem: apiItem,
+            GetItemPluginResult: this.getItemPluginResult
+        };
 
         for (const plugin of plugins) {
             if (plugin.CheckApiItem(apiItem)) {
-                return plugin.Render({
-                    ExtractedData: this.configuration.ExtractedData,
-                    Reference: reference,
-                    ApiItem: apiItem,
-                    GetItem: this.getRenderedItemByReference
-                });
+                return plugin.Render(pluginOptions);
             }
         }
 
         const defaultPlugin = new ApiDefaultPlugin();
-        return defaultPlugin.Render({
-            ExtractedData: this.configuration.ExtractedData,
-            Reference: reference,
-            ApiItem: apiItem,
-            GetItem: this.getRenderedItemByReference
-        });
+        return defaultPlugin.Render(pluginOptions);
     }
 }

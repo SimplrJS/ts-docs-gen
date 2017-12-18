@@ -173,3 +173,11 @@ export const enum ConstUogos {
  * @deprecated Use uogos instead ;)
  */
 export type Hello = Uogos;
+
+export namespace FooNamespace {
+    export namespace BooNamespace {
+        export namespace BooNamespace2 {
+            export const Hello = "World!";
+        }
+    }
+}

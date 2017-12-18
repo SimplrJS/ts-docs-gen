@@ -1,11 +1,12 @@
 [EnumDeclaration-0]: index.md#uogos
-# index
-
+[ModuleDeclaration-1]: index\boonamespace.md#boonamespace
 ## class: World
 
 ## Uogos
 
 <span style="color: #d2d255;">Warning: Beta!</span>
+
+<span style="color: red;">Deprecated!</span>
 
 Some information
 2nd line of some information
@@ -122,3 +123,8 @@ type Hello = Uogos;
 ### Type
 
 [Uogos][EnumDeclaration-0]
+
+# FooNamespace
+
+## [BooNamespace][ModuleDeclaration-1]
+
