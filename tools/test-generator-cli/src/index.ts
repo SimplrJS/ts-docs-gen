@@ -20,12 +20,7 @@ async function StartWatcher(testsCasesPath: string): Promise<fs.FSWatcher> {
 }
 
 (async (argumentsObject: CLIArgumentsObject) => {
-    let cwd: string;
-    if (argumentsObject.path != null) {
-        cwd = argumentsObject.path;
-    } else {
-        cwd = process.cwd();
-    }
+    const cwd = argumentsObject.path || process.cwd();
     const testsCasesPath = FixSep(path.join(cwd, TESTS_DIR_NAME, CASES_DIR_NAME));
 
     Logger.Info("Starting test generator...");
