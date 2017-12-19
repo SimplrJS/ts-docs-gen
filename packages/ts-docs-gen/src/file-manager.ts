@@ -67,6 +67,10 @@ export class FileManager implements FileManagerInterface {
                             linkDefinitions.push(
                                 MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
                             );
+                        } else {
+                            linkDefinitions.push(
+                                MarkdownGenerator.LinkDefinition(referenceId, "Error")
+                            );
                         }
                     });
             }

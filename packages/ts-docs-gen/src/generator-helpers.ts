@@ -1,5 +1,5 @@
 import { Contracts, ExtractDto } from "ts-extractor";
-import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
+import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional } from "./contracts/plugin";
 
@@ -207,6 +207,10 @@ export namespace GeneratorHelpers {
         lang: "typescript"
     };
 
+    export const DEFAULT_TABLE_OPTIONS: MarkdownContracts.TableOptions = {
+        removeColumnIfEmpty: true
+    };
+
     export function FixSentence(sentence: string, punctuationMark: string = "."): string {
         const trimmedSentence = sentence.trim();
         const punctuationMarks = ".!:;,-";
@@ -224,5 +228,36 @@ export namespace GeneratorHelpers {
         const name = alias != null ? alias : item.Name;
 
         return `type ${name} = ${item.Type.Text};`;
+    }
+
+    export function ApiFunctionToString(
+        alias: string,
+        apiItem: Contracts.ApiFunctionDto,
+        parametersApiItems: Contracts.ApiParameterDto[]
+    ): string {
+        const name = alias || apiItem.Name;
+        const parametersString = parametersApiItems
+            .map(x => x.Name)
+            .join(", ");
+
+        return `${name}(${parametersString})`;
+    }
+
+    export function GetApiItemsFromReferenceTuple<T extends Contracts.ApiItemDto>(
+        items: Contracts.ApiItemReferenceTuple,
+        extractedData: ExtractDto
+    ): T[] {
+        const apiItems: T[] = [];
+
+        for (const itemReferences of items) {
+            const [, references] = itemReferences;
+
+            for (const reference of references) {
+                const apiItem = extractedData.Registry[reference] as T;
+                apiItems.push(apiItem);
+            }
+        }
+
+        return apiItems;
     }
 }

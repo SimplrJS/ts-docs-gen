@@ -1,4 +1,4 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
 
 import { GeneratorHelpers } from "../generator-helpers";
@@ -23,23 +23,6 @@ export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
         return MarkdownGenerator.Table(header, content, { removeColumnIfEmpty: true });
     }
 
-    /**
-     * Resolve api items of an enum from ApiItemReferenceTuple.
-     */
-    private getEnumMembers(members: Contracts.ApiItemReferenceTuple, extractedData: ExtractDto): Contracts.ApiEnumMemberDto[] {
-        const apiItems: Contracts.ApiEnumMemberDto[] = [];
-
-        for (const memberReferences of members) {
-            const [, references] = memberReferences;
-            for (const reference of references) {
-                const apiItem = extractedData.Registry[reference] as Contracts.ApiEnumMemberDto;
-                apiItems.push(apiItem);
-            }
-        }
-
-        return apiItems;
-    }
-
     public Render(data: PluginOptions<Contracts.ApiEnumDto>): PluginResult {
         const heading: string = data.Reference.Alias;
         const headings: PluginHeading[] = [
@@ -49,7 +32,10 @@ export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
             }
         ];
 
-        const enumMembers = this.getEnumMembers(data.ApiItem.Members, data.ExtractedData);
+        const enumMembers = GeneratorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiEnumMemberDto>(
+            data.ApiItem.Members,
+            data.ExtractedData
+        );
         const builder = new MarkdownBuilder()
             .Header(heading, 2)
             .EmptyLine()

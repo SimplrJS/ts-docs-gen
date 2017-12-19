@@ -1,16 +1,17 @@
 import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
-import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
-import { SupportedApiItemKindType } from "../contracts/supported-api-item-kind-type";
-import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
-import { PluginData } from "../contracts/plugin-data";
 import { GeneratorHelpers } from "../generator-helpers";
-import { ExtractorHelpers } from "../extractor-helpers";
+import { SupportedApiItemKindType, Plugin, PluginResult, PluginOptions, PluginHeading } from "../contracts/plugin";
+import { ApiFunctionDto } from "ts-extractor/dist/contracts";
 
-export class ApiFunctionPlugin extends ApiItemPluginBase<Contracts.ApiFunctionDto> {
-    public SupportedApiItemsKinds(): SupportedApiItemKindType[] {
-        return [this.SupportKind.Function];
+export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
+    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiItemKinds.Function];
+    }
+
+    public CheckApiItem(item: ApiFunctionDto): boolean {
+        return true;
     }
 
     // TODO: add description from @param jsdoc tag.
@@ -36,7 +37,7 @@ export class ApiFunctionPlugin extends ApiItemPluginBase<Contracts.ApiFunctionDt
         const text = new MarkdownBuilder()
             .Header("Parameters", 3)
             .EmptyLine()
-            .Table(header, content, ExtractorHelpers.DEFAULT_TABLE_OPTIONS)
+            .Table(header, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
             .EmptyLine()
             .GetOutput();
 
@@ -82,7 +83,7 @@ export class ApiFunctionPlugin extends ApiItemPluginBase<Contracts.ApiFunctionDt
         const text = new MarkdownBuilder()
             .Header("Type parameters", 3)
             .EmptyLine()
-            .Table(header, content, ExtractorHelpers.DEFAULT_TABLE_OPTIONS)
+            .Table(header, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
             .EmptyLine()
             .GetOutput();
 
@@ -115,16 +116,23 @@ export class ApiFunctionPlugin extends ApiItemPluginBase<Contracts.ApiFunctionDt
         };
     }
 
-    public Render(data: PluginData<Contracts.ApiFunctionDto>): RenderItemOutputDto {
-        const [, alias] = data.Reference;
+    public Render(data: PluginOptions<Contracts.ApiFunctionDto>): PluginResult {
+        const alias = data.Reference.Alias;
 
-        const parameters = ExtractorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiParameterDto>(
+        const headings: PluginHeading[] = [
+            {
+                ApiItemId: data.Reference.Id,
+                Heading: alias
+            }
+        ];
+
+        const parameters = GeneratorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiParameterDto>(
             data.ApiItem.Parameters,
             data.ExtractedData
         );
         const resolvedParametersDto = this.resolveFunctionParameters(parameters);
 
-        const typeParameters = ExtractorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiTypeParameterDto>(
+        const typeParameters = GeneratorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiTypeParameterDto>(
             data.ApiItem.TypeParameters,
             data.ExtractedData
         );
@@ -133,7 +141,7 @@ export class ApiFunctionPlugin extends ApiItemPluginBase<Contracts.ApiFunctionDt
         const resolvedReturnTypeDto = this.resolveReturnType(data.ApiItem.ReturnType);
 
         const builder = new MarkdownBuilder()
-            .Header(ExtractorHelpers.ApiFunctionToString(alias, data.ApiItem, parameters), 2)
+            .Header(GeneratorHelpers.ApiFunctionToString(alias, data.ApiItem, parameters), 2)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Text(resolvedTypeParametersDto.Text)
@@ -141,15 +149,15 @@ export class ApiFunctionPlugin extends ApiItemPluginBase<Contracts.ApiFunctionDt
             .Text(resolvedReturnTypeDto.Text);
 
         return {
-            Heading: alias,
             ApiItem: data.ApiItem,
-            References: [
+            Reference: data.Reference,
+            Headings: headings,
+            UsedReferences: [
                 ...resolvedParametersDto.References,
                 ...resolvedTypeParametersDto.References,
                 ...resolvedReturnTypeDto.References
             ],
-            RenderOutput: builder.GetOutput()
+            Result: builder.GetOutput()
         };
     }
-
 }
