@@ -1,10 +1,10 @@
+import * as ts from "typescript";
 import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional } from "./contracts/plugin";
 
 export namespace GeneratorHelpers {
-
     export type TypeToStringDto = ReferenceDto<string>;
 
     export interface ReferenceDto<T = string | string[]> {
@@ -19,6 +19,11 @@ export namespace GeneratorHelpers {
 
     export function GetApiItemKinds(): typeof Contracts.ApiItemKinds & typeof ApiItemKindsAdditional {
         return Object.assign(Contracts.ApiItemKinds, ApiItemKindsAdditional);
+    }
+
+    // TODO: reexport InternalSymbolName in ts-extractor.
+    export function IsTypeScriptInternalSymbolName(name: string): boolean {
+        return Object.values(ts.InternalSymbolName).indexOf(name) !== -1;
     }
 
     // TODO: implement type literal and function type.
@@ -61,11 +66,16 @@ export namespace GeneratorHelpers {
                 }
 
                 // Basic type with reference.
-                if (type.ReferenceId != null) {
+                // FIXME: do not use flag string. Exclude Type parameters references.
+                if (type.ReferenceId != null && type.FlagsString !== "TypeParameter") {
                     text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
                     references.push(type.ReferenceId);
                 } else {
-                    text = type.Name || type.Text;
+                    if(type.Name == null || IsTypeScriptInternalSymbolName(type.Name)) {
+                        text = type.Text;
+                    } else {
+                        text = type.Name;
+                    }
                 }
             }
         }
