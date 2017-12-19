@@ -19,10 +19,10 @@ Bla bla
 
 ### Parameters
 
-| Name       | Type                 |
-| ---------- | -------------------- |
-| parameter1 | [T][TypeParameter-0] |
-| parameter2 | [P][TypeParameter-1] |
+| Name       | Type |
+| ---------- | ---- |
+| parameter1 | T    |
+| parameter2 | P    |
 
 ### Return type
 
@@ -37,14 +37,14 @@ Some general comment about AnotherBar function.
 
 | Name | Constraint type | Default type |
 | ---- | --------------- | ------------ |
-| T    | Object          | __type       |
+| T    | Object          | {}           |
 
 ### Parameters
 
-| Name       | Type                 |
-| ---------- | -------------------- |
-| parameter1 | string               |
-| parameter2 | [T][TypeParameter-2] |
+| Name       | Type   |
+| ---------- | ------ |
+| parameter1 | string |
+| parameter2 | T      |
 
 ### Return type
 
@@ -63,10 +63,10 @@ Some general comment about AnotherBar function.
 
 ### Parameters
 
-| Name       | Type                 |
-| ---------- | -------------------- |
-| parameter1 | string               |
-| parameter2 | [T][TypeParameter-3] |
+| Name       | Type   |
+| ---------- | ------ |
+| parameter1 | string |
+| parameter2 | T      |
 
 ### Return type
 

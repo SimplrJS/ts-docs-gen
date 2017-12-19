@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# exported-functions
-
 ## Foo()
 
 ### Return type
@@ -13,7 +10,4 @@ string
 ### Return type
 
 string
-=======
-## function: Foo
->>>>>>> origin/dev
 
