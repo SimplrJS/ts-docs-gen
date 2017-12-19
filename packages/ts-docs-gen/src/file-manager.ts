@@ -61,16 +61,14 @@ export class FileManager implements FileManagerInterface {
                         const filePath = path.dirname(fileLocation);
 
                         const referenceString = this.referenceToFile.get(referenceId);
+                        const resolvePath = path.relative(filePath, referenceString || "#__error");
 
-                        if (referenceString) {
-                            const resolvePath = path.relative(filePath, referenceString);
-                            linkDefinitions.push(
-                                MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
-                            );
-                        } else {
-                            linkDefinitions.push(
-                                MarkdownGenerator.LinkDefinition(referenceId, "Error")
-                            );
+                        linkDefinitions.push(
+                            MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
+                        );
+
+                        if (!referenceString) {
+                            console.warn(`Reference "${referenceId}" not found. Check ${fileLocation}.`);
                         }
                     });
             }
