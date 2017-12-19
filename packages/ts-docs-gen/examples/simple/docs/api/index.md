@@ -1,8 +1,7 @@
 [ClassDeclaration-1]: index.md#class-earth
 [ClassDeclaration-0]: index.md#class-world
 [EnumDeclaration-0]: index.md#uogos
-# index
-
+[ModuleDeclaration-1]: index\boonamespace.md#boonamespace
 ## class: World
 
 ## class: Earth
@@ -324,3 +323,8 @@ type Hello = Uogos;
 ### Type
 
 [Uogos][EnumDeclaration-0]
+
+# FooNamespace
+
+## [BooNamespace][ModuleDeclaration-1]
+

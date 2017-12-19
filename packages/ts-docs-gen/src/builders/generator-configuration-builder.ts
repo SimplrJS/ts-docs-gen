@@ -2,8 +2,8 @@ import * as ts from "typescript";
 import * as path from "path";
 import { Extractor, GetCompilerOptions } from "ts-extractor";
 
-import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
 import { GeneratorConfiguration, WorkingGeneratorConfiguration } from "../contracts/generator-configuration";
+import { Plugin } from "../contracts/plugin";
 
 import { PluginRegistry } from "../registries/plugin-registry";
 import { DefaultPlugins } from "../default-plugins";
@@ -44,7 +44,7 @@ export class GeneratorConfigurationBuilder {
         return this;
     }
 
-    public AddPlugins(plugins: ApiItemPluginBase[]): this {
+    public AddPlugins(plugins: Plugin[]): this {
         const currentPlugins = this.configuration.Plugins || [];
         this.configuration.Plugins = [...plugins, ...currentPlugins];
 

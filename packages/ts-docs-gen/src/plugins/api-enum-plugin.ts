@@ -1,18 +1,18 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
 
-import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
-import { SupportedApiItemKindType } from "../contracts/supported-api-item-kind-type";
-import { PluginData } from "../contracts/plugin-data";
-import { RenderItemOutputDto } from "../contracts/render-item-output-dto";
-import { ExtractorHelpers } from "../extractor-helpers";
 import { GeneratorHelpers } from "../generator-helpers";
+import { Plugin, SupportedApiItemKindType, PluginResult, PluginOptions, PluginHeading } from "../contracts/plugin";
 
 // TODO: const enums implementation.
-// TODO: add summary jsdoc support.
-export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
-    public SupportedApiItemsKinds(): SupportedApiItemKindType[] {
-        return [this.SupportKind.Enum];
+
+export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
+    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiItemKinds.Enum];
+    }
+
+    public CheckApiItem(item: Contracts.ApiItemDto): boolean {
+        return true;
     }
 
     private constructEnumTable(members: Contracts.ApiEnumMemberDto[]): string[] {
@@ -23,26 +23,48 @@ export class ApiEnumPlugin extends ApiItemPluginBase<Contracts.ApiEnumDto> {
         return MarkdownGenerator.Table(header, content, { removeColumnIfEmpty: true });
     }
 
-    public Render(data: PluginData<Contracts.ApiEnumDto>): RenderItemOutputDto {
-        const [, alias] = data.Reference;
-        const enumMembers = ExtractorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiEnumMemberDto>(
-            data.ApiItem.Members,
-            data.ExtractedData
-        );
+    /**
+     * Resolve api items of an enum from ApiItemReferenceTuple.
+     */
+    private getEnumMembers(members: Contracts.ApiItemReferenceTuple, extractedData: ExtractDto): Contracts.ApiEnumMemberDto[] {
+        const apiItems: Contracts.ApiEnumMemberDto[] = [];
+
+        for (const memberReferences of members) {
+            const [, references] = memberReferences;
+            for (const reference of references) {
+                const apiItem = extractedData.Registry[reference] as Contracts.ApiEnumMemberDto;
+                apiItems.push(apiItem);
+            }
+        }
+
+        return apiItems;
+    }
+
+    public Render(data: PluginOptions<Contracts.ApiEnumDto>): PluginResult {
+        const heading: string = data.Reference.Alias;
+        const headings: PluginHeading[] = [
+            {
+                ApiItemId: data.Reference.Id,
+                Heading: heading
+            }
+        ];
+
+        const enumMembers = this.getEnumMembers(data.ApiItem.Members, data.ExtractedData);
         const builder = new MarkdownBuilder()
-            .Header(alias, 2)
+            .Header(heading, 2)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .EmptyLine()
-            .Code(ExtractorHelpers.ReconstructEnumCode(alias, enumMembers), ExtractorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(GeneratorHelpers.ReconstructEnumCode(data.Reference.Alias, enumMembers), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
             .Text(this.constructEnumTable(enumMembers));
 
         return {
-            Heading: alias,
             ApiItem: data.ApiItem,
-            References: [],
-            RenderOutput: builder.GetOutput()
+            Reference: data.Reference,
+            Headings: headings,
+            UsedReferences: [],
+            Result: builder.GetOutput()
         };
     }
 }

@@ -1,7 +1,7 @@
 import { ExtractDto } from "ts-extractor";
 
-import { ApiItemPluginBase } from "../abstractions/api-item-plugin-base";
 import { PluginRegistry } from "../registries/plugin-registry";
+import { Plugin } from "./plugin";
 
 export interface GeneratorConfiguration {
     OutputDirectory: string;
@@ -12,7 +12,7 @@ export interface GeneratorConfiguration {
 export interface WorkingGeneratorConfiguration {
     OutputDirectory: string;
     ProjectDirectory: string;
-    Plugins: ApiItemPluginBase[];
+    Plugins: Plugin[];
 
     Exclude: string[];
     OutputPathSeparator: string;
