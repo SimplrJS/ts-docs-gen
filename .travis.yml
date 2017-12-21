@@ -12,4 +12,4 @@ node_js:
 - "node"
 script:
 - npm run rush-install
-- npm run rush-test
+- npm run test-ci

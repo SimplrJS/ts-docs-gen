@@ -6,8 +6,8 @@
   "scripts": {
     "pretest": "npm run build -- --noEmit && npm run build-tests",
     "test": "npm run tslint && jest && echo All tests passed successfully.",
+    "test-ci": "jest --maxWorkers=4 -b",
     "test-watch": "start npm run build-tests -- --watchAll && jest --watchAll",
-    "jest": "jest --maxWorkers=4",
     "tslint": "tslint --project . --config ./tslint.json && echo Successfully passed tslint test.",
     "build": "tsc -p .",
     "build-tests": "node ../../tools/test-generator-cli/dist/index.js"

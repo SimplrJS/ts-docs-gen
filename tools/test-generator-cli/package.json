@@ -9,6 +9,7 @@
     "watch": "tsc -w",
     "pretest": "npm run build -- --noEmit",
     "test": "npm run tslint",
+    "test-ci": "npm test",
     "tslint": "tslint --project . --config ./tslint.json && echo Successfully passed tslint test."
   },
   "keywords": [],
