@@ -23,9 +23,9 @@
     },
     "@rush-temp/ts-docs-gen": {
       "version": "file:projects/ts-docs-gen.tgz",
-      "integrity": "sha1-EOjVkNyk5eR6fdm0niJiuEltOls=",
+      "integrity": "sha1-IIM5lH+f0v1NDXEIhk/erutcOrQ=",
       "requires": {
-        "@simplrjs/markdown": "1.0.2",
+        "@simplrjs/markdown": "1.0.3",
         "@types/fs-extra": "4.0.7",
         "@types/jest": "21.1.9",
         "@types/sinon": "4.1.2",
@@ -42,9 +42,9 @@
       }
     },
     "@simplrjs/markdown": {
-      "version": "1.0.2",
-      "resolved": "https://registry.npmjs.org/@simplrjs/markdown/-/markdown-1.0.2.tgz",
-      "integrity": "sha512-iGfzFQwjvnGle/vKuGy8o9cDfLtj6AVSLybK0bNTG08T0FG2CZuRSG6PQBaCRwSV9Wqmxu+JjDryVyZNPdNTVQ==",
+      "version": "1.0.3",
+      "resolved": "https://registry.npmjs.org/@simplrjs/markdown/-/markdown-1.0.3.tgz",
+      "integrity": "sha512-QkC79ttUek7d9w1yysaETZnsD7WO7JOLCbAIX8kCAeZhMY/21ZRULWjb3Pl7SBm6QqqYTOnKl8rvikmbVaGtLA==",
       "requires": {
         "@types/string": "0.0.29",
         "string": "3.3.3"
