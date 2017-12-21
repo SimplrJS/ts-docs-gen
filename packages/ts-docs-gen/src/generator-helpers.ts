@@ -71,7 +71,7 @@ export namespace GeneratorHelpers {
                     text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
                     references.push(type.ReferenceId);
                 } else {
-                    if(type.Name == null || IsTypeScriptInternalSymbolName(type.Name)) {
+                    if (type.Name == null || IsTypeScriptInternalSymbolName(type.Name)) {
                         text = type.Text;
                     } else {
                         text = type.Name;
