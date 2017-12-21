@@ -10,6 +10,10 @@
 
 Bla bla
 
+```typescript
+function FunctionWithMultipleTypeParameters<T extends Object, P>(parameter1: T, parameter2: P): string
+```
+
 ### Type parameters
 
 | Name | Constraint type |
@@ -33,6 +37,10 @@ string
 
 Some general comment about AnotherBar function.
 
+```typescript
+function FunctionWithTypeParameterDefault<T extends Object = {}>(parameter1: string, parameter2: T): string
+```
+
 ### Type parameters
 
 | Name | Constraint type | Default type |
@@ -55,6 +63,10 @@ string
 
 Some general comment about AnotherBar function.
 
+```typescript
+function FunctionWithTypeParameterConstraint<T extends Object>(parameter1: string, parameter2: T): string
+```
+
 ### Type parameters
 
 | Name | Constraint type |
@@ -74,6 +86,10 @@ string
 
 
 ## AnotherFoo(parameter1, parameter2)
+
+```typescript
+function AnotherFoo<T extends T[]>(parameter1: string, parameter2: Promise<T>): string
+```
 
 ### Type parameters
 
@@ -95,6 +111,10 @@ string
 
 ## FunctionWithOneParameter(parameter)
 
+```typescript
+function FunctionWithOneParameter(parameter: string): void
+```
+
 ### Parameters
 
 | Name      | Type   |
@@ -108,12 +128,20 @@ void
 
 ## FunctionWithNoParameters()
 
+```typescript
+function FunctionWithNoParameters(): void
+```
+
 ### Return type
 
 void
 
 
 ## FunctionWithMultipleParameters(parameter1, parameter2)
+
+```typescript
+function FunctionWithMultipleParameters(parameter1: string, parameter2: number): void
+```
 
 ### Parameters
 
@@ -129,6 +157,10 @@ void
 
 ## Foo()
 
+```typescript
+function Foo(): string
+```
+
 ### Return type
 
 string
@@ -141,6 +173,10 @@ string
 <span style="color: red;">Deprecated!</span>
 
 Some general comment about Bar function.
+
+```typescript
+function Bar(parameter1: string, parameter2: number): string
+```
 
 ### Parameters
 
@@ -155,6 +191,10 @@ string
 
 
 ## FunctionWithoutReturnType(parameter1, parameter2)
+
+```typescript
+function FunctionWithoutReturnType<T extends T[]>(parameter1: string, parameter2: Promise<T>): string
+```
 
 ### Type parameters
 
@@ -176,12 +216,20 @@ string
 
 ## FunctionWithGenericReturnType()
 
+```typescript
+function FunctionWithGenericReturnType(): string[]
+```
+
 ### Return type
 
 Array
 
 
 ## FunctionWithPrimitiveReturnType()
+
+```typescript
+function FunctionWithPrimitiveReturnType(): boolean
+```
 
 ### Return type
 
@@ -190,12 +238,20 @@ true | false
 
 ## FunctionWithUnionReturnType()
 
+```typescript
+function FunctionWithUnionReturnType(): "something" | "nothing"
+```
+
 ### Return type
 
 "something" | "nothing"
 
 
 ## FunctionWithIntersectionReturnType()
+
+```typescript
+function FunctionWithIntersectionReturnType(): Earth & World
+```
 
 ### Return type
 

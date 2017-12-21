@@ -240,7 +240,52 @@ export namespace GeneratorHelpers {
         return `type ${name} = ${item.Type.Text};`;
     }
 
+    /**
+     * From ApiFunction to build function head.
+     *
+     * Return example: `function foo<TValue>(arg: TValue): void`
+     */
     export function ApiFunctionToString(
+        apiItem: Contracts.ApiFunctionDto,
+        typeParameters?: Contracts.ApiTypeParameterDto[],
+        parameters?: Contracts.ApiParameterDto[],
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+
+        // TypeParameters
+        let typeParametersString: string;
+        if (typeParameters != null && typeParameters.length > 0) {
+            const params: string[] = typeParameters.map(TypeParameterToString);
+            typeParametersString = `<${params.join(", ")}>`;
+        } else {
+            typeParametersString = "";
+        }
+
+        // Parameters
+        let parametersString: string;
+        if (parameters != null && parameters.length > 0) {
+            parametersString = parameters
+                .map(x => `${x.Name}: ${x.Type.Text}`)
+                .join(", ");
+        } else {
+            parametersString = "";
+        }
+
+        // ReturnType
+        const returnType = apiItem.ReturnType != null ? `: ${apiItem.ReturnType.Text}` : "";
+
+        return `function ${name}${typeParametersString}(${parametersString})${returnType}`;
+    }
+
+    export function TypeParameterToString(apiItem: Contracts.ApiTypeParameterDto): string {
+        const $extends = apiItem.ConstraintType != null ? ` extends ${apiItem.ConstraintType.Text}` : "";
+        const defaultType = apiItem.DefaultType != null ? ` = ${apiItem.DefaultType.Text}` : "";
+
+        return `${apiItem.Name}${$extends}${defaultType}`;
+    }
+
+    export function ApiFunctionToSimpleString(
         alias: string,
         apiItem: Contracts.ApiFunctionDto,
         parametersApiItems: Contracts.ApiParameterDto[]
