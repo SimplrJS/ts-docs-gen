@@ -1,4 +1,4 @@
-# exported-functions.ts
+# exported-functions
 
 ## Foo()
 

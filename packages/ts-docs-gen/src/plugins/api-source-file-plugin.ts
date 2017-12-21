@@ -1,5 +1,6 @@
 import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
+import * as path from "path";
 
 import { GeneratorHelpers } from "../generator-helpers";
 import { PluginMember, Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginHeading } from "../contracts/plugin";
@@ -63,7 +64,7 @@ export class ApiSourceFilePlugin implements Plugin<Contracts.ApiSourceFileDto> {
     }
 
     public Render(data: PluginOptions<Contracts.ApiSourceFileDto>): PluginResult {
-        const heading = data.ApiItem.Name;
+        const heading = path.basename(data.ApiItem.Name, path.extname(data.ApiItem.Name));
         const headings: PluginHeading[] = [
             {
                 Heading: heading,
