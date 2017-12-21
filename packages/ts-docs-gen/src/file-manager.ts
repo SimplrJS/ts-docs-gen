@@ -1,7 +1,7 @@
+import { Contracts } from "ts-extractor";
 import { MarkdownGenerator } from "@simplrjs/markdown";
 import * as path from "path";
 
-import { FileManager as FileManagerInterface } from "./contracts/file-manager";
 import { Helpers } from "./utils/helpers";
 import { PluginResult } from "./contracts/plugin";
 import { FileResult } from "./contracts/file-result";
@@ -14,7 +14,7 @@ interface OutputData {
 
 type RenderedItemList = Array<PluginResult | OutputData>;
 
-export class FileManager implements FileManagerInterface {
+export class FileManager {
     /**
      * <FileLocation, RenderedItems>
      */
@@ -23,6 +23,16 @@ export class FileManager implements FileManagerInterface {
      * <ReferenceId, FileLocation>
      */
     private referenceToFile: Map<string, string> = new Map();
+
+    public AddEntryFile(itemResult: PluginResult<Contracts.ApiSourceFileDto>): void {
+        const filePath = path.basename(
+            itemResult.ApiItem.Location.FileName,
+            path.extname(itemResult.ApiItem.Location.FileName
+            )
+        ) + GeneratorHelpers.MARKDOWN_EXT;
+
+        this.AddItem(itemResult, filePath);
+    }
 
     public AddItem(itemResult: PluginResult, filePath: string): void {
         const items = this.filesList.get(filePath) || [];
@@ -37,13 +47,13 @@ export class FileManager implements FileManagerInterface {
         if (itemResult.Members != null) {
             for (const member of itemResult.Members) {
                 const baseName = path.basename(filePath, path.extname(filePath));
-                const targetFileNPath = path.join(
+                const targetFilePath = path.join(
                     path.dirname(filePath),
                     baseName,
                     member.PluginResult.ApiItem.Name + GeneratorHelpers.MARKDOWN_EXT
                 ).toLowerCase();
 
-                this.AddItem(member.PluginResult, targetFileNPath);
+                this.AddItem(member.PluginResult, targetFilePath);
             }
         }
     }
