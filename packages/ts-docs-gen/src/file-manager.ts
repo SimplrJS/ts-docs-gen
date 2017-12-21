@@ -71,7 +71,7 @@ export class FileManager {
                         const filePath = path.dirname(fileLocation);
 
                         const referenceString = this.referenceToFile.get(referenceId);
-                        const resolvePath = path.relative(filePath, referenceString || "#__error");
+                        const resolvePath = GeneratorHelpers.StandardisePath(path.relative(filePath, referenceString || "#__error"));
 
                         linkDefinitions.push(
                             MarkdownGenerator.LinkDefinition(referenceId, resolvePath)

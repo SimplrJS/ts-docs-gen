@@ -1,6 +1,8 @@
 import { Contracts, ExtractDto, TSHelpers } from "ts-extractor";
 import { LogLevel } from "simplr-logger";
 import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
+import * as path from "path";
+
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
@@ -336,5 +338,9 @@ export namespace GeneratorHelpers {
         const { FileName, Line, Character } = apiItem.Location;
         const linePrefix = `${FileName}[${Line}:${Character + 1}]`;
         Logger.Log(logLevel, `${linePrefix}: ${message}`);
+    }
+
+    export function StandardisePath(pathString: string): string {
+        return pathString.split(path.sep).join("/");
     }
 }
