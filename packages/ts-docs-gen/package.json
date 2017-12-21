@@ -6,6 +6,7 @@
   "scripts": {
     "pretest": "npm run build -- --noEmit && npm run build-tests",
     "test": "npm run tslint && jest && echo All tests passed successfully.",
+    "pretest-ci": "npm run pretest && npm run tslint",
     "test-ci": "jest --maxWorkers=4 -b",
     "test-watch": "start npm run build-tests -- --watchAll && jest --watchAll",
     "tslint": "tslint --project . --config ./tslint.json && echo Successfully passed tslint test.",
