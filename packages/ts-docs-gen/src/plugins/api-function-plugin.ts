@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { MarkdownBuilder } from "@simplrjs/markdown";
+import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
 
 import { GeneratorHelpers } from "../generator-helpers";
 import { SupportedApiItemKindType, Plugin, PluginResult, PluginOptions, PluginHeading } from "../contracts/plugin";
@@ -31,7 +31,7 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
 
             referenceIds = referenceIds.concat(parameterTypeDto.References);
 
-            return [parameter.Name, parameterTypeDto.Text];
+            return [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text)];
         });
 
         const text = new MarkdownBuilder()
@@ -67,14 +67,14 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
                 const parsedConstraintType = GeneratorHelpers.TypeDtoToMarkdownString(typeParameter.ConstraintType);
 
                 referenceIds = referenceIds.concat(parsedConstraintType.References);
-                constraintType = parsedConstraintType.Text;
+                constraintType = MarkdownGenerator.EscapeString(parsedConstraintType.Text);
             }
 
             if (typeParameter.DefaultType) {
                 const parsedDefaultType = GeneratorHelpers.TypeDtoToMarkdownString(typeParameter.DefaultType);
 
                 referenceIds = referenceIds.concat(parsedDefaultType.References);
-                defaultType = parsedDefaultType.Text;
+                defaultType = MarkdownGenerator.EscapeString(parsedDefaultType.Text);
             }
 
             return [typeParameter.Name, constraintType, defaultType];
