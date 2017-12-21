@@ -141,9 +141,16 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
         const resolvedReturnTypeDto = this.resolveReturnType(data.ApiItem.ReturnType);
 
         const builder = new MarkdownBuilder()
-            .Header(GeneratorHelpers.ApiFunctionToString(alias, data.ApiItem, parameters), 2)
+            .Header(GeneratorHelpers.ApiFunctionToSimpleString(alias, data.ApiItem, parameters), 2)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
+            .Code(GeneratorHelpers.ApiFunctionToString(
+                data.ApiItem,
+                typeParameters,
+                parameters,
+                data.Reference.Alias
+            ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .EmptyLine()
             .Text(resolvedTypeParametersDto.Text)
             .Text(resolvedParametersDto.Text)
             .Text(resolvedReturnTypeDto.Text);

@@ -1,12 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`index 1`] = `
+exports[`simple-project-1 1`] = `
 Array [
   Object {
     "FileLocation": "index.md",
-    "Output": Array [
-      "# index",
-      "",
+    "Result": Array [
       "## EnumList",
       "",
       "Simple list.",
@@ -28,7 +26,7 @@ Array [
       "",
       "## EnumListWithNumberValues",
       "",
-      "List with number values with no punctuation at the end of description.",
+      "List with number values with no punctuation at the end of description",
       "",
       "",
       "\`\`\`typescript",
@@ -47,9 +45,10 @@ Array [
       "",
       "## EnumListWithStringValues",
       "",
+      "<span style=\\"color: #d2d255;\\">Warning: Beta!</span>",
       "",
-      "beta",
-      "deprecated",
+      "<span style=\\"color: red;\\">Deprecated!</span>",
+      "",
       "",
       "\`\`\`typescript",
       "enum EnumListWithStringValues {",
