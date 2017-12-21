@@ -292,5 +292,5 @@ coverage
 package-deps.json
 
 # Tests
-*/__tests__/*
-!*/__tests__/**/__snapshots__
+**/tests/cases/__tests__/*.test.ts
+

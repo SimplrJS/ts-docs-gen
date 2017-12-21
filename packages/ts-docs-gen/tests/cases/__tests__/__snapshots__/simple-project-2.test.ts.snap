@@ -1,12 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`index 1`] = `
+exports[`simple-project-2 1`] = `
 Array [
   Object {
     "FileLocation": "index.md",
-    "Output": Array [
-      "# index",
-      "",
+    "Result": Array [
       "## class: Foo",
       "",
       "## class: FooStart",
@@ -15,9 +13,7 @@ Array [
   },
   Object {
     "FileLocation": "foo.md",
-    "Output": Array [
-      "# foo",
-      "",
+    "Result": Array [
       "## class: Foo",
       "",
     ],

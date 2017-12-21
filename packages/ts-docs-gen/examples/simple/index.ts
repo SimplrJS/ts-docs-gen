@@ -2,20 +2,58 @@
 
 // import { Foo } from "./exported-functions";
 
-export class World { }
+// export class World { }
+// export class Earth { }
 // export class Earth { }
 
 // export declare const Hello: World & Earth;
 
 // export const FooFunc = Foo;
 
+//---------------------------------------------------------
+
+
+// #region Parameters
+
+// #endregion Parameters
+
 // export function Foo(): string {
 //     return "foo";
 // }
 
-// export function Bar(): string {
+// /**
+//  * Some general comment about Bar function.
+//  * 
+//  * @beta Some comment on beta.
+//  * @deprecated
+//  */
+// export function Bar(parameter1: string, parameter2: number): string {
 //     return "bar";
 // }
+
+// #region Return types
+// export function FunctionWithoutReturnType<T extends Array<T>>(parameter1: string, parameter2: Promise<T>) {
+//     return "bar";
+// }
+
+// export function FunctionWithGenericReturnType(): Array<string> {
+//     return [];
+// }
+
+// export function FunctionWithPrimitiveReturnType(): boolean {
+//     return true;
+// }
+
+// export function FunctionWithUnionReturnType(): "something" | "nothing" {
+//     return "nothing";
+// }
+
+// export function FunctionWithIntersectionReturnType(): Earth & World {
+//     return {};
+// }
+// #endregion Return types
+
+// ------------------------------------------------------
 
 // export * from "./exported-functions";
 // export { Kintamasis as Pakeistas } from "./exported-const-variables";
@@ -41,11 +79,11 @@ export class World { }
 //     anotherProperty: number;
 // }
 
-// export function Funkcija<T extends MyConstraintType = MyDefaultType>(): T {
-//     return {
-//         myProperty: "asd"
-//     } as T;
-// }
+export function MyFunction<T extends { myProperty: string, myPropertyTwo?: number } = { myProperty: string }>(): T {
+    return {
+        myProperty: "sampleString"
+    } as T;
+}
 
 // export interface MyInterface {
 //     <TValue>(param1: TValue, param2: TValue): boolean;
@@ -71,68 +109,63 @@ export class World { }
 //     export const name = "some-kind-of-module";
 // }
 
-/**
- * Some information
- * 2nd line of some information
- * 3rd line of some information
- * 4th line of some information
- * 5th line of some information
- * @summary Some summary about this package version.
- * @summary 2nd of some summary about this package version.
- * @deprecated
- * @beta
- */
-export enum Uogos {
-    Jokie = "jokie",
-    Braskes = "braskes"
-}
+// /**
+//  * Some information
+//  * 2nd line of some information
+//  * 3rd line of some information
+//  * 4th line of some information
+//  * 5th line of some information
+//  * @summary Some summary about this package version.
+//  * @summary 2nd of some summary about this package version.
+//  * @deprecated
+//  * @beta
+//  */
+// export enum Uogos {
+//     Jokie = "jokie",
+//     Braskes = "braskes"
+// }
 
-export enum Skaiciai {
-    Nulis = 0,
-    Vienas = 1,
-    Du = 2
-}
+// export enum Skaiciai {
+//     Nulis = 0,
+//     Vienas = 1,
+//     Du = 2
+// }
 
-export enum Sarasas {
-    /**
-     * Pirmo description'as
-     */
-    Pirmas,
-    /**
-     * Antro description'as
-     */
-    Antras,
-    /**
-     * Trečio description'as
-     */
-    Trecias
-}
+// export enum Sarasas {
+//     /**
+//      * Pirmo description'as
+//      */
+//     Pirmas,
+//     /**
+//      * Antro description'as
+//      */
+//     Antras,
+//     /**
+//      * Trečio description'as
+//      */
+//     Trecias
+// }
 
-export const enum ConstSkaiciai {
-    PirmasC = 0,
-    AntrasC = 1,
-    TreciasC = 2
-}
+// export const enum ConstSkaiciai {
+//     PirmasC = 0,
+//     AntrasC = 1,
+//     TreciasC = 2
+// }
 
-export const enum ConstSarasas {
-    /**
-     * Pirmo description'as
-     */
-    PirmasC,
-    /**
-     * Antro description'as
-     */
-    AntrasC,
-    /**
-     * Trečio description'as
-     */
-    TreciasC
-}
-
-export const enum ConstUogos {
-    Jokie = "jokie",
-    Braskes = "braskes"
-}
+// export const enum ConstSarasas {
+//     /**
+//      * Pirmo description'as
+//      */
+//     PirmasC,
+//     /**
+//      * Antro description'as
+//      */
+//     AntrasC,
+//     /**
+//      * Trečio description'as
+//      */
+//     TreciasC
+// }
 
 // export interface Boo {
 //     Boos: string[];
@@ -142,10 +175,6 @@ export const enum ConstUogos {
 //     Name: string;
 //     Surname: string;
 //     Type: TType;
-// }
-
-// export async function GetFoo(): Promise<void> {
-//     return;
 // }
 
 // export interface Bar extends Foo<number>, Boo {
@@ -169,15 +198,15 @@ export const enum ConstUogos {
 //     public abstract Bar(): string;
 // }
 
-/**
- * @deprecated Use uogos instead ;)
- */
-export type Hello = Uogos;
+// /**
+//  * @deprecated Use uogos instead ;)
+//  */
+// export type Hello = Uogos;
 
-export namespace FooNamespace {
-    export namespace BooNamespace {
-        export namespace BooNamespace2 {
-            export const Hello = "World!";
-        }
-    }
-}
+// export namespace FooNamespace {
+//     export namespace BooNamespace {
+//         export namespace BooNamespace2 {
+//             export const Hello = "World!";
+//         }
+//     }
+// }

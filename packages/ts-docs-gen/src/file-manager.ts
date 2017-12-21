@@ -55,13 +55,21 @@ export class FileManager implements FileManagerInterface {
             // Link definitions to file location.
             const linkDefinitions: string[] = [];
             for (const item of items) {
+
                 item.UsedReferences
                     .forEach(referenceId => {
                         const filePath = path.dirname(fileLocation);
-                        const resolvePath = path.relative(filePath, this.referenceToFile.get(referenceId) || "#__error");
+
+                        const referenceString = this.referenceToFile.get(referenceId);
+                        const resolvePath = path.relative(filePath, referenceString || "#__error");
+
                         linkDefinitions.push(
                             MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
                         );
+
+                        if (!referenceString) {
+                            console.warn(`Reference "${referenceId}" not found. Check ${fileLocation}.`);
+                        }
                     });
             }
 

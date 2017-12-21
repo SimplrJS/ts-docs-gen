@@ -1,9 +1,17 @@
+import * as ts from "typescript";
 import { Contracts, ExtractDto } from "ts-extractor";
-import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
+import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional } from "./contracts/plugin";
 
 export namespace GeneratorHelpers {
+    export type TypeToStringDto = ReferenceDto<string>;
+
+    export interface ReferenceDto<T = string | string[]> {
+        References: string[];
+        Text: T;
+    }
+
     export const MARKDOWN_EXT = ".md";
 
     export const ApiItemKinds: typeof ApiItemKindsAdditional & typeof Contracts.ApiItemKinds =
@@ -13,11 +21,12 @@ export namespace GeneratorHelpers {
         return Object.assign(Contracts.ApiItemKinds, ApiItemKindsAdditional);
     }
 
-    export interface TypeToStringDto {
-        References: string[];
-        Text: string;
+    // TODO: reexport InternalSymbolName in ts-extractor.
+    export function IsTypeScriptInternalSymbolName(name: string): boolean {
+        return Object.values(ts.InternalSymbolName).indexOf(name) !== -1;
     }
 
+    // TODO: implement type literal and function type.
     export function TypeDtoToMarkdownString(type: Contracts.TypeDto): TypeToStringDto {
         let references: string[] = [];
         let text: string = "";
@@ -57,11 +66,16 @@ export namespace GeneratorHelpers {
                 }
 
                 // Basic type with reference.
-                if (type.ReferenceId != null) {
-                    text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
-                    references.push(type.ReferenceId);
+                if (type.Name == null || IsTypeScriptInternalSymbolName(type.Name)) {
+                    text = type.Text;
                 } else {
-                    text = type.Name || type.Text;
+                    // FIXME: do not use flag string. Exclude Type parameters references.
+                    if (type.ReferenceId != null && type.FlagsString !== "TypeParameter") {
+                        text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
+                        references.push(type.ReferenceId);
+                    } else {
+                        text = type.Name;
+                    }
                 }
             }
         }
@@ -203,6 +217,10 @@ export namespace GeneratorHelpers {
         lang: "typescript"
     };
 
+    export const DEFAULT_TABLE_OPTIONS: MarkdownContracts.TableOptions = {
+        removeColumnIfEmpty: true
+    };
+
     export function FixSentence(sentence: string, punctuationMark: string = "."): string {
         const trimmedSentence = sentence.trim();
         const punctuationMarks = ".!:;,-";
@@ -220,5 +238,81 @@ export namespace GeneratorHelpers {
         const name = alias != null ? alias : item.Name;
 
         return `type ${name} = ${item.Type.Text};`;
+    }
+
+    /**
+     * From ApiFunction to build function head.
+     *
+     * Return example: `function foo<TValue>(arg: TValue): void`
+     */
+    export function ApiFunctionToString(
+        apiItem: Contracts.ApiFunctionDto,
+        typeParameters?: Contracts.ApiTypeParameterDto[],
+        parameters?: Contracts.ApiParameterDto[],
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+
+        // TypeParameters
+        let typeParametersString: string;
+        if (typeParameters != null && typeParameters.length > 0) {
+            const params: string[] = typeParameters.map(TypeParameterToString);
+            typeParametersString = `<${params.join(", ")}>`;
+        } else {
+            typeParametersString = "";
+        }
+
+        // Parameters
+        let parametersString: string;
+        if (parameters != null && parameters.length > 0) {
+            parametersString = parameters
+                .map(x => `${x.Name}: ${x.Type.Text}`)
+                .join(", ");
+        } else {
+            parametersString = "";
+        }
+
+        // ReturnType
+        const returnType = apiItem.ReturnType != null ? `: ${apiItem.ReturnType.Text}` : "";
+
+        return `function ${name}${typeParametersString}(${parametersString})${returnType}`;
+    }
+
+    export function TypeParameterToString(apiItem: Contracts.ApiTypeParameterDto): string {
+        const $extends = apiItem.ConstraintType != null ? ` extends ${apiItem.ConstraintType.Text}` : "";
+        const defaultType = apiItem.DefaultType != null ? ` = ${apiItem.DefaultType.Text}` : "";
+
+        return `${apiItem.Name}${$extends}${defaultType}`;
+    }
+
+    export function ApiFunctionToSimpleString(
+        alias: string,
+        apiItem: Contracts.ApiFunctionDto,
+        parametersApiItems: Contracts.ApiParameterDto[]
+    ): string {
+        const name = alias || apiItem.Name;
+        const parametersString = parametersApiItems
+            .map(x => x.Name)
+            .join(", ");
+
+        return `${name}(${parametersString})`;
+    }
+
+    export function GetApiItemsFromReferenceTuple<T extends Contracts.ApiItemDto>(
+        items: Contracts.ApiItemReferenceTuple,
+        extractedData: ExtractDto
+    ): T[] {
+        const apiItems: T[] = [];
+
+        for (const itemReferences of items) {
+            const [, references] = itemReferences;
+
+            for (const reference of references) {
+                const apiItem = extractedData.Registry[reference] as T;
+                apiItems.push(apiItem);
+            }
+        }
+
+        return apiItems;
     }
 }
