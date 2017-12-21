@@ -1,8 +1,9 @@
-import * as ts from "typescript";
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts, ExtractDto, TSHelpers } from "ts-extractor";
+import { LogLevel } from "simplr-logger";
 import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional } from "./contracts/plugin";
+import { Logger } from "./utils/logger";
 
 export namespace GeneratorHelpers {
     export type TypeToStringDto = ReferenceDto<string>;
@@ -19,11 +20,6 @@ export namespace GeneratorHelpers {
 
     export function GetApiItemKinds(): typeof Contracts.ApiItemKinds & typeof ApiItemKindsAdditional {
         return Object.assign(Contracts.ApiItemKinds, ApiItemKindsAdditional);
-    }
-
-    // TODO: reexport InternalSymbolName in ts-extractor.
-    export function IsTypeScriptInternalSymbolName(name: string): boolean {
-        return Object.values(ts.InternalSymbolName).indexOf(name) !== -1;
     }
 
     // TODO: implement type literal and function type.
@@ -66,7 +62,7 @@ export namespace GeneratorHelpers {
                 }
 
                 // Basic type with reference.
-                if (type.Name == null || IsTypeScriptInternalSymbolName(type.Name)) {
+                if (type.Name == null || TSHelpers.IsInternalSymbolName(type.Name)) {
                     text = type.Text;
                 } else {
                     // FIXME: do not use flag string. Exclude Type parameters references.
@@ -131,34 +127,56 @@ export namespace GeneratorHelpers {
 
     export function GetApiItemReferences(
         extractedData: ExtractDto,
-        itemsReference: Contracts.ApiItemReferenceTuple
+        itemsReference: Contracts.ApiItemReference[]
     ): ApiItemReference[] {
         let list: ApiItemReference[] = [];
 
-        for (const [alias, references] of itemsReference) {
-            for (const referenceId of references) {
+        for (const item of itemsReference) {
+            for (const referenceId of item.Ids) {
                 // Check if item is ExportSpecifier or ExportDeclaration.
                 const apiItem = extractedData.Registry[referenceId];
 
                 switch (apiItem.ApiKind) {
                     case Contracts.ApiItemKinds.Export: {
-                        const referenceTuples = GetApiItemReferences(extractedData, apiItem.Members);
-                        list = list.concat(referenceTuples);
+                        if (apiItem.SourceFileId != null) {
+                            const sourceFileReference = { Alias: apiItem.Name, Ids: [apiItem.SourceFileId] };
+                            const referencesList = GetApiItemReferences(extractedData, [sourceFileReference]);
+                            list = list.concat(referencesList);
+                        }
                         break;
                     }
+                    case Contracts.ApiItemKinds.ImportSpecifier:
                     case Contracts.ApiItemKinds.ExportSpecifier: {
                         if (apiItem.ApiItems == null) {
-                            console.warn(`ApiItems are missing in "${apiItem.Name}"?`);
+                            LogWithApiItemPosition(
+                                LogLevel.Warning,
+                                apiItem,
+                                `ApiItems are missing in "${apiItem.Name}"?`
+                            );
                             break;
                         }
-                        const referenceTuples = GetApiItemReferences(extractedData, [[apiItem.Name, apiItem.ApiItems]]);
-                        list = list.concat(referenceTuples);
+
+                        const referencesList = GetApiItemReferences(extractedData, [{ Alias: apiItem.Name, Ids: apiItem.ApiItems }]);
+                        list = list.concat(referencesList);
+                        break;
+                    }
+                    case Contracts.ApiItemKinds.SourceFile: {
+                        if (apiItem.Members == null) {
+                            LogWithApiItemPosition(
+                                LogLevel.Warning,
+                                apiItem,
+                                "Members are missing"
+                            );
+                        }
+
+                        const referencesList = GetApiItemReferences(extractedData, apiItem.Members);
+                        list = list.concat(referencesList);
                         break;
                     }
                     default: {
                         list.push({
                             Id: referenceId,
-                            Alias: alias
+                            Alias: item.Alias
                         });
                     }
                 }
@@ -298,21 +316,25 @@ export namespace GeneratorHelpers {
         return `${name}(${parametersString})`;
     }
 
-    export function GetApiItemsFromReferenceTuple<T extends Contracts.ApiItemDto>(
-        items: Contracts.ApiItemReferenceTuple,
+    export function GetApiItemsFromReference<T extends Contracts.ApiItemDto>(
+        items: Contracts.ApiItemReference[],
         extractedData: ExtractDto
     ): T[] {
         const apiItems: T[] = [];
 
         for (const itemReferences of items) {
-            const [, references] = itemReferences;
-
-            for (const reference of references) {
-                const apiItem = extractedData.Registry[reference] as T;
+            for (const referenceId of itemReferences.Ids) {
+                const apiItem = extractedData.Registry[referenceId] as T;
                 apiItems.push(apiItem);
             }
         }
 
         return apiItems;
+    }
+
+    export function LogWithApiItemPosition(logLevel: LogLevel, apiItem: Contracts.ApiItemDto, message: string): void {
+        const { FileName, Line, Character } = apiItem.Location;
+        const linePrefix = `${FileName}[${Line}:${Character + 1}]`;
+        Logger.Log(logLevel, `${linePrefix}: ${message}`);
     }
 }
