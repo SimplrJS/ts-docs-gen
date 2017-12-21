@@ -1,3 +1,5 @@
+# exported-functions.ts
+
 ## Foo()
 
 ```typescript
@@ -18,4 +20,5 @@ function Bar(): string
 ### Return type
 
 string
+
 

@@ -1,3 +1,5 @@
+# index.ts
+
 ## MyFunction()
 
 ```typescript
@@ -13,4 +15,5 @@ function MyFunction<T extends { myProperty: string; myPropertyTwo?: number | und
 ### Return type
 
 T
+
 
