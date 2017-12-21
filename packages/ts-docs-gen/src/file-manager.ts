@@ -86,7 +86,7 @@ export class FileManager {
             const itemsResult = Helpers.Flatten(items.map(x => [x.Result, ""]));
 
             files.push({
-                FileLocation: fileLocation,
+                FileLocation: GeneratorHelpers.StandardisePath(fileLocation),
                 Result: [
                     ...linkDefinitions,
                     ...itemsResult
