@@ -66,13 +66,13 @@ export namespace GeneratorHelpers {
                 }
 
                 // Basic type with reference.
-                // FIXME: do not use flag string. Exclude Type parameters references.
-                if (type.ReferenceId != null && type.FlagsString !== "TypeParameter") {
-                    text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
-                    references.push(type.ReferenceId);
+                if (type.Name == null || IsTypeScriptInternalSymbolName(type.Name)) {
+                    text = type.Text;
                 } else {
-                    if(type.Name == null || IsTypeScriptInternalSymbolName(type.Name)) {
-                        text = type.Text;
+                    // FIXME: do not use flag string. Exclude Type parameters references.
+                    if (type.ReferenceId != null && type.FlagsString !== "TypeParameter" && type.FlagsString !== "TypeLiteral") {
+                        text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
+                        references.push(type.ReferenceId);
                     } else {
                         text = type.Name;
                     }
