@@ -360,21 +360,21 @@ Array [
     ],
   },
   Object {
-    "FileLocation": "index\\\\foo.md",
+    "FileLocation": "index/foo.md",
     "Result": Array [
       "## class: Foo",
       "",
     ],
   },
   Object {
-    "FileLocation": "index\\\\world.md",
+    "FileLocation": "index/world.md",
     "Result": Array [
       "## class: World",
       "",
     ],
   },
   Object {
-    "FileLocation": "index\\\\earth.md",
+    "FileLocation": "index/earth.md",
     "Result": Array [
       "## class: Earth",
       "",

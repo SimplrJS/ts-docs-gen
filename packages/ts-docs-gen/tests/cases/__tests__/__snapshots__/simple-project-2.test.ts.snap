@@ -17,14 +17,14 @@ Array [
     ],
   },
   Object {
-    "FileLocation": "index\\\\foo.md",
+    "FileLocation": "index/foo.md",
     "Result": Array [
       "## class: Foo",
       "",
     ],
   },
   Object {
-    "FileLocation": "index\\\\foostart.md",
+    "FileLocation": "index/foostart.md",
     "Result": Array [
       "## class: FooStart",
       "",
@@ -42,7 +42,7 @@ Array [
     ],
   },
   Object {
-    "FileLocation": "foo\\\\foo.md",
+    "FileLocation": "foo/foo.md",
     "Result": Array [
       "## class: Foo",
       "",
