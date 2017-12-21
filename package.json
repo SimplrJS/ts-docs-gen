@@ -5,6 +5,7 @@
   "description": "Generating documentation for TypeScript code.",
   "scripts": {
     "test-ci": "rush test-ci",
+    "rush-rebuild": "rush rebuild",
     "rush-install": "rush install"
   },
   "devDependencies": {
