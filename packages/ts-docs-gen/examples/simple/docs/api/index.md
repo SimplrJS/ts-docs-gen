@@ -1,3 +1,4 @@
+[ModuleDeclaration-0]: index\foonamespace.md#foonamespace
 # index
 
 ## MyFunction()
@@ -16,4 +17,6 @@ function MyFunction<T extends { myProperty: string; myPropertyTwo?: number | und
 
 T
 
+
+## [FooNamespace][ModuleDeclaration-0]
 
