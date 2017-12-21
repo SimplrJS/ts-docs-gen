@@ -4,7 +4,7 @@
         {
             "name": "test-ci",
             "documentation": "Testing packages",
-            "parallelized": true,
+            "parallelized": false,
             "summary": "Testing packages"
         }
     ],
