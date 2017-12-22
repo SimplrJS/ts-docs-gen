@@ -131,7 +131,7 @@ export namespace GeneratorHelpers {
         extractedData: ExtractDto,
         itemsReference: Contracts.ApiItemReference[]
     ): ApiItemReference[] {
-        let list: ApiItemReference[] = [];
+        let overallReferences: ApiItemReference[] = [];
 
         for (const item of itemsReference) {
             for (const referenceId of item.Ids) {
@@ -143,7 +143,7 @@ export namespace GeneratorHelpers {
                         if (apiItem.SourceFileId != null) {
                             const sourceFileReference = { Alias: apiItem.Name, Ids: [apiItem.SourceFileId] };
                             const referencesList = GetApiItemReferences(extractedData, [sourceFileReference]);
-                            list = list.concat(referencesList);
+                            overallReferences = overallReferences.concat(referencesList);
                         }
                         break;
                     }
@@ -158,8 +158,9 @@ export namespace GeneratorHelpers {
                             break;
                         }
 
-                        const referencesList = GetApiItemReferences(extractedData, [{ Alias: apiItem.Name, Ids: apiItem.ApiItems }]);
-                        list = list.concat(referencesList);
+                        const apiItemReference = { Alias: apiItem.Name, Ids: apiItem.ApiItems };
+                        const referencesList = GetApiItemReferences(extractedData, [apiItemReference]);
+                        overallReferences = overallReferences.concat(referencesList);
                         break;
                     }
                     case Contracts.ApiItemKinds.SourceFile: {
@@ -172,11 +173,11 @@ export namespace GeneratorHelpers {
                         }
 
                         const referencesList = GetApiItemReferences(extractedData, apiItem.Members);
-                        list = list.concat(referencesList);
+                        overallReferences = overallReferences.concat(referencesList);
                         break;
                     }
                     default: {
-                        list.push({
+                        overallReferences.push({
                             Id: referenceId,
                             Alias: item.Alias
                         });
@@ -185,7 +186,7 @@ export namespace GeneratorHelpers {
             }
         }
 
-        return list;
+        return overallReferences;
     }
 
     export function ApiVariableToString(item: Contracts.ApiVariableDto, alias?: string): string {
