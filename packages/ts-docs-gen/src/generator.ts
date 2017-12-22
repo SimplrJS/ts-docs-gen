@@ -77,7 +77,8 @@ export class Generator {
             ExtractedData: this.configuration.ExtractedData,
             Reference: apiItemReference,
             ApiItem: apiItem,
-            GetItemPluginResult: this.getItemPluginResult
+            GetItemPluginResult: this.getItemPluginResult,
+            IsPluginResultExists: reference => this.pluginResultRegistry.Exists(reference)
         };
 
         for (const plugin of plugins) {
