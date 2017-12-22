@@ -32,7 +32,7 @@ export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
             }
         ];
 
-        const enumMembers = GeneratorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiEnumMemberDto>(
+        const enumMembers = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiEnumMemberDto>(
             data.ApiItem.Members,
             data.ExtractedData
         );

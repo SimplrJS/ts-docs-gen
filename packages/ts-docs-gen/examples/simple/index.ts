@@ -203,10 +203,10 @@ export function MyFunction<T extends { myProperty: string, myPropertyTwo?: numbe
 //  */
 // export type Hello = Uogos;
 
-// export namespace FooNamespace {
-//     export namespace BooNamespace {
-//         export namespace BooNamespace2 {
-//             export const Hello = "World!";
-//         }
-//     }
-// }
+export namespace FooNamespace {
+    export namespace BooNamespace {
+        export namespace BooNamespace2 {
+            export const Hello = "World!";
+        }
+    }
+}

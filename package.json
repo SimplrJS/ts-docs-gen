@@ -4,8 +4,9 @@
   "private": true,
   "description": "Generating documentation for TypeScript code.",
   "scripts": {
-    "rush-install": "rush install",
-    "rush-test": "rush test"
+    "test-ci": "rush test-ci",
+    "rush-rebuild": "rush rebuild",
+    "rush-install": "rush install"
   },
   "devDependencies": {
     "@microsoft/rush": "^4.0.1"

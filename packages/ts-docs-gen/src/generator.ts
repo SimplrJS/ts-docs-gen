@@ -9,35 +9,29 @@ import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { PluginResult, PluginOptions, GetItemPluginResultHandler } from "./contracts/plugin";
 import { FileResult } from "./contracts/file-result";
-import { GeneratorHelpers } from "./generator-helpers";
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
         this.fileManager = new FileManager();
         const { ExtractedData } = this.configuration;
 
-        for (const entryFile of this.configuration.ExtractedData.EntryFiles) {
-            const apiItemsReferences = GeneratorHelpers.GetApiItemReferences(ExtractedData, entryFile.Members);
+        for (const entryFile of ExtractedData.EntryFiles) {
+            const sourceFile = ExtractedData.Registry[entryFile];
+            const pluginResult
+                = this.renderApiItem({ Alias: sourceFile.Name, Id: entryFile }, sourceFile) as PluginResult<Contracts.ApiSourceFileDto>;
 
-            for (const reference of apiItemsReferences) {
-                const renderedItem = this.getItemPluginResult(reference);
-                this.fileManager.AddItem(renderedItem, this.getFilePathFromEntryFile(entryFile));
-            }
+            this.fileManager.AddEntryFile(pluginResult);
         }
 
         this.outputData = this.fileManager.ToFilesOutput();
     }
 
     /**
-     * Reference check.... how Map Works here.
+     * FIXME: Reference check.... how Map Works here.
      */
     private renderedItems: Map<ApiItemReference, PluginResult> = new Map();
     private fileManager: FileManager;
     private outputData: FileResult[];
-
-    private getFilePathFromEntryFile(entryFile: Contracts.ApiSourceFileDto): string {
-        return path.basename(entryFile.Name, path.extname(entryFile.Name)) + ".md";
-    }
 
     public get OutputData(): ReadonlyArray<FileResult> {
         return this.outputData;

@@ -2,9 +2,9 @@
     "$schema": "../../schemas/command-line.schema.json",
     "customCommands": [
         {
-            "name": "test",
+            "name": "test-ci",
             "documentation": "Testing packages",
-            "parallelized": true,
+            "parallelized": false,
             "summary": "Testing packages"
         }
     ],

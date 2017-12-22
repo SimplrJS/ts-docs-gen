@@ -1,3 +1,6 @@
+[ModuleDeclaration-0]: index\foonamespace.md#foonamespace
+# index
+
 ## MyFunction()
 
 ```typescript
@@ -13,4 +16,7 @@ function MyFunction<T extends { myProperty: string; myPropertyTwo?: number | und
 ### Return type
 
 T
+
+
+## [FooNamespace][ModuleDeclaration-0]
 

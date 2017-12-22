@@ -5,8 +5,11 @@ Array [
   Object {
     "FileLocation": "index.md",
     "Result": Array [
-      "[ClassDeclaration-2]: index.md#class-earth",
-      "[ClassDeclaration-1]: index.md#class-world",
+      "[ClassDeclaration-0]: index/foo.md#class-foo",
+      "[ClassDeclaration-1]: index/world.md#class-world",
+      "[ClassDeclaration-2]: index/earth.md#class-earth",
+      "# index",
+      "",
       "## EnumList",
       "",
       "Simple list.",
@@ -76,11 +79,11 @@ Array [
       "",
       "string",
       "",
-      "## class: Foo",
+      "## [Foo][ClassDeclaration-0]",
       "",
-      "## class: World",
+      "## [World][ClassDeclaration-1]",
       "",
-      "## class: Earth",
+      "## [Earth][ClassDeclaration-2]",
       "",
       "## AnotherFoo(parameter1, parameter2)",
       "",
@@ -352,6 +355,28 @@ Array [
       "",
       "T",
       "",
+      "",
+      "",
+    ],
+  },
+  Object {
+    "FileLocation": "index/foo.md",
+    "Result": Array [
+      "## class: Foo",
+      "",
+    ],
+  },
+  Object {
+    "FileLocation": "index/world.md",
+    "Result": Array [
+      "## class: World",
+      "",
+    ],
+  },
+  Object {
+    "FileLocation": "index/earth.md",
+    "Result": Array [
+      "## class: Earth",
       "",
     ],
   },

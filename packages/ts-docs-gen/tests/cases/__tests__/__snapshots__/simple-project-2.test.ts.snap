@@ -5,14 +5,44 @@ Array [
   Object {
     "FileLocation": "index.md",
     "Result": Array [
+      "[ClassDeclaration-0]: foo/foo.md#class-foo",
+      "[ClassDeclaration-1]: index/foostart.md#class-foostart",
+      "# index",
+      "",
+      "## [Foo][ClassDeclaration-0]",
+      "",
+      "## [FooStart][ClassDeclaration-1]",
+      "",
+      "",
+    ],
+  },
+  Object {
+    "FileLocation": "index/foo.md",
+    "Result": Array [
       "## class: Foo",
       "",
+    ],
+  },
+  Object {
+    "FileLocation": "index/foostart.md",
+    "Result": Array [
       "## class: FooStart",
       "",
     ],
   },
   Object {
     "FileLocation": "foo.md",
+    "Result": Array [
+      "[ClassDeclaration-0]: foo/foo.md#class-foo",
+      "# foo",
+      "",
+      "## [Foo][ClassDeclaration-0]",
+      "",
+      "",
+    ],
+  },
+  Object {
+    "FileLocation": "foo/foo.md",
     "Result": Array [
       "## class: Foo",
       "",

@@ -126,13 +126,13 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
             }
         ];
 
-        const parameters = GeneratorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiParameterDto>(
+        const parameters = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiParameterDto>(
             data.ApiItem.Parameters,
             data.ExtractedData
         );
         const resolvedParametersDto = this.resolveFunctionParameters(parameters);
 
-        const typeParameters = GeneratorHelpers.GetApiItemsFromReferenceTuple<Contracts.ApiTypeParameterDto>(
+        const typeParameters = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(
             data.ApiItem.TypeParameters,
             data.ExtractedData
         );
