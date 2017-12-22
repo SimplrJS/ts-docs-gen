@@ -9,10 +9,13 @@ import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { PluginResult, PluginOptions, GetItemPluginResultHandler } from "./contracts/plugin";
 import { FileResult } from "./contracts/file-result";
+import { PluginResultRegistry } from "./contracts/plugin-result-registry";
+import { PluginResultRegistry as PluginResultRegistryClass } from "./registries/plugin-result-registry";
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
         this.fileManager = new FileManager();
+        this.pluginResultRegistry = new PluginResultRegistryClass();
         const { ExtractedData } = this.configuration;
 
         for (const entryFile of ExtractedData.EntryFiles) {
@@ -26,10 +29,7 @@ export class Generator {
         this.outputData = this.fileManager.ToFilesOutput();
     }
 
-    /**
-     * FIXME: Reference check.... how Map Works here.
-     */
-    private renderedItems: Map<ApiItemReference, PluginResult> = new Map();
+    private pluginResultRegistry: PluginResultRegistry;
     private fileManager: FileManager;
     private outputData: FileResult[];
 
@@ -53,14 +53,15 @@ export class Generator {
     }
 
     private getItemPluginResult: GetItemPluginResultHandler = (apiItemReference: ApiItemReference): PluginResult => {
-        const renderedItem = this.renderedItems.get(apiItemReference);
+        const renderedItem = this.pluginResultRegistry.GetItem(apiItemReference);
 
         if (renderedItem == null) {
             const { Registry } = this.configuration.ExtractedData;
-            const renderedData = this.renderApiItem(apiItemReference, Registry[apiItemReference.Id]);
-            this.renderedItems.set(apiItemReference, renderedData);
 
-            return renderedData;
+            const pluginResult = this.renderApiItem(apiItemReference, Registry[apiItemReference.Id]);
+            this.pluginResultRegistry.AddItem(apiItemReference, pluginResult);
+
+            return pluginResult;
         }
 
         return renderedItem;
