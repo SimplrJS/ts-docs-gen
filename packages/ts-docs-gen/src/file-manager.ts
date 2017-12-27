@@ -64,8 +64,7 @@ export class FileManager {
         for (const [fileLocation, items] of this.filesList) {
             // Link definitions to file location.
             const linkDefinitions: string[] = [];
-            for (const item of items) {
-
+            for (const item of items.reverse()) {
                 item.UsedReferences
                     .forEach(referenceId => {
                         const filePath = path.dirname(fileLocation);
