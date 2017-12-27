@@ -8,6 +8,8 @@ Array [
       "[ClassDeclaration-0]: index/foo.md#class-foo",
       "[ClassDeclaration-1]: index/world.md#class-world",
       "[ClassDeclaration-2]: index/earth.md#class-earth",
+      "[ClassDeclaration-2]: index/earth.md#class-earth",
+      "[ClassDeclaration-1]: index/world.md#class-world",
       "# index",
       "",
       "## EnumList",
