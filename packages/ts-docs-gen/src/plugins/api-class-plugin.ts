@@ -56,6 +56,9 @@ export class ApiClassPlugin implements Plugin<Contracts.ApiClassDto> {
     }
 
     public Render(data: PluginOptions<Contracts.ApiClassDto>): PluginResult {
+        const typeParameters = GeneratorHelpers
+            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(data.ApiItem.TypeParameters, data.ExtractedData);
+
         const pluginResult: PluginResult = {
             ApiItem: data.ApiItem,
             Reference: data.Reference,
@@ -73,7 +76,12 @@ export class ApiClassPlugin implements Plugin<Contracts.ApiClassDto> {
         const builder = new MarkdownBuilder()
             .Header(heading, 1)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem));
+            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
+            .Code(GeneratorHelpers.ClassToString(
+                data.ApiItem,
+                typeParameters,
+                data.Reference.Alias
+            ), GeneratorHelpers.DEFAULT_CODE_OPTIONS);
         pluginResult.Result = builder.GetOutput();
 
         // ApiMembers

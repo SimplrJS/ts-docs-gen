@@ -306,6 +306,43 @@ export namespace GeneratorHelpers {
         return `${apiItem.Name}${$extends}${defaultType}`;
     }
 
+    export function ClassToString(
+        apiItem: Contracts.ApiClassDto,
+        typeParameters?: Contracts.ApiTypeParameterDto[],
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+        // Abstract
+        const abstract = apiItem.IsAbstract ? "abstract " : "";
+
+        // TypeParameters
+        let typeParametersString: string;
+        if (typeParameters != null && typeParameters.length > 0) {
+            const params: string[] = typeParameters.map(TypeParameterToString);
+            typeParametersString = `<${params.join(", ")}>`;
+        } else {
+            typeParametersString = "";
+        }
+
+        // Extends
+        let extendsString: string;
+        if (apiItem.Extends != null) {
+            extendsString = ` extends ${apiItem.Extends.Text}`;
+        } else {
+            extendsString = "";
+        }
+
+        // Implements
+        let implementsString: string;
+        if (apiItem.Implements != null && apiItem.Implements.length > 0) {
+            implementsString = ` implements ${apiItem.Implements.map(x => x.Text).join(", ")}`;
+        } else {
+            implementsString = "";
+        }
+
+        return `${abstract}class ${name}${typeParametersString}${extendsString}${implementsString}`;
+    }
+
     export function ApiFunctionToSimpleString(
         alias: string,
         apiItem: Contracts.ApiFunctionDto,
