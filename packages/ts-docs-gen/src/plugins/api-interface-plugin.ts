@@ -157,7 +157,7 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
             const pluginResult = getPluginResult(item.Reference);
             references.push(...pluginResult.UsedReferences);
             builder
-                .Text(pluginResult.UsedReferences)
+                .Text(pluginResult.Result)
                 .EmptyLine()
                 .HorizontalRule()
                 .EmptyLine();
@@ -237,46 +237,62 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
             }
         ];
 
+        const memberReferences = GeneratorHelpers.GetApiItemReferences(data.ExtractedData, data.ApiItem.Members);
+        const memberItems = memberReferences.map<ExtractedItemDto>(itemReference => ({
+            Reference: itemReference,
+            ApiItem: data.ExtractedData.Registry[itemReference.Id]
+        }));
+
+        // ----
+
         const typeParameters = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(
             data.ApiItem.TypeParameters,
             data.ExtractedData
         );
 
         const resolvedTypeParameters = this.resolveTypeParameters(typeParameters);
+        // ---
+
         const resolvedConstraintTypes = this.resolveConstraintTypes(data.ApiItem);
 
-        const memberReferences = GeneratorHelpers.GetApiItemReferences(data.ExtractedData, data.ApiItem.Members);
+        // ---
 
-        const memberItems = memberReferences.map<ExtractedItemDto>(itemReference => ({
-            Reference: itemReference,
-            ApiItem: data.ExtractedData.Registry[itemReference.Id]
-        }));
-
+        // ---
         const constructItems = memberItems.filter<ExtractedItemDto<Contracts.ApiConstructDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Construct)
         );
         const renderedConstructMembers = this.renderConstructMembers(constructItems, data.GetItemPluginResult);
+        // ---
 
         const callItems = memberItems.filter<ExtractedItemDto<Contracts.ApiCallDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Call)
         );
         const renderedCallMembers = this.renderCallMembers(callItems, data.GetItemPluginResult);
 
+        // ---
+
+
         const indexItems = memberItems.filter<ExtractedItemDto<Contracts.ApiIndexDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Index)
         );
         const renderedIndexMembers = this.renderIndexMembers(indexItems, data.GetItemPluginResult);
+
+        // ---
 
         const methodItems = memberItems.filter<ExtractedItemDto<Contracts.ApiMethodDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Method)
         );
         const renderedMethodMembers = this.renderMethodMembers(methodItems, data.GetItemPluginResult);
 
+        // ---
+
         const propertyMembers = memberItems.filter<ExtractedItemDto<Contracts.ApiPropertyDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Property)
         ).map(x => x.ApiItem);
 
         const renderedPropertyMembers = this.renderPropertyMembers(propertyMembers);
+
+        // ---
 
         const interfaceString = GeneratorHelpers.ApiInterfaceToString(
             data.ApiItem,
