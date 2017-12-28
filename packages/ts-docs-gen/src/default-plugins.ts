@@ -6,6 +6,7 @@ import { ApiTypePlugin } from "./plugins/api-type-plugin";
 import { ApiNamespacePlugin } from "./plugins/api-namespace-plugin";
 import { ApiInterfacePlugin } from "./plugins/api-interface-plugin";
 import { ApiCallablePlugin } from "./plugins/api-callable-plugin";
+import { ApiIndexPlugin } from "./plugins/api-index-plugin";
 
 export const DefaultPlugins = [
     new ApiSourceFilePlugin(),
@@ -15,5 +16,6 @@ export const DefaultPlugins = [
     new ApiTypePlugin(),
     new ApiNamespacePlugin(),
     new ApiInterfacePlugin(),
-    new ApiCallablePlugin()
+    new ApiCallablePlugin(),
+    new ApiIndexPlugin()
 ];
