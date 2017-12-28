@@ -356,6 +356,22 @@ export namespace GeneratorHelpers {
         return `${name}(${parametersString})`;
     }
 
+    export function ApiClassMethodToString(
+        apiItem: Contracts.ApiClassMethodDto,
+        parameters: Contracts.ApiParameterDto[],
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+
+        const optional = apiItem.IsOptional ? "?" : "";
+        const abstract = apiItem.IsAbstract ? " abstract" : "";
+        const async = apiItem.IsAsync ? " async" : "";
+        const $static = apiItem.IsStatic ? " static" : "";
+        const functionHeader = CallableParametersToString(`${name}${optional}`, parameters, apiItem.ReturnType);
+
+        return `${apiItem.AccessModifier}${$static}${abstract}${async} ${functionHeader}`.trim();
+    }
+
     export function CallableParametersToSimpleString(text: string, parameters: Contracts.ApiParameterDto[]): string {
         const parametersString = parameters
             .map(x => x.Name)
@@ -416,11 +432,11 @@ export namespace GeneratorHelpers {
         return pathString.split(path.sep).join("/");
     }
 
-    export function MergePluginResultData<T extends PluginResultData>(a: T, b: PluginResultData): T {
-        a.Headings = a.Headings.concat(b.Headings);
+    export function MergePluginResultData<T extends PluginResultData>(a: T, b: Partial<PluginResultData>): T {
+        a.Headings = a.Headings.concat(b.Headings || []);
         a.Members = (a.Members || []).concat(b.Members || []);
-        a.Result = a.Result.concat(b.Result);
-        a.UsedReferences = a.UsedReferences.concat(b.UsedReferences);
+        a.Result = a.Result.concat(b.Result || []);
+        a.UsedReferences = a.UsedReferences.concat(b.UsedReferences || []);
 
         return a;
     }

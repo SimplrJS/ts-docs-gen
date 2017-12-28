@@ -1,7 +1,7 @@
 # Hello
 
 ```typescript
-class Hello implements Foo<string>
+class Hello
 ```
 ## Constructor
 
@@ -21,5 +21,39 @@ constructor(arg: string)
 
 ## Methods
 
-## class-method: GetFoo
+### GetFoo(arg)
+
+```typescript
+public GetFoo(arg: number): string
+```
+#### Parameters
+
+| Name | Type   |
+| ---- | ------ |
+| arg  | number |
+
+
+### GetFoo(arg)
+
+```typescript
+public GetFoo(arg: string): string
+```
+#### Parameters
+
+| Name | Type   |
+| ---- | ------ |
+| arg  | string |
+
+
+### GetFoo(arg)
+
+```typescript
+public GetFoo(arg: string | number): string
+```
+#### Parameters
+
+| Name | Type             |
+| ---- | ---------------- |
+| arg  | string \| number |
+
 

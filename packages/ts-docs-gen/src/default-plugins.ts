@@ -6,6 +6,7 @@ import { ApiTypePlugin } from "./plugins/api-type-plugin";
 import { ApiNamespacePlugin } from "./plugins/api-namespace-plugin";
 import { ApiClassPlugin } from "./plugins/api-class-plugin";
 import { ApiClassConstructorPlugin } from "./plugins/api-class-constructor-plugin";
+import { ApiClassMethodPlugin } from "./plugins/api-class-method-plugin";
 
 export const DefaultPlugins = [
     new ApiSourceFilePlugin(),
@@ -15,5 +16,6 @@ export const DefaultPlugins = [
     new ApiTypePlugin(),
     new ApiNamespacePlugin(),
     new ApiClassPlugin(),
-    new ApiClassConstructorPlugin()
+    new ApiClassConstructorPlugin(),
+    new ApiClassMethodPlugin()
 ];

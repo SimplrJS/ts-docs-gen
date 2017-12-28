@@ -211,18 +211,16 @@
 //     }
 // }
 
-export interface Foo<TValue> {
-    GetFoo(): TValue;
-}
-
-export class Hello implements Foo<string> {
+export class Hello {
     /**
      * This is a constructor
      * @param arg This is an argument ;)
      */
     constructor(arg: string) { }
 
-    GetFoo(): string {
+    GetFoo(arg: number): string
+    GetFoo(arg: string): string
+    GetFoo(arg: string | number): string {
         throw new Error("Method not implemented.");
     }
 }
