@@ -1,22 +1,7 @@
-[ModuleDeclaration-0]: index\foonamespace.md#foonamespace
+[ClassDeclaration-0]: index/hello.md#hello
 # index
 
-## MyFunction()
+## interface: Foo
 
-```typescript
-function MyFunction<T extends { myProperty: string; myPropertyTwo?: number | undefined; } = { myProperty: string; }>(): T
-```
-
-### Type parameters
-
-| Name | Constraint type                                                | Default type              |
-| ---- | -------------------------------------------------------------- | ------------------------- |
-| T    | \{ myProperty: string; myPropertyTwo?: number \| undefined; \} | \{ myProperty: string; \} |
-
-### Return type
-
-T
-
-
-## [FooNamespace][ModuleDeclaration-0]
+## [Hello][ClassDeclaration-0]
 

@@ -356,6 +356,40 @@ export namespace GeneratorHelpers {
         return `${name}(${parametersString})`;
     }
 
+    export function CallableParametersToSimpleString(text: string, parameters: Contracts.ApiParameterDto[]): string {
+        const parametersString = parameters
+            .map(x => x.Name)
+            .join(", ");
+
+        return `${text}(${parametersString})`;
+    }
+
+    export function CallableParametersToString(
+        text: string,
+        parameters: Contracts.ApiParameterDto[],
+        returnType?: Contracts.TypeDto
+    ): string {
+        // Parameters
+        let parametersString: string;
+        if (parameters != null && parameters.length > 0) {
+            parametersString = parameters
+                .map(x => `${x.Name}: ${x.Type.Text}`)
+                .join(", ");
+        } else {
+            parametersString = "";
+        }
+
+        // ReturnType
+        let returnTypeString: string;
+        if (returnType != null) {
+            returnTypeString = `: ${returnType.Text}`;
+        } else {
+            returnTypeString = "";
+        }
+
+        return `${text}(${parametersString})${returnTypeString}`;
+    }
+
     export function GetApiItemsFromReference<T extends Contracts.ApiItemDto>(
         items: Contracts.ApiItemReference[],
         extractedData: ExtractDto
