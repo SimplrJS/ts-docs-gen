@@ -4,7 +4,7 @@ import { MarkdownBuilder } from "@simplrjs/markdown";
 import { Plugin, SupportedApiItemKindType, PluginResult, PluginOptions } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 
-export type CallableApiItem = Contracts.ApiCallDto | Contracts.ApiMethodDto;// | Contracts.ApiConstructDto;
+export type CallableApiItem = Contracts.ApiCallDto | Contracts.ApiMethodDto | Contracts.ApiConstructDto;
 
 export class ApiCallablePlugin implements Plugin<CallableApiItem> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
@@ -26,9 +26,9 @@ export class ApiCallablePlugin implements Plugin<CallableApiItem> {
     ): string {
 
         switch (apiItem.ApiKind) {
-            // case Contracts.ApiItemKinds.Construct: {
-            // return GeneratorHelpers.ApiConstructToString(typeParameters, parameters, apiItem.ReturnType);
-            // }
+            case Contracts.ApiItemKinds.Construct: {
+                return GeneratorHelpers.ApiConstructToString(typeParameters, parameters, apiItem.ReturnType);
+            }
             case Contracts.ApiItemKinds.Call: {
                 return GeneratorHelpers.ApiCallToString(typeParameters, parameters, apiItem.ReturnType);
             }
