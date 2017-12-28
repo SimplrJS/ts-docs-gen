@@ -420,8 +420,8 @@ export namespace GeneratorHelpers {
 
         constructMembers.forEach(member => {
             const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(member.Parameters, extractedData);
-            // TODO: ...
-            builder.Text(`${Tab(1)}${ApiConstructToString(undefined, parameters, undefined)};`);
+            const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(member.TypeParameters, extractedData);
+            builder.Text(`${Tab(1)}${ApiConstructToString(memberTypeParameters, parameters, member.ReturnType)};`);
         });
 
         callMembers.forEach(member => {
@@ -451,9 +451,11 @@ export namespace GeneratorHelpers {
         return builder.GetOutput();
     }
 
-    // TODO: implement readonly.
     export function ApiPropertyToString(apiItem: Contracts.ApiPropertyDto): string {
-        return `${apiItem.Name}${apiItem.IsOptional ? "?" : ""}: ${TypeDtoToMarkdownString(apiItem.Type).Text}`;
+        const isReadOnlyString = apiItem.IsReadonly ? "readonly " : "";
+        const isOptionalString = apiItem.IsReadonly ? "?" : "";
+        const returnTypeString = TypeDtoToMarkdownString(apiItem.Type).Text;
+        return `${isReadOnlyString}${apiItem.Name}${isOptionalString}: ${returnTypeString}`;
     }
 
     // TODO: add description from @template jsdoc tag.
