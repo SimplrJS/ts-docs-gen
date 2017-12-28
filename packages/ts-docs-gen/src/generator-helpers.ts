@@ -4,7 +4,7 @@ import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } fr
 import * as path from "path";
 
 import { ApiItemReference } from "./contracts/api-item-reference";
-import { ApiItemKindsAdditional } from "./contracts/plugin";
+import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
 
 export namespace GeneratorHelpers {
@@ -343,5 +343,22 @@ export namespace GeneratorHelpers {
 
     export function StandardisePath(pathString: string): string {
         return pathString.split(path.sep).join("/");
+    }
+
+    export function MergePluginResultData<T extends PluginResultData>(a: T, b: PluginResultData): T {
+        a.Headings = a.Headings.concat(b.Headings);
+        a.Members = (a.Members || []).concat(b.Members || []);
+        a.Result = a.Result.concat(b.Result);
+        a.UsedReferences = a.UsedReferences.concat(b.UsedReferences);
+
+        return a;
+    }
+
+    export function GetDefaultPluginResultData(): PluginResultData {
+        return {
+            Headings: [],
+            Result: [],
+            UsedReferences: []
+        };
     }
 }
