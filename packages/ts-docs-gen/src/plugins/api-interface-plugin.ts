@@ -73,134 +73,6 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
         };
     }
 
-    private renderConstructMembers(
-        items: Array<ExtractedItemDto<Contracts.ApiConstructDto>>,
-        getPluginResult: GetItemPluginResultHandler
-    ): GeneratorHelpers.ReferenceDto<string[]> {
-        if (items.length === 0) {
-            return {
-                References: [],
-                Text: []
-            };
-        }
-
-        const references: string[] = [];
-        const builder = new MarkdownBuilder()
-            .Header("Construct", 3)
-            .EmptyLine();
-
-        for (const item of items) {
-            const pluginResult = getPluginResult(item.Reference);
-            references.push(...pluginResult.UsedReferences);
-            builder
-                .Text(pluginResult.Result)
-                .EmptyLine()
-                .HorizontalRule()
-                .EmptyLine();
-        }
-
-        return {
-            References: references,
-            Text: builder.GetOutput()
-        };
-    }
-
-    private renderCallMembers(
-        items: Array<ExtractedItemDto<Contracts.ApiCallDto>>,
-        getPluginResult: GetItemPluginResultHandler
-    ): GeneratorHelpers.ReferenceDto<string[]> {
-        if (items.length === 0) {
-            return {
-                References: [],
-                Text: []
-            };
-        }
-
-        const references: string[] = [];
-        const builder = new MarkdownBuilder()
-            .Header("Call", 3)
-            .EmptyLine();
-
-        for (const item of items) {
-            const pluginResult = getPluginResult(item.Reference);
-            references.push(...pluginResult.UsedReferences);
-            builder
-                .Text(pluginResult.Result)
-                .EmptyLine()
-                .HorizontalRule()
-                .EmptyLine();
-        }
-
-        return {
-            References: references,
-            Text: builder.GetOutput()
-        };
-    }
-
-    private renderIndexMembers(
-        items: Array<ExtractedItemDto<Contracts.ApiIndexDto>>,
-        getPluginResult: GetItemPluginResultHandler
-    ): GeneratorHelpers.ReferenceDto<string[]> {
-        if (items.length === 0) {
-            return {
-                References: [],
-                Text: []
-            };
-        }
-
-        const references: string[] = [];
-        const builder = new MarkdownBuilder()
-            .Header("Index signatures", 3)
-            .EmptyLine();
-
-        for (const item of items) {
-            const pluginResult = getPluginResult(item.Reference);
-            references.push(...pluginResult.UsedReferences);
-            builder
-                .Text(pluginResult.Result)
-                .EmptyLine()
-                .HorizontalRule()
-                .EmptyLine();
-        }
-
-        return {
-            References: references,
-            Text: builder.GetOutput()
-        };
-    }
-
-    private renderMethodMembers(
-        items: Array<ExtractedItemDto<Contracts.ApiMethodDto>>,
-        getPluginResult: GetItemPluginResultHandler
-    ): GeneratorHelpers.ReferenceDto<string[]> {
-        if (items.length === 0) {
-            return {
-                References: [],
-                Text: []
-            };
-        }
-
-        const references: string[] = [];
-        const builder = new MarkdownBuilder()
-            .Header("Methods", 3)
-            .EmptyLine();
-
-        for (const item of items) {
-            const pluginResult = getPluginResult(item.Reference);
-            references.push(...pluginResult.Result);
-            builder
-                .Text(pluginResult.Result)
-                .EmptyLine()
-                .HorizontalRule()
-                .EmptyLine();
-        }
-
-        return {
-            References: references,
-            Text: builder.GetOutput()
-        };
-    }
-
     private renderPropertyMembers(apiItems: Contracts.ApiPropertyDto[]): GeneratorHelpers.ReferenceDto<string[]> {
         if (apiItems.length === 0) {
             return {
@@ -226,6 +98,39 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
         extractedItem: ExtractedItemDto<TKindDto>
     ): extractedItem is ExtractedItemDto<TKindDto> {
         return extractedItem.ApiItem.ApiKind === itemKind;
+    }
+
+    private renderMultipleItems(
+        title: string,
+        items: ExtractedItemDto[],
+        getPluginResult: GetItemPluginResultHandler
+    ): GeneratorHelpers.ReferenceDto<string[]> {
+        if (items.length === 0) {
+            return {
+                References: [],
+                Text: []
+            };
+        }
+
+        const references: string[] = [];
+        const builder = new MarkdownBuilder()
+            .Header(title, 3)
+            .EmptyLine();
+
+        for (const item of items) {
+            const pluginResult = getPluginResult(item.Reference);
+            references.push(...pluginResult.Result);
+            builder
+                .Text(pluginResult.Result)
+                .EmptyLine()
+                .HorizontalRule()
+                .EmptyLine();
+        }
+
+        return {
+            References: references,
+            Text: builder.GetOutput()
+        };
     }
 
     public Render(data: PluginOptions<Contracts.ApiInterfaceDto>): PluginResult {
@@ -261,28 +166,26 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
         const constructItems = memberItems.filter<ExtractedItemDto<Contracts.ApiConstructDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Construct)
         );
-        const renderedConstructMembers = this.renderConstructMembers(constructItems, data.GetItemPluginResult);
+        const renderedConstructMembers = this.renderMultipleItems("Construct", constructItems, data.GetItemPluginResult);
         // ---
 
         const callItems = memberItems.filter<ExtractedItemDto<Contracts.ApiCallDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Call)
         );
-        const renderedCallMembers = this.renderCallMembers(callItems, data.GetItemPluginResult);
+        const renderedCallMembers = this.renderMultipleItems("Call", callItems, data.GetItemPluginResult);
 
         // ---
-
-
         const indexItems = memberItems.filter<ExtractedItemDto<Contracts.ApiIndexDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Index)
         );
-        const renderedIndexMembers = this.renderIndexMembers(indexItems, data.GetItemPluginResult);
+        const renderedIndexMembers = this.renderMultipleItems("Index signatures", indexItems, data.GetItemPluginResult);
 
         // ---
 
         const methodItems = memberItems.filter<ExtractedItemDto<Contracts.ApiMethodDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Method)
         );
-        const renderedMethodMembers = this.renderMethodMembers(methodItems, data.GetItemPluginResult);
+        const renderedMethodMembers = this.renderMultipleItems("Methods", methodItems, data.GetItemPluginResult);
 
         // ---
 
