@@ -57,3 +57,15 @@ public GetFoo(arg: string | number): string
 | arg  | string \| number |
 
 
+## Properties
+
+### Foo
+
+```typescript
+public Foo: string;
+```
+
+### Type
+
+string
+

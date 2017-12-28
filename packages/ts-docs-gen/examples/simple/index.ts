@@ -223,4 +223,6 @@ export class Hello {
     GetFoo(arg: string | number): string {
         throw new Error("Method not implemented.");
     }
+
+    public Foo: string;
 }

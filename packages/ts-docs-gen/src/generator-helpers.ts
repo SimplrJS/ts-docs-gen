@@ -372,6 +372,16 @@ export namespace GeneratorHelpers {
         return `${apiItem.AccessModifier}${$static}${abstract}${async} ${functionHeader}`.trim();
     }
 
+    export function ApiClassPropertyToString(apiItem: Contracts.ApiClassPropertyDto, alias?: string): string {
+        const name = alias || apiItem.Name;
+
+        const optional = apiItem.IsOptional ? "?" : "";
+        const abstract = apiItem.IsAbstract ? " abstract" : "";
+        const $static = apiItem.IsStatic ? " static" : "";
+
+        return `${apiItem.AccessModifier}${$static}${abstract} ${name}${optional}: ${apiItem.Type.Text};`;
+    }
+
     export function CallableParametersToSimpleString(text: string, parameters: Contracts.ApiParameterDto[]): string {
         const parametersString = parameters
             .map(x => x.Name)
