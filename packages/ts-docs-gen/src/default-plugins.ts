@@ -4,6 +4,10 @@ import { ApiEnumPlugin } from "./plugins/api-enum-plugin";
 import { ApiFunctionPlugin } from "./plugins/api-function-plugin";
 import { ApiTypePlugin } from "./plugins/api-type-plugin";
 import { ApiNamespacePlugin } from "./plugins/api-namespace-plugin";
+import { ApiClassPlugin } from "./plugins/api-class-plugin";
+import { ApiClassConstructorPlugin } from "./plugins/api-class-constructor-plugin";
+import { ApiClassMethodPlugin } from "./plugins/api-class-method-plugin";
+import { ApiClassPropertyPlugin } from "./plugins/api-class-property-plugin";
 
 export const DefaultPlugins = [
     new ApiSourceFilePlugin(),
@@ -11,5 +15,9 @@ export const DefaultPlugins = [
     new ApiEnumPlugin(),
     new ApiFunctionPlugin(),
     new ApiTypePlugin(),
-    new ApiNamespacePlugin()
+    new ApiNamespacePlugin(),
+    new ApiClassPlugin(),
+    new ApiClassConstructorPlugin(),
+    new ApiClassMethodPlugin(),
+    new ApiClassPropertyPlugin()
 ];

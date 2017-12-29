@@ -4,7 +4,7 @@ import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } fr
 import * as path from "path";
 
 import { ApiItemReference } from "./contracts/api-item-reference";
-import { ApiItemKindsAdditional } from "./contracts/plugin";
+import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
 
 export namespace GeneratorHelpers {
@@ -306,6 +306,43 @@ export namespace GeneratorHelpers {
         return `${apiItem.Name}${$extends}${defaultType}`;
     }
 
+    export function ClassToString(
+        apiItem: Contracts.ApiClassDto,
+        typeParameters?: Contracts.ApiTypeParameterDto[],
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+        // Abstract
+        const abstract = apiItem.IsAbstract ? "abstract " : "";
+
+        // TypeParameters
+        let typeParametersString: string;
+        if (typeParameters != null && typeParameters.length > 0) {
+            const params: string[] = typeParameters.map(TypeParameterToString);
+            typeParametersString = `<${params.join(", ")}>`;
+        } else {
+            typeParametersString = "";
+        }
+
+        // Extends
+        let extendsString: string;
+        if (apiItem.Extends != null) {
+            extendsString = ` extends ${apiItem.Extends.Text}`;
+        } else {
+            extendsString = "";
+        }
+
+        // Implements
+        let implementsString: string;
+        if (apiItem.Implements != null && apiItem.Implements.length > 0) {
+            implementsString = ` implements ${apiItem.Implements.map(x => x.Text).join(", ")}`;
+        } else {
+            implementsString = "";
+        }
+
+        return `${abstract}class ${name}${typeParametersString}${extendsString}${implementsString}`;
+    }
+
     export function ApiFunctionToSimpleString(
         alias: string,
         apiItem: Contracts.ApiFunctionDto,
@@ -317,6 +354,66 @@ export namespace GeneratorHelpers {
             .join(", ");
 
         return `${name}(${parametersString})`;
+    }
+
+    export function ApiClassMethodToString(
+        apiItem: Contracts.ApiClassMethodDto,
+        parameters: Contracts.ApiParameterDto[],
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+
+        const optional = apiItem.IsOptional ? "?" : "";
+        const abstract = apiItem.IsAbstract ? " abstract" : "";
+        const async = apiItem.IsAsync ? " async" : "";
+        const $static = apiItem.IsStatic ? " static" : "";
+        const functionHeader = CallableParametersToString(`${name}${optional}`, parameters, apiItem.ReturnType);
+
+        return `${apiItem.AccessModifier}${$static}${abstract}${async} ${functionHeader}`.trim();
+    }
+
+    export function ApiClassPropertyToString(apiItem: Contracts.ApiClassPropertyDto, alias?: string): string {
+        const name = alias || apiItem.Name;
+
+        const optional = apiItem.IsOptional ? "?" : "";
+        const abstract = apiItem.IsAbstract ? " abstract" : "";
+        const $static = apiItem.IsStatic ? " static" : "";
+
+        return `${apiItem.AccessModifier}${$static}${abstract} ${name}${optional}: ${apiItem.Type.Text};`;
+    }
+
+    export function CallableParametersToSimpleString(text: string, parameters: Contracts.ApiParameterDto[]): string {
+        const parametersString = parameters
+            .map(x => x.Name)
+            .join(", ");
+
+        return `${text}(${parametersString})`;
+    }
+
+    export function CallableParametersToString(
+        text: string,
+        parameters: Contracts.ApiParameterDto[],
+        returnType?: Contracts.TypeDto
+    ): string {
+        // Parameters
+        let parametersString: string;
+        if (parameters != null && parameters.length > 0) {
+            parametersString = parameters
+                .map(x => `${x.Name}: ${x.Type.Text}`)
+                .join(", ");
+        } else {
+            parametersString = "";
+        }
+
+        // ReturnType
+        let returnTypeString: string;
+        if (returnType != null) {
+            returnTypeString = `: ${returnType.Text}`;
+        } else {
+            returnTypeString = "";
+        }
+
+        return `${text}(${parametersString})${returnTypeString}`;
     }
 
     export function GetApiItemsFromReference<T extends Contracts.ApiItemDto>(
@@ -343,5 +440,22 @@ export namespace GeneratorHelpers {
 
     export function StandardisePath(pathString: string): string {
         return pathString.split(path.sep).join("/");
+    }
+
+    export function MergePluginResultData<T extends PluginResultData>(a: T, b: Partial<PluginResultData>): T {
+        a.Headings = a.Headings.concat(b.Headings || []);
+        a.Members = (a.Members || []).concat(b.Members || []);
+        a.Result = a.Result.concat(b.Result || []);
+        a.UsedReferences = a.UsedReferences.concat(b.UsedReferences || []);
+
+        return a;
+    }
+
+    export function GetDefaultPluginResultData(): PluginResultData {
+        return {
+            Headings: [],
+            Result: [],
+            UsedReferences: []
+        };
     }
 }
