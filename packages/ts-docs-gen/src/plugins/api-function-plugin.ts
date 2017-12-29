@@ -37,6 +37,10 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
     }
 
     private resolveFunctionTypeParameters(typeParameters: Contracts.ApiTypeParameterDto[]): GeneratorHelpers.ReferenceDto<string[]> {
+        if (typeParameters.length === 0) {
+            return { References: [], Text: [] };
+        }
+
         const typeParametersTable = GeneratorHelpers.ApiTypeParametersTableToString(typeParameters);
         const text = new MarkdownBuilder()
             .Header("Type parameters", 3)
