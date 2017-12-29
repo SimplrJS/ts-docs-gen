@@ -1,5 +1,94 @@
 // tslint:disable
 
+export interface ExtendedBar extends Foo<number>, Boo {
+    OtherStuff: string[];
+}
+
+export interface Foo<TType> {
+    Name: string;
+    Surname: string;
+    Type: TType;
+}
+
+export interface Boo {
+    Boos: string[];
+}
+
+export interface AnotherInterface {
+    <TValue>(param1: TValue, param2: TValue): boolean;
+}
+
+export interface MyConstraintType {
+    myProperty: string;
+}
+
+export interface MyDefaultType extends MyConstraintType {
+    anotherProperty: number;
+}
+
+export interface ObjectsInterface {
+    objectOne: Object;
+    objectTwo: Object;
+}
+
+export interface InterfaceWithCall {
+    <T>(): { someProperty: T };
+}
+
+export interface InterfaceWithConstraintType extends Dictionary<string> {
+    someProperty: string;
+}
+
+export interface InterfaceWithMethod<T> {
+    someMethodOne(): T;
+    someMethodTwo<TReturn>(): TReturn;
+}
+
+export interface Dictionary<TValue> {
+    new(): Dictionary<TValue>;
+    [key: string]: TValue;
+}
+
+export interface MethodsInterface {
+    someMethod<T>(): string;
+    <TValue>(arg: TValue): void;
+}
+
+/**
+ * Monster interface
+ * @beta
+ * @deprecated
+ */
+export interface MonsterInterface<TValue extends Object = {}> extends ObjectsInterface {
+    new <T>(): MonsterInterface<T>;
+    new(someParameter: string): string;
+
+    readonly [key: string]: TValue;
+
+    <T>(): { someProperty: T };
+    <T>(key?: string): { someProperty: T };
+    <T>(key: number): { someProperty: T };
+
+    readonly objectOne: TValue;
+    objectTwo: TValue;
+}
+
+export interface SomeInterface {
+    [key: string]: string | number;
+    [key: number]: string;
+}
+
+export interface StringsDictionary {
+    [key: string]: string;
+}
+
+export interface MyInterface {
+    MyPropertyOne: string;
+    MyPropertyTwo: Object;
+    MyPropertyThree: number;
+}
+
+
 // import { Foo } from "./exported-functions";
 
 // export class World { }
@@ -211,18 +300,18 @@
 //     }
 // }
 
-export class Hello {
-    /**
-     * This is a constructor
-     * @param arg This is an argument ;)
-     */
-    constructor(arg: string) { }
+// export class Hello {
+//     /**
+//      * This is a constructor
+//      * @param arg This is an argument ;)
+//      */
+//     constructor(arg: string) { }
 
-    GetFoo(arg: number): string
-    GetFoo(arg: string): string
-    GetFoo(arg: string | number): string {
-        throw new Error("Method not implemented.");
-    }
+//     GetFoo(arg: number): string
+//     GetFoo(arg: string): string
+//     GetFoo(arg: string | number): string {
+//         throw new Error("Method not implemented.");
+//     }
 
-    public Foo: string;
-}
+//     public Foo: string;
+// }
