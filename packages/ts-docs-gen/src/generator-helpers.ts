@@ -55,14 +55,6 @@ export namespace GeneratorHelpers {
             }
             case Contracts.TypeKinds.Basic:
             default: {
-                // Generics
-                if (type.Name != null && type.Generics != null) {
-                    const generics = type.Generics.map(TypeDtoToMarkdownString);
-                    references = references.concat(...generics.map(x => x.References));
-
-                    text += `<${generics.map(x => x.Text).join(", ")}>`;
-                }
-
                 // Basic type with reference.
                 if (type.Name == null || TSHelpers.IsInternalSymbolName(type.Name)) {
                     text = type.Text;
@@ -74,6 +66,14 @@ export namespace GeneratorHelpers {
                     } else {
                         text = type.Name;
                     }
+                }
+
+                // Generics
+                if (type.Name != null && type.Generics != null) {
+                    const generics = type.Generics.map(TypeDtoToMarkdownString);
+                    references = references.concat(...generics.map(x => x.References));
+
+                    text += MarkdownGenerator.EscapeString(`<${generics.map(x => x.Text).join(", ")}>`);
                 }
             }
         }
@@ -307,9 +307,11 @@ export namespace GeneratorHelpers {
         return `${typeParametersString}(${parametersString})${returnTypeString}`;
     }
 
+    // FIXME: `?` and `| undefined` in a single statement.
     export function ApiParameterToString(apiItem: Contracts.ApiParameterDto): string {
+        const initializerString = apiItem.Initializer ? ` = ${apiItem.Initializer}` : "";
         const isOptionalString = apiItem.IsOptional ? "?" : "";
-        return `${apiItem.Name}${isOptionalString}: ${apiItem.Type.Text}`;
+        return `${apiItem.Name}${isOptionalString}: ${apiItem.Type.Text}${initializerString}`;
     }
 
     /**
@@ -467,14 +469,17 @@ export namespace GeneratorHelpers {
 
     export function GetApiItemsFromReference<T extends Contracts.ApiItemDto>(
         items: Contracts.ApiItemReference[],
-        extractedData: ExtractDto
+        extractedData: ExtractDto,
+        apiItemKind?: Contracts.ApiItemKinds
     ): T[] {
         const apiItems: T[] = [];
 
         for (const itemReferences of items) {
             for (const referenceId of itemReferences.Ids) {
                 const apiItem = extractedData.Registry[referenceId] as T;
-                apiItems.push(apiItem);
+                if (apiItemKind == null || apiItemKind != null && apiItem.ApiKind === apiItemKind) {
+                    apiItems.push(apiItem);
+                }
             }
         }
 
@@ -496,49 +501,77 @@ export namespace GeneratorHelpers {
         return `interface ${name}`;
     }
 
+    // TODO: optimize.
     export function ApiInterfaceToString(
         apiItem: Contracts.ApiInterfaceDto,
-        typeParameters: Contracts.ApiTypeParameterDto[],
-        constructMembers: Contracts.ApiConstructDto[],
-        callMembers: Contracts.ApiCallDto[],
-        indexMembers: Contracts.ApiIndexDto[],
-        methodMembers: Contracts.ApiMethodDto[],
-        propertyMembers: Contracts.ApiPropertyDto[],
         extractedData: ExtractDto
     ): string[] {
+        const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(apiItem.TypeParameters, extractedData);
         const typeParametersString = TypeParametersToString(typeParameters);
 
-        const typesExtended = apiItem.Extends
-            .map(TypeDtoToMarkdownString)
-            .join(", ");
+        let extendsString: string;
+
+        if (apiItem.Extends.length === 0) {
+            extendsString = "";
+        } else {
+            const typesExtended = apiItem.Extends
+                .map(x => x.Text)
+                .join(", ");
+            extendsString = ` extends ${typesExtended}`;
+        }
 
         const builder = new MarkdownBuilder()
-            .Text(`interface ${apiItem.Name}${typeParametersString} extends ${typesExtended} {`);
+            .Text(`interface ${apiItem.Name}${typeParametersString}${extendsString} {`);
 
+        const constructMembers = GetApiItemsFromReference<Contracts.ApiConstructDto>(
+            apiItem.Members,
+            extractedData,
+            Contracts.ApiItemKinds.Construct
+        );
         constructMembers.forEach(member => {
             const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(member.Parameters, extractedData);
             const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(member.TypeParameters, extractedData);
             builder.Text(`${Tab(1)}${ApiConstructToString(memberTypeParameters, parameters, member.ReturnType)};`);
         });
 
+        const callMembers = GetApiItemsFromReference<Contracts.ApiCallDto>(
+            apiItem.Members,
+            extractedData,
+            Contracts.ApiItemKinds.Call
+        );
         callMembers.forEach(member => {
             const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(member.Parameters, extractedData);
             const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(member.TypeParameters, extractedData);
             builder.Text(`${Tab(1)}${ApiCallToString(memberTypeParameters, parameters, member.ReturnType)};`);
         });
 
+        const indexMembers = GetApiItemsFromReference<Contracts.ApiIndexDto>(
+            apiItem.Members,
+            extractedData,
+            Contracts.ApiItemKinds.Index
+        );
         indexMembers.forEach(member => {
             const parameter = extractedData.Registry[member.Parameter] as Contracts.ApiParameterDto;
             builder.Text(`${Tab(1)}${ApiIndexToString(parameter, member.Type, member.IsReadonly)};`);
         });
 
+        const methodMembers = GetApiItemsFromReference<Contracts.ApiConstructDto>(
+            apiItem.Members,
+            extractedData,
+            Contracts.ApiItemKinds.Method
+        );
         methodMembers.forEach(member => {
             const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(member.Parameters, extractedData);
-            const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(apiItem.TypeParameters, extractedData);
+            const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(member.TypeParameters, extractedData);
 
-            builder.Text(`${Tab(1)}${ApiMethodToString(apiItem.Name, memberTypeParameters, parameters)};`);
+            builder.Text(`${Tab(1)}${ApiMethodToString(member.Name, memberTypeParameters, parameters, member.ReturnType)};`);
         });
 
+        const propertyMembers = GetApiItemsFromReference<Contracts.ApiPropertyDto>(
+            apiItem.Members,
+            extractedData,
+            Contracts.ApiItemKinds.Property
+        );
         propertyMembers.forEach(member => {
             builder.Text(`${Tab(1)}${ApiPropertyToString(member)};`);
         });
@@ -551,7 +584,7 @@ export namespace GeneratorHelpers {
     export function ApiPropertyToString(apiItem: Contracts.ApiPropertyDto): string {
         const isReadOnlyString = apiItem.IsReadonly ? "readonly " : "";
         const isOptionalString = apiItem.IsReadonly ? "?" : "";
-        const returnTypeString = TypeDtoToMarkdownString(apiItem.Type).Text;
+        const returnTypeString = apiItem.Type.Text;
         return `${isReadOnlyString}${apiItem.Name}${isOptionalString}: ${returnTypeString}`;
     }
 
@@ -610,7 +643,7 @@ export namespace GeneratorHelpers {
         }
 
         let referenceIds: string[] = [];
-        const header = ["Name", "Type", "Optional", "Description"];
+        const header = ["Name", "Type", "Optional", "Initial value", "Description"];
 
         const content = parameters.map(parameter => {
             const parameterTypeDto = TypeDtoToMarkdownString(parameter.Type);
@@ -618,8 +651,9 @@ export namespace GeneratorHelpers {
             referenceIds = referenceIds.concat(parameterTypeDto.References);
 
             const isOptionalString = parameter.IsOptional ? "Yes" : "";
+            const initializerString = parameter.Initializer || "";
 
-            return [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text), isOptionalString];
+            return [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text), isOptionalString, initializerString];
         });
 
         return {
