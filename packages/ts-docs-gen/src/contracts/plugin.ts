@@ -19,17 +19,17 @@ export interface PluginMember {
 }
 
 export type GetItemPluginResultHandler = (reference: ApiItemReference) => PluginResult;
+export type IsPluginResultExistsHandler = (reference: ApiItemReference) => boolean;
 
 export interface PluginOptions<TKind = Contracts.ApiItemDto> {
     Reference: ApiItemReference;
     ApiItem: TKind;
     ExtractedData: ExtractDto;
     GetItemPluginResult: GetItemPluginResultHandler;
+    IsPluginResultExists: IsPluginResultExistsHandler;
 }
 
-export interface PluginResult<TKind = Contracts.ApiItemDto> {
-    Reference: ApiItemReference;
-    ApiItem: TKind;
+export interface PluginResultData {
     /**
      * All headings used in `Result` with ApiItemIds.
      */
@@ -43,6 +43,11 @@ export interface PluginResult<TKind = Contracts.ApiItemDto> {
      */
     Result: string[];
     Members?: PluginMember[];
+}
+
+export interface PluginResult<TKind = Contracts.ApiItemDto> extends PluginResultData {
+    Reference: ApiItemReference;
+    ApiItem: TKind;
 }
 
 export interface Plugin<TKind = Contracts.ApiItemDto> {

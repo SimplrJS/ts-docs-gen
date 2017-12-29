@@ -7,6 +7,7 @@ import { PluginMember, Plugin, SupportedApiItemKindType, PluginOptions, PluginRe
 
 interface RenderItems {
     References: string[];
+    Headings: PluginHeading[];
     Output: string[];
     Members: PluginMember[];
 }
@@ -23,41 +24,52 @@ export class ApiSourceFilePlugin implements Plugin<Contracts.ApiSourceFileDto> {
     // TODO: Move this to helpers.
     private renderItems(data: PluginOptions<Contracts.ApiSourceFileDto>): RenderItems {
         const references = GeneratorHelpers.GetApiItemReferences(data.ExtractedData, data.ApiItem.Members);
-        const referencesList: string[] = [];
+        let referencesList: string[] = [];
+        let headingsList: PluginHeading[] = [];
         const members: PluginMember[] = [];
         const builder = new MarkdownBuilder();
 
         for (const reference of references) {
             const apiItem = data.ExtractedData.Registry[reference.Id];
 
-            switch (apiItem.ApiKind) {
-                case Contracts.ApiItemKinds.Namespace:
-                case Contracts.ApiItemKinds.Class: {
+            if (data.IsPluginResultExists(reference)) {
+                builder
+                    .Text(md => md.Header(md.Link(apiItem.Name, reference.Id, true), 2))
+                    .EmptyLine();
+                referencesList.push(reference.Id);
+            } else {
+                switch (apiItem.ApiKind) {
+                    case Contracts.ApiItemKinds.Namespace:
+                    case Contracts.ApiItemKinds.Class: {
 
-                    const renderedItem = data.GetItemPluginResult(reference);
-                    members.push({
-                        Reference: reference,
-                        PluginResult: renderedItem
-                    });
+                        const renderedItem = data.GetItemPluginResult(reference);
+                        members.push({
+                            Reference: reference,
+                            PluginResult: renderedItem
+                        });
 
-                    builder
-                        .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, reference.Id, true), 2))
-                        .EmptyLine();
-                    referencesList.push(reference.Id);
-                    break;
-                }
-                default: {
-                    const renderedItem = data.GetItemPluginResult(reference);
-                    // Something to do with heading. Maybe heading reference registry?
-                    builder
-                        .Text(renderedItem.Result)
-                        .EmptyLine();
+                        builder
+                            .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, reference.Id, true), 2))
+                            .EmptyLine();
+                        referencesList.push(reference.Id);
+                        break;
+                    }
+                    default: {
+                        const renderedItem = data.GetItemPluginResult(reference);
+                        builder
+                            .Text(renderedItem.Result)
+                            .EmptyLine();
+
+                        headingsList = headingsList.concat(renderedItem.Headings);
+                        referencesList = referencesList.concat(renderedItem.UsedReferences);
+                    }
                 }
             }
         }
 
         return {
             References: referencesList,
+            Headings: headingsList,
             Output: builder.GetOutput(),
             Members: members
         };
@@ -65,7 +77,7 @@ export class ApiSourceFilePlugin implements Plugin<Contracts.ApiSourceFileDto> {
 
     public Render(data: PluginOptions<Contracts.ApiSourceFileDto>): PluginResult {
         const heading = path.basename(data.ApiItem.Name, path.extname(data.ApiItem.Name));
-        const headings: PluginHeading[] = [
+        let headings: PluginHeading[] = [
             {
                 Heading: heading,
                 ApiItemId: data.Reference.Id
@@ -74,6 +86,7 @@ export class ApiSourceFilePlugin implements Plugin<Contracts.ApiSourceFileDto> {
 
         const renderedItems = this.renderItems(data);
         const references: string[] = renderedItems.References;
+        headings = headings.concat(renderedItems.Headings);
 
         // Header
         const builder = new MarkdownBuilder()
