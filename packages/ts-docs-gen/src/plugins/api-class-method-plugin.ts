@@ -50,7 +50,11 @@ export class ApiClassMethodPlugin implements Plugin<Contracts.ApiClassMethodDto>
             .GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ApiItem.Parameters, options.ExtractedData);
         const parameters = this.renderParameters(apiParameters);
 
-        const heading = GeneratorHelpers.CallableParametersToSimpleString(options.Reference.Alias, apiParameters);
+        // Parameters
+        const apiTypeParameters = GeneratorHelpers
+            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ApiItem.TypeParameters, options.ExtractedData);
+
+        const heading = GeneratorHelpers.MethodToSimpleString(options.Reference.Alias, apiParameters);
 
         pluginResult.Headings.push({ ApiItemId: options.Reference.Id, Heading: heading });
 
@@ -60,6 +64,7 @@ export class ApiClassMethodPlugin implements Plugin<Contracts.ApiClassMethodDto>
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(GeneratorHelpers.ApiClassMethodToString(
                 options.ApiItem,
+                apiTypeParameters,
                 apiParameters,
                 options.Reference.Alias
             ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)

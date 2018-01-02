@@ -50,7 +50,7 @@ export class ApiClassConstructorPlugin implements Plugin<Contracts.ApiClassConst
             .GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ApiItem.Parameters, options.ExtractedData);
         const parameters = this.renderParameters(apiParameters);
 
-        const heading = GeneratorHelpers.CallableParametersToSimpleString("constructor", apiParameters);
+        const heading = GeneratorHelpers.MethodToSimpleString("constructor", apiParameters);
 
         pluginResult.Headings.push({ ApiItemId: options.Reference.Id, Heading: heading });
 
@@ -58,7 +58,7 @@ export class ApiClassConstructorPlugin implements Plugin<Contracts.ApiClassConst
             .Header(heading, 3)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
-            .Code(GeneratorHelpers.CallableParametersToString("constructor", apiParameters), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(GeneratorHelpers.ApiClassConstructorToString(apiParameters), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .Text(parameters.Result);
 
         GeneratorHelpers.MergePluginResultData(pluginResult, parameters);

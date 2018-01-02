@@ -103,7 +103,7 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
         const resolvedReturnTypeDto = this.resolveReturnType(data.ApiItem.ReturnType);
 
         const builder = new MarkdownBuilder()
-            .Header(GeneratorHelpers.ApiFunctionToSimpleString(alias, data.ApiItem, parameters), 2)
+            .Header(GeneratorHelpers.MethodToSimpleString(alias || data.ApiItem.Name, parameters), 2)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Code(GeneratorHelpers.ApiFunctionToString(
