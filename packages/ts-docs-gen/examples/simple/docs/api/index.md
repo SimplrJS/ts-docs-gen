@@ -17,15 +17,15 @@ interface ExtendedBar extends Foo<number>, Boo {
 
 ### Extends
 
-[Foo][InterfaceDeclaration-1]<number>
+[Foo][InterfaceDeclaration-1]&#60;number&#62;
 
 [Boo][InterfaceDeclaration-2]
 
 ### Properties
 
-| Name       | Type          |
-| ---------- | ------------- |
-| OtherStuff | Array<string> |
+| Name       | Type                  |
+| ---------- | --------------------- |
+| OtherStuff | Array&#60;string&#62; |
 
 ## interface Foo
 
@@ -61,9 +61,9 @@ interface Boo {
 
 ### Properties
 
-| Name | Type          |
-| ---- | ------------- |
-| Boos | Array<string> |
+| Name | Type                  |
+| ---- | --------------------- |
+| Boos | Array&#60;string&#62; |
 
 ## interface AnotherInterface
 
@@ -184,7 +184,7 @@ interface InterfaceWithConstraintType extends Dictionary<string> {
 
 ### Extends
 
-[Dictionary][InterfaceDeclaration-9]<string>
+[Dictionary][InterfaceDeclaration-9]&#60;string&#62;
 
 ### Properties
 
@@ -259,7 +259,7 @@ new (): Dictionary<TValue>
 
 Return type:
 
-[Dictionary][InterfaceDeclaration-9]<TValue>
+[Dictionary][InterfaceDeclaration-9]&#60;TValue&#62;
 
 ---
 
@@ -373,7 +373,7 @@ Type parameters:
 
 Return type:
 
-[MonsterInterface][InterfaceDeclaration-12]<T>
+[MonsterInterface][InterfaceDeclaration-12]&#60;T&#62;
 
 ---
 
