@@ -6,6 +6,7 @@ import * as path from "path";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
+import { Helpers } from "./utils/helpers";
 
 export namespace GeneratorHelpers {
     export type TypeToStringDto = ReferenceDto<string>;
@@ -15,116 +16,34 @@ export namespace GeneratorHelpers {
         Text: T;
     }
 
-    export const MARKDOWN_EXT = ".md";
-
-    export const ApiItemKinds: typeof ApiItemKindsAdditional & typeof Contracts.ApiItemKinds =
-        Object.assign(ApiItemKindsAdditional, Contracts.ApiItemKinds);
-
-    export function GetApiItemKinds(): typeof Contracts.ApiItemKinds & typeof ApiItemKindsAdditional {
-        return Object.assign(Contracts.ApiItemKinds, ApiItemKindsAdditional);
-    }
-
-    // TODO: implement type literal and function type.
-    export function TypeDtoToMarkdownString(type: Contracts.TypeDto): TypeToStringDto {
-        let references: string[] = [];
-        let text: string = "";
-
-        switch (type.ApiTypeKind) {
-            case Contracts.TypeKinds.Union:
-            case Contracts.TypeKinds.Intersection: {
-                const symbol = type.ApiTypeKind === Contracts.TypeKinds.Union ? "|" : "&";
-
-                if (type.ReferenceId != null) {
-                    text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
-                    references.push(type.ReferenceId);
-                    break;
-                }
-
-                type.Types
-                    .map(TypeDtoToMarkdownString)
-                    .forEach(typeItem => {
-                        references = references.concat(typeItem.References);
-
-                        if (text === "") {
-                            text = typeItem.Text;
-                        } else {
-                            text += ` ${symbol} ${typeItem.Text}`;
-                        }
-                    });
-                break;
-            }
-            case Contracts.TypeKinds.Basic:
-            default: {
-                // Basic type with reference.
-                if (type.Name == null || TSHelpers.IsInternalSymbolName(type.Name)) {
-                    text = type.Text;
-                } else {
-                    // FIXME: do not use flag string. Exclude Type parameters references.
-                    if (type.ReferenceId != null && type.FlagsString !== "TypeParameter") {
-                        text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
-                        references.push(type.ReferenceId);
-                    } else {
-                        text = type.Name;
-                    }
-                }
-
-                // Generics
-                if (type.Name != null && type.Generics != null) {
-                    const generics = type.Generics.map(TypeDtoToMarkdownString);
-                    references = references.concat(...generics.map(x => x.References));
-
-                    text += MarkdownGenerator.EscapeString(`<${generics.map(x => x.Text).join(", ")}>`);
-                }
-            }
-        }
-
-        return {
-            References: references,
-            Text: text
-        };
-    }
-
     export enum JSDocTags {
         Beta = "beta",
         Deprecated = "deprecated",
         Summary = "summary"
     }
 
-    export function RenderApiItemMetadata(apiItem: Contracts.ApiItemDto): string[] {
-        const builder = new MarkdownBuilder();
+    // #region Defaults and constants
 
-        // Optimise?
-        const isBeta = apiItem.Metadata.JSDocTags.findIndex(x => x.name.toLowerCase() === JSDocTags.Beta) !== -1;
-        const deprecated = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Deprecated);
-        const summary = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Summary);
-        const jSDocComment = apiItem.Metadata.DocumentationComment;
+    export const MARKDOWN_EXT = ".md";
 
-        if (isBeta) {
-            builder
-                .Text(`<span style="color: #d2d255;">Warning: Beta!</span>`)
-                .EmptyLine();
-        }
+    export const ApiItemKinds: typeof ApiItemKindsAdditional & typeof Contracts.ApiItemKinds =
+        Object.assign(ApiItemKindsAdditional, Contracts.ApiItemKinds);
 
-        if (deprecated != null) {
-            const message = Boolean(deprecated.text) ? `: ${deprecated.text}` : "";
-            builder
-                .Text(`<span style="color: red;">Deprecated${message}!</span>`)
-                .EmptyLine();
-        }
+    export const DEFAULT_CODE_OPTIONS = {
+        lang: "typescript"
+    };
 
-        if (jSDocComment.length > 0) {
-            builder
-                .Text(jSDocComment)
-                .EmptyLine();
-        }
+    export const DEFAULT_TABLE_OPTIONS: MarkdownContracts.TableOptions = {
+        removeColumnIfEmpty: true,
+        removeRowIfEmpty: true
+    };
 
-        if (summary != null && Boolean(summary.text)) {
-            builder
-                .Blockquote(summary.text!.split("\n"))
-                .EmptyLine();
-        }
+    // #endregion Defaults and constants
 
-        return builder.GetOutput();
+    // #region General helpers
+
+    export function GetApiItemKinds(): typeof Contracts.ApiItemKinds & typeof ApiItemKindsAdditional {
+        return Object.assign(Contracts.ApiItemKinds, ApiItemKindsAdditional);
     }
 
     export function GetApiItemReferences(
@@ -189,284 +108,6 @@ export namespace GeneratorHelpers {
         return overallReferences;
     }
 
-    export function ApiVariableToString(item: Contracts.ApiVariableDto, alias?: string): string {
-        const name = alias != null ? alias : item.Name;
-
-        return `${item.VariableDeclarationType} ${name}: ${item.Type.Text};`;
-    }
-
-    export function ReconstructEnumCode(alias: string, memberItems: Contracts.ApiEnumMemberDto[]): string[] {
-        // Constructing enum body.
-        const membersStrings = memberItems.map((memberItem, index, array) => {
-            // Add an enum name
-            let memberString = `${GeneratorHelpers.Tab()} ${memberItem.Name}`;
-
-            // Add an enum member value if it exists.
-            if (memberItem.Value) {
-                memberString += ` = ${memberItem.Value}`;
-            }
-
-            // Add a comma if current item is not the last item
-            if (index !== memberItems.length - 1) {
-                memberString += ",";
-            }
-
-            return memberString;
-        });
-
-        // Construct enum code output
-        return [
-            `enum ${alias} {`,
-            ...membersStrings,
-            "}"
-        ];
-    }
-
-    // TODO: reconsider location
-    const TAB_STRING = "    ";
-
-    export function Tab(size: number = 1): string {
-        let result: string = "";
-        for (let i = 0; i < size; i++) {
-            result += TAB_STRING;
-        }
-        return result;
-    }
-    // ---------------------------------------------------
-
-    export const DEFAULT_CODE_OPTIONS = {
-        lang: "typescript"
-    };
-
-    export const DEFAULT_TABLE_OPTIONS: MarkdownContracts.TableOptions = {
-        removeColumnIfEmpty: true,
-        removeRowIfEmpty: true
-    };
-
-    export function FixSentence(sentence: string, punctuationMark: string = "."): string {
-        const trimmedSentence = sentence.trim();
-        const punctuationMarks = ".!:;,-";
-
-        const lastSymbol = trimmedSentence[trimmedSentence.length - 1];
-
-        if (punctuationMarks.indexOf(lastSymbol) !== -1) {
-            return trimmedSentence;
-        }
-
-        return trimmedSentence + punctuationMark;
-    }
-
-    export function ApiTypeToString(item: Contracts.ApiTypeDto, alias?: string): string {
-        const name = alias != null ? alias : item.Name;
-
-        return `type ${name} = ${item.Type.Text};`;
-    }
-
-    export function TypeParametersToString(typeParameters?: Contracts.ApiTypeParameterDto[]): string {
-        if (typeParameters != null && typeParameters.length > 0) {
-            const params: string[] = typeParameters.map(TypeParameterToString);
-            return `<${params.join(", ")}>`;
-        } else {
-            return "";
-        }
-    }
-
-    export function TypeParameterToString(apiItem: Contracts.ApiTypeParameterDto): string {
-        const extendsString = apiItem.ConstraintType != null ? ` extends ${apiItem.ConstraintType.Text}` : "";
-        const defaultType = apiItem.DefaultType != null ? ` = ${apiItem.DefaultType.Text}` : "";
-
-        return `${apiItem.Name}${extendsString}${defaultType}`;
-    }
-
-    /**
-     * Builds call declaration.
-     *
-     * Return example: `<TValue>(arg: TValue): void`
-     */
-    export function ApiCallToString(
-        typeParameters?: Contracts.ApiTypeParameterDto[],
-        parameters?: Contracts.ApiParameterDto[],
-        returnType?: Contracts.TypeDto
-    ): string {
-        // TypeParameters
-        const typeParametersString = TypeParametersToString(typeParameters);
-
-        // Parameters
-        let parametersString: string;
-        if (parameters != null && parameters.length > 0) {
-            parametersString = parameters
-                .map(ApiParameterToString)
-                .join(", ");
-        } else {
-            parametersString = "";
-        }
-
-        // ReturnType
-        const returnTypeString = returnType != null ? `: ${returnType.Text}` : "";
-
-        return `${typeParametersString}(${parametersString})${returnTypeString}`;
-    }
-
-    // FIXME: `?` and `| undefined` in a single statement.
-    export function ApiParameterToString(apiItem: Contracts.ApiParameterDto): string {
-        const initializerString = apiItem.Initializer ? ` = ${apiItem.Initializer}` : "";
-        const isOptionalString = apiItem.IsOptional ? "?" : "";
-        return `${apiItem.Name}${isOptionalString}: ${apiItem.Type.Text}${initializerString}`;
-    }
-
-    /**
-     * Builds function head from ApiFunction.
-     *
-     * Return example: `function foo<TValue>(arg: TValue): void`
-     */
-    export function ApiFunctionToString(
-        apiItem: Contracts.ApiFunctionDto,
-        typeParameters?: Contracts.ApiTypeParameterDto[],
-        parameters?: Contracts.ApiParameterDto[],
-        alias?: string
-    ): string {
-        const name = alias || apiItem.Name;
-        const callString = ApiCallToString(typeParameters, parameters, apiItem.ReturnType);
-
-        return `function ${name}${callString}`;
-    }
-
-    /**
-     * Builds construct declaration.
-     *
-     * Return example: `new <TValue>(arg: TValue): void`
-     */
-    export function ApiConstructToString(
-        typeParameters?: Contracts.ApiTypeParameterDto[],
-        parameters?: Contracts.ApiParameterDto[],
-        returnType?: Contracts.TypeDto
-    ): string {
-        const callString = ApiCallToString(typeParameters, parameters, returnType);
-
-        return `new ${callString}`;
-    }
-
-    export function ApiMethodToString(
-        name: string,
-        typeParameters?: Contracts.ApiTypeParameterDto[],
-        parameters?: Contracts.ApiParameterDto[],
-        returnType?: Contracts.TypeDto
-    ): string {
-        const callString = ApiCallToString(typeParameters, parameters, returnType);
-
-        return `${name}${callString}`;
-    }
-
-    export function ClassToString(
-        apiItem: Contracts.ApiClassDto,
-        typeParameters?: Contracts.ApiTypeParameterDto[],
-        alias?: string
-    ): string {
-        const name = alias || apiItem.Name;
-        // Abstract
-        const abstract = apiItem.IsAbstract ? "abstract " : "";
-
-        // TypeParameters
-        let typeParametersString: string;
-        if (typeParameters != null && typeParameters.length > 0) {
-            const params: string[] = typeParameters.map(TypeParameterToString);
-            typeParametersString = `<${params.join(", ")}>`;
-        } else {
-            typeParametersString = "";
-        }
-
-        // Extends
-        let extendsString: string;
-        if (apiItem.Extends != null) {
-            extendsString = ` extends ${apiItem.Extends.Text}`;
-        } else {
-            extendsString = "";
-        }
-
-        // Implements
-        let implementsString: string;
-        if (apiItem.Implements != null && apiItem.Implements.length > 0) {
-            implementsString = ` implements ${apiItem.Implements.map(x => x.Text).join(", ")}`;
-        } else {
-            implementsString = "";
-        }
-
-        return `${abstract}class ${name}${typeParametersString}${extendsString}${implementsString}`;
-    }
-
-    export function ApiFunctionToSimpleString(
-        alias: string,
-        apiItem: Contracts.ApiFunctionDto,
-        parametersApiItems: Contracts.ApiParameterDto[]
-    ): string {
-        const name = alias || apiItem.Name;
-        const parametersString = parametersApiItems
-            .map(x => x.Name)
-            .join(", ");
-
-        return `${name}(${parametersString})`;
-    }
-
-    export function ApiClassMethodToString(
-        apiItem: Contracts.ApiClassMethodDto,
-        parameters: Contracts.ApiParameterDto[],
-        alias?: string
-    ): string {
-        const name = alias || apiItem.Name;
-
-        const optional = apiItem.IsOptional ? "?" : "";
-        const abstract = apiItem.IsAbstract ? " abstract" : "";
-        const async = apiItem.IsAsync ? " async" : "";
-        const $static = apiItem.IsStatic ? " static" : "";
-        const functionHeader = CallableParametersToString(`${name}${optional}`, parameters, apiItem.ReturnType);
-
-        return `${apiItem.AccessModifier}${$static}${abstract}${async} ${functionHeader}`.trim();
-    }
-
-    export function ApiClassPropertyToString(apiItem: Contracts.ApiClassPropertyDto, alias?: string): string {
-        const name = alias || apiItem.Name;
-
-        const optional = apiItem.IsOptional ? "?" : "";
-        const abstract = apiItem.IsAbstract ? " abstract" : "";
-        const $static = apiItem.IsStatic ? " static" : "";
-
-        return `${apiItem.AccessModifier}${$static}${abstract} ${name}${optional}: ${apiItem.Type.Text};`;
-    }
-
-    export function CallableParametersToSimpleString(text: string, parameters: Contracts.ApiParameterDto[]): string {
-        const parametersString = parameters
-            .map(x => x.Name)
-            .join(", ");
-
-        return `${text}(${parametersString})`;
-    }
-
-    export function CallableParametersToString(
-        text: string,
-        parameters: Contracts.ApiParameterDto[],
-        returnType?: Contracts.TypeDto
-    ): string {
-        // Parameters
-        let parametersString: string;
-        if (parameters != null && parameters.length > 0) {
-            parametersString = parameters
-                .map(x => `${x.Name}: ${x.Type.Text}`)
-                .join(", ");
-        } else {
-            parametersString = "";
-        }
-
-        // ReturnType
-        let returnTypeString: string;
-        if (returnType != null) {
-            returnTypeString = `: ${returnType.Text}`;
-        } else {
-            returnTypeString = "";
-        }
-
-        return `${text}(${parametersString})${returnTypeString}`;
-    }
-
     export function GetApiItemsFromReference<T extends Contracts.ApiItemDto>(
         items: Contracts.ApiItemReference[],
         extractedData: ExtractDto,
@@ -496,10 +137,155 @@ export namespace GeneratorHelpers {
         return pathString.split(path.sep).join("/");
     }
 
-    export function ApiInterfaceToSimpleString(alias: string, apiItem: Contracts.ApiInterfaceDto): string {
-        const name = alias || apiItem.Name;
-        return `interface ${name}`;
+    export function IsApiItemKind<TKindDto extends Contracts.ApiItemDto>(
+        itemKind: Contracts.ApiItemKinds,
+        apiItem: Contracts.ApiItemDto): apiItem is TKindDto {
+        return apiItem.ApiKind === itemKind;
     }
+
+    export function MergePluginResultData<T extends PluginResultData>(a: T, b: Partial<PluginResultData>): T {
+        a.Headings = a.Headings.concat(b.Headings || []);
+        a.Members = (a.Members || []).concat(b.Members || []);
+        a.Result = a.Result.concat(b.Result || []);
+        a.UsedReferences = a.UsedReferences.concat(b.UsedReferences || []);
+
+        return a;
+    }
+
+    export function GetDefaultPluginResultData(): PluginResultData {
+        return {
+            Headings: [],
+            Result: [],
+            UsedReferences: []
+        };
+    }
+    // #endregion General helpers
+
+    // #region Render helpers
+
+    // TODO: implement type literal and function type.
+    export function TypeDtoToMarkdownString(type: Contracts.TypeDto): TypeToStringDto {
+        let references: string[] = [];
+        let text: string = "";
+
+        switch (type.ApiTypeKind) {
+            case Contracts.TypeKinds.Union:
+            case Contracts.TypeKinds.Intersection: {
+                const symbol = type.ApiTypeKind === Contracts.TypeKinds.Union ? "|" : "&";
+
+                if (type.ReferenceId != null) {
+                    text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
+                    references.push(type.ReferenceId);
+                    break;
+                }
+
+                type.Types
+                    .map(TypeDtoToMarkdownString)
+                    .forEach(typeItem => {
+                        references = references.concat(typeItem.References);
+
+                        if (text === "") {
+                            text = typeItem.Text;
+                        } else {
+                            text += ` ${symbol} ${typeItem.Text}`;
+                        }
+                    });
+                break;
+            }
+            case Contracts.TypeKinds.Basic:
+            default: {
+                // Basic type with reference.
+                if (type.Name == null || TSHelpers.IsInternalSymbolName(type.Name)) {
+                    text = type.Text;
+                } else {
+                    // FIXME: do not use flag string. Exclude Type parameters references.
+                    if (type.ReferenceId != null && type.FlagsString !== "TypeParameter") {
+                        text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
+                        references.push(type.ReferenceId);
+                    } else {
+                        text = type.Name;
+                    }
+                }
+
+                // Generics
+                if (type.Name != null && type.Generics != null) {
+                    const generics = type.Generics.map(TypeDtoToMarkdownString);
+                    references = references.concat(...generics.map(x => x.References));
+
+                    text += MarkdownGenerator.EscapeString(`<${generics.map(x => x.Text).join(", ")}>`);
+                }
+            }
+        }
+
+        return {
+            References: references,
+            Text: text
+        };
+    }
+
+    export function RenderApiItemMetadata(apiItem: Contracts.ApiItemDto): string[] {
+        const builder = new MarkdownBuilder();
+
+        // Optimise?
+        const isBeta = apiItem.Metadata.JSDocTags.findIndex(x => x.name.toLowerCase() === JSDocTags.Beta) !== -1;
+        const deprecated = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Deprecated);
+        const summary = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Summary);
+        const jSDocComment = apiItem.Metadata.DocumentationComment;
+
+        if (isBeta) {
+            builder
+                .Text(`<span style="color: #d2d255;">Warning: Beta!</span>`)
+                .EmptyLine();
+        }
+
+        if (deprecated != null) {
+            const message = Boolean(deprecated.text) ? `: ${deprecated.text}` : "";
+            builder
+                .Text(`<span style="color: red;">Deprecated${message}!</span>`)
+                .EmptyLine();
+        }
+
+        if (jSDocComment.length > 0) {
+            builder
+                .Text(jSDocComment)
+                .EmptyLine();
+        }
+
+        if (summary != null && Boolean(summary.text)) {
+            builder
+                .Blockquote(summary.text!.split("\n"))
+                .EmptyLine();
+        }
+
+        return builder.GetOutput();
+    }
+
+    const TAB_STRING = "    ";
+
+    export function Tab(size: number = 1): string {
+        let result: string = "";
+        for (let i = 0; i < size; i++) {
+            result += TAB_STRING;
+        }
+        return result;
+    }
+
+    export function FixSentence(sentence: string, punctuationMark: string = "."): string {
+        const trimmedSentence = sentence.trim();
+        const punctuationMarks = ".!:;,-";
+
+        const lastSymbol = trimmedSentence[trimmedSentence.length - 1];
+
+        if (punctuationMarks.indexOf(lastSymbol) !== -1) {
+            return trimmedSentence;
+        }
+
+        return trimmedSentence + punctuationMark;
+    }
+
+    // #endregion Render helpers
+
+    // #region Stringifiers
 
     // TODO: optimize.
     export function ApiInterfaceToString(
@@ -581,85 +367,15 @@ export namespace GeneratorHelpers {
         return builder.GetOutput();
     }
 
-    export function ApiPropertyToString(apiItem: Contracts.ApiPropertyDto): string {
-        const isReadOnlyString = apiItem.IsReadonly ? "readonly " : "";
-        const isOptionalString = apiItem.IsReadonly ? "?" : "";
-        const returnTypeString = apiItem.Type.Text;
-        return `${isReadOnlyString}${apiItem.Name}${isOptionalString}: ${returnTypeString}`;
+    export function ApiTypeToString(item: Contracts.ApiTypeDto, alias?: string): string {
+        const name = alias != null ? alias : item.Name;
+
+        return `type ${name} = ${item.Type.Text};`;
     }
 
-    // TODO: add description from @template jsdoc tag.
-    export function ApiTypeParametersTableToString(typeParameters: Contracts.ApiTypeParameterDto[]): ReferenceDto<string[]> {
-        if (typeParameters.length === 0) {
-            return {
-                References: [],
-                Text: []
-            };
-        }
-
-        let referenceIds: string[] = [];
-        const header = ["Name", "Constraint type", "Default type"];
-        const content = typeParameters.map(typeParameter => {
-            let constraintType: string = "";
-            let defaultType: string = "";
-
-            if (typeParameter.ConstraintType) {
-                const parsedConstraintType = TypeDtoToMarkdownString(typeParameter.ConstraintType);
-
-                referenceIds = referenceIds.concat(parsedConstraintType.References);
-                constraintType = MarkdownGenerator.EscapeString(parsedConstraintType.Text);
-            }
-
-            if (typeParameter.DefaultType) {
-                const parsedDefaultType = TypeDtoToMarkdownString(typeParameter.DefaultType);
-
-                referenceIds = referenceIds.concat(parsedDefaultType.References);
-                defaultType = MarkdownGenerator.EscapeString(parsedDefaultType.Text);
-            }
-
-            return [typeParameter.Name, constraintType, defaultType];
-        });
-
-        return {
-            References: referenceIds,
-            Text: MarkdownGenerator.Table(header, content, DEFAULT_TABLE_OPTIONS)
-        };
-    }
-
-    export function IsApiItemKind<TKindDto extends Contracts.ApiItemDto>(
-        itemKind: Contracts.ApiItemKinds,
-        apiItem: Contracts.ApiItemDto): apiItem is TKindDto {
-        return apiItem.ApiKind === itemKind;
-    }
-
-    // TODO: implement description.
-    // TODO: implement IsSpread.
-    export function ApiParametersToTableString(parameters: Contracts.ApiParameterDto[]): ReferenceDto<string[]> {
-        if (parameters.length === 0) {
-            return {
-                References: [],
-                Text: []
-            };
-        }
-
-        let referenceIds: string[] = [];
-        const header = ["Name", "Type", "Optional", "Initial value", "Description"];
-
-        const content = parameters.map(parameter => {
-            const parameterTypeDto = TypeDtoToMarkdownString(parameter.Type);
-
-            referenceIds = referenceIds.concat(parameterTypeDto.References);
-
-            const isOptionalString = parameter.IsOptional ? "Yes" : "";
-            const initializerString = parameter.Initializer || "";
-
-            return [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text), isOptionalString, initializerString];
-        });
-
-        return {
-            Text: MarkdownGenerator.Table(header, content, DEFAULT_TABLE_OPTIONS),
-            References: referenceIds
-        };
+    export function ApiInterfaceToSimpleString(alias: string, apiItem: Contracts.ApiInterfaceDto): string {
+        const name = alias || apiItem.Name;
+        return `interface ${name}`;
     }
 
     export function ApiIndexToString(parameter: Contracts.ApiParameterDto, type: Contracts.TypeDto, readOnly: boolean = false): string {
@@ -671,47 +387,324 @@ export namespace GeneratorHelpers {
         return `${readOnlyString}[${parameter.Name}: ${parameterTypeString}]: ${typeString}`;
     }
 
+    export function ApiPropertyToString(apiItem: Contracts.ApiPropertyDto): string {
+        const optional = apiItem.IsOptional ? "?" : "";
+        const readOnly = apiItem.IsReadonly ? "readonly " : "";
+
+        return `${readOnly}${apiItem.Name}${optional}: ${apiItem.Type.Text}`;
+    }
+
+    export function ApiClassPropertyToString(apiItem: Contracts.ApiClassPropertyDto, alias?: string): string {
+        const name = alias || apiItem.Name;
+
+        const optional = apiItem.IsOptional ? "?" : "";
+        const readOnly = apiItem.IsReadonly ? " readonly" : "";
+        const abstract = apiItem.IsAbstract ? " abstract" : "";
+        const $static = apiItem.IsStatic ? " static" : "";
+
+        return `${apiItem.AccessModifier}${$static}${abstract}${readOnly} ${name}${optional}: ${apiItem.Type.Text};`;
+    }
+
+    export function EnumToString(alias: string, memberItems: Contracts.ApiEnumMemberDto[]): string[] {
+        // Constructing enum body.
+        const membersStrings = memberItems.map((memberItem, index, array) => {
+            // Add an enum name
+            let memberString = `${GeneratorHelpers.Tab()} ${memberItem.Name}`;
+
+            // Add an enum member value if it exists.
+            if (memberItem.Value) {
+                memberString += ` = ${memberItem.Value}`;
+            }
+
+            // Add a comma if current item is not the last item
+            if (index !== memberItems.length - 1) {
+                memberString += ",";
+            }
+
+            return memberString;
+        });
+
+        // Construct enum code output
+        return [
+            `enum ${alias} {`,
+            ...membersStrings,
+            "}"
+        ];
+    }
+
+    export function ApiVariableToString(item: Contracts.ApiVariableDto, alias?: string): string {
+        const name = alias != null ? alias : item.Name;
+
+        return `${item.VariableDeclarationType} ${name}: ${item.Type.Text};`;
+    }
+
+    export function ClassToString(
+        apiItem: Contracts.ApiClassDto,
+        typeParameters?: Contracts.ApiTypeParameterDto[],
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+        // Abstract
+        const abstract = apiItem.IsAbstract ? "abstract " : "";
+
+        // TypeParameters
+        const typeParametersString: string = TypeParametersToString(typeParameters);
+
+        // Extends
+        let extendsString: string;
+        if (apiItem.Extends != null) {
+            extendsString = ` extends ${apiItem.Extends.Text}`;
+        } else {
+            extendsString = "";
+        }
+
+        // Implements
+        let implementsString: string;
+        if (apiItem.Implements != null && apiItem.Implements.length > 0) {
+            implementsString = ` implements ${apiItem.Implements.map(x => x.Text).join(", ")}`;
+        } else {
+            implementsString = "";
+        }
+
+        return `${abstract}class ${name}${typeParametersString}${extendsString}${implementsString}`;
+    }
+
+    export function TypeParametersToString(typeParameters?: Contracts.ApiTypeParameterDto[]): string {
+        if (typeParameters != null && typeParameters.length > 0) {
+            const params: string[] = typeParameters.map(TypeParameterToString);
+            return `<${params.join(", ")}>`;
+        } else {
+            return "";
+        }
+    }
+
+    export function TypeParameterToString(apiItem: Contracts.ApiTypeParameterDto): string {
+        const extendsString = apiItem.ConstraintType != null ? ` extends ${apiItem.ConstraintType.Text}` : "";
+        const defaultType = apiItem.DefaultType != null ? ` = ${apiItem.DefaultType.Text}` : "";
+
+        return `${apiItem.Name}${extendsString}${defaultType}`;
+    }
+
+    // #endregion Stringifiers
+
+    // #region Tables
     export function ApiPropertiesToTableString(properties: Contracts.ApiPropertyDto[]): ReferenceDto<string[]> {
-        if (properties.length === 0) {
+        const headers = ["Name", "Type", "Optional"];
+        return ApiItemsToTableString<Contracts.ApiPropertyDto>(headers, properties, ApiPropertyToTableRow);
+    }
+
+    export function ApiPropertyToTableRow(property: Contracts.ApiPropertyDto): ReferenceDto<string[]> {
+        const parameterTypeDto = TypeDtoToMarkdownString(property.Type);
+        const isOptionalString = property.IsOptional ? "Yes" : "";
+
+        return {
+            Text: [property.Name, parameterTypeDto.Text, isOptionalString],
+            References: parameterTypeDto.References
+        };
+    }
+
+    export function ApiParametersToTableString(parameters: Contracts.ApiParameterDto[]): ReferenceDto<string[]> {
+        const headers = ["Name", "Type", "Optional", "Initial value", "Description"];
+        return ApiItemsToTableString<Contracts.ApiParameterDto>(headers, parameters, ApiParameterToTableRow);
+    }
+
+    // TODO: implement description.
+    // TODO: implement IsSpread.
+    export function ApiParameterToTableRow(parameter: Contracts.ApiParameterDto): ReferenceDto<string[]> {
+        const parameterTypeDto = TypeDtoToMarkdownString(parameter.Type);
+        const isOptionalString = parameter.IsOptional ? "Yes" : "";
+        const initializerString = parameter.Initializer || "";
+
+        return {
+            Text: [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text), isOptionalString, initializerString],
+            References: parameterTypeDto.References
+        };
+    }
+
+    export function ApiTypeParametersTableToString(typeParameters: Contracts.ApiTypeParameterDto[]): ReferenceDto<string[]> {
+        const headers = ["Name", "Constraint type", "Default type"];
+        return ApiItemsToTableString<Contracts.ApiTypeParameterDto>(headers, typeParameters, ApiTypeParameterToTableRow);
+    }
+
+    // TODO: add description from @template jsdoc tag.
+    export function ApiTypeParameterToTableRow(typeParameter: Contracts.ApiTypeParameterDto): ReferenceDto<string[]> {
+        let referenceIds: string[] = [];
+        let constraintType: string = "";
+        let defaultType: string = "";
+
+        if (typeParameter.ConstraintType) {
+            const parsedConstraintType = TypeDtoToMarkdownString(typeParameter.ConstraintType);
+
+            referenceIds = referenceIds.concat(parsedConstraintType.References);
+            constraintType = MarkdownGenerator.EscapeString(parsedConstraintType.Text);
+        }
+
+        if (typeParameter.DefaultType) {
+            const parsedDefaultType = TypeDtoToMarkdownString(typeParameter.DefaultType);
+
+            referenceIds = referenceIds.concat(parsedDefaultType.References);
+            defaultType = MarkdownGenerator.EscapeString(parsedDefaultType.Text);
+        }
+
+        return {
+            Text: [typeParameter.Name, constraintType, defaultType],
+            References: referenceIds
+        };
+    }
+
+    export function ApiItemsToTableString<TApiDto extends Contracts.ApiItemDto>(
+        headers: string[],
+        items: TApiDto[],
+        itemToString: (item: TApiDto) => ReferenceDto<string[]>
+    ): ReferenceDto<string[]> {
+        if (items.length === 0) {
             return {
                 References: [],
                 Text: []
             };
         }
 
-        let referenceIds: string[] = [];
-        const header = ["Name", "Type", "Optional"];
-
-        const content = properties.map(property => {
-            const parameterTypeDto = TypeDtoToMarkdownString(property.Type);
-
-            referenceIds = referenceIds.concat(parameterTypeDto.References);
-
-            const isOptionalString = property.IsOptional ? "Yes" : "";
-
-            return [property.Name, parameterTypeDto.Text, isOptionalString];
-        });
+        const rows = items.map(itemToString);
+        const content = rows.map(row => row.Text);
+        const referenceIds = Helpers.Flatten(rows.map(row => row.References));
 
         return {
-            Text: MarkdownGenerator.Table(header, content, DEFAULT_TABLE_OPTIONS),
+            Text: MarkdownGenerator.Table(headers, content, DEFAULT_TABLE_OPTIONS),
             References: referenceIds
         };
     }
 
-    export function MergePluginResultData<T extends PluginResultData>(a: T, b: Partial<PluginResultData>): T {
-        a.Headings = a.Headings.concat(b.Headings || []);
-        a.Members = (a.Members || []).concat(b.Members || []);
-        a.Result = a.Result.concat(b.Result || []);
-        a.UsedReferences = a.UsedReferences.concat(b.UsedReferences || []);
+    //#endregion Tables
 
-        return a;
+    // #region Call strings
+    /**
+     * Builds call declaration.
+     *
+     * Return example: `<TValue>(arg: TValue): void`.
+     */
+    export function ApiCallToString(
+        typeParameters?: Contracts.ApiTypeParameterDto[],
+        parameters?: Contracts.ApiParameterDto[],
+        returnType?: Contracts.TypeDto
+    ): string {
+        // TypeParameters
+        const typeParametersString = TypeParametersToString(typeParameters);
+
+        // Parameters
+        let parametersString: string;
+        if (parameters != null && parameters.length > 0) {
+            parametersString = parameters
+                .map(ApiParameterToString)
+                .join(", ");
+        } else {
+            parametersString = "";
+        }
+
+        // ReturnType
+        const returnTypeString = returnType != null ? `: ${returnType.Text}` : "";
+
+        return `${typeParametersString}(${parametersString})${returnTypeString}`;
     }
 
-    export function GetDefaultPluginResultData(): PluginResultData {
-        return {
-            Headings: [],
-            Result: [],
-            UsedReferences: []
-        };
+    /**
+     * Builds ApiParameter string.
+     *
+     * Return example: `arg: TValue`.
+     */
+    export function ApiParameterToString(apiItem: Contracts.ApiParameterDto): string {
+        // FIXME: `?` and `| undefined` in a single statement.
+        const initializerString = apiItem.Initializer ? ` = ${apiItem.Initializer}` : "";
+        const isOptionalString = apiItem.IsOptional ? "?" : "";
+        return `${apiItem.Name}${isOptionalString}: ${apiItem.Type.Text}${initializerString}`;
     }
+
+    export function ApiClassConstructorToString(parameters?: Contracts.ApiParameterDto[], returnType?: Contracts.TypeDto): string {
+        const callString = ApiCallToString(undefined, parameters, returnType);
+        return `constructor${callString}`;
+    }
+
+    /**
+     * Builds function head from ApiFunction.
+     *
+     * Return example: `function foo<TValue>(arg: TValue): void`.
+     */
+    export function ApiFunctionToString(
+        apiItem: Contracts.ApiFunctionDto,
+        typeParameters?: Contracts.ApiTypeParameterDto[],
+        parameters?: Contracts.ApiParameterDto[],
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+        const callString = ApiCallToString(typeParameters, parameters, apiItem.ReturnType);
+
+        return `function ${name}${callString}`;
+    }
+
+    /**
+     * Builds construct declaration.
+     *
+     * Return example: `new <TValue>(arg: TValue): void`.
+     */
+    export function ApiConstructToString(
+        typeParameters?: Contracts.ApiTypeParameterDto[],
+        parameters?: Contracts.ApiParameterDto[],
+        returnType?: Contracts.TypeDto
+    ): string {
+        const callString = ApiCallToString(typeParameters, parameters, returnType);
+
+        return `new ${callString}`;
+    }
+
+    /**
+     * Builds method declaration.
+     *
+     * Return example: `someMethod<TValue>(arg: TValue): void`.
+     */
+    export function ApiMethodToString(
+        name: string,
+        typeParameters?: Contracts.ApiTypeParameterDto[],
+        parameters?: Contracts.ApiParameterDto[],
+        returnType?: Contracts.TypeDto
+    ): string {
+        const callString = ApiCallToString(typeParameters, parameters, returnType);
+
+        return `${name}${callString}`;
+    }
+
+    /**
+     * Builds class method declaration.
+     *
+     * Return example: `public static SomeMethod<TValue>(arg: TValue): void`.
+     */
+    export function ApiClassMethodToString(
+        apiItem: Contracts.ApiClassMethodDto,
+        typeParameters: Contracts.ApiTypeParameterDto[],
+        parameters: Contracts.ApiParameterDto[],
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+
+        const optional = apiItem.IsOptional ? "?" : "";
+        const abstract = apiItem.IsAbstract ? " abstract" : "";
+        const async = apiItem.IsAsync ? " async" : "";
+        const $static = apiItem.IsStatic ? " static" : "";
+        const functionHeader = ApiMethodToString(`${name}${optional}`, typeParameters, parameters, apiItem.ReturnType);
+
+        return `${apiItem.AccessModifier}${$static}${abstract}${async} ${functionHeader}`.trim();
+    }
+
+    /**
+     * Build simplified method declaration
+     *
+     * Return example: `someMethod(parameter1, parameter2)`.
+     */
+    export function MethodToSimpleString(text: string, parameters: Contracts.ApiParameterDto[]): string {
+        const parametersString = parameters
+            .map(x => x.Name)
+            .join(", ");
+
+        return `${text}(${parametersString})`;
+    }
+
+    // #endregion Call strings
 }
