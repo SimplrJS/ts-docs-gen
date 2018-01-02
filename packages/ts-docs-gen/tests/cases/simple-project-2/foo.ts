@@ -1,5 +1,7 @@
 export class Foo {
     public GetMessage(message: string): string {
-        return message;
+        return this.defaultMessage;
     }
+
+    private readonly defaultMessage: string = "It's a default message.";
 }

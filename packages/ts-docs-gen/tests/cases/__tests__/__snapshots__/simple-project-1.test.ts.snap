@@ -356,7 +356,7 @@ Array [
       "    <T>(key?: string | undefined): { someProperty: T; };",
       "    <T>(key: number): { someProperty: T; };",
       "    readonly [key: string]: TValue;",
-      "    readonly objectOne?: TValue;",
+      "    readonly objectOne: TValue;",
       "    objectTwo: TValue;",
       "}",
       "\`\`\`",
