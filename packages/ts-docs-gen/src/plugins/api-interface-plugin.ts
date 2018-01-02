@@ -43,7 +43,6 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
             .EmptyLine()
             .GetOutput();
 
-        // TODO: Should I put type parameter heading here?
         return {
             Result: text,
             UsedReferences: typeParametersTable.References,
@@ -71,7 +70,6 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
                 .EmptyLine();
         }
 
-        // TODO: should Extends header be added to Headings?
         return {
             UsedReferences: references,
             Result: builder.GetOutput(),
@@ -94,7 +92,6 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
             .EmptyLine()
             .Text(table.Text);
 
-        // TODO: should I put Properties heading to Headers?
         return {
             UsedReferences: table.References,
             Result: builder.GetOutput(),
