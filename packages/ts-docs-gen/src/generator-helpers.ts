@@ -689,7 +689,7 @@ export namespace GeneratorHelpers {
 
             const isOptionalString = property.IsOptional ? "Yes" : "";
 
-            return [property.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text), isOptionalString];
+            return [property.Name, parameterTypeDto.Text, isOptionalString];
         });
 
         return {
