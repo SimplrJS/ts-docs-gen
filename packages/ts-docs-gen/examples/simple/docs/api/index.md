@@ -5,6 +5,7 @@
 [InterfaceDeclaration-9]: index.md#dictionary
 [InterfaceDeclaration-6]: index.md#objectsinterface
 [InterfaceDeclaration-12]: index.md#monsterinterface
+[ClassDeclaration-0]: index/hello.md#hello
 # index
 
 ## interface ExtendedBar
@@ -546,4 +547,6 @@ interface MyInterface {
 | MyPropertyOne   | string |
 | MyPropertyTwo   | Object |
 | MyPropertyThree | number |
+
+## [Hello][ClassDeclaration-0]
 

@@ -19,53 +19,35 @@ constructor(arg: string)
 | arg  | string | This is an argument ;) |
 
 
-## Methods
-
-### GetFoo(arg)
-
-```typescript
-public GetFoo(arg: number): string
-```
-#### Parameters
-
-| Name | Type   |
-| ---- | ------ |
-| arg  | number |
-
-
-### GetFoo(arg)
-
-```typescript
-public GetFoo(arg: string): string
-```
-#### Parameters
-
-| Name | Type   |
-| ---- | ------ |
-| arg  | string |
-
-
-### GetFoo(arg)
-
-```typescript
-public GetFoo(arg: string | number): string
-```
-#### Parameters
-
-| Name | Type                 |
-| ---- | -------------------- |
-| arg  | string &#124; number |
-
-
 ## Properties
 
-### Foo
+### get Foo
 
 ```typescript
-public Foo: string;
+public get Foo: string;
 ```
 
-### Type
+#### Type
+
+string
+
+### set Foo
+
+```typescript
+public set Foo: string;
+```
+
+#### Type
+
+string
+
+### set Bar
+
+```typescript
+public static set Bar: string;
+```
+
+#### Type
 
 string
 

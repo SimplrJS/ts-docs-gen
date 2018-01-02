@@ -300,18 +300,18 @@ export interface MyInterface {
 //     }
 // }
 
-// export class Hello {
-//     /**
-//      * This is a constructor
-//      * @param arg This is an argument ;)
-//      */
-//     constructor(arg: string) { }
+export class Hello {
+    /**
+     * This is a constructor
+     * @param arg This is an argument ;)
+     */
+    constructor(arg: string) { }
 
-//     GetFoo(arg: number): string
-//     GetFoo(arg: string): string
-//     GetFoo(arg: string | number): string {
-//         throw new Error("Method not implemented.");
-//     }
+    get Foo(): string {
+        throw new Error("Method not implemented.");
+    }
 
-//     public Foo: string;
-// }
+    set Foo(arg: string) { }
+
+    public static set Bar(arg: string) { }
+}
