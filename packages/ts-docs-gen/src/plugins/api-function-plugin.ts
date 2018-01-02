@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
+import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { GeneratorHelpers } from "../generator-helpers";
 import { SupportedApiItemKindType, Plugin, PluginResult, PluginOptions, PluginHeading } from "../contracts/plugin";
@@ -23,72 +23,34 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
             };
         }
 
-        let referenceIds: string[] = [];
-        const header = ["Name", "Type", "Description"];
-
-        const content = parameters.map(parameter => {
-            const parameterTypeDto = GeneratorHelpers.TypeDtoToMarkdownString(parameter.Type);
-
-            referenceIds = referenceIds.concat(parameterTypeDto.References);
-
-            return [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text)];
-        });
-
-        const text = new MarkdownBuilder()
+        const table = GeneratorHelpers.ApiParametersToTableString(parameters);
+        const builder = new MarkdownBuilder()
             .Header("Parameters", 3)
             .EmptyLine()
-            .Table(header, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
-            .EmptyLine()
-            .GetOutput();
+            .Text(table.Text)
+            .EmptyLine();
 
         return {
-            Text: text,
-            References: referenceIds
+            Text: builder.GetOutput(),
+            References: table.References
         };
     }
 
-    // TODO: add description from @template jsdoc tag.
     private resolveFunctionTypeParameters(typeParameters: Contracts.ApiTypeParameterDto[]): GeneratorHelpers.ReferenceDto<string[]> {
-        let referenceIds: string[] = [];
-
         if (typeParameters.length === 0) {
-            return {
-                References: [],
-                Text: []
-            };
+            return { References: [], Text: [] };
         }
 
-        const header = ["Name", "Constraint type", "Default type"];
-        const content = typeParameters.map(typeParameter => {
-            let constraintType: string = "";
-            let defaultType: string = "";
-
-            if (typeParameter.ConstraintType) {
-                const parsedConstraintType = GeneratorHelpers.TypeDtoToMarkdownString(typeParameter.ConstraintType);
-
-                referenceIds = referenceIds.concat(parsedConstraintType.References);
-                constraintType = MarkdownGenerator.EscapeString(parsedConstraintType.Text);
-            }
-
-            if (typeParameter.DefaultType) {
-                const parsedDefaultType = GeneratorHelpers.TypeDtoToMarkdownString(typeParameter.DefaultType);
-
-                referenceIds = referenceIds.concat(parsedDefaultType.References);
-                defaultType = MarkdownGenerator.EscapeString(parsedDefaultType.Text);
-            }
-
-            return [typeParameter.Name, constraintType, defaultType];
-        });
-
+        const typeParametersTable = GeneratorHelpers.ApiTypeParametersTableToString(typeParameters);
         const text = new MarkdownBuilder()
             .Header("Type parameters", 3)
             .EmptyLine()
-            .Table(header, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
+            .Text(typeParametersTable.Text)
             .EmptyLine()
             .GetOutput();
 
         return {
-            References: referenceIds,
+            References: typeParametersTable.References,
             Text: text
         };
     }

@@ -52,9 +52,9 @@ public GetFoo(arg: string | number): string
 ```
 #### Parameters
 
-| Name | Type             |
-| ---- | ---------------- |
-| arg  | string \| number |
+| Name | Type                 |
+| ---- | -------------------- |
+| arg  | string &#124; number |
 
 
 ## Properties
