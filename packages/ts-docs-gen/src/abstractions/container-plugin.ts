@@ -1,8 +1,9 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 import { BasePlugin } from "./base-plugin";
 import { PluginOptions, PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
+import { ApiItemReference } from "../contracts/api-item-reference";
 
 export interface ApiContainer extends Contracts.ApiBaseItemDto {
     Members: Contracts.ApiItemReference[];
@@ -13,27 +14,95 @@ export interface ContainerRenderMembers {
     Kinds: Contracts.ApiItemKinds[];
 }
 
+interface ContainersMembersReferences {
+    Heading: string;
+    References: ApiItemReference[];
+}
+
 export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePlugin<TKind> {
+    private getItemReferenceByKind(
+        list: ContainerRenderMembers[],
+        members: Contracts.ApiItemReference[],
+        data: ExtractDto
+    ): ContainersMembersReferences[] {
+        const result: ContainersMembersReferences[] = [];
+        let membersReferences = GeneratorHelpers.GetApiItemReferences(data, members);
+
+        for (const item of list) {
+            // Filter item ids by kind
+            const apiItemsIdsByKind = membersReferences.filter(x => item.Kinds.indexOf(data.Registry[x.Id].ApiKind) !== -1);
+            // Remove ids that was used
+            membersReferences = membersReferences.filter(x => apiItemsIdsByKind.indexOf(x) === -1);
+
+            result.push({
+                Heading: item.Heading,
+                References: apiItemsIdsByKind
+            });
+        }
+
+        // TODO: Using ApiKind.Any to add everything to other if some kind is not supported.
+        if (membersReferences.length !== 0) {
+            result.push({
+                Heading: "Other",
+                References: membersReferences
+            });
+        }
+
+        return result;
+    }
+
     protected RenderMembers(list: ContainerRenderMembers[], data: PluginOptions<TKind>): PluginResultData {
-        const references = GeneratorHelpers.GetApiItemReferences(data.ExtractedData, data.ApiItem.Members);
-        const renderedItems = references.map(x => data.GetItemPluginResult(x));
+        const membersReferences = this.getItemReferenceByKind(list, data.ApiItem.Members, data.ExtractedData);
         const pluginResultData = GeneratorHelpers.GetDefaultPluginResultData();
         const builder = new MarkdownBuilder();
 
-        for (const memberKind of list) {
-            const pluginResultsByKind = renderedItems.filter(x => memberKind.Kinds.indexOf(x.ApiItem.ApiKind) !== -1);
+        if (pluginResultData.Members == null) {
+            pluginResultData.Members = [];
+        }
 
-            if (pluginResultsByKind.length > 0) {
+        for (const { Heading, References } of membersReferences) {
+            if (References.length > 0) {
                 builder
-                    .Header(memberKind.Heading, 2)
+                    .Header(Heading, 2)
                     .EmptyLine();
 
-                for (const member of pluginResultsByKind) {
-                    GeneratorHelpers.MergePluginResultData(pluginResultData, member);
+                for (const reference of References) {
+                    const apiItem = data.ExtractedData.Registry[reference.Id];
 
-                    builder
-                        .Text(member.Result)
-                        .EmptyLine();
+                    if (data.IsPluginResultExists(reference)) {
+                        builder
+                            .Text(md => md.Header(md.Link(apiItem.Name, reference.Id, true), 2))
+                            .EmptyLine();
+                        pluginResultData.UsedReferences.push(reference.Id);
+                    } else {
+                        switch (apiItem.ApiKind) {
+                            case Contracts.ApiItemKinds.Namespace:
+                            case Contracts.ApiItemKinds.Class: {
+                                const renderedItem = data.GetItemPluginResult(reference);
+                                pluginResultData.Members.push({
+                                    Reference: reference,
+                                    PluginResult: renderedItem
+                                });
+
+                                builder
+                                    .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, reference.Id, true), 2))
+                                    .EmptyLine();
+                                pluginResultData.UsedReferences.push(reference.Id);
+                                break;
+                            }
+                            default: {
+                                const renderedItem = data.GetItemPluginResult(reference);
+                                builder
+                                    .Text(renderedItem.Result)
+                                    .EmptyLine();
+
+                                GeneratorHelpers.MergePluginResultData(pluginResultData, {
+                                    Headings: renderedItem.Headings,
+                                    UsedReferences: renderedItem.UsedReferences
+                                });
+                            }
+                        }
+                    }
                 }
             }
         }
