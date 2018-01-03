@@ -41,7 +41,7 @@ export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .EmptyLine()
-            .Code(GeneratorHelpers.ReconstructEnumCode(data.Reference.Alias, enumMembers), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(GeneratorHelpers.EnumToString(data.Reference.Alias, enumMembers), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
             .Text(this.constructEnumTable(enumMembers));
 
