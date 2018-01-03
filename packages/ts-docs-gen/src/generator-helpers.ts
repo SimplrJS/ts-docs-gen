@@ -394,6 +394,26 @@ export namespace GeneratorHelpers {
         return `${readOnly}${apiItem.Name}${optional}: ${apiItem.Type.Text}`;
     }
 
+    export function ApiAccessorToString(
+        apiItem: Contracts.ApiGetAccessorDto | Contracts.ApiSetAccessorDto,
+        type: Contracts.TypeDto | undefined,
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+        const abstract = apiItem.IsAbstract ? " abstract" : "";
+        const $static = apiItem.IsStatic ? " static" : "";
+
+        const typeString = type != null ? type.Text : "???";
+        let accessorType: string;
+        if (apiItem.ApiKind === Contracts.ApiItemKinds.SetAccessor) {
+            accessorType = "set";
+        } else {
+            accessorType = "get";
+        }
+
+        return `${apiItem.AccessModifier}${$static}${abstract} ${accessorType} ${name}: ${typeString};`;
+    }
+
     export function ApiClassPropertyToString(apiItem: Contracts.ApiClassPropertyDto, alias?: string): string {
         const name = alias || apiItem.Name;
 
