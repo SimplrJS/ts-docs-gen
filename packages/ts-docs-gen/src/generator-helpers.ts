@@ -143,7 +143,11 @@ export namespace GeneratorHelpers {
         return apiItem.ApiKind === itemKind;
     }
 
-    export function MergePluginResultData<T extends PluginResultData>(a: T, b: Partial<PluginResultData>): T {
+    export function MergePluginResultData<T extends PluginResultData>(a: T, b: Partial<PluginResultData> | undefined): T {
+        if (b == null) {
+            return a;
+        }
+
         a.Headings = a.Headings.concat(b.Headings || []);
         a.Members = (a.Members || []).concat(b.Members || []);
         a.Result = a.Result.concat(b.Result || []);
