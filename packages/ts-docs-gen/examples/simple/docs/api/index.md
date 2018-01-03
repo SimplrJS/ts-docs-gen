@@ -1,10 +1,10 @@
-[InterfaceDeclaration-1]: index.md#foo
-[InterfaceDeclaration-2]: index.md#boo
-[InterfaceDeclaration-4]: index.md#myconstrainttype
-[InterfaceDeclaration-9]: index.md#dictionary
-[InterfaceDeclaration-9]: index.md#dictionary
-[InterfaceDeclaration-6]: index.md#objectsinterface
-[InterfaceDeclaration-12]: index.md#monsterinterface
+[InterfaceDeclaration-1]: index.md#interface-foo
+[InterfaceDeclaration-2]: index.md#interface-boo
+[InterfaceDeclaration-4]: index.md#interface-myconstrainttype
+[InterfaceDeclaration-9]: index.md#interface-dictionary
+[InterfaceDeclaration-9]: index.md#interface-dictionary
+[InterfaceDeclaration-6]: index.md#interface-objectsinterface
+[InterfaceDeclaration-12]: index.md#interface-monsterinterface
 [ClassDeclaration-0]: index/hello.md#hello
 # index
 
@@ -345,7 +345,7 @@ interface MonsterInterface<TValue extends Object = {}> extends ObjectsInterface 
     <T>(key?: string | undefined): { someProperty: T; };
     <T>(key: number): { someProperty: T; };
     readonly [key: string]: TValue;
-    readonly objectOne?: TValue;
+    readonly objectOne: TValue;
     objectTwo: TValue;
 }
 ```

@@ -133,6 +133,7 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
 
     public Render(data: PluginOptions<Contracts.ApiInterfaceDto>): PluginResult {
         const alias = data.Reference.Alias;
+        const header = GeneratorHelpers.ApiInterfaceToSimpleString(alias, data.ApiItem);
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
             ApiItem: data.ApiItem,
@@ -140,7 +141,7 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
             Headings: [
                 {
                     ApiItemId: data.Reference.Id,
-                    Heading: alias
+                    Heading: header
                 }
             ]
         };
@@ -153,7 +154,7 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
 
         const interfaceString = GeneratorHelpers.ApiInterfaceToString(data.ApiItem, data.ExtractedData);
         const builder = new MarkdownBuilder()
-            .Header(GeneratorHelpers.ApiInterfaceToSimpleString(alias, data.ApiItem), 2)
+            .Header(header, 2)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Code(interfaceString, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
