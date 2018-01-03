@@ -24,7 +24,6 @@ export class ApiCallablePlugin implements Plugin<CallableApiItem> {
         parameters: Contracts.ApiParameterDto[],
         typeParameters: Contracts.ApiTypeParameterDto[]
     ): string {
-
         switch (apiItem.ApiKind) {
             case Contracts.ApiItemKinds.Construct: {
                 return GeneratorHelpers.ApiConstructToString(typeParameters, parameters, apiItem.ReturnType);
@@ -58,7 +57,7 @@ export class ApiCallablePlugin implements Plugin<CallableApiItem> {
             usedReferences.push(...table.References);
 
             builder
-                .Text("Type parameters:")
+                .Bold("Type parameters:")
                 .EmptyLine()
                 .Text(table.Text)
                 .EmptyLine();
@@ -69,7 +68,7 @@ export class ApiCallablePlugin implements Plugin<CallableApiItem> {
             usedReferences.push(...table.References);
 
             builder
-                .Text("Parameters:")
+                .Bold("Parameters:")
                 .EmptyLine()
                 .Text(table.Text)
                 .EmptyLine();
@@ -79,7 +78,7 @@ export class ApiCallablePlugin implements Plugin<CallableApiItem> {
             const renderedReturnType = GeneratorHelpers.TypeDtoToMarkdownString(data.ApiItem.ReturnType);
 
             builder
-                .Text("Return type:")
+                .Bold("Return type:")
                 .EmptyLine()
                 .Text(renderedReturnType.Text);
 

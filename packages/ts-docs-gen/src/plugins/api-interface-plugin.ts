@@ -57,15 +57,16 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
 
         const builder = new MarkdownBuilder()
             .EmptyLine()
-            .Header("Extends", 3)
-            .EmptyLine();
+            .Header("Extends", 3);
 
         const references = [];
 
         for (const type of apiItem.Extends) {
             const typeDto = GeneratorHelpers.TypeDtoToMarkdownString(type);
             references.push(...typeDto.References);
-            builder.Text(typeDto.Text);
+            builder
+                .EmptyLine()
+                .Text(typeDto.Text);
         }
 
         return {

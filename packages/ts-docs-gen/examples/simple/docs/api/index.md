@@ -19,6 +19,7 @@ interface ExtendedBar extends Foo<number>, Boo {
 ### Extends
 
 [Foo][InterfaceDeclaration-1]&#60;number&#62;
+
 [Boo][InterfaceDeclaration-2]
 
 ### Properties
@@ -79,20 +80,20 @@ interface AnotherInterface {
 <TValue>(param1: TValue, param2: TValue): boolean
 ```
 
-Type parameters:
+**Type parameters:**
 
 | Name   |
 | ------ |
 | TValue |
 
-Parameters:
+**Parameters:**
 
 | Name   | Type   |
 | ------ | ------ |
 | param1 | TValue |
 | param2 | TValue |
 
-Return type:
+**Return type:**
 
 true | false
 
@@ -158,13 +159,13 @@ interface InterfaceWithCall {
 <T>(): { someProperty: T; }
 ```
 
-Type parameters:
+**Type parameters:**
 
 | Name |
 | ---- |
 | T    |
 
-Return type:
+**Return type:**
 
 { someProperty: T; }
 
@@ -207,7 +208,7 @@ interface InterfaceWithMethod<T> {
 someMethodOne(): T
 ```
 
-Return type:
+**Return type:**
 
 T
 
@@ -215,13 +216,13 @@ T
 someMethodTwo<TReturn>(): TReturn
 ```
 
-Type parameters:
+**Type parameters:**
 
 | Name    |
 | ------- |
 | TReturn |
 
-Return type:
+**Return type:**
 
 TReturn
 
@@ -246,7 +247,7 @@ interface Dictionary<TValue> {
 new (): Dictionary<TValue>
 ```
 
-Return type:
+**Return type:**
 
 [Dictionary][InterfaceDeclaration-9]&#60;TValue&#62;
 
@@ -275,19 +276,19 @@ interface MethodsInterface {
 <TValue>(arg: TValue): void
 ```
 
-Type parameters:
+**Type parameters:**
 
 | Name   |
 | ------ |
 | TValue |
 
-Parameters:
+**Parameters:**
 
 | Name | Type   |
 | ---- | ------ |
 | arg  | TValue |
 
-Return type:
+**Return type:**
 
 void
 
@@ -297,13 +298,13 @@ void
 someMethod<T>(): string
 ```
 
-Type parameters:
+**Type parameters:**
 
 | Name |
 | ---- |
 | T    |
 
-Return type:
+**Return type:**
 
 string
 
@@ -344,13 +345,13 @@ interface MonsterInterface<TValue extends Object = {}> extends ObjectsInterface 
 new <T>(): MonsterInterface<T>
 ```
 
-Type parameters:
+**Type parameters:**
 
 | Name |
 | ---- |
 | T    |
 
-Return type:
+**Return type:**
 
 [MonsterInterface][InterfaceDeclaration-12]&#60;T&#62;
 
@@ -358,13 +359,13 @@ Return type:
 new (someParameter: string): string
 ```
 
-Parameters:
+**Parameters:**
 
 | Name          | Type   |
 | ------------- | ------ |
 | someParameter | string |
 
-Return type:
+**Return type:**
 
 string
 
@@ -374,13 +375,13 @@ string
 <T>(): { someProperty: T; }
 ```
 
-Type parameters:
+**Type parameters:**
 
 | Name |
 | ---- |
 | T    |
 
-Return type:
+**Return type:**
 
 { someProperty: T; }
 
@@ -388,19 +389,19 @@ Return type:
 <T>(key?: string | undefined): { someProperty: T; }
 ```
 
-Type parameters:
+**Type parameters:**
 
 | Name |
 | ---- |
 | T    |
 
-Parameters:
+**Parameters:**
 
 | Name | Type                    | Optional |
 | ---- | ----------------------- | -------- |
 | key  | undefined &#124; string | Yes      |
 
-Return type:
+**Return type:**
 
 { someProperty: T; }
 
@@ -408,19 +409,19 @@ Return type:
 <T>(key: number): { someProperty: T; }
 ```
 
-Type parameters:
+**Type parameters:**
 
 | Name |
 | ---- |
 | T    |
 
-Parameters:
+**Parameters:**
 
 | Name | Type   |
 | ---- | ------ |
 | key  | number |
 
-Return type:
+**Return type:**
 
 { someProperty: T; }
 
