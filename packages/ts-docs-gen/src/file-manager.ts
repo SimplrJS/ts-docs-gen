@@ -14,6 +14,7 @@ interface OutputData {
 
 type RenderedItemList = Array<PluginResult | OutputData>;
 
+// TODO: remove unused files before generating docs.
 export class FileManager {
     /**
      * <FileLocation, RenderedItems>

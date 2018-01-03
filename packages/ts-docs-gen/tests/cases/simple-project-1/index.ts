@@ -88,7 +88,6 @@ export interface MyInterface {
 }
 // #endregion Interfaces
 
-
 // #region Enums
 /**
  * Simple list.
