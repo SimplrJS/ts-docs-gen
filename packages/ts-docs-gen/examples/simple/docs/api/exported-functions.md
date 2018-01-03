@@ -1,23 +1,25 @@
 # exported-functions
 
-## Foo()
+## Functions
+
+### Foo()
 
 ```typescript
 function Foo(): string
 ```
 
-### Return type
+**Return type**
 
 string
 
 
-## Bar()
+### Bar()
 
 ```typescript
 function Bar(): string
 ```
 
-### Return type
+**Return type**
 
 string
 

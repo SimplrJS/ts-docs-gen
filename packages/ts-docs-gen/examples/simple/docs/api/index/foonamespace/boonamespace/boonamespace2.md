@@ -1,12 +1,14 @@
 # BooNamespace2
 
-## Hello
+## Variables
+
+### Hello
 
 ```typescript
 const Hello: "World!";
 ```
 
-### Type
+**Type**
 
 "World!"
 

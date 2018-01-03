@@ -71,7 +71,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
 
                     if (data.IsPluginResultExists(reference)) {
                         builder
-                            .Text(md => md.Header(md.Link(apiItem.Name, reference.Id, true), 2))
+                            .Text(md => md.Header(md.Link(apiItem.Name, reference.Id, true), 3))
                             .EmptyLine();
                         pluginResultData.UsedReferences.push(reference.Id);
                     } else {
@@ -85,7 +85,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                                 });
 
                                 builder
-                                    .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, reference.Id, true), 2))
+                                    .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, reference.Id, true), 3))
                                     .EmptyLine();
                                 pluginResultData.UsedReferences.push(reference.Id);
                                 break;

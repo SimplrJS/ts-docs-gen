@@ -292,13 +292,13 @@ export interface MyInterface {
 //  */
 // export type Hello = Uogos;
 
-// export namespace FooNamespace {
-//     export namespace BooNamespace {
-//         export namespace BooNamespace2 {
-//             export const Hello = "World!";
-//         }
-//     }
-// }
+export namespace FooNamespace {
+    export namespace BooNamespace {
+        export namespace BooNamespace2 {
+            export const Hello = "World!";
+        }
+    }
+}
 
 export class Hello {
     /**
