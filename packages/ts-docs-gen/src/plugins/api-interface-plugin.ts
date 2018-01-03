@@ -25,20 +25,20 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
         return true;
     }
 
-    private renderTypeParameters(pluginOptions: PluginOptions<Contracts.ApiInterfaceDto>): PluginResultData {
+    private renderTypeParameters(pluginOptions: PluginOptions<Contracts.ApiInterfaceDto>): PluginResultData | undefined {
         const typeParameters = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(
             pluginOptions.ApiItem.TypeParameters,
             pluginOptions.ExtractedData
         );
 
         if (typeParameters.length === 0) {
-            return GeneratorHelpers.GetDefaultPluginResultData();
+            return undefined;
         }
 
         const typeParametersTable = GeneratorHelpers.ApiTypeParametersTableToString(typeParameters);
         const text = new MarkdownBuilder()
             .EmptyLine()
-            .Header("Type parameters", 3)
+            .Bold("Type parameters")
             .EmptyLine()
             .Text(typeParametersTable.Text)
             .GetOutput();
@@ -50,14 +50,14 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
         };
     }
 
-    private renderConstraintTypes(apiItem: Contracts.ApiInterfaceDto): PluginResultData {
+    private renderConstraintTypes(apiItem: Contracts.ApiInterfaceDto): PluginResultData | undefined {
         if (apiItem.Extends.length === 0) {
-            return GeneratorHelpers.GetDefaultPluginResultData();
+            return undefined;
         }
 
         const builder = new MarkdownBuilder()
             .EmptyLine()
-            .Header("Extends", 3);
+            .Bold("Extends");
 
         const references = [];
 
@@ -76,19 +76,19 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
         };
     }
 
-    private renderPropertyMembers(memberItems: ExtractedItemDto[]): PluginResultData {
+    private renderPropertyMembers(memberItems: ExtractedItemDto[]): PluginResultData | undefined {
         const apiItems = memberItems.filter<ExtractedItemDto<Contracts.ApiPropertyDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Property)
         ).map(x => x.ApiItem);
 
         if (apiItems.length === 0) {
-            return GeneratorHelpers.GetDefaultPluginResultData();
+            return undefined;
         }
 
         const table = GeneratorHelpers.ApiPropertiesToTableString(apiItems);
         const builder = new MarkdownBuilder()
             .EmptyLine()
-            .Header("Properties", 3)
+            .Header("Properties", 4)
             .EmptyLine()
             .Text(table.Text);
 
@@ -111,15 +111,15 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
         apiItemKind: Contracts.ApiItemKinds,
         memberItems: ExtractedItemDto[],
         getPluginResult: GetItemPluginResultHandler
-    ): PluginResultData {
+    ): PluginResultData | undefined {
         const items = memberItems.filter<ExtractedItemDto>(this.isReferenceOfApiItemKind.bind(undefined, apiItemKind));
 
         if (items.length === 0) {
-            return GeneratorHelpers.GetDefaultPluginResultData();
+            return undefined;
         }
 
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        pluginResult.Result.push("", MarkdownGenerator.Header(title, 3));
+        pluginResult.Result.push("", MarkdownGenerator.Header(title, 4));
 
         for (const item of items) {
             pluginResult.Result.push("");
@@ -132,8 +132,7 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
     }
 
     public Render(data: PluginOptions<Contracts.ApiInterfaceDto>): PluginResult {
-        const alias = data.Reference.Alias;
-        const header = GeneratorHelpers.ApiInterfaceToSimpleString(alias, data.ApiItem);
+        const heading = data.Reference.Alias;
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
             ApiItem: data.ApiItem,
@@ -141,7 +140,7 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
             Headings: [
                 {
                     ApiItemId: data.Reference.Id,
-                    Heading: header
+                    Heading: heading
                 }
             ]
         };
@@ -154,7 +153,7 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
 
         const interfaceString = GeneratorHelpers.ApiInterfaceToString(data.ApiItem, data.ExtractedData);
         const builder = new MarkdownBuilder()
-            .Header(header, 2)
+            .Header(heading, 3)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Code(interfaceString, GeneratorHelpers.DEFAULT_CODE_OPTIONS);

@@ -24,12 +24,12 @@ export class ApiVariablePlugin implements Plugin<Contracts.ApiVariableDto> {
         const typeStringDto = GeneratorHelpers.TypeDtoToMarkdownString(data.ApiItem.Type);
 
         const builder = new MarkdownBuilder()
-            .Header(heading, 2)
+            .Header(heading, 3)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Code(GeneratorHelpers.ApiVariableToString(data.ApiItem), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
-            .Header("Type", 3)
+            .Bold("Type")
             .EmptyLine()
             .Text(typeStringDto.Text);
 

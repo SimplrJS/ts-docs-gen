@@ -37,7 +37,7 @@ export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
             data.ExtractedData
         );
         const builder = new MarkdownBuilder()
-            .Header(heading, 2)
+            .Header(heading, 3)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .EmptyLine()

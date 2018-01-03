@@ -22,7 +22,7 @@ export class ApiDefaultPlugin implements Plugin<Contracts.ApiItemDto> {
         ];
 
         const result: string[] = [
-            MarkdownGenerator.Header(heading, 2)
+            MarkdownGenerator.Header(heading, 3)
         ];
 
         return {

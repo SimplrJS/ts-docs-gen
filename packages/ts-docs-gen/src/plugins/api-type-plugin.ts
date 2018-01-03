@@ -25,12 +25,12 @@ export class ApiTypePlugin implements Plugin<Contracts.ApiTypeDto> {
 
         // Header
         const builder = new MarkdownBuilder()
-            .Header(heading, 2)
+            .Header(heading, 3)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Code(GeneratorHelpers.ApiTypeToString(data.ApiItem), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
-            .Header("Type", 3)
+            .Bold("Type")
             .EmptyLine()
             .Text(typeStringDto.Text);
 

@@ -25,7 +25,7 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
 
         const table = GeneratorHelpers.ApiParametersToTableString(parameters);
         const builder = new MarkdownBuilder()
-            .Header("Parameters", 3)
+            .Bold("Parameters")
             .EmptyLine()
             .Text(table.Text)
             .EmptyLine();
@@ -43,7 +43,7 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
 
         const typeParametersTable = GeneratorHelpers.ApiTypeParametersTableToString(typeParameters);
         const text = new MarkdownBuilder()
-            .Header("Type parameters", 3)
+            .Bold("Type parameters")
             .EmptyLine()
             .Text(typeParametersTable.Text)
             .EmptyLine()
@@ -66,7 +66,7 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
         const parsedReturnType = GeneratorHelpers.TypeDtoToMarkdownString(typeDto);
 
         const text = new MarkdownBuilder()
-            .Header("Return type", 3)
+            .Bold("Return type")
             .EmptyLine()
             .Text(parsedReturnType.Text)
             .EmptyLine()
@@ -103,7 +103,7 @@ export class ApiFunctionPlugin implements Plugin<Contracts.ApiFunctionDto> {
         const resolvedReturnTypeDto = this.resolveReturnType(data.ApiItem.ReturnType);
 
         const builder = new MarkdownBuilder()
-            .Header(GeneratorHelpers.MethodToSimpleString(alias || data.ApiItem.Name, parameters), 2)
+            .Header(GeneratorHelpers.MethodToSimpleString(alias || data.ApiItem.Name, parameters), 3)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Code(GeneratorHelpers.ApiFunctionToString(
