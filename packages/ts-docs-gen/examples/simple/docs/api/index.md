@@ -19,7 +19,6 @@ interface ExtendedBar extends Foo<number>, Boo {
 ### Extends
 
 [Foo][InterfaceDeclaration-1]&#60;number&#62;
-
 [Boo][InterfaceDeclaration-2]
 
 ### Properties
@@ -97,9 +96,6 @@ Return type:
 
 true | false
 
----
-
-
 ## interface MyConstraintType
 
 ```typescript
@@ -172,9 +168,6 @@ Return type:
 
 { someProperty: T; }
 
----
-
-
 ## interface InterfaceWithConstraintType
 
 ```typescript
@@ -218,8 +211,6 @@ Return type:
 
 T
 
----
-
 ```typescript
 someMethodTwo<TReturn>(): TReturn
 ```
@@ -233,9 +224,6 @@ Type parameters:
 Return type:
 
 TReturn
-
----
-
 
 ## interface Dictionary
 
@@ -262,8 +250,6 @@ Return type:
 
 [Dictionary][InterfaceDeclaration-9]&#60;TValue&#62;
 
----
-
 ### Index signatures
 
 ```typescript
@@ -273,9 +259,6 @@ Return type:
 Index `key` - string
 
 Type - TValue
-
----
-
 
 ## interface MethodsInterface
 
@@ -308,8 +291,6 @@ Return type:
 
 void
 
----
-
 ### Methods
 
 ```typescript
@@ -325,9 +306,6 @@ Type parameters:
 Return type:
 
 string
-
----
-
 
 ## interface MonsterInterface
 
@@ -376,8 +354,6 @@ Return type:
 
 [MonsterInterface][InterfaceDeclaration-12]&#60;T&#62;
 
----
-
 ```typescript
 new (someParameter: string): string
 ```
@@ -391,8 +367,6 @@ Parameters:
 Return type:
 
 string
-
----
 
 ### Call
 
@@ -409,8 +383,6 @@ Type parameters:
 Return type:
 
 { someProperty: T; }
-
----
 
 ```typescript
 <T>(key?: string | undefined): { someProperty: T; }
@@ -432,8 +404,6 @@ Return type:
 
 { someProperty: T; }
 
----
-
 ```typescript
 <T>(key: number): { someProperty: T; }
 ```
@@ -454,8 +424,6 @@ Return type:
 
 { someProperty: T; }
 
----
-
 ### Index signatures
 
 ```typescript
@@ -467,8 +435,6 @@ Readonly.
 Index `key` - string
 
 Type - TValue
-
----
 
 ### Properties
 
@@ -496,8 +462,6 @@ Index `key` - string
 
 Type - string | number
 
----
-
 ```typescript
 [key: number]: string
 ```
@@ -505,9 +469,6 @@ Type - string | number
 Index `key` - number
 
 Type - string
-
----
-
 
 ## interface StringsDictionary
 
@@ -526,9 +487,6 @@ interface StringsDictionary {
 Index `key` - string
 
 Type - string
-
----
-
 
 ## interface MyInterface
 
