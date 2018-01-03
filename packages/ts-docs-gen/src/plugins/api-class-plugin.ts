@@ -11,6 +11,11 @@ import {
     PluginResultData
 } from "../contracts/plugin";
 
+interface RenderMembers {
+    Heading: string;
+    Kinds: Contracts.ApiItemKinds[];
+}
+
 export class ApiClassPlugin implements Plugin<Contracts.ApiClassDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.Class];
@@ -26,26 +31,42 @@ export class ApiClassPlugin implements Plugin<Contracts.ApiClassDto> {
         const pluginResultData = GeneratorHelpers.GetDefaultPluginResultData();
         const builder = new MarkdownBuilder();
 
-        const list: Array<[Contracts.ApiItemKinds, string]> = [
-            [Contracts.ApiItemKinds.Index, "Index"],
-            [Contracts.ApiItemKinds.ClassConstructor, "Constructor"],
-            [Contracts.ApiItemKinds.ClassMethod, "Methods"],
-            [Contracts.ApiItemKinds.ClassProperty, "Properties"]
+        const list: RenderMembers[] = [
+            {
+                Heading: "Index",
+                Kinds: [Contracts.ApiItemKinds.Index]
+            },
+            {
+                Heading: "Constructor",
+                Kinds: [Contracts.ApiItemKinds.ClassConstructor]
+            },
+            {
+                Heading: "Methods",
+                Kinds: [Contracts.ApiItemKinds.ClassMethod]
+            },
+            {
+                Heading: "Properties",
+                Kinds: [
+                    Contracts.ApiItemKinds.ClassProperty,
+                    Contracts.ApiItemKinds.GetAccessor,
+                    Contracts.ApiItemKinds.SetAccessor,
+                ]
+            }
         ];
 
-        for (const [kind, heading] of list) {
-            const pluginResultsByKind = renderedItems.filter(x => x.ApiItem.ApiKind === kind);
+        for (const memberKind of list) {
+            const pluginResultsByKind = renderedItems.filter(x => memberKind.Kinds.indexOf(x.ApiItem.ApiKind) !== -1);
 
             if (pluginResultsByKind.length > 0) {
                 builder
-                    .Header(heading, 2)
+                    .Header(memberKind.Heading, 2)
                     .EmptyLine();
 
-                for (const item of pluginResultsByKind) {
-                    GeneratorHelpers.MergePluginResultData(pluginResultData, item);
+                for (const member of pluginResultsByKind) {
+                    GeneratorHelpers.MergePluginResultData(pluginResultData, member);
 
                     builder
-                        .Text(item.Result)
+                        .Text(member.Result)
                         .EmptyLine();
                 }
             }

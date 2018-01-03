@@ -588,6 +588,26 @@ export namespace GeneratorHelpers {
         return `${isReadOnlyString}${apiItem.Name}${isOptionalString}: ${returnTypeString}`;
     }
 
+    export function ApiAccessorToString(
+        apiItem: Contracts.ApiGetAccessorDto | Contracts.ApiSetAccessorDto,
+        type: Contracts.TypeDto | undefined,
+        alias?: string
+    ): string {
+        const name = alias || apiItem.Name;
+        const abstract = apiItem.IsAbstract ? " abstract" : "";
+        const $static = apiItem.IsStatic ? " static" : "";
+
+        const typeString = type != null ? type.Text : "???";
+        let accessorType: string;
+        if (apiItem.ApiKind === Contracts.ApiItemKinds.SetAccessor) {
+            accessorType = "set";
+        } else {
+            accessorType = "get";
+        }
+
+        return `${apiItem.AccessModifier}${$static}${abstract} ${accessorType} ${name}: ${typeString};`;
+    }
+
     // TODO: add description from @template jsdoc tag.
     export function ApiTypeParametersTableToString(typeParameters: Contracts.ApiTypeParameterDto[]): ReferenceDto<string[]> {
         if (typeParameters.length === 0) {
@@ -698,7 +718,11 @@ export namespace GeneratorHelpers {
         };
     }
 
-    export function MergePluginResultData<T extends PluginResultData>(a: T, b: Partial<PluginResultData>): T {
+    export function MergePluginResultData<T extends PluginResultData>(a: T, b: Partial<PluginResultData> | undefined): T {
+        if (b == null) {
+            return a;
+        }
+
         a.Headings = a.Headings.concat(b.Headings || []);
         a.Members = (a.Members || []).concat(b.Members || []);
         a.Result = a.Result.concat(b.Result || []);
