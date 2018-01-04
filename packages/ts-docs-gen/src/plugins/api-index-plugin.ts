@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { MarkdownBuilder } from "@simplrjs/markdown";
+import { MarkdownBuilder, MarkdownGenerator as md } from "@simplrjs/markdown";
 
 import { SupportedApiItemKindType, PluginResult, PluginOptions } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
@@ -44,11 +44,11 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
         // }
 
         pluginResult.Result = builder
-            .Text(md => `${md.Bold("Index")} ${md.InlineCode(parameter.Name)} - ${parameterType.Text}`)
-            .EmptyLine()
-            .Text(md => `${md.Bold("Type")} - ${indexType.Text}`)
+            .UnorderedList([
+                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Name)} - ${parameterType.Text}`,
+                `${md.Italic("Type")} ${indexType.Text}`
+            ])
             .GetOutput();
-
 
         return pluginResult;
     }
