@@ -2,15 +2,12 @@ import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { GeneratorHelpers } from "../generator-helpers";
-import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginHeading } from "../contracts/plugin";
+import { SupportedApiItemKindType, PluginOptions, PluginResult, PluginHeading } from "../contracts/plugin";
+import { BasePlugin } from "../abstractions/base-plugin";
 
-export class ApiTypePlugin implements Plugin<Contracts.ApiTypeDto> {
+export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.Type];
-    }
-
-    public CheckApiItem(item: Contracts.ApiItemDto): boolean {
-        return true;
     }
 
     public Render(data: PluginOptions<Contracts.ApiTypeDto>): PluginResult {
@@ -21,6 +18,7 @@ export class ApiTypePlugin implements Plugin<Contracts.ApiTypeDto> {
                 ApiItemId: data.Reference.Id
             }
         ];
+
         const typeStringDto = GeneratorHelpers.TypeDtoToMarkdownString(data.ApiItem.Type);
 
         // Header
