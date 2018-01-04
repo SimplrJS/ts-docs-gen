@@ -50,7 +50,7 @@ interface ExtendedBar extends Foo<number>, Boo {
 
 [Boo][InterfaceDeclaration-2]
 
-#### Properties
+**Properties**
 
 | Name       | Type                  |
 | ---------- | --------------------- |
@@ -74,7 +74,7 @@ interface Foo<TType> {
 | ----- |
 | TType |
 
-#### Properties
+**Properties**
 
 | Name    | Type   |
 | ------- | ------ |
@@ -92,7 +92,7 @@ interface Boo {
 }
 ```
 
-#### Properties
+**Properties**
 
 | Name | Type                  |
 | ---- | --------------------- |
@@ -141,7 +141,7 @@ interface MyConstraintType {
 }
 ```
 
-#### Properties
+**Properties**
 
 | Name       | Type   |
 | ---------- | ------ |
@@ -161,7 +161,7 @@ interface MyDefaultType extends MyConstraintType {
 
 [MyConstraintType][InterfaceDeclaration-4]
 
-#### Properties
+**Properties**
 
 | Name            | Type   |
 | --------------- | ------ |
@@ -178,7 +178,7 @@ interface ObjectsInterface {
 }
 ```
 
-#### Properties
+**Properties**
 
 | Name      | Type   |
 | --------- | ------ |
@@ -225,7 +225,7 @@ interface InterfaceWithConstraintType extends Dictionary<string> {
 
 [Dictionary][InterfaceDeclaration-9]&#60;string&#62;
 
-#### Properties
+**Properties**
 
 | Name         | Type   |
 | ------------ | ------ |
@@ -384,7 +384,7 @@ interface MonsterInterface<TValue extends Object = {}> extends ObjectsInterface 
 
 | Name   | Constraint type | Default type |
 | ------ | --------------- | ------------ |
-| TValue | Object          | \{\}         |
+| TValue | Object          | {}           |
 
 **Extends**
 
@@ -485,7 +485,7 @@ readonly [key: string]: TValue
 * *Parameter* `key` - string
 * *Type* TValue
 
-#### Properties
+**Properties**
 
 | Name      | Type   |
 | --------- | ------ |
@@ -550,7 +550,7 @@ interface MyInterface {
 }
 ```
 
-#### Properties
+**Properties**
 
 | Name            | Type   |
 | --------------- | ------ |
@@ -568,7 +568,7 @@ interface Props {
 }
 ```
 
-#### Properties
+**Properties**
 
 | Name | Type   |
 | ---- | ------ |

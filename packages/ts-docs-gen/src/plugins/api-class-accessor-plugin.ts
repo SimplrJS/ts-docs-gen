@@ -3,11 +3,11 @@ import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
-import { PropertyLikePlugin } from "../abstractions/property-like-plugin";
+import { BasePlugin } from "../abstractions/base-plugin";
 
 export type Kind = Contracts.ApiSetAccessorDto | Contracts.ApiGetAccessorDto;
 
-export class ApiClassAccessorPlugin extends PropertyLikePlugin<Kind> {
+export class ApiClassAccessorPlugin extends BasePlugin<Kind> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [
             GeneratorHelpers.ApiItemKinds.GetAccessor,

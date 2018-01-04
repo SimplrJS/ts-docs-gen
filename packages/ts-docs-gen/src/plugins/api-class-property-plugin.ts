@@ -3,9 +3,9 @@ import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
-import { PropertyLikePlugin } from "../abstractions/property-like-plugin";
+import { BasePlugin } from "../abstractions/base-plugin";
 
-export class ApiClassPropertyPlugin extends PropertyLikePlugin<Contracts.ApiClassPropertyDto> {
+export class ApiClassPropertyPlugin extends BasePlugin<Contracts.ApiClassPropertyDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.ClassProperty];
     }
