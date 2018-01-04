@@ -31,6 +31,8 @@ interface ExtendedBar extends Foo<number>, Boo {
 | ---------- | --------------------- |
 | OtherStuff | Array&#60;string&#62; |
 
+----------
+
 ### Foo
 
 ```typescript
@@ -55,6 +57,8 @@ interface Foo<TType> {
 | Surname | string |
 | Type    | TType  |
 
+----------
+
 ### Boo
 
 ```typescript
@@ -68,6 +72,8 @@ interface Boo {
 | Name | Type                  |
 | ---- | --------------------- |
 | Boos | Array&#60;string&#62; |
+
+----------
 
 ### AnotherInterface
 
@@ -100,6 +106,8 @@ interface AnotherInterface {
 
 true | false
 
+----------
+
 ### MyConstraintType
 
 ```typescript
@@ -113,6 +121,8 @@ interface MyConstraintType {
 | Name       | Type   |
 | ---------- | ------ |
 | myProperty | string |
+
+----------
 
 ### MyDefaultType
 
@@ -132,6 +142,8 @@ interface MyDefaultType extends MyConstraintType {
 | --------------- | ------ |
 | anotherProperty | number |
 
+----------
+
 ### ObjectsInterface
 
 ```typescript
@@ -147,6 +159,8 @@ interface ObjectsInterface {
 | --------- | ------ |
 | objectOne | Object |
 | objectTwo | Object |
+
+----------
 
 ### InterfaceWithCall
 
@@ -172,6 +186,8 @@ interface InterfaceWithCall {
 
 { someProperty: T; }
 
+----------
+
 ### InterfaceWithConstraintType
 
 ```typescript
@@ -189,6 +205,8 @@ interface InterfaceWithConstraintType extends Dictionary<string> {
 | Name         | Type   |
 | ------------ | ------ |
 | someProperty | string |
+
+----------
 
 ### InterfaceWithMethod
 
@@ -229,6 +247,8 @@ someMethodTwo<TReturn>(): TReturn
 
 TReturn
 
+----------
+
 ### Dictionary
 
 ```typescript
@@ -263,6 +283,8 @@ new (): Dictionary<TValue>
 Index `key` - string
 
 Type - TValue
+
+----------
 
 ### MethodsInterface
 
@@ -310,6 +332,8 @@ someMethod<T>(): string
 **Return type:**
 
 string
+
+----------
 
 ### MonsterInterface
 
@@ -447,6 +471,8 @@ Type - TValue
 | objectOne | TValue |
 | objectTwo | TValue |
 
+----------
+
 ### SomeInterface
 
 ```typescript
@@ -474,6 +500,8 @@ Index `key` - number
 
 Type - string
 
+----------
+
 ### StringsDictionary
 
 ```typescript
@@ -491,6 +519,8 @@ interface StringsDictionary {
 Index `key` - string
 
 Type - string
+
+----------
 
 ### MyInterface
 

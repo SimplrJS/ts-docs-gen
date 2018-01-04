@@ -13,6 +13,8 @@ function Foo(): string
 string
 
 
+----------
+
 ### Bar()
 
 ```typescript

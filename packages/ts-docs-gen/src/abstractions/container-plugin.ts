@@ -103,6 +103,12 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                             }
                         }
                     }
+
+                    if ((References.indexOf(reference) + 1) !== References.length) {
+                        builder
+                            .HorizontalRule(undefined, 10)
+                            .EmptyLine();
+                    }
                 }
             }
         }

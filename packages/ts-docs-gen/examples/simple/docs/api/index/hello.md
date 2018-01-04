@@ -31,6 +31,8 @@ public get Foo: string;
 
 string
 
+----------
+
 ### set Foo
 
 ```typescript
@@ -40,6 +42,8 @@ public set Foo: string;
 #### Type
 
 string
+
+----------
 
 ### set Bar
 
