@@ -1,14 +1,42 @@
-[InterfaceDeclaration-1]: index.md#interface-foo
-[InterfaceDeclaration-2]: index.md#interface-boo
-[InterfaceDeclaration-4]: index.md#interface-myconstrainttype
-[InterfaceDeclaration-9]: index.md#interface-dictionary
-[InterfaceDeclaration-9]: index.md#interface-dictionary
-[InterfaceDeclaration-6]: index.md#interface-objectsinterface
-[InterfaceDeclaration-12]: index.md#interface-monsterinterface
+[InterfaceDeclaration-16]: index.md#props
+[InterfaceDeclaration-16]: index.md#props
+[InterfaceDeclaration-1]: index.md#foo
+[InterfaceDeclaration-2]: index.md#boo
+[InterfaceDeclaration-4]: index.md#myconstrainttype
+[InterfaceDeclaration-9]: index.md#dictionary
+[InterfaceDeclaration-9]: index.md#dictionary
+[InterfaceDeclaration-6]: index.md#objectsinterface
+[InterfaceDeclaration-12]: index.md#monsterinterface
 [ClassDeclaration-0]: index/hello.md#hello
 # index
 
-## interface ExtendedBar
+## Functions
+
+### Component(arg)
+
+```typescript
+function Component<T extends Props = Props>(arg: T): void
+```
+
+**Type parameters**
+
+| Name | Constraint type                  | Default type                     |
+| ---- | -------------------------------- | -------------------------------- |
+| T    | [Props][InterfaceDeclaration-16] | [Props][InterfaceDeclaration-16] |
+
+**Parameters**
+
+| Name | Type |
+| ---- | ---- |
+| arg  | T    |
+
+**Return type**
+
+void
+
+## Interfaces
+
+### ExtendedBar
 
 ```typescript
 interface ExtendedBar extends Foo<number>, Boo {
@@ -16,19 +44,21 @@ interface ExtendedBar extends Foo<number>, Boo {
 }
 ```
 
-### Extends
+**Extends**
 
 [Foo][InterfaceDeclaration-1]&#60;number&#62;
 
 [Boo][InterfaceDeclaration-2]
 
-### Properties
+**Properties**
 
 | Name       | Type                  |
 | ---------- | --------------------- |
 | OtherStuff | Array&#60;string&#62; |
 
-## interface Foo
+----------
+
+### Foo
 
 ```typescript
 interface Foo<TType> {
@@ -38,13 +68,13 @@ interface Foo<TType> {
 }
 ```
 
-### Type parameters
+**Type parameters**
 
 | Name  |
 | ----- |
 | TType |
 
-### Properties
+**Properties**
 
 | Name    | Type   |
 | ------- | ------ |
@@ -52,7 +82,9 @@ interface Foo<TType> {
 | Surname | string |
 | Type    | TType  |
 
-## interface Boo
+----------
+
+### Boo
 
 ```typescript
 interface Boo {
@@ -60,13 +92,15 @@ interface Boo {
 }
 ```
 
-### Properties
+**Properties**
 
 | Name | Type                  |
 | ---- | --------------------- |
 | Boos | Array&#60;string&#62; |
 
-## interface AnotherInterface
+----------
+
+### AnotherInterface
 
 ```typescript
 interface AnotherInterface {
@@ -74,30 +108,32 @@ interface AnotherInterface {
 }
 ```
 
-### Call
+#### Call
 
 ```typescript
 <TValue>(param1: TValue, param2: TValue): boolean
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name   |
 | ------ |
 | TValue |
 
-**Parameters:**
+**Parameters**
 
 | Name   | Type   |
 | ------ | ------ |
 | param1 | TValue |
 | param2 | TValue |
 
-**Return type:**
+**Return type**
 
 true | false
 
-## interface MyConstraintType
+----------
+
+### MyConstraintType
 
 ```typescript
 interface MyConstraintType {
@@ -105,13 +141,15 @@ interface MyConstraintType {
 }
 ```
 
-### Properties
+**Properties**
 
 | Name       | Type   |
 | ---------- | ------ |
 | myProperty | string |
 
-## interface MyDefaultType
+----------
+
+### MyDefaultType
 
 ```typescript
 interface MyDefaultType extends MyConstraintType {
@@ -119,17 +157,19 @@ interface MyDefaultType extends MyConstraintType {
 }
 ```
 
-### Extends
+**Extends**
 
 [MyConstraintType][InterfaceDeclaration-4]
 
-### Properties
+**Properties**
 
 | Name            | Type   |
 | --------------- | ------ |
 | anotherProperty | number |
 
-## interface ObjectsInterface
+----------
+
+### ObjectsInterface
 
 ```typescript
 interface ObjectsInterface {
@@ -138,14 +178,16 @@ interface ObjectsInterface {
 }
 ```
 
-### Properties
+**Properties**
 
 | Name      | Type   |
 | --------- | ------ |
 | objectOne | Object |
 | objectTwo | Object |
 
-## interface InterfaceWithCall
+----------
+
+### InterfaceWithCall
 
 ```typescript
 interface InterfaceWithCall {
@@ -153,23 +195,25 @@ interface InterfaceWithCall {
 }
 ```
 
-### Call
+#### Call
 
 ```typescript
 <T>(): { someProperty: T; }
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Return type:**
+**Return type**
 
 { someProperty: T; }
 
-## interface InterfaceWithConstraintType
+----------
+
+### InterfaceWithConstraintType
 
 ```typescript
 interface InterfaceWithConstraintType extends Dictionary<string> {
@@ -177,17 +221,19 @@ interface InterfaceWithConstraintType extends Dictionary<string> {
 }
 ```
 
-### Extends
+**Extends**
 
 [Dictionary][InterfaceDeclaration-9]&#60;string&#62;
 
-### Properties
+**Properties**
 
 | Name         | Type   |
 | ------------ | ------ |
 | someProperty | string |
 
-## interface InterfaceWithMethod
+----------
+
+### InterfaceWithMethod
 
 ```typescript
 interface InterfaceWithMethod<T> {
@@ -196,19 +242,19 @@ interface InterfaceWithMethod<T> {
 }
 ```
 
-### Type parameters
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-### Methods
+#### Methods
 
 ```typescript
 someMethodOne(): T
 ```
 
-**Return type:**
+**Return type**
 
 T
 
@@ -216,17 +262,19 @@ T
 someMethodTwo<TReturn>(): TReturn
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name    |
 | ------- |
 | TReturn |
 
-**Return type:**
+**Return type**
 
 TReturn
 
-## interface Dictionary
+----------
+
+### Dictionary
 
 ```typescript
 interface Dictionary<TValue> {
@@ -235,33 +283,34 @@ interface Dictionary<TValue> {
 }
 ```
 
-### Type parameters
+**Type parameters**
 
 | Name   |
 | ------ |
 | TValue |
 
-### Construct
+#### Construct
 
 ```typescript
 new (): Dictionary<TValue>
 ```
 
-**Return type:**
+**Return type**
 
 [Dictionary][InterfaceDeclaration-9]&#60;TValue&#62;
 
-### Index signatures
+#### Index signatures
 
 ```typescript
 [key: string]: TValue
 ```
 
-Index `key` - string
+* *Parameter* `key` - string
+* *Type* TValue
 
-Type - TValue
+----------
 
-## interface MethodsInterface
+### MethodsInterface
 
 ```typescript
 interface MethodsInterface {
@@ -270,45 +319,47 @@ interface MethodsInterface {
 }
 ```
 
-### Call
+#### Call
 
 ```typescript
 <TValue>(arg: TValue): void
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name   |
 | ------ |
 | TValue |
 
-**Parameters:**
+**Parameters**
 
 | Name | Type   |
 | ---- | ------ |
 | arg  | TValue |
 
-**Return type:**
+**Return type**
 
 void
 
-### Methods
+#### Methods
 
 ```typescript
 someMethod<T>(): string
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Return type:**
+**Return type**
 
 string
 
-## interface MonsterInterface
+----------
+
+### MonsterInterface
 
 <span style="color: #d2d255;">Warning: Beta!</span>
 
@@ -329,29 +380,29 @@ interface MonsterInterface<TValue extends Object = {}> extends ObjectsInterface 
 }
 ```
 
-### Type parameters
+**Type parameters**
 
 | Name   | Constraint type | Default type |
 | ------ | --------------- | ------------ |
-| TValue | Object          | \{\}         |
+| TValue | Object          | {}           |
 
-### Extends
+**Extends**
 
 [ObjectsInterface][InterfaceDeclaration-6]
 
-### Construct
+#### Construct
 
 ```typescript
 new <T>(): MonsterInterface<T>
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Return type:**
+**Return type**
 
 [MonsterInterface][InterfaceDeclaration-12]&#60;T&#62;
 
@@ -359,29 +410,29 @@ new <T>(): MonsterInterface<T>
 new (someParameter: string): string
 ```
 
-**Parameters:**
+**Parameters**
 
 | Name          | Type   |
 | ------------- | ------ |
 | someParameter | string |
 
-**Return type:**
+**Return type**
 
 string
 
-### Call
+#### Call
 
 ```typescript
 <T>(): { someProperty: T; }
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Return type:**
+**Return type**
 
 { someProperty: T; }
 
@@ -389,19 +440,19 @@ string
 <T>(key?: string | undefined): { someProperty: T; }
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Parameters:**
+**Parameters**
 
-| Name | Type                    | Optional |
-| ---- | ----------------------- | -------- |
-| key  | undefined &#124; string | Yes      |
+| Name | Type                    |
+| ---- | ----------------------- |
+| key  | undefined &#124; string |
 
-**Return type:**
+**Return type**
 
 { someProperty: T; }
 
@@ -409,42 +460,41 @@ string
 <T>(key: number): { someProperty: T; }
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Parameters:**
+**Parameters**
 
 | Name | Type   |
 | ---- | ------ |
 | key  | number |
 
-**Return type:**
+**Return type**
 
 { someProperty: T; }
 
-### Index signatures
+#### Index signatures
 
 ```typescript
 readonly [key: string]: TValue
 ```
 
-Readonly.
+* *Parameter* `key` - string
+* *Type* TValue
 
-Index `key` - string
-
-Type - TValue
-
-### Properties
+**Properties**
 
 | Name      | Type   |
 | --------- | ------ |
 | objectOne | TValue |
 | objectTwo | TValue |
 
-## interface SomeInterface
+----------
+
+### SomeInterface
 
 ```typescript
 interface SomeInterface {
@@ -453,25 +503,25 @@ interface SomeInterface {
 }
 ```
 
-### Index signatures
+#### Index signatures
 
 ```typescript
 [key: string]: string | number
 ```
 
-Index `key` - string
-
-Type - string | number
+* *Parameter* `key` - string
+* *Type* string | number
 
 ```typescript
 [key: number]: string
 ```
 
-Index `key` - number
+* *Parameter* `key` - number
+* *Type* string
 
-Type - string
+----------
 
-## interface StringsDictionary
+### StringsDictionary
 
 ```typescript
 interface StringsDictionary {
@@ -479,17 +529,18 @@ interface StringsDictionary {
 }
 ```
 
-### Index signatures
+#### Index signatures
 
 ```typescript
 [key: string]: string
 ```
 
-Index `key` - string
+* *Parameter* `key` - string
+* *Type* string
 
-Type - string
+----------
 
-## interface MyInterface
+### MyInterface
 
 ```typescript
 interface MyInterface {
@@ -499,7 +550,7 @@ interface MyInterface {
 }
 ```
 
-### Properties
+**Properties**
 
 | Name            | Type   |
 | --------------- | ------ |
@@ -507,5 +558,75 @@ interface MyInterface {
 | MyPropertyTwo   | Object |
 | MyPropertyThree | number |
 
-## [Hello][ClassDeclaration-0]
+----------
+
+### Props
+
+```typescript
+interface Props {
+    name: string;
+}
+```
+
+**Properties**
+
+| Name | Type   |
+| ---- | ------ |
+| name | string |
+
+## Enums
+
+### Uogos
+
+<span style="color: #d2d255;">Warning: Beta!</span>
+
+<span style="color: red;">Deprecated!</span>
+
+Some information
+2nd line of some information
+3rd line of some information
+4th line of some information
+5th line of some information
+
+> Some summary about this package version.
+
+
+```typescript
+enum Uogos {
+     Jokie = "jokie",
+     Braskes = "braskes"
+}
+```
+
+**Members**
+
+| Name    | Value     |
+| ------- | --------- |
+| Jokie   | "jokie"   |
+| Braskes | "braskes" |
+
+----------
+
+### ConstSkaiciai
+
+
+```typescript
+const enum ConstSkaiciai {
+     PirmasC = 0,
+     AntrasC = 1,
+     TreciasC = 2
+}
+```
+
+**Members**
+
+| Name     | Value |
+| -------- | ----- |
+| PirmasC  | 0     |
+| AntrasC  | 1     |
+| TreciasC | 2     |
+
+## Classes
+
+### [Hello][ClassDeclaration-0]
 

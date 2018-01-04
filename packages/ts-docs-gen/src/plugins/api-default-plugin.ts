@@ -1,36 +1,37 @@
 import { Contracts } from "ts-extractor";
-import { MarkdownGenerator } from "@simplrjs/markdown";
-import { Plugin, PluginOptions, PluginResult, SupportedApiItemKindType, PluginHeading } from "../contracts/plugin";
-import { GeneratorHelpers } from "../generator-helpers";
+import { MarkdownBuilder } from "@simplrjs/markdown";
 
-export class ApiDefaultPlugin implements Plugin<Contracts.ApiItemDto> {
+import { PluginOptions, PluginResult, SupportedApiItemKindType } from "../contracts/plugin";
+import { GeneratorHelpers } from "../generator-helpers";
+import { BasePlugin } from "../abstractions/base-plugin";
+
+export class ApiDefaultPlugin extends BasePlugin<Contracts.ApiItemDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.Any];
     }
 
-    public CheckApiItem(item: Contracts.ApiItemDto): boolean {
-        return true;
-    }
-
-    public Render(data: PluginOptions<Contracts.ApiItemDto>): PluginResult {
-        const heading = `${data.ApiItem.ApiKind}: ${data.Reference.Alias}`;
-        const headings: PluginHeading[] = [
-            {
-                ApiItemId: data.Reference.Id,
-                Heading: heading
-            }
-        ];
-
-        const result: string[] = [
-            MarkdownGenerator.Header(heading, 2)
-        ];
-
-        return {
-            ApiItem: data.ApiItem,
-            Reference: data.Reference,
-            Headings: headings,
-            UsedReferences: [],
-            Result: result,
+    public Render(options: PluginOptions<Contracts.ApiItemDto>): PluginResult {
+        const heading = `${options.ApiItem.ApiKind}: ${options.Reference.Alias}`;
+        const pluginResult: PluginResult = {
+            ...GeneratorHelpers.GetDefaultPluginResultData(),
+            ApiItem: options.ApiItem,
+            Reference: options.Reference,
+            Headings: [
+                {
+                    Heading: heading,
+                    ApiItemId: options.Reference.Id
+                }
+            ]
         };
+
+        pluginResult.Result = new MarkdownBuilder()
+            .Header(heading, 3)
+            .EmptyLine()
+            .Bold(`Warning: unsupported api item kind ${options.ApiItem.ApiKind}!`)
+            .EmptyLine()
+            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
+            .GetOutput();
+
+        return pluginResult;
     }
 }

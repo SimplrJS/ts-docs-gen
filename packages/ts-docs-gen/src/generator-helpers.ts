@@ -19,6 +19,7 @@ export namespace GeneratorHelpers {
     export enum JSDocTags {
         Beta = "beta",
         Deprecated = "deprecated",
+        Internal = "internal",
         Summary = "summary"
     }
 
@@ -160,7 +161,8 @@ export namespace GeneratorHelpers {
         return {
             Headings: [],
             Result: [],
-            UsedReferences: []
+            UsedReferences: [],
+            Members: []
         };
     }
     // #endregion General helpers
@@ -233,6 +235,7 @@ export namespace GeneratorHelpers {
         // Optimise?
         const isBeta = apiItem.Metadata.JSDocTags.findIndex(x => x.name.toLowerCase() === JSDocTags.Beta) !== -1;
         const deprecated = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Deprecated);
+        const internal = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Internal);
         const summary = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Summary);
         const jSDocComment = apiItem.Metadata.DocumentationComment;
 
@@ -246,6 +249,13 @@ export namespace GeneratorHelpers {
             const message = Boolean(deprecated.text) ? `: ${deprecated.text}` : "";
             builder
                 .Text(`<span style="color: red;">Deprecated${message}!</span>`)
+                .EmptyLine();
+        }
+
+        if (internal != null) {
+            const message = Boolean(internal.text) ? `: ${internal.text}` : "";
+            builder
+                .Bold(`Internal${message}`)
                 .EmptyLine();
         }
 
@@ -429,7 +439,10 @@ export namespace GeneratorHelpers {
         return `${apiItem.AccessModifier}${$static}${abstract}${readOnly} ${name}${optional}: ${apiItem.Type.Text};`;
     }
 
-    export function EnumToString(alias: string, memberItems: Contracts.ApiEnumMemberDto[]): string[] {
+    export function ApiEnumToString(apiItem: Contracts.ApiEnumDto, memberItems: Contracts.ApiEnumMemberDto[], alias?: string): string[] {
+        const name = alias || apiItem.Name;
+        const $const = apiItem.IsConst ? "const " : "";
+
         // Constructing enum body.
         const membersStrings = memberItems.map((memberItem, index, array) => {
             // Add an enum name
@@ -450,7 +463,7 @@ export namespace GeneratorHelpers {
 
         // Construct enum code output
         return [
-            `enum ${alias} {`,
+            `${$const}enum ${name} {`,
             ...membersStrings,
             "}"
         ];
@@ -642,9 +655,13 @@ export namespace GeneratorHelpers {
         return `${apiItem.Name}${isOptionalString}: ${apiItem.Type.Text}${initializerString}`;
     }
 
-    export function ApiClassConstructorToString(parameters?: Contracts.ApiParameterDto[], returnType?: Contracts.TypeDto): string {
+    export function ApiClassConstructorToString(
+        apiItem: Contracts.ApiClassConstructorDto,
+        parameters?: Contracts.ApiParameterDto[],
+        returnType?: Contracts.TypeDto
+    ): string {
         const callString = ApiCallToString(undefined, parameters, returnType);
-        return `constructor${callString}`;
+        return `${apiItem.AccessModifier} constructor${callString}`;
     }
 
     /**

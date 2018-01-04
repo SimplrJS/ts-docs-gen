@@ -1,28 +1,31 @@
 import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
-import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
-import { GeneratorHelpers } from "../generator-helpers";
 
-export class ApiClassPropertyPlugin implements Plugin<Contracts.ApiClassPropertyDto> {
+import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
+import { GeneratorHelpers } from "../generator-helpers";
+import { BasePlugin } from "../abstractions/base-plugin";
+
+export class ApiClassPropertyPlugin extends BasePlugin<Contracts.ApiClassPropertyDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.ClassProperty];
     }
 
-    public CheckApiItem(item: Contracts.ApiItemDto): boolean {
-        return true;
-    }
-
     public Render(options: PluginOptions<Contracts.ApiClassPropertyDto>): PluginResult {
-        const pluginResultData = GeneratorHelpers.GetDefaultPluginResultData();
-        const builder = new MarkdownBuilder();
-
         const heading = options.Reference.Alias;
-        pluginResultData.Headings.push({ ApiItemId: options.Reference.Id, Heading: heading });
+        const pluginResult: PluginResult = {
+            ...GeneratorHelpers.GetDefaultPluginResultData(),
+            ApiItem: options.ApiItem,
+            Reference: options.Reference,
+            Headings: [
+                {
+                    ApiItemId: options.Reference.Id,
+                    Heading: heading
+                }
+            ]
+        };
 
-        const typeStringDto = GeneratorHelpers.TypeDtoToMarkdownString(options.ApiItem.Type);
-        pluginResultData.UsedReferences = pluginResultData.UsedReferences.concat(typeStringDto.References);
-
-        builder
+        // Header
+        pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
@@ -30,17 +33,11 @@ export class ApiClassPropertyPlugin implements Plugin<Contracts.ApiClassProperty
                 options.ApiItem,
                 options.Reference.Alias
             ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
-            .EmptyLine()
-            .Header("Type", 3)
-            .EmptyLine()
-            .Text(typeStringDto.Text);
+            .GetOutput();
 
-        pluginResultData.Result = builder.GetOutput();
+        const typeResult = this.RenderType(options.ApiItem.Type);
+        GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
-        return {
-            ApiItem: options.ApiItem,
-            Reference: options.Reference,
-            ...pluginResultData
-        };
+        return pluginResult;
     }
 }

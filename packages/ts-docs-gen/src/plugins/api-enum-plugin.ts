@@ -2,11 +2,10 @@ import { Contracts } from "ts-extractor";
 import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
 
 import { GeneratorHelpers } from "../generator-helpers";
-import { Plugin, SupportedApiItemKindType, PluginResult, PluginOptions, PluginHeading } from "../contracts/plugin";
+import { SupportedApiItemKindType, PluginResult, PluginOptions } from "../contracts/plugin";
+import { BasePlugin } from "../abstractions/base-plugin";
 
-// TODO: const enums implementation.
-
-export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
+export class ApiEnumPlugin extends BasePlugin<Contracts.ApiEnumDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.Enum];
     }
@@ -15,7 +14,7 @@ export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
         return true;
     }
 
-    private constructEnumTable(members: Contracts.ApiEnumMemberDto[]): string[] {
+    private renderEnumTable(members: Contracts.ApiEnumMemberDto[]): string[] {
         // Table header.
         const header = ["Name", "Value", "Description"];
         const content = members.map(x => [x.Name, x.Value, x.Metadata.DocumentationComment]);
@@ -23,34 +22,42 @@ export class ApiEnumPlugin implements Plugin<Contracts.ApiEnumDto> {
         return MarkdownGenerator.Table(header, content, { removeColumnIfEmpty: true });
     }
 
-    public Render(data: PluginOptions<Contracts.ApiEnumDto>): PluginResult {
-        const heading: string = data.Reference.Alias;
-        const headings: PluginHeading[] = [
-            {
-                ApiItemId: data.Reference.Id,
-                Heading: heading
-            }
-        ];
-
-        const enumMembers = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiEnumMemberDto>(
-            data.ApiItem.Members,
-            data.ExtractedData
-        );
-        const builder = new MarkdownBuilder()
-            .Header(heading, 2)
-            .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
-            .EmptyLine()
-            .Code(GeneratorHelpers.EnumToString(data.Reference.Alias, enumMembers), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
-            .EmptyLine()
-            .Text(this.constructEnumTable(enumMembers));
-
-        return {
-            ApiItem: data.ApiItem,
-            Reference: data.Reference,
-            Headings: headings,
-            UsedReferences: [],
-            Result: builder.GetOutput()
+    public Render(options: PluginOptions<Contracts.ApiEnumDto>): PluginResult {
+        const heading: string = options.Reference.Alias;
+        const pluginResult: PluginResult = {
+            ...GeneratorHelpers.GetDefaultPluginResultData(),
+            ApiItem: options.ApiItem,
+            Reference: options.Reference,
+            Headings: [
+                {
+                    Heading: heading,
+                    ApiItemId: options.Reference.Id
+                }
+            ]
         };
+
+        // Enum members
+        const enumMembers = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiEnumMemberDto>(
+            options.ApiItem.Members,
+            options.ExtractedData
+        );
+
+        pluginResult.Result = new MarkdownBuilder()
+            .Header(heading, 3)
+            .EmptyLine()
+            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
+            .EmptyLine()
+            .Code(GeneratorHelpers.ApiEnumToString(
+                options.ApiItem,
+                enumMembers,
+                options.Reference.Alias
+            ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .EmptyLine()
+            .Bold("Members")
+            .EmptyLine()
+            .Text(this.renderEnumTable(enumMembers))
+            .GetOutput();
+
+        return pluginResult;
     }
 }

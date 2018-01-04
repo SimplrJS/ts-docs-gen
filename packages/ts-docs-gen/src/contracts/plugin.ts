@@ -42,7 +42,7 @@ export interface PluginResultData {
      * Plugin rendered result.
      */
     Result: string[];
-    Members?: PluginMember[];
+    Members: PluginMember[];
 }
 
 export interface PluginResult<TKind = Contracts.ApiItemDto> extends PluginResultData {

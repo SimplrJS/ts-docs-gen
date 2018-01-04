@@ -1,20 +1,18 @@
 import { Contracts, ExtractDto } from "ts-extractor";
-import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginResultData } from "../contracts/plugin";
-import { GeneratorHelpers } from "../generator-helpers";
 import { MarkdownBuilder } from "@simplrjs/markdown";
+
+import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
+import { GeneratorHelpers } from "../generator-helpers";
+import { BasePlugin } from "../abstractions/base-plugin";
 
 export type Kind = Contracts.ApiSetAccessorDto | Contracts.ApiGetAccessorDto;
 
-export class ApiClassAccessorPlugin implements Plugin<Kind> {
+export class ApiClassAccessorPlugin extends BasePlugin<Kind> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [
             GeneratorHelpers.ApiItemKinds.GetAccessor,
             GeneratorHelpers.ApiItemKinds.SetAccessor,
         ];
-    }
-
-    public CheckApiItem(item: Kind): boolean {
-        return true;
     }
 
     private getHeading(data: PluginOptions<Kind>): string {
@@ -29,11 +27,14 @@ export class ApiClassAccessorPlugin implements Plugin<Kind> {
     }
 
     private resolveType(apiItem: Kind, extractedData: ExtractDto): Contracts.TypeDto | undefined {
-        // Resolve type
         let type: Contracts.TypeDto | undefined;
         if (apiItem.ApiKind === Contracts.ApiItemKinds.GetAccessor) {
+            // GetAccessor
+
             type = apiItem.Type;
         } else if (apiItem.Parameter != null) {
+            // SetAccessor
+
             const apiParameter = extractedData.Registry[apiItem.Parameter.Ids[0]] as Contracts.ApiParameterDto;
             if (apiParameter != null) {
                 type = apiParameter.Type;
@@ -43,49 +44,35 @@ export class ApiClassAccessorPlugin implements Plugin<Kind> {
         return type;
     }
 
-    private renderTypeDto(type: Contracts.TypeDto | undefined): Partial<PluginResultData> | undefined {
-        if (type == null) {
-            return undefined;
-        }
-
-        const result = GeneratorHelpers.TypeDtoToMarkdownString(type);
-
-        const builder = new MarkdownBuilder()
-            .EmptyLine()
-            .Header("Type", 4)
-            .EmptyLine()
-            .Text(result.Text);
-
-        return {
-            Result: builder.GetOutput(),
-            UsedReferences: result.References
-        };
-    }
-
-    public Render(data: PluginOptions<Kind>): PluginResult {
-        const heading = this.getHeading(data);
-        const type = this.resolveType(data.ApiItem, data.ExtractedData);
+    public Render(options: PluginOptions<Kind>): PluginResult {
+        const heading = this.getHeading(options);
+        const type = this.resolveType(options.ApiItem, options.ExtractedData);
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: data.ApiItem,
-            Reference: data.Reference,
+            ApiItem: options.ApiItem,
+            Reference: options.Reference,
             Headings: [
                 {
-                    ApiItemId: data.Reference.Id,
+                    ApiItemId: options.Reference.Id,
                     Heading: heading
                 }
             ]
         };
 
+        // Header
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
-            .Code(GeneratorHelpers.ApiAccessorToString(data.ApiItem, type, data.Reference.Alias), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
+            .Code(GeneratorHelpers.ApiAccessorToString(
+                options.ApiItem,
+                type,
+                options.Reference.Alias
+            ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
         // Type
-        const typeResult = this.renderTypeDto(type);
+        const typeResult = this.RenderType(type);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;
