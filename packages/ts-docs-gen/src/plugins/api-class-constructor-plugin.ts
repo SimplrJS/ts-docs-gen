@@ -1,73 +1,46 @@
 import { Contracts } from "ts-extractor";
-import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
-import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginResultData } from "../contracts/plugin";
+import { MarkdownBuilder } from "@simplrjs/markdown";
+import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
+import { FunctionLikePlugin } from "../abstractions/function-like-plugin";
 
-export class ApiClassConstructorPlugin implements Plugin<Contracts.ApiClassConstructorDto> {
+export class ApiClassConstructorPlugin extends FunctionLikePlugin<Contracts.ApiClassConstructorDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.ClassConstructor];
     }
 
-    public CheckApiItem(item: Contracts.ApiItemDto): boolean {
-        return true;
-    }
-
-    private renderParameters(parameters: Contracts.ApiParameterDto[]): PluginResultData {
-        const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        if (parameters.length === 0) {
-            return pluginResult;
-        }
-
-        let referenceIds: string[] = [];
-        const header = ["Name", "Type", "Description"];
-
-        const content = parameters.map(parameter => {
-            const parameterTypeDto = GeneratorHelpers.TypeDtoToMarkdownString(parameter.Type);
-
-            referenceIds = referenceIds.concat(parameterTypeDto.References);
-
-            return [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text), parameter.Metadata.DocumentationComment];
-        });
-
-        const builder = new MarkdownBuilder()
-            .Header("Parameters", 4)
-            .EmptyLine()
-            .Table(header, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
-            .EmptyLine();
-
-        pluginResult.UsedReferences = referenceIds;
-        pluginResult.Result = builder.GetOutput();
-
-        return pluginResult;
-    }
-
-    public Render(options: PluginOptions<Contracts.ApiClassConstructorDto>): PluginResult {
-        const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        const builder = new MarkdownBuilder();
-
-        // Parameters
+    public Render(data: PluginOptions<Contracts.ApiClassConstructorDto>): PluginResult {
+        // ApiParameters
         const apiParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ApiItem.Parameters, options.ExtractedData);
-        const parameters = this.renderParameters(apiParameters);
+            .GetApiItemsFromReference<Contracts.ApiParameterDto>(data.ApiItem.Parameters, data.ExtractedData);
 
         const heading = GeneratorHelpers.MethodToSimpleString("constructor", apiParameters);
+        const pluginResult: PluginResult = {
+            ...GeneratorHelpers.GetDefaultPluginResultData(),
+            ApiItem: data.ApiItem,
+            Reference: data.Reference,
+            Headings: [
+                {
+                    Heading: heading,
+                    ApiItemId: data.Reference.Id
+                }
+            ]
+        };
+        const builder = new MarkdownBuilder();
 
-        pluginResult.Headings.push({ ApiItemId: options.Reference.Id, Heading: heading });
 
-        builder
+        // Header
+        pluginResult.Result = builder
             .Header(heading, 3)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
+            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
             .Code(GeneratorHelpers.ApiClassConstructorToString(apiParameters), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
-            .Text(parameters.Result);
+            .GetOutput();
 
-        GeneratorHelpers.MergePluginResultData(pluginResult, parameters);
-        pluginResult.Result = builder.GetOutput();
+        // Parameters
+        const parametersResult = this.RenderParameters(apiParameters);
+        GeneratorHelpers.MergePluginResultData(pluginResult, parametersResult);
 
-        return {
-            ApiItem: options.ApiItem,
-            Reference: options.Reference,
-            ...pluginResult
-        };
+        return pluginResult;
     }
 }
