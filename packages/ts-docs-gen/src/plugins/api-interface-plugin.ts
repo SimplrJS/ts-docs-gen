@@ -1,5 +1,6 @@
 import { Contracts } from "ts-extractor";
 import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
+
 import {
     Plugin,
     SupportedApiItemKindType,

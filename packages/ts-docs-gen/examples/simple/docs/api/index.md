@@ -483,8 +483,6 @@ string
 readonly [key: string]: TValue
 ```
 
-*Readonly*
-
 **Index** `key` - string
 
 **Type** - TValue
