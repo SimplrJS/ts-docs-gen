@@ -305,9 +305,9 @@ new (): Dictionary<TValue>
 [key: string]: TValue
 ```
 
-Index `key` - string
+**Index** `key` - string
 
-Type - TValue
+**Type** - TValue
 
 ----------
 
@@ -483,11 +483,11 @@ string
 readonly [key: string]: TValue
 ```
 
-Readonly.
+*Readonly*
 
-Index `key` - string
+**Index** `key` - string
 
-Type - TValue
+**Type** - TValue
 
 #### Properties
 
@@ -513,17 +513,17 @@ interface SomeInterface {
 [key: string]: string | number
 ```
 
-Index `key` - string
+**Index** `key` - string
 
-Type - string | number
+**Type** - string | number
 
 ```typescript
 [key: number]: string
 ```
 
-Index `key` - number
+**Index** `key` - number
 
-Type - string
+**Type** - string
 
 ----------
 
@@ -541,9 +541,9 @@ interface StringsDictionary {
 [key: string]: string
 ```
 
-Index `key` - string
+**Index** `key` - string
 
-Type - string
+**Type** - string
 
 ----------
 
