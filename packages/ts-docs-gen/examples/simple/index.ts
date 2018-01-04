@@ -198,21 +198,21 @@ export interface MyInterface {
 //     export const name = "some-kind-of-module";
 // }
 
-// /**
-//  * Some information
-//  * 2nd line of some information
-//  * 3rd line of some information
-//  * 4th line of some information
-//  * 5th line of some information
-//  * @summary Some summary about this package version.
-//  * @summary 2nd of some summary about this package version.
-//  * @deprecated
-//  * @beta
-//  */
-// export enum Uogos {
-//     Jokie = "jokie",
-//     Braskes = "braskes"
-// }
+/**
+ * Some information
+ * 2nd line of some information
+ * 3rd line of some information
+ * 4th line of some information
+ * 5th line of some information
+ * @summary Some summary about this package version.
+ * @summary 2nd of some summary about this package version.
+ * @deprecated
+ * @beta
+ */
+export enum Uogos {
+    Jokie = "jokie",
+    Braskes = "braskes"
+}
 
 // export enum Skaiciai {
 //     Nulis = 0,
@@ -235,11 +235,11 @@ export interface MyInterface {
 //     Trecias
 // }
 
-// export const enum ConstSkaiciai {
-//     PirmasC = 0,
-//     AntrasC = 1,
-//     TreciasC = 2
-// }
+export const enum ConstSkaiciai {
+    PirmasC = 0,
+    AntrasC = 1,
+    TreciasC = 2
+}
 
 // export const enum ConstSarasas {
 //     /**

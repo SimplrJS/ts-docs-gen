@@ -429,7 +429,10 @@ export namespace GeneratorHelpers {
         return `${apiItem.AccessModifier}${$static}${abstract}${readOnly} ${name}${optional}: ${apiItem.Type.Text};`;
     }
 
-    export function EnumToString(alias: string, memberItems: Contracts.ApiEnumMemberDto[]): string[] {
+    export function ApiEnumToString(apiItem: Contracts.ApiEnumDto, memberItems: Contracts.ApiEnumMemberDto[], alias?: string): string[] {
+        const name = alias || apiItem.Name;
+        const $const = apiItem.IsConst ? "const " : "";
+
         // Constructing enum body.
         const membersStrings = memberItems.map((memberItem, index, array) => {
             // Add an enum name
@@ -450,7 +453,7 @@ export namespace GeneratorHelpers {
 
         // Construct enum code output
         return [
-            `enum ${alias} {`,
+            `${$const}enum ${name} {`,
             ...membersStrings,
             "}"
         ];

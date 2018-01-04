@@ -581,6 +581,58 @@ interface Props {
 | ---- | ------ |
 | name | string |
 
+## Enums
+
+### Uogos
+
+<span style="color: #d2d255;">Warning: Beta!</span>
+
+<span style="color: red;">Deprecated!</span>
+
+Some information
+2nd line of some information
+3rd line of some information
+4th line of some information
+5th line of some information
+
+> Some summary about this package version.
+
+
+```typescript
+enum Uogos {
+     Jokie = "jokie",
+     Braskes = "braskes"
+}
+```
+
+**Members**
+
+| Name    | Value     |
+| ------- | --------- |
+| Jokie   | "jokie"   |
+| Braskes | "braskes" |
+
+----------
+
+### ConstSkaiciai
+
+
+```typescript
+const enum ConstSkaiciai {
+     PirmasC = 0,
+     AntrasC = 1,
+     TreciasC = 2
+}
+```
+
+**Members**
+
+| Name     | Value |
+| -------- | ----- |
+| PirmasC  | 0     |
+| AntrasC  | 1     |
+| TreciasC | 2     |
+
 ## Classes
 
 ### [Hello][ClassDeclaration-0]
