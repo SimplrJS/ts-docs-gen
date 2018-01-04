@@ -292,13 +292,11 @@ export interface MyInterface {
 //  */
 // export type Hello = Uogos;
 
-export namespace FooNamespace {
-    export namespace BooNamespace {
-        export namespace BooNamespace2 {
-            export const Hello = "World!";
-        }
-    }
+export interface Props {
+    name: string;
 }
+
+export function Component<T extends Props = Props>(arg: T): void { }
 
 export class Hello {
     /**
@@ -307,11 +305,20 @@ export class Hello {
      */
     constructor(arg: string) { }
 
-    get Foo(): string {
-        throw new Error("Method not implemented.");
+    /**
+     * Comment about Render
+     * @beta
+     * @param arg Argument comment here.
+     */
+    public render<T extends String = String>(arg: T): T {
+        return arg;
     }
 
-    set Foo(arg: string) { }
+    // get Foo(): string {
+    //     throw new Error("Method not implemented.");
+    // }
 
-    public static set Bar(arg: string) { }
+    // set Foo(arg: string) { }
+
+    // public static set Bar(arg: string) { }
 }

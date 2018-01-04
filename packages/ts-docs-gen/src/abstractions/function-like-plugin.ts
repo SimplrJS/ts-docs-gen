@@ -46,10 +46,10 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         });
 
         pluginResult.Result = new MarkdownBuilder()
+            .EmptyLine()
             .Bold("Type parameters")
             .EmptyLine()
             .Table(header, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
-            .EmptyLine()
             .GetOutput();
 
         return pluginResult;
@@ -74,10 +74,10 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         });
 
         pluginResult.Result = new MarkdownBuilder()
+            .EmptyLine()
             .Bold("Parameters")
             .EmptyLine()
             .Table(header, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
-            .EmptyLine()
             .GetOutput();
 
         return pluginResult;
@@ -92,6 +92,7 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         const parsedReturnType = GeneratorHelpers.TypeDtoToMarkdownString(type);
 
         pluginResult.Result = new MarkdownBuilder()
+            .EmptyLine()
             .Bold("Return type")
             .EmptyLine()
             .Text(parsedReturnType.Text)

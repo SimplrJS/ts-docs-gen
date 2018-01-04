@@ -1,22 +1,19 @@
 import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
-import { Plugin, SupportedApiItemKindType, PluginResult, PluginOptions } from "../contracts/plugin";
+import { SupportedApiItemKindType, PluginResult, PluginOptions } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
+import { FunctionLikePlugin } from "../abstractions/function-like-plugin";
 
 export type CallableApiItem = Contracts.ApiCallDto | Contracts.ApiMethodDto | Contracts.ApiConstructDto;
 
-export class ApiCallablePlugin implements Plugin<CallableApiItem> {
+export class ApiCallablePlugin extends FunctionLikePlugin<CallableApiItem> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [
             GeneratorHelpers.ApiItemKinds.Construct,
             GeneratorHelpers.ApiItemKinds.Call,
             GeneratorHelpers.ApiItemKinds.Method
         ];
-    }
-
-    public CheckApiItem(item: CallableApiItem): boolean {
-        return true;
     }
 
     private resolveItemCode(
@@ -37,60 +34,36 @@ export class ApiCallablePlugin implements Plugin<CallableApiItem> {
         }
     }
 
-    public Render(data: PluginOptions<CallableApiItem>): PluginResult<CallableApiItem> {
-        const usedReferences = [];
-        const parameters = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiParameterDto>(
-            data.ApiItem.Parameters,
-            data.ExtractedData
-        );
-        const typeParameters = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(
-            data.ApiItem.TypeParameters,
-            data.ExtractedData
-        );
-
-        const builder = new MarkdownBuilder()
-            .Code(this.resolveItemCode(data.ApiItem, parameters, typeParameters), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
-            .EmptyLine();
-
-        if (typeParameters.length > 0) {
-            const table = GeneratorHelpers.ApiTypeParametersTableToString(typeParameters);
-            usedReferences.push(...table.References);
-
-            builder
-                .Bold("Type parameters:")
-                .EmptyLine()
-                .Text(table.Text)
-                .EmptyLine();
-        }
-
-        if (parameters.length > 0) {
-            const table = GeneratorHelpers.ApiParametersToTableString(parameters);
-            usedReferences.push(...table.References);
-
-            builder
-                .Bold("Parameters:")
-                .EmptyLine()
-                .Text(table.Text)
-                .EmptyLine();
-        }
-
-        if (data.ApiItem.ReturnType) {
-            const renderedReturnType = GeneratorHelpers.TypeDtoToMarkdownString(data.ApiItem.ReturnType);
-
-            builder
-                .Bold("Return type:")
-                .EmptyLine()
-                .Text(renderedReturnType.Text);
-
-            usedReferences.push(...renderedReturnType.References);
-        }
-
-        return {
-            ApiItem: data.ApiItem,
-            Reference: data.Reference,
-            Headings: [],
-            Result: builder.GetOutput(),
-            UsedReferences: usedReferences
+    public Render(options: PluginOptions<CallableApiItem>): PluginResult<CallableApiItem> {
+        const pluginResult: PluginResult<CallableApiItem> = {
+            ...GeneratorHelpers.GetDefaultPluginResultData(),
+            ApiItem: options.ApiItem,
+            Reference: options.Reference
         };
+
+        // ApiParameters
+        const apiParameters =
+            GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ApiItem.Parameters, options.ExtractedData);
+        // ApiTypeParameters
+        const apiTypeParameters =
+            GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ApiItem.TypeParameters, options.ExtractedData);
+
+        pluginResult.Result = new MarkdownBuilder()
+            .Code(this.resolveItemCode(options.ApiItem, apiParameters, apiTypeParameters), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .GetOutput();
+
+        // TypeParameters
+        const typeParametersResult = this.RenderTypeParameters(apiTypeParameters);
+        GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
+
+        // Parameters
+        const parametersResult = this.RenderParameters(apiParameters);
+        GeneratorHelpers.MergePluginResultData(pluginResult, parametersResult);
+
+        // ReturnType
+        const returnTypeResult = this.RenderReturnType(options.ApiItem.ReturnType);
+        GeneratorHelpers.MergePluginResultData(pluginResult, returnTypeResult);
+
+        return pluginResult;
     }
 }

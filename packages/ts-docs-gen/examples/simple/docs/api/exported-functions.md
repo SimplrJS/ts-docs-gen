@@ -12,7 +12,6 @@ function Foo(): string
 
 string
 
-
 ----------
 
 ### Bar()
@@ -24,5 +23,4 @@ function Bar(): string
 **Return type**
 
 string
-
 

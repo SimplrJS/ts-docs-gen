@@ -1,3 +1,5 @@
+[InterfaceDeclaration-16]: index.md#props
+[InterfaceDeclaration-16]: index.md#props
 [InterfaceDeclaration-1]: index.md#foo
 [InterfaceDeclaration-2]: index.md#boo
 [InterfaceDeclaration-4]: index.md#myconstrainttype
@@ -6,8 +8,31 @@
 [InterfaceDeclaration-6]: index.md#objectsinterface
 [InterfaceDeclaration-12]: index.md#monsterinterface
 [ClassDeclaration-0]: index/hello.md#hello
-[ModuleDeclaration-0]: index/foonamespace.md#foonamespace
 # index
+
+## Functions
+
+### Component(arg)
+
+```typescript
+function Component<T extends Props = Props>(arg: T): void
+```
+
+**Type parameters**
+
+| Name | Constraint type                  | Default type                     |
+| ---- | -------------------------------- | -------------------------------- |
+| T    | [Props][InterfaceDeclaration-16] | [Props][InterfaceDeclaration-16] |
+
+**Parameters**
+
+| Name | Type |
+| ---- | ---- |
+| arg  | T    |
+
+**Return type**
+
+void
 
 ## Interfaces
 
@@ -89,20 +114,20 @@ interface AnotherInterface {
 <TValue>(param1: TValue, param2: TValue): boolean
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name   |
 | ------ |
 | TValue |
 
-**Parameters:**
+**Parameters**
 
 | Name   | Type   |
 | ------ | ------ |
 | param1 | TValue |
 | param2 | TValue |
 
-**Return type:**
+**Return type**
 
 true | false
 
@@ -176,13 +201,13 @@ interface InterfaceWithCall {
 <T>(): { someProperty: T; }
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Return type:**
+**Return type**
 
 { someProperty: T; }
 
@@ -229,7 +254,7 @@ interface InterfaceWithMethod<T> {
 someMethodOne(): T
 ```
 
-**Return type:**
+**Return type**
 
 T
 
@@ -237,13 +262,13 @@ T
 someMethodTwo<TReturn>(): TReturn
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name    |
 | ------- |
 | TReturn |
 
-**Return type:**
+**Return type**
 
 TReturn
 
@@ -270,7 +295,7 @@ interface Dictionary<TValue> {
 new (): Dictionary<TValue>
 ```
 
-**Return type:**
+**Return type**
 
 [Dictionary][InterfaceDeclaration-9]&#60;TValue&#62;
 
@@ -301,19 +326,19 @@ interface MethodsInterface {
 <TValue>(arg: TValue): void
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name   |
 | ------ |
 | TValue |
 
-**Parameters:**
+**Parameters**
 
 | Name | Type   |
 | ---- | ------ |
 | arg  | TValue |
 
-**Return type:**
+**Return type**
 
 void
 
@@ -323,13 +348,13 @@ void
 someMethod<T>(): string
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Return type:**
+**Return type**
 
 string
 
@@ -372,13 +397,13 @@ interface MonsterInterface<TValue extends Object = {}> extends ObjectsInterface 
 new <T>(): MonsterInterface<T>
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Return type:**
+**Return type**
 
 [MonsterInterface][InterfaceDeclaration-12]&#60;T&#62;
 
@@ -386,13 +411,13 @@ new <T>(): MonsterInterface<T>
 new (someParameter: string): string
 ```
 
-**Parameters:**
+**Parameters**
 
 | Name          | Type   |
 | ------------- | ------ |
 | someParameter | string |
 
-**Return type:**
+**Return type**
 
 string
 
@@ -402,13 +427,13 @@ string
 <T>(): { someProperty: T; }
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Return type:**
+**Return type**
 
 { someProperty: T; }
 
@@ -416,19 +441,19 @@ string
 <T>(key?: string | undefined): { someProperty: T; }
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Parameters:**
+**Parameters**
 
-| Name | Type                    | Optional |
-| ---- | ----------------------- | -------- |
-| key  | undefined &#124; string | Yes      |
+| Name | Type                    |
+| ---- | ----------------------- |
+| key  | undefined &#124; string |
 
-**Return type:**
+**Return type**
 
 { someProperty: T; }
 
@@ -436,19 +461,19 @@ string
 <T>(key: number): { someProperty: T; }
 ```
 
-**Type parameters:**
+**Type parameters**
 
 | Name |
 | ---- |
 | T    |
 
-**Parameters:**
+**Parameters**
 
 | Name | Type   |
 | ---- | ------ |
 | key  | number |
 
-**Return type:**
+**Return type**
 
 { someProperty: T; }
 
@@ -540,11 +565,23 @@ interface MyInterface {
 | MyPropertyTwo   | Object |
 | MyPropertyThree | number |
 
+----------
+
+### Props
+
+```typescript
+interface Props {
+    name: string;
+}
+```
+
+#### Properties
+
+| Name | Type   |
+| ---- | ------ |
+| name | string |
+
 ## Classes
 
 ### [Hello][ClassDeclaration-0]
-
-## Namespaces
-
-### [FooNamespace][ModuleDeclaration-0]
 

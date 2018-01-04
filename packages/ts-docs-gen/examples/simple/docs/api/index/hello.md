@@ -12,46 +12,38 @@ This is a constructor
 ```typescript
 constructor(arg: string)
 ```
-#### Parameters
+
+**Parameters**
 
 | Name | Type   | Description            |
 | ---- | ------ | ---------------------- |
 | arg  | string | This is an argument ;) |
 
+## Methods
 
-## Properties
+### render(arg)
 
-### get Foo
+<span style="color: #d2d255;">Warning: Beta!</span>
 
-```typescript
-public get Foo: string;
-```
-
-#### Type
-
-string
-
-----------
-
-### set Foo
+Comment about Render
 
 ```typescript
-public set Foo: string;
+public render<T extends String = String>(arg: T): T
 ```
 
-#### Type
+**Type parameters**
 
-string
+| Name | Constraint type | Default type |
+| ---- | --------------- | ------------ |
+| T    | String          | String       |
 
-----------
+**Parameters**
 
-### set Bar
+| Name | Type | Description            |
+| ---- | ---- | ---------------------- |
+| arg  | T    | Argument comment here. |
 
-```typescript
-public static set Bar: string;
-```
+**Return type**
 
-#### Type
-
-string
+T
 
