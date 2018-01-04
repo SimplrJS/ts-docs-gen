@@ -59,10 +59,6 @@ export class ApiClassMethodPlugin extends FunctionLikePlugin<Contracts.ApiClassM
         const returnTypeResult = this.RenderReturnType(options.ApiItem.ReturnType);
         GeneratorHelpers.MergePluginResultData(pluginResult, returnTypeResult);
 
-        return {
-            ApiItem: options.ApiItem,
-            Reference: options.Reference,
-            ...pluginResult
-        };
+        return pluginResult;
     }
 }

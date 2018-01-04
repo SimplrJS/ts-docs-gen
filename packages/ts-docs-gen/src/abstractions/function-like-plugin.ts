@@ -6,6 +6,7 @@ import { PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends BasePlugin<TKind> {
+    // TODO: Escape string!
     protected RenderTypeParameters(typeParameters: Contracts.ApiTypeParameterDto[]): PluginResultData | undefined {
         if (typeParameters.length === 0) {
             return undefined;
@@ -39,8 +40,8 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
 
             return [
                 typeParameter.Name,
-                MarkdownGenerator.EscapeString(constraintType.Text),
-                MarkdownGenerator.EscapeString(defaultType.Text)
+                constraintType.Text,
+                defaultType.Text
             ];
         });
 
@@ -54,6 +55,7 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         return pluginResult;
     }
 
+    // TODO: Escape string!
     protected RenderParameters(parameters: Contracts.ApiParameterDto[]): PluginResultData | undefined {
         if (parameters.length === 0) {
             return undefined;
