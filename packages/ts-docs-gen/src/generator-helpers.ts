@@ -19,6 +19,7 @@ export namespace GeneratorHelpers {
     export enum JSDocTags {
         Beta = "beta",
         Deprecated = "deprecated",
+        Internal = "internal",
         Summary = "summary"
     }
 
@@ -233,6 +234,7 @@ export namespace GeneratorHelpers {
         // Optimise?
         const isBeta = apiItem.Metadata.JSDocTags.findIndex(x => x.name.toLowerCase() === JSDocTags.Beta) !== -1;
         const deprecated = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Deprecated);
+        const internal = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Internal);
         const summary = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === JSDocTags.Summary);
         const jSDocComment = apiItem.Metadata.DocumentationComment;
 
@@ -246,6 +248,13 @@ export namespace GeneratorHelpers {
             const message = Boolean(deprecated.text) ? `: ${deprecated.text}` : "";
             builder
                 .Text(`<span style="color: red;">Deprecated${message}!</span>`)
+                .EmptyLine();
+        }
+
+        if (internal != null) {
+            const message = Boolean(internal.text) ? `: ${internal.text}` : "";
+            builder
+                .Bold(`Internal${message}`)
                 .EmptyLine();
         }
 
