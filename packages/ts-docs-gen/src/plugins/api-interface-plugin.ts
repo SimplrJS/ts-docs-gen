@@ -2,7 +2,6 @@ import { Contracts } from "ts-extractor";
 import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
 
 import {
-    Plugin,
     SupportedApiItemKindType,
     PluginResult,
     PluginOptions,
@@ -11,20 +10,18 @@ import {
 } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiItemReference } from "../contracts/api-item-reference";
+import { BasePlugin } from "../abstractions/base-plugin";
 
 interface ExtractedItemDto<TApiItemDto extends Contracts.ApiItemDto = Contracts.ApiItemDto> {
     Reference: ApiItemReference;
     ApiItem: TApiItemDto;
 }
 
-export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
+export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.Interface];
     }
 
-    public CheckApiItem(item: Contracts.ApiInterfaceDto): boolean {
-        return true;
-    }
 
     private renderTypeParameters(pluginOptions: PluginOptions<Contracts.ApiInterfaceDto>): PluginResultData | undefined {
         const typeParameters = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(
@@ -45,9 +42,9 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
             .GetOutput();
 
         return {
+            ...GeneratorHelpers.GetDefaultPluginResultData(),
             Result: text,
-            UsedReferences: typeParametersTable.References,
-            Headings: []
+            UsedReferences: typeParametersTable.References
         };
     }
 
@@ -71,9 +68,9 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
         }
 
         return {
+            ...GeneratorHelpers.GetDefaultPluginResultData(),
             UsedReferences: references,
             Result: builder.GetOutput(),
-            Headings: []
         };
     }
 
@@ -89,14 +86,14 @@ export class ApiInterfacePlugin implements Plugin<Contracts.ApiInterfaceDto> {
         const table = GeneratorHelpers.ApiPropertiesToTableString(apiItems);
         const builder = new MarkdownBuilder()
             .EmptyLine()
-            .Header("Properties", 4)
+            .Bold("Properties")
             .EmptyLine()
             .Text(table.Text);
 
         return {
+            ...GeneratorHelpers.GetDefaultPluginResultData(),
             UsedReferences: table.References,
             Result: builder.GetOutput(),
-            Headings: []
         };
     }
 

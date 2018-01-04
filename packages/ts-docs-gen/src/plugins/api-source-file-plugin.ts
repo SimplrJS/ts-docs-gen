@@ -4,7 +4,7 @@ import * as path from "path";
 
 import { GeneratorHelpers } from "../generator-helpers";
 import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
-import { ContainerPlugin, ContainerRenderMembers } from "../abstractions/container-plugin";
+import { ContainerPlugin, ContainerMembersKindsGroup } from "../abstractions/container-plugin";
 
 export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFileDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
@@ -33,7 +33,7 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
             .GetOutput();
 
         // Members
-        const memberKindsList: ContainerRenderMembers[] = [
+        const memberKindsList: ContainerMembersKindsGroup[] = [
             {
                 Heading: "Functions",
                 Kinds: [Contracts.ApiItemKinds.Function]
@@ -63,7 +63,7 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
                 Kinds: [Contracts.ApiItemKinds.Variable]
             }
         ];
-        const members = this.RenderMembers(memberKindsList, data);
+        const members = this.RenderMembersGroups(memberKindsList, data);
         GeneratorHelpers.MergePluginResultData(pluginResult, members);
 
         return pluginResult;

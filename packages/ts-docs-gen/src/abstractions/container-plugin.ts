@@ -9,34 +9,34 @@ export interface ApiContainer extends Contracts.ApiBaseItemDto {
     Members: Contracts.ApiItemReference[];
 }
 
-export interface ContainerRenderMembers {
+export interface ContainerMembersKindsGroup {
     Heading: string;
     Kinds: Contracts.ApiItemKinds[];
 }
 
-interface ContainersMembersReferences {
+interface ContainerMembersReferencesGroup {
     Heading: string;
     References: ApiItemReference[];
 }
 
 export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePlugin<TKind> {
-    private getItemReferenceByKind(
-        list: ContainerRenderMembers[],
+    private getItemsReferenceByKind(
+        list: ContainerMembersKindsGroup[],
         members: Contracts.ApiItemReference[],
-        data: ExtractDto
-    ): ContainersMembersReferences[] {
-        const result: ContainersMembersReferences[] = [];
-        let membersReferences = GeneratorHelpers.GetApiItemReferences(data, members);
+        extractedData: ExtractDto
+    ): ContainerMembersReferencesGroup[] {
+        const result: ContainerMembersReferencesGroup[] = [];
+        let membersReferences = GeneratorHelpers.GetApiItemReferences(extractedData, members);
 
         for (const item of list) {
-            // Filter item ids by kind
-            const apiItemsIdsByKind = membersReferences.filter(x => item.Kinds.indexOf(data.Registry[x.Id].ApiKind) !== -1);
-            // Remove ids that was used
-            membersReferences = membersReferences.filter(x => apiItemsIdsByKind.indexOf(x) === -1);
+            // Filter item references by kind
+            const apiItemsReferenceByKind = membersReferences.filter(x => item.Kinds.indexOf(extractedData.Registry[x.Id].ApiKind) !== -1);
+            // Remove references that was used
+            membersReferences = membersReferences.filter(x => apiItemsReferenceByKind.indexOf(x) === -1);
 
             result.push({
                 Heading: item.Heading,
-                References: apiItemsIdsByKind
+                References: apiItemsReferenceByKind
             });
         }
 
@@ -51,14 +51,10 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
         return result;
     }
 
-    protected RenderMembers(list: ContainerRenderMembers[], data: PluginOptions<TKind>): PluginResultData {
-        const membersReferences = this.getItemReferenceByKind(list, data.ApiItem.Members, data.ExtractedData);
+    protected RenderMembersGroups(list: ContainerMembersKindsGroup[], options: PluginOptions<TKind>): PluginResultData {
+        const membersReferences = this.getItemsReferenceByKind(list, options.ApiItem.Members, options.ExtractedData);
         const pluginResultData = GeneratorHelpers.GetDefaultPluginResultData();
         const builder = new MarkdownBuilder();
-
-        if (pluginResultData.Members == null) {
-            pluginResultData.Members = [];
-        }
 
         for (const { Heading, References } of membersReferences) {
             if (References.length > 0) {
@@ -67,9 +63,9 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                     .EmptyLine();
 
                 for (const reference of References) {
-                    const apiItem = data.ExtractedData.Registry[reference.Id];
+                    const apiItem = options.ExtractedData.Registry[reference.Id];
 
-                    if (data.IsPluginResultExists(reference)) {
+                    if (options.IsPluginResultExists(reference)) {
                         builder
                             .Text(md => md.Header(md.Link(apiItem.Name, reference.Id, true), 3))
                             .EmptyLine();
@@ -78,7 +74,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                         switch (apiItem.ApiKind) {
                             case Contracts.ApiItemKinds.Namespace:
                             case Contracts.ApiItemKinds.Class: {
-                                const renderedItem = data.GetItemPluginResult(reference);
+                                const renderedItem = options.GetItemPluginResult(reference);
                                 pluginResultData.Members.push({
                                     Reference: reference,
                                     PluginResult: renderedItem
@@ -91,7 +87,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                                 break;
                             }
                             default: {
-                                const renderedItem = data.GetItemPluginResult(reference);
+                                const renderedItem = options.GetItemPluginResult(reference);
                                 builder
                                     .Text(renderedItem.Result)
                                     .EmptyLine();

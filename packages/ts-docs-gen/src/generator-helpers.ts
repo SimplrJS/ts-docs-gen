@@ -161,7 +161,8 @@ export namespace GeneratorHelpers {
         return {
             Headings: [],
             Result: [],
-            UsedReferences: []
+            UsedReferences: [],
+            Members: []
         };
     }
     // #endregion General helpers

@@ -5,6 +5,7 @@ import { GeneratorHelpers } from "../generator-helpers";
 import { SupportedApiItemKindType, PluginOptions, PluginResult, PluginHeading } from "../contracts/plugin";
 import { BasePlugin } from "../abstractions/base-plugin";
 
+// TODO: Add TypeParameters
 export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.Type];
@@ -37,7 +38,8 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
             Reference: data.Reference,
             Headings: headings,
             UsedReferences: typeStringDto.References,
-            Result: builder.GetOutput()
+            Result: builder.GetOutput(),
+            Members: []
         };
     }
 }
