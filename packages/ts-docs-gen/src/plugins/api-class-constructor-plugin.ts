@@ -33,7 +33,7 @@ export class ApiClassConstructorPlugin extends FunctionLikePlugin<Contracts.ApiC
             .Header(heading, 3)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
-            .Code(GeneratorHelpers.ApiClassConstructorToString(apiParameters), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(GeneratorHelpers.ApiClassConstructorToString(options.ApiItem, apiParameters), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
         // Parameters

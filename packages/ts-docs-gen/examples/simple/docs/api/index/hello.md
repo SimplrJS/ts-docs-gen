@@ -10,7 +10,7 @@ class Hello
 This is a constructor
 
 ```typescript
-constructor(arg: string)
+public constructor(arg: string)
 ```
 
 **Parameters**

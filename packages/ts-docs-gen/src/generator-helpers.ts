@@ -654,9 +654,13 @@ export namespace GeneratorHelpers {
         return `${apiItem.Name}${isOptionalString}: ${apiItem.Type.Text}${initializerString}`;
     }
 
-    export function ApiClassConstructorToString(parameters?: Contracts.ApiParameterDto[], returnType?: Contracts.TypeDto): string {
+    export function ApiClassConstructorToString(
+        apiItem: Contracts.ApiClassConstructorDto,
+        parameters?: Contracts.ApiParameterDto[],
+        returnType?: Contracts.TypeDto
+    ): string {
         const callString = ApiCallToString(undefined, parameters, returnType);
-        return `constructor${callString}`;
+        return `${apiItem.AccessModifier} constructor${callString}`;
     }
 
     /**
