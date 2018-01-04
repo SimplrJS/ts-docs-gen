@@ -80,4 +80,22 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
 
         return pluginResult;
     }
+
+    protected RenderReturnType(type?: Contracts.TypeDto): PluginResultData | undefined {
+        if (type == null) {
+            return undefined;
+        }
+        const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
+
+        const parsedReturnType = GeneratorHelpers.TypeDtoToMarkdownString(type);
+
+        pluginResult.Result = new MarkdownBuilder()
+            .Bold("Return type")
+            .EmptyLine()
+            .Text(parsedReturnType.Text)
+            .GetOutput();
+
+        pluginResult.UsedReferences = parsedReturnType.References;
+        return pluginResult;
+    }
 }
