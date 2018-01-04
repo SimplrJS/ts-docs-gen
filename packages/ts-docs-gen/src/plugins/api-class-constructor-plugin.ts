@@ -9,31 +9,29 @@ export class ApiClassConstructorPlugin extends FunctionLikePlugin<Contracts.ApiC
         return [GeneratorHelpers.ApiItemKinds.ClassConstructor];
     }
 
-    public Render(data: PluginOptions<Contracts.ApiClassConstructorDto>): PluginResult {
+    public Render(options: PluginOptions<Contracts.ApiClassConstructorDto>): PluginResult {
         // ApiParameters
         const apiParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiParameterDto>(data.ApiItem.Parameters, data.ExtractedData);
+            .GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ApiItem.Parameters, options.ExtractedData);
 
         const heading = GeneratorHelpers.MethodToSimpleString("constructor", apiParameters);
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: data.ApiItem,
-            Reference: data.Reference,
+            ApiItem: options.ApiItem,
+            Reference: options.Reference,
             Headings: [
                 {
                     Heading: heading,
-                    ApiItemId: data.Reference.Id
+                    ApiItemId: options.Reference.Id
                 }
             ]
         };
-        const builder = new MarkdownBuilder();
-
 
         // Header
-        pluginResult.Result = builder
+        pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
+            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(GeneratorHelpers.ApiClassConstructorToString(apiParameters), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
