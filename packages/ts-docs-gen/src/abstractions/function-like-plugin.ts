@@ -6,34 +6,78 @@ import { PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends BasePlugin<TKind> {
+    protected RenderTypeParameters(typeParameters: Contracts.ApiTypeParameterDto[]): PluginResultData | undefined {
+        if (typeParameters.length === 0) {
+            return undefined;
+        }
+
+        const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
+        const header = ["Name", "Constraint type", "Default type"];
+
+        const content = typeParameters.map(typeParameter => {
+            // ConstraintType
+            let constraintType: GeneratorHelpers.TypeToStringDto;
+            if (typeParameter.ConstraintType != null) {
+                constraintType = GeneratorHelpers.TypeDtoToMarkdownString(typeParameter.ConstraintType);
+                GeneratorHelpers.MergePluginResultData(pluginResult, {
+                    UsedReferences: constraintType.References
+                });
+            } else {
+                constraintType = { References: [], Text: "" };
+            }
+
+            // DefaultType
+            let defaultType: GeneratorHelpers.TypeToStringDto;
+            if (typeParameter.DefaultType != null) {
+                defaultType = GeneratorHelpers.TypeDtoToMarkdownString(typeParameter.DefaultType);
+                GeneratorHelpers.MergePluginResultData(pluginResult, {
+                    UsedReferences: defaultType.References
+                });
+            } else {
+                defaultType = { References: [], Text: "" };
+            }
+
+            return [
+                typeParameter.Name,
+                MarkdownGenerator.EscapeString(constraintType.Text),
+                MarkdownGenerator.EscapeString(defaultType.Text)
+            ];
+        });
+
+        pluginResult.Result = new MarkdownBuilder()
+            .Bold("Type parameters")
+            .EmptyLine()
+            .Table(header, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
+            .EmptyLine()
+            .GetOutput();
+
+        return pluginResult;
+    }
+
     protected RenderParameters(parameters: Contracts.ApiParameterDto[]): PluginResultData | undefined {
         if (parameters.length === 0) {
             return undefined;
         }
 
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-
-        let referenceIds: string[] = [];
         const header = ["Name", "Type", "Description"];
 
         const content = parameters.map(parameter => {
             const parameterTypeDto = GeneratorHelpers.TypeDtoToMarkdownString(parameter.Type);
-
-            referenceIds = referenceIds.concat(parameterTypeDto.References);
+            GeneratorHelpers.MergePluginResultData(pluginResult, {
+                UsedReferences: parameterTypeDto.References
+            });
 
             return [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text), parameter.Metadata.DocumentationComment];
         });
 
-        const builder = new MarkdownBuilder()
-            .Header("Parameters", 4)
+        pluginResult.Result = new MarkdownBuilder()
+            .Bold("Parameters")
             .EmptyLine()
             .Table(header, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
-            .EmptyLine();
-
-        pluginResult.UsedReferences = referenceIds;
-        pluginResult.Result = builder.GetOutput();
+            .EmptyLine()
+            .GetOutput();
 
         return pluginResult;
     }
-
 }
