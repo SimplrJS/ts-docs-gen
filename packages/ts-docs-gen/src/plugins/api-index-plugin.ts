@@ -35,12 +35,13 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
             .Code(indexDeclarationString, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine();
 
+        // !!! @DeividasBakanas, should we really include this?
         // Readonly
-        if (options.ApiItem.IsReadonly) {
-            builder
-                .Italic("Readonly")
-                .EmptyLine();
-        }
+        // if (options.ApiItem.IsReadonly) {
+        //     builder
+        //         .Italic("Readonly")
+        //         .EmptyLine();
+        // }
 
         pluginResult.Result = builder
             .Text(md => `${md.Bold("Index")} ${md.InlineCode(parameter.Name)} - ${parameterType.Text}`)
