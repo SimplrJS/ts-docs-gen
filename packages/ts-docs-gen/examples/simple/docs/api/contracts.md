@@ -214,20 +214,20 @@ SupportedApiItemKindType
 ### GetItemPluginResultHandler
 
 ```typescript
-type GetItemPluginResultHandler = GetItemPluginResultHandler;
+type GetItemPluginResultHandler = () _=> {};
 ```
 
-GetItemPluginResultHandler
+() _=> {}
 
 ----------
 
 ### IsPluginResultExistsHandler
 
 ```typescript
-type IsPluginResultExistsHandler = IsPluginResultExistsHandler;
+type IsPluginResultExistsHandler = () _=> {};
 ```
 
-IsPluginResultExistsHandler
+() _=> {}
 
 ## Enums
 

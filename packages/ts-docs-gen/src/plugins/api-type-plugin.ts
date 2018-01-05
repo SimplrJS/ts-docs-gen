@@ -35,12 +35,15 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
             ]
         };
 
+        const resolvedType = this.resolveTypeDto(options);
+        const codeInline = GeneratorHelpers.ApiTypeToString(options.Reference.Alias, resolvedType, options.ExtractedData);
+
         // Header
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
-            .Code(GeneratorHelpers.ApiTypeToString(options.ApiItem), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(codeInline, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
             .Text(GeneratorHelpers.TypeDtoToString(this.resolveTypeDto(options), options.ExtractedData))
             .GetOutput();

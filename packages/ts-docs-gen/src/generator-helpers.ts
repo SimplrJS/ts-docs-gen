@@ -459,10 +459,8 @@ export namespace GeneratorHelpers {
         return builder.GetOutput();
     }
 
-    export function ApiTypeToString(item: Contracts.ApiTypeDto, alias?: string): string {
-        const name = alias != null ? alias : item.Name;
-
-        return `type ${name} = ${item.Type.Text};`;
+    export function ApiTypeToString(name: string, type: Contracts.TypeDto, extractedData: ExtractDto): string {
+        return `type ${name} = ${TypeDtoToString(type, extractedData)};`;
     }
 
     export function ApiInterfaceToSimpleString(alias: string, apiItem: Contracts.ApiInterfaceDto): string {

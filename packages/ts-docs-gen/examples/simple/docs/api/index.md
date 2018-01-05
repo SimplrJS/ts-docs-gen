@@ -576,6 +576,16 @@ interface Props {
 
 ## Types
 
+### A1
+
+```typescript
+type A1 = { (): void; };
+```
+
+{ (): void; }
+
+----------
+
 ### FooBar
 
 ```typescript

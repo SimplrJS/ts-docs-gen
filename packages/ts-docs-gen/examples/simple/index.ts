@@ -1,5 +1,9 @@
 // tslint:disable
 
+export type A1 = {
+    (): void;
+};
+
 export type FooBar = Foo<string> | Boo;
 
 export interface ExtendedBar extends Foo<number>, Boo {
