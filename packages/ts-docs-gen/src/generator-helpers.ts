@@ -169,6 +169,62 @@ export namespace GeneratorHelpers {
 
     // #region Render helpers
 
+    export function FunctionTypeToString(apiItem: Contracts.ApiFunctionTypeDto, extractedData: ExtractDto): string {
+        return "() _=> {}";
+    }
+
+    export function TypeLikeToString(referenceId: string, extractedData: ExtractDto): string {
+        const apiItem = extractedData.Registry[referenceId];
+
+        switch (apiItem.ApiKind) {
+            case Contracts.ApiItemKinds.FunctionType: {
+                return FunctionTypeToString(apiItem, extractedData);
+            }
+            case Contracts.ApiItemKinds.TypeLiteral: {
+                return ApiObjectToString(apiItem, extractedData).join(" ")
+            }
+            default: {
+                return "???";
+            }
+        }
+    }
+
+    export function TypeDtoToString(type: Contracts.TypeDto, extractedData: ExtractDto): string {
+        if (type.ReferenceId == null &&
+            type.Text === type.Name) {
+            return type.Text;
+        }
+
+        switch (type.ApiTypeKind) {
+            case Contracts.TypeKinds.Union:
+            case Contracts.TypeKinds.Intersection: {
+                const separator = type.ApiTypeKind === Contracts.TypeKinds.Union ? "|" : "&";
+                const result = type.Types
+                    .map(x => TypeDtoToString(x, extractedData))
+                    .join(` ${separator} `);
+
+                return result;
+            }
+            case Contracts.TypeKinds.Basic:
+            default: {
+                let result: string = type.Name || type.Text;
+
+                if (type.Name != null && TSHelpers.IsInternalSymbolName(type.Name)) {
+                    result = type.Text;
+                }
+
+                // Generics
+                if (type.Name != null && type.Generics != null) {
+                    const generics = type.Generics.map(TypeDtoToMarkdownString);
+
+                    result += `<${generics.map(x => x.Text).join(", ")}>`;
+                }
+
+                return result;
+            }
+        }
+    }
+
     // TODO: implement type literal and function type.
     export function TypeDtoToMarkdownString(type: Contracts.TypeDto): TypeToStringDto {
         let references: string[] = [];
@@ -304,27 +360,13 @@ export namespace GeneratorHelpers {
 
     // #region Stringifiers
 
-    // TODO: optimize.
-    export function ApiInterfaceToString(
-        apiItem: Contracts.ApiInterfaceDto,
-        extractedData: ExtractDto
-    ): string[] {
-        const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(apiItem.TypeParameters, extractedData);
-        const typeParametersString = TypeParametersToString(typeParameters);
+    export interface ApiItemObject extends Contracts.ApiBaseItemDto {
+        Members: Contracts.ApiItemReference[];
+    }
 
-        let extendsString: string;
-
-        if (apiItem.Extends.length === 0) {
-            extendsString = "";
-        } else {
-            const typesExtended = apiItem.Extends
-                .map(x => x.Text)
-                .join(", ");
-            extendsString = ` extends ${typesExtended}`;
-        }
-
+    export function ApiObjectToString(apiItem: ApiItemObject, extractedData: ExtractDto, title?: string): string[] {
         const builder = new MarkdownBuilder()
-            .Text(`interface ${apiItem.Name}${typeParametersString}${extendsString} {`);
+            .Text(`${title} {`.trim());
 
         const constructMembers = GetApiItemsFromReference<Contracts.ApiConstructDto>(
             apiItem.Members,
@@ -380,6 +422,33 @@ export namespace GeneratorHelpers {
         });
 
         builder.Text("}");
+
+        return builder.GetOutput();
+    }
+
+    // TODO: optimize.
+    export function ApiInterfaceToString(
+        apiItem: Contracts.ApiInterfaceDto,
+        extractedData: ExtractDto
+    ): string[] {
+        const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(apiItem.TypeParameters, extractedData);
+        const typeParametersString = TypeParametersToString(typeParameters);
+
+        let extendsString: string;
+
+        if (apiItem.Extends.length === 0) {
+            extendsString = "";
+        } else {
+            const typesExtended = apiItem.Extends
+                .map(x => x.Text)
+                .join(", ");
+            extendsString = ` extends ${typesExtended}`;
+        }
+
+        const heading = `interface ${apiItem.Name}${typeParametersString}${extendsString}`;
+
+        const builder = new MarkdownBuilder()
+            .Text(ApiObjectToString(apiItem, extractedData, heading));
 
         return builder.GetOutput();
     }

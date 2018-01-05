@@ -1,12 +1,12 @@
-[InterfaceDeclaration-16]: index.md#props
-[InterfaceDeclaration-16]: index.md#props
-[InterfaceDeclaration-1]: index.md#foo
-[InterfaceDeclaration-2]: index.md#boo
-[InterfaceDeclaration-4]: index.md#myconstrainttype
-[InterfaceDeclaration-9]: index.md#dictionary
-[InterfaceDeclaration-9]: index.md#dictionary
-[InterfaceDeclaration-6]: index.md#objectsinterface
-[InterfaceDeclaration-12]: index.md#monsterinterface
+[InterfaceDeclaration-23]: index.md#props
+[InterfaceDeclaration-23]: index.md#props
+[InterfaceDeclaration-7]: index.md#foo
+[InterfaceDeclaration-8]: index.md#boo
+[InterfaceDeclaration-11]: index.md#myconstrainttype
+[InterfaceDeclaration-16]: index.md#dictionary
+[InterfaceDeclaration-16]: index.md#dictionary
+[InterfaceDeclaration-13]: index.md#objectsinterface
+[InterfaceDeclaration-19]: index.md#monsterinterface
 [ClassDeclaration-0]: index/hello.md#hello
 # index
 
@@ -22,7 +22,7 @@ function Component<T extends Props = Props>(arg: T): void
 
 | Name | Constraint type                  | Default type                     |
 | ---- | -------------------------------- | -------------------------------- |
-| T    | [Props][InterfaceDeclaration-16] | [Props][InterfaceDeclaration-16] |
+| T    | [Props][InterfaceDeclaration-23] | [Props][InterfaceDeclaration-23] |
 
 **Parameters**
 
@@ -46,15 +46,15 @@ interface ExtendedBar extends Foo<number>, Boo {
 
 **Extends**
 
-[Foo][InterfaceDeclaration-1]&#60;number&#62;
+[Foo][InterfaceDeclaration-7]&lt;number&gt;
 
-[Boo][InterfaceDeclaration-2]
+[Boo][InterfaceDeclaration-8]
 
 **Properties**
 
-| Name       | Type                  |
-| ---------- | --------------------- |
-| OtherStuff | Array&#60;string&#62; |
+| Name       | Type                |
+| ---------- | ------------------- |
+| OtherStuff | Array&lt;string&gt; |
 
 ----------
 
@@ -94,9 +94,9 @@ interface Boo {
 
 **Properties**
 
-| Name | Type                  |
-| ---- | --------------------- |
-| Boos | Array&#60;string&#62; |
+| Name | Type                |
+| ---- | ------------------- |
+| Boos | Array&lt;string&gt; |
 
 ----------
 
@@ -159,7 +159,7 @@ interface MyDefaultType extends MyConstraintType {
 
 **Extends**
 
-[MyConstraintType][InterfaceDeclaration-4]
+[MyConstraintType][InterfaceDeclaration-11]
 
 **Properties**
 
@@ -223,7 +223,7 @@ interface InterfaceWithConstraintType extends Dictionary<string> {
 
 **Extends**
 
-[Dictionary][InterfaceDeclaration-9]&#60;string&#62;
+[Dictionary][InterfaceDeclaration-16]&lt;string&gt;
 
 **Properties**
 
@@ -297,7 +297,7 @@ new (): Dictionary<TValue>
 
 **Return type**
 
-[Dictionary][InterfaceDeclaration-9]&#60;TValue&#62;
+[Dictionary][InterfaceDeclaration-16]&lt;TValue&gt;
 
 #### Index signatures
 
@@ -388,7 +388,7 @@ interface MonsterInterface<TValue extends Object = {}> extends ObjectsInterface 
 
 **Extends**
 
-[ObjectsInterface][InterfaceDeclaration-6]
+[ObjectsInterface][InterfaceDeclaration-13]
 
 #### Construct
 
@@ -404,7 +404,7 @@ new <T>(): MonsterInterface<T>
 
 **Return type**
 
-[MonsterInterface][InterfaceDeclaration-12]&#60;T&#62;
+[MonsterInterface][InterfaceDeclaration-19]&lt;T&gt;
 
 ```typescript
 new (someParameter: string): string
@@ -448,9 +448,9 @@ string
 
 **Parameters**
 
-| Name | Type                    |
-| ---- | ----------------------- |
-| key  | undefined &#124; string |
+| Name | Type               |
+| ---- | ------------------ |
+| key  | undefined | string |
 
 **Return type**
 
@@ -574,6 +574,16 @@ interface Props {
 | ---- | ------ |
 | name | string |
 
+## Types
+
+### FooBar
+
+```typescript
+type FooBar = FooBar;
+```
+
+FooBar
+
 ## Enums
 
 ### Uogos
@@ -629,4 +639,5 @@ const enum ConstSkaiciai {
 ## Classes
 
 ### [Hello][ClassDeclaration-0]
+
 

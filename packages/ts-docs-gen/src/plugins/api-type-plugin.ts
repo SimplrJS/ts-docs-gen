@@ -10,6 +10,17 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
         return [GeneratorHelpers.ApiItemKinds.Type];
     }
 
+    private resolveTypeDto(options: PluginOptions<Contracts.ApiTypeDto>): Contracts.TypeDto {
+        const resultType: Contracts.TypeDto = { ...options.ApiItem.Type };
+
+        // Remove reference to itself.
+        if (resultType.ReferenceId === options.Reference.Id) {
+            resultType.ReferenceId = undefined;
+        }
+
+        return resultType;
+    }
+
     public Render(options: PluginOptions<Contracts.ApiTypeDto>): PluginResult {
         const heading = options.Reference.Alias;
         const pluginResult: PluginResult = {
@@ -30,6 +41,8 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(GeneratorHelpers.ApiTypeToString(options.ApiItem), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .EmptyLine()
+            .Text(GeneratorHelpers.TypeDtoToString(this.resolveTypeDto(options), options.ExtractedData))
             .GetOutput();
 
         // TypeParameters
@@ -38,9 +51,9 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
         const typeParametersResult = this.RenderTypeParameters(apiTypeParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
-        // Type
-        const typeResult = this.RenderType(options.ApiItem.Type);
-        GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
+        // // Type
+        // const typeResult = this.RenderType(options.ApiItem.Type);
+        // GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;
     }
