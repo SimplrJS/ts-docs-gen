@@ -1,13 +1,61 @@
+[SourceFile-1]: index.md#index
+[FunctionDeclaration-2]: index.md#componentarg
 [InterfaceDeclaration-16]: index.md#props
 [InterfaceDeclaration-16]: index.md#props
+[InterfaceDeclaration-0]: index.md#extendedbar
 [InterfaceDeclaration-1]: index.md#foo
 [InterfaceDeclaration-2]: index.md#boo
+[InterfaceDeclaration-1]: index.md#foo
+[InterfaceDeclaration-2]: index.md#boo
+[InterfaceDeclaration-3]: index.md#anotherinterface
 [InterfaceDeclaration-4]: index.md#myconstrainttype
+[InterfaceDeclaration-5]: index.md#mydefaulttype
+[InterfaceDeclaration-4]: index.md#myconstrainttype
+[InterfaceDeclaration-6]: index.md#objectsinterface
+[InterfaceDeclaration-7]: index.md#interfacewithcall
+[InterfaceDeclaration-8]: index.md#interfacewithconstrainttype
+[InterfaceDeclaration-9]: index.md#dictionary
+[InterfaceDeclaration-10]: index.md#interfacewithmethod
 [InterfaceDeclaration-9]: index.md#dictionary
 [InterfaceDeclaration-9]: index.md#dictionary
+[InterfaceDeclaration-11]: index.md#methodsinterface
+[InterfaceDeclaration-12]: index.md#monsterinterface
 [InterfaceDeclaration-6]: index.md#objectsinterface
 [InterfaceDeclaration-12]: index.md#monsterinterface
+[InterfaceDeclaration-13]: index.md#someinterface
+[InterfaceDeclaration-14]: index.md#stringsdictionary
+[InterfaceDeclaration-15]: index.md#myinterface
+[InterfaceDeclaration-16]: index.md#props
+[EnumDeclaration-0]: index.md#uogos
+[EnumDeclaration-1]: index.md#constskaiciai
 [ClassDeclaration-0]: index/hello.md#hello
+# Table of contents
+
+* [index][SourceFile-1]
+    * Functions
+        * [Component(arg)][FunctionDeclaration-2]
+    * Interfaces
+        * [ExtendedBar][InterfaceDeclaration-0]
+        * [Foo][InterfaceDeclaration-1]
+        * [Boo][InterfaceDeclaration-2]
+        * [AnotherInterface][InterfaceDeclaration-3]
+        * [MyConstraintType][InterfaceDeclaration-4]
+        * [MyDefaultType][InterfaceDeclaration-5]
+        * [ObjectsInterface][InterfaceDeclaration-6]
+        * [InterfaceWithCall][InterfaceDeclaration-7]
+        * [InterfaceWithConstraintType][InterfaceDeclaration-8]
+        * [InterfaceWithMethod][InterfaceDeclaration-10]
+        * [Dictionary][InterfaceDeclaration-9]
+        * [MethodsInterface][InterfaceDeclaration-11]
+        * [MonsterInterface][InterfaceDeclaration-12]
+        * [SomeInterface][InterfaceDeclaration-13]
+        * [StringsDictionary][InterfaceDeclaration-14]
+        * [MyInterface][InterfaceDeclaration-15]
+        * [Props][InterfaceDeclaration-16]
+    * Enums
+        * [Uogos][EnumDeclaration-0]
+        * [ConstSkaiciai][EnumDeclaration-1]
+
 # index
 
 ## Functions
