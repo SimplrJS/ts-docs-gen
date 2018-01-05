@@ -1,7 +1,7 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 import { BasePlugin } from "./base-plugin";
-import { PluginOptions, PluginResultData } from "../contracts/plugin";
+import { PluginOptions, PluginResultData, PluginHeading } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiItemReference } from "../contracts/api-item-reference";
 
@@ -50,6 +50,18 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
 
         return result;
     }
+
+    // -----
+
+    // protected abstract ContainerMembersKindsGroups
+
+    protected HeadingMembers: PluginHeading[] = [];
+
+    // protected RenderTableOfContents(): string[] {
+    //     return [];
+    // }
+
+    // -----
 
     protected RenderMembersGroups(list: ContainerMembersKindsGroup[], options: PluginOptions<TKind>): PluginResultData {
         const membersReferences = this.getItemsReferenceByKind(list, options.ApiItem.Members, options.ExtractedData);
@@ -110,6 +122,10 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
         }
 
         pluginResultData.Result = builder.GetOutput();
+
+        this.HeadingMembers = pluginResultData.Headings;
+        pluginResultData.Headings = [];
+
         return pluginResultData;
     }
 }

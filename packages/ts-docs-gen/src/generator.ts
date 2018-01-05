@@ -14,7 +14,7 @@ import { PluginResultRegistry as PluginResultRegistryClass } from "./registries/
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
-        this.fileManager = new FileManager();
+        this.fileManager = new FileManager(configuration.ExtractedData.Registry);
         this.pluginResultRegistry = new PluginResultRegistryClass();
         const { ExtractedData } = this.configuration;
 

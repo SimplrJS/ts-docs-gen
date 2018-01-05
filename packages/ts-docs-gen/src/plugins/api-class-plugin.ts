@@ -11,61 +11,63 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
         return [GeneratorHelpers.ApiItemKinds.Class];
     }
 
-    public Render(data: PluginOptions<Contracts.ApiClassDto>): PluginResult {
-        const heading = path.basename(data.ApiItem.Name, path.extname(data.ApiItem.Name));
+    public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
+        {
+            Heading: "Index",
+            Kinds: [Contracts.ApiItemKinds.Index]
+        },
+        {
+            Heading: "Constructor",
+            Kinds: [Contracts.ApiItemKinds.ClassConstructor]
+        },
+        {
+            Heading: "Methods",
+            Kinds: [Contracts.ApiItemKinds.ClassMethod]
+        },
+        {
+            Heading: "Properties",
+            Kinds: [
+                Contracts.ApiItemKinds.ClassProperty,
+                Contracts.ApiItemKinds.GetAccessor,
+                Contracts.ApiItemKinds.SetAccessor,
+            ]
+        }
+    ];
+
+    public Render(options: PluginOptions<Contracts.ApiClassDto>): PluginResult {
+        const heading = path.basename(options.ApiItem.Name, path.extname(options.ApiItem.Name));
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: data.ApiItem,
-            Reference: data.Reference,
-            Headings: [
-                {
-                    Heading: heading,
-                    ApiItemId: data.Reference.Id
-                }
-            ]
+            ApiItem: options.ApiItem,
+            Reference: options.Reference,
+            UsedReferences: [options.Reference.Id]
         };
 
         // Resolve ApiItems from references.
         const typeParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(data.ApiItem.TypeParameters, data.ExtractedData);
+            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ApiItem.TypeParameters, options.ExtractedData);
 
         // Header
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 1)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(data.ApiItem))
+            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(GeneratorHelpers.ClassToString(
-                data.ApiItem,
+                options.ApiItem,
                 typeParameters,
-                data.Reference.Alias
+                options.Reference.Alias
             ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
         // ApiMembers
-        const memberKindsList: ContainerMembersKindsGroup[] = [
-            {
-                Heading: "Index",
-                Kinds: [Contracts.ApiItemKinds.Index]
-            },
-            {
-                Heading: "Constructor",
-                Kinds: [Contracts.ApiItemKinds.ClassConstructor]
-            },
-            {
-                Heading: "Methods",
-                Kinds: [Contracts.ApiItemKinds.ClassMethod]
-            },
-            {
-                Heading: "Properties",
-                Kinds: [
-                    Contracts.ApiItemKinds.ClassProperty,
-                    Contracts.ApiItemKinds.GetAccessor,
-                    Contracts.ApiItemKinds.SetAccessor,
-                ]
-            }
-        ];
-        const members = this.RenderMembersGroups(memberKindsList, data);
+        const members = this.RenderMembersGroups(ApiClassPlugin.MemberKindsList, options);
         GeneratorHelpers.MergePluginResultData(pluginResult, members);
+
+        pluginResult.Headings.push({
+            Heading: heading,
+            ApiItemId: options.Reference.Id,
+            Members: this.HeadingMembers
+        });
 
         return pluginResult;
     }
