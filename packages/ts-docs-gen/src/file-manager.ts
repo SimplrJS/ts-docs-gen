@@ -47,6 +47,7 @@ export class FileManager {
 
         const builder = new MarkdownBuilder();
 
+        // TODO: improve list generation when Markdown UnorderedList fixed.
         containerResult.Headings.forEach(heading => {
             const headingMembers = heading.Members;
             if (headingMembers == null || headingMembers.length === 0) {
