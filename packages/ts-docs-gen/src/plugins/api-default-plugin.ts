@@ -21,7 +21,8 @@ export class ApiDefaultPlugin extends BasePlugin<Contracts.ApiItemDto> {
                     Heading: heading,
                     ApiItemId: options.Reference.Id
                 }
-            ]
+            ],
+            UsedReferences: [options.Reference.Id]
         };
 
         pluginResult.Result = new MarkdownBuilder()

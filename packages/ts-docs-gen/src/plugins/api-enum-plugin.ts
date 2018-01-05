@@ -33,7 +33,8 @@ export class ApiEnumPlugin extends BasePlugin<Contracts.ApiEnumDto> {
                     Heading: heading,
                     ApiItemId: options.Reference.Id
                 }
-            ]
+            ],
+            UsedReferences: [ options.Reference.Id ]
         };
 
         // Enum members

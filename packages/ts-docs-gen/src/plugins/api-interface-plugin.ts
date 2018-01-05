@@ -114,7 +114,8 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
                     ApiItemId: options.Reference.Id,
                     Heading: heading
                 }
-            ]
+            ],
+            UsedReferences: [ options.Reference.Id ]
         };
 
         const memberReferences = GeneratorHelpers.GetApiItemReferences(options.ExtractedData, options.ApiItem.Members);

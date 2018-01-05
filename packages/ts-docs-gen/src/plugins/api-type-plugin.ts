@@ -21,7 +21,8 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
                     Heading: heading,
                     ApiItemId: options.Reference.Id
                 }
-            ]
+            ],
+            UsedReferences: [options.Reference.Id]
         };
 
         // Header

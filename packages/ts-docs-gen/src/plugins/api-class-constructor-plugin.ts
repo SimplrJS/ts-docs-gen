@@ -25,7 +25,8 @@ export class ApiClassConstructorPlugin extends FunctionLikePlugin<Contracts.ApiC
                     Heading: heading,
                     ApiItemId: options.Reference.Id
                 }
-            ]
+            ],
+            UsedReferences: [options.Reference.Id]
         };
 
         // Header
