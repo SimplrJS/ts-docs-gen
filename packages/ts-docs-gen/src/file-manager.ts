@@ -11,15 +11,6 @@ import { ApiClassPlugin } from "./plugins/api-class-plugin";
 import { ApiSourceFilePlugin } from "./plugins/api-source-file-plugin";
 import { ApiNamespacePlugin } from "./plugins/api-namespace-plugin";
 
-// TODO: Do we need OutputData?
-// interface OutputData {
-//     Result: string[];
-//     UsedReferences: string[];
-// }
-
-// type RenderedItemList = Array<PluginResult | OutputData>;
-type RenderedItemList = Array<PluginResult<ApiContainer>>;
-
 // TODO: remove unused files before generating docs.
 export class FileManager {
     constructor(private registry: ExtractedApiRegistry) { }
@@ -27,7 +18,7 @@ export class FileManager {
     /**
      * <FileLocation, RenderedItems>
      */
-    private filesList: Map<string, RenderedItemList> = new Map();
+    private filesList: Map<string, PluginResult<ApiContainer>> = new Map();
     /**
      * <ReferenceId, FileLocation>
      */
@@ -48,12 +39,6 @@ export class FileManager {
     }
 
     private renderTableOfContents(containerResult: PluginResult<ApiContainer>): string[] {
-        console.log(`------- ${containerResult.Reference.Id} -------`);
-        // console.log(containerResult.Headings.map(x => `${x.ApiItemId} ${x.Heading}`).join("\n"));
-        // console.log("---");
-
-        // console.log(containerResult.Headings[0].Members);
-
         const memberKindsList = this.resolveMemberKindsList(containerResult.ApiItem.ApiKind);
 
         if (memberKindsList == null) {
@@ -125,9 +110,11 @@ export class FileManager {
     }
 
     public AddItem(itemResult: PluginResult<ApiContainer>, filePath: string): void {
-        const items = this.filesList.get(filePath) || [];
-        items.push(itemResult);
-        this.filesList.set(filePath, items);
+        if (this.filesList.get(filePath) == null) {
+            this.filesList.set(filePath, itemResult);
+        }
+
+        this.filesList.set(filePath, itemResult);
         // Adding headings.
         this.addItemHeadings(itemResult.Headings, filePath);
 
@@ -149,38 +136,33 @@ export class FileManager {
     public ToFilesOutput(): FileResult[] {
         const files: FileResult[] = [];
 
-        // TODO: @MartynasZilinskas, can `items` have more than one item?
-        for (const [fileLocation, items] of this.filesList) {
+        for (const [fileLocation, item] of this.filesList) {
 
             // Link definitions to file location.
             const linkDefinitions: string[] = [];
-            for (const item of items.reverse()) {
-                item.UsedReferences
-                    .forEach(referenceId => {
-                        const filePath = path.dirname(fileLocation);
 
-                        const referenceString = this.referenceToFile.get(referenceId);
-                        const resolvePath = GeneratorHelpers.StandardisePath(path.relative(filePath, referenceString || "#__error"));
+            item.UsedReferences
+                .forEach(referenceId => {
+                    const filePath = path.dirname(fileLocation);
 
-                        linkDefinitions.push(
-                            MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
-                        );
+                    const referenceString = this.referenceToFile.get(referenceId);
+                    const resolvePath = GeneratorHelpers.StandardisePath(path.relative(filePath, referenceString || "#__error"));
 
-                        if (!referenceString) {
-                            console.warn(`Reference "${referenceId}" not found. Check ${fileLocation}.`);
-                        }
-                    });
-            }
+                    linkDefinitions.push(
+                        MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
+                    );
 
-            const itemsResult = Helpers.Flatten(items.map(x => [x.Result, ""]));
+                    if (!referenceString) {
+                        console.warn(`Reference "${referenceId}" not found. Check ${fileLocation}.`);
+                    }
+                });
 
             files.push({
                 FileLocation: GeneratorHelpers.StandardisePath(fileLocation),
                 Result: [
                     ...linkDefinitions,
-                    // TODO: check if items[0] is a correct declaration.
-                    ...this.renderTableOfContents(items[0]),
-                    ...itemsResult
+                    ...this.renderTableOfContents(item),
+                    ...item.Result
                 ]
             });
         }

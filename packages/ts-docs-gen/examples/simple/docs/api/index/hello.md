@@ -57,4 +57,3 @@ public render<T extends String = String>(arg: T): T
 **Return type**
 
 T
-

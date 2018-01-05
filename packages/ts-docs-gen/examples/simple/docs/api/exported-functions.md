@@ -33,4 +33,3 @@ function Bar(): string
 **Return type**
 
 string
-
