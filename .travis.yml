@@ -1,0 +1,16 @@
+language: node_js
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+branches:
+  only:
+  - master
+  - dev
+  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+node_js:
+- "node"
+script:
+- npm run rush-install
+- npm run rush-rebuild
+- npm run test-ci

@@ -1,0 +1,17 @@
+{
+    "$schema": "./common/schemas/rush.schema.json",
+    "npmVersion": "5.3.0",
+    "rushVersion": "4.0.1",
+    "projects": [
+        {
+            "packageName": "ts-docs-gen",
+            "projectFolder": "packages/ts-docs-gen",
+            "shouldPublish": false
+        },
+        {
+            "packageName": "test-generator-cli",
+            "projectFolder": "tools/test-generator-cli",
+            "shouldPublish": false
+        }
+    ]
+}

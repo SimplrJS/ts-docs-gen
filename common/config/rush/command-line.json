@@ -1,0 +1,12 @@
+{
+    "$schema": "../../schemas/command-line.schema.json",
+    "customCommands": [
+        {
+            "name": "test-ci",
+            "documentation": "Testing packages",
+            "parallelized": false,
+            "summary": "Testing packages"
+        }
+    ],
+    "customOptions": {}
+}
