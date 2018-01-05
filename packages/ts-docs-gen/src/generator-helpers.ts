@@ -179,6 +179,11 @@ export namespace GeneratorHelpers {
             case Contracts.TypeKinds.Intersection: {
                 const symbol = type.ApiTypeKind === Contracts.TypeKinds.Union ? "|" : "&";
 
+                if (type.Name === type.Text) {
+                    text = type.Text;
+                    break;
+                }
+
                 if (type.ReferenceId != null) {
                     text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
                     references.push(type.ReferenceId);
@@ -198,18 +203,16 @@ export namespace GeneratorHelpers {
                     });
                 break;
             }
-            case Contracts.TypeKinds.Basic:
             default: {
                 // Basic type with reference.
                 if (type.Name == null || TSHelpers.IsInternalSymbolName(type.Name)) {
                     text = type.Text;
                 } else {
-                    // FIXME: do not use flag string. Exclude Type parameters references.
-                    if (type.ReferenceId != null && type.FlagsString !== "TypeParameter") {
+                    if (type.ApiTypeKind !== Contracts.TypeKinds.TypeParameter && type.ReferenceId != null) {
                         text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
                         references.push(type.ReferenceId);
                     } else {
-                        text = type.Name;
+                        text = type.Name || type.Text;
                     }
                 }
 
@@ -218,7 +221,7 @@ export namespace GeneratorHelpers {
                     const generics = type.Generics.map(TypeDtoToMarkdownString);
                     references = references.concat(...generics.map(x => x.References));
 
-                    text += MarkdownGenerator.EscapeString(`<${generics.map(x => x.Text).join(", ")}>`);
+                    text += `&lt;${generics.map(x => x.Text).join(", ")}&gt;`;
                 }
             }
         }

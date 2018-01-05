@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
+import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { BasePlugin } from "./base-plugin";
 import { PluginResultData } from "../contracts/plugin";
@@ -21,7 +21,7 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
                 UsedReferences: parameterTypeDto.References
             });
 
-            return [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text), parameter.Metadata.DocumentationComment];
+            return [parameter.Name, parameterTypeDto.Text, parameter.Metadata.DocumentationComment];
         });
 
         pluginResult.Result = new MarkdownBuilder()
