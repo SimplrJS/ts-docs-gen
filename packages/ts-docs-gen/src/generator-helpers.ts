@@ -181,7 +181,9 @@ export namespace GeneratorHelpers {
                 return FunctionTypeToString(apiItem, extractedData);
             }
             case Contracts.ApiItemKinds.TypeLiteral: {
-                return ApiObjectToString(apiItem, extractedData).join(" ")
+                return ApiObjectToString(apiItem, extractedData)
+                    .map(x => x.trim())
+                    .join(" ");
             }
             default: {
                 return "???";
@@ -209,8 +211,12 @@ export namespace GeneratorHelpers {
             default: {
                 let result: string = type.Name || type.Text;
 
-                if (type.Name != null && TSHelpers.IsInternalSymbolName(type.Name)) {
-                    result = type.Text;
+                if (
+                    type.Name != null &&
+                    type.ReferenceId != null &&
+                    TSHelpers.IsInternalSymbolName(type.Name)
+                ) {
+                    result = TypeLikeToString(type.ReferenceId, extractedData);
                 }
 
                 // Generics
@@ -366,7 +372,7 @@ export namespace GeneratorHelpers {
 
     export function ApiObjectToString(apiItem: ApiItemObject, extractedData: ExtractDto, title?: string): string[] {
         const builder = new MarkdownBuilder()
-            .Text(`${title} {`.trim());
+            .Text(`${title != null ? title : ""} {`.trim());
 
         const constructMembers = GetApiItemsFromReference<Contracts.ApiConstructDto>(
             apiItem.Members,
