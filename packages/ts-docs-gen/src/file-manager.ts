@@ -1,5 +1,5 @@
 import { Contracts, ExtractedApiRegistry } from "ts-extractor";
-import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
+import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import * as path from "path";
 
 import { Helpers } from "./utils/helpers";
@@ -45,47 +45,41 @@ export class FileManager {
             return [];
         }
 
-        const builder = new MarkdownBuilder();
+        const tableList: MarkdownContracts.MarkdownList = [];
 
-        // TODO: improve list generation when Markdown UnorderedList fixed.
         containerResult.Headings.forEach(heading => {
             const headingMembers = heading.Members;
             if (headingMembers == null || headingMembers.length === 0) {
                 return;
             }
 
+            // Adding first level heading link.
             const headingLink = MarkdownGenerator.Link(heading.Heading, heading.ApiItemId, true);
-            builder.UnorderedList([headingLink]);
+            tableList.push(headingLink);
 
             memberKindsList.forEach(memberKindGroup => {
+                // Filtering headings by kind group.
                 const membersOfKind = headingMembers.filter(x => memberKindGroup.Kinds.indexOf(this.registry[x.ApiItemId].ApiKind) !== -1);
 
                 if (membersOfKind.length === 0) {
-                    return;
+                    return [];
                 }
 
-                const kindItem = GeneratorHelpers.Tab(1) + MarkdownGenerator.UnorderedList([memberKindGroup.Heading]);
-                builder.Text(kindItem);
+                const membersReferences = membersOfKind.map(x => MarkdownGenerator.Link(x.Heading, x.ApiItemId, true));
 
-                const membersReferences = membersOfKind.map(memberHeading => {
-                    const memberLink = MarkdownGenerator.Link(memberHeading.Heading, memberHeading.ApiItemId, true);
-                    return GeneratorHelpers.Tab(2) + MarkdownGenerator.UnorderedList([memberLink]);
-                });
-
-                builder.Text(membersReferences);
+                // Adding headings of single kind group.
+                tableList.push([memberKindGroup.Heading, membersReferences]);
             });
         });
 
-        const contentsList = builder.GetOutput();
-
-        if (contentsList.length === 0) {
+        if (tableList.length === 0) {
             return [];
         }
 
         return new MarkdownBuilder()
             .Header("Table of contents", 1)
             .EmptyLine()
-            .Text(contentsList)
+            .UnorderedList(tableList)
             .EmptyLine()
             .GetOutput();
     }
