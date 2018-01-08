@@ -2,28 +2,31 @@
 
 * [index][SourceFile-1]
     * Functions
-        * [Component(arg)][FunctionDeclaration-2]
+        * [Component(arg)][FunctionDeclaration-0]
     * Interfaces
-        * [ExtendedBar][InterfaceDeclaration-0]
-        * [Foo][InterfaceDeclaration-1]
-        * [Boo][InterfaceDeclaration-2]
-        * [AnotherInterface][InterfaceDeclaration-3]
-        * [MyConstraintType][InterfaceDeclaration-4]
-        * [MyDefaultType][InterfaceDeclaration-5]
-        * [ObjectsInterface][InterfaceDeclaration-6]
-        * [InterfaceWithCall][InterfaceDeclaration-7]
-        * [InterfaceWithConstraintType][InterfaceDeclaration-8]
-        * [InterfaceWithMethod][InterfaceDeclaration-10]
-        * [Dictionary][InterfaceDeclaration-9]
-        * [MethodsInterface][InterfaceDeclaration-11]
-        * [MonsterInterface][InterfaceDeclaration-12]
-        * [SomeInterface][InterfaceDeclaration-13]
-        * [StringsDictionary][InterfaceDeclaration-14]
-        * [MyInterface][InterfaceDeclaration-15]
-        * [Props][InterfaceDeclaration-16]
+        * [ExtendedBar][InterfaceDeclaration-9]
+        * [Foo][InterfaceDeclaration-7]
+        * [Boo][InterfaceDeclaration-8]
+        * [AnotherInterface][InterfaceDeclaration-10]
+        * [MyConstraintType][InterfaceDeclaration-11]
+        * [MyDefaultType][InterfaceDeclaration-12]
+        * [ObjectsInterface][InterfaceDeclaration-13]
+        * [InterfaceWithCall][InterfaceDeclaration-14]
+        * [InterfaceWithConstraintType][InterfaceDeclaration-15]
+        * [InterfaceWithMethod][InterfaceDeclaration-17]
+        * [Dictionary][InterfaceDeclaration-16]
+        * [MethodsInterface][InterfaceDeclaration-18]
+        * [MonsterInterface][InterfaceDeclaration-19]
+        * [SomeInterface][InterfaceDeclaration-20]
+        * [StringsDictionary][InterfaceDeclaration-21]
+        * [MyInterface][InterfaceDeclaration-22]
+        * [Props][InterfaceDeclaration-23]
+    * Types
+        * [A1][TypeAliasDeclaration-3]
+        * [FooBar][TypeAliasDeclaration-4]
     * Enums
-        * [Uogos][EnumDeclaration-0]
-        * [ConstSkaiciai][EnumDeclaration-1]
+        * [Uogos][EnumDeclaration-1]
+        * [ConstSkaiciai][EnumDeclaration-2]
 
 # index
 
@@ -667,38 +670,37 @@ const enum ConstSkaiciai {
 
 ### [Hello][ClassDeclaration-0]
 
-<<<<<<< HEAD
 
-=======
 [SourceFile-1]: index.md#index
-[FunctionDeclaration-2]: index.md#componentarg
-[InterfaceDeclaration-16]: index.md#props
-[InterfaceDeclaration-16]: index.md#props
-[InterfaceDeclaration-0]: index.md#extendedbar
-[InterfaceDeclaration-1]: index.md#foo
-[InterfaceDeclaration-2]: index.md#boo
-[InterfaceDeclaration-1]: index.md#foo
-[InterfaceDeclaration-2]: index.md#boo
-[InterfaceDeclaration-3]: index.md#anotherinterface
-[InterfaceDeclaration-4]: index.md#myconstrainttype
-[InterfaceDeclaration-5]: index.md#mydefaulttype
-[InterfaceDeclaration-4]: index.md#myconstrainttype
-[InterfaceDeclaration-6]: index.md#objectsinterface
-[InterfaceDeclaration-7]: index.md#interfacewithcall
-[InterfaceDeclaration-8]: index.md#interfacewithconstrainttype
-[InterfaceDeclaration-9]: index.md#dictionary
-[InterfaceDeclaration-10]: index.md#interfacewithmethod
-[InterfaceDeclaration-9]: index.md#dictionary
-[InterfaceDeclaration-9]: index.md#dictionary
-[InterfaceDeclaration-11]: index.md#methodsinterface
-[InterfaceDeclaration-12]: index.md#monsterinterface
-[InterfaceDeclaration-6]: index.md#objectsinterface
-[InterfaceDeclaration-12]: index.md#monsterinterface
-[InterfaceDeclaration-13]: index.md#someinterface
-[InterfaceDeclaration-14]: index.md#stringsdictionary
-[InterfaceDeclaration-15]: index.md#myinterface
-[InterfaceDeclaration-16]: index.md#props
-[EnumDeclaration-0]: index.md#uogos
-[EnumDeclaration-1]: index.md#constskaiciai
+[FunctionDeclaration-0]: index.md#componentarg
+[InterfaceDeclaration-23]: index.md#props
+[InterfaceDeclaration-23]: index.md#props
+[InterfaceDeclaration-9]: index.md#extendedbar
+[InterfaceDeclaration-7]: index.md#foo
+[InterfaceDeclaration-8]: index.md#boo
+[InterfaceDeclaration-7]: index.md#foo
+[InterfaceDeclaration-8]: index.md#boo
+[InterfaceDeclaration-10]: index.md#anotherinterface
+[InterfaceDeclaration-11]: index.md#myconstrainttype
+[InterfaceDeclaration-12]: index.md#mydefaulttype
+[InterfaceDeclaration-11]: index.md#myconstrainttype
+[InterfaceDeclaration-13]: index.md#objectsinterface
+[InterfaceDeclaration-14]: index.md#interfacewithcall
+[InterfaceDeclaration-15]: index.md#interfacewithconstrainttype
+[InterfaceDeclaration-16]: index.md#dictionary
+[InterfaceDeclaration-17]: index.md#interfacewithmethod
+[InterfaceDeclaration-16]: index.md#dictionary
+[InterfaceDeclaration-16]: index.md#dictionary
+[InterfaceDeclaration-18]: index.md#methodsinterface
+[InterfaceDeclaration-19]: index.md#monsterinterface
+[InterfaceDeclaration-13]: index.md#objectsinterface
+[InterfaceDeclaration-19]: index.md#monsterinterface
+[InterfaceDeclaration-20]: index.md#someinterface
+[InterfaceDeclaration-21]: index.md#stringsdictionary
+[InterfaceDeclaration-22]: index.md#myinterface
+[InterfaceDeclaration-23]: index.md#props
+[TypeAliasDeclaration-3]: index.md#a1
+[TypeAliasDeclaration-4]: index.md#foobar
+[EnumDeclaration-1]: index.md#uogos
+[EnumDeclaration-2]: index.md#constskaiciai
 [ClassDeclaration-0]: index/hello.md#hello
->>>>>>> origin/dev

@@ -1,12 +1,21 @@
-[InterfaceDeclaration-0]: contracts.md#apiitemreference
-[InterfaceDeclaration-3]: contracts.md#pluginresult
-[InterfaceDeclaration-0]: contracts.md#apiitemreference
-[InterfaceDeclaration-1]: contracts.md#pluginheading
-[InterfaceDeclaration-2]: contracts.md#pluginmember
-[InterfaceDeclaration-4]: contracts.md#pluginresultdata
-[InterfaceDeclaration-0]: contracts.md#apiitemreference
-[InterfaceDeclaration-5]: contracts.md#pluginoptions
-[InterfaceDeclaration-3]: contracts.md#pluginresult
+# Table of contents
+
+* [contracts][SourceFile-0]
+    * Interfaces
+        * [ApiItemReference][InterfaceDeclaration-0]
+        * [PluginHeading][InterfaceDeclaration-1]
+        * [PluginMember][InterfaceDeclaration-2]
+        * [PluginOptions][InterfaceDeclaration-5]
+        * [PluginResultData][InterfaceDeclaration-4]
+        * [PluginResult][InterfaceDeclaration-3]
+        * [Plugin][InterfaceDeclaration-6]
+    * Types
+        * [SupportedApiItemKindType][TypeAliasDeclaration-0]
+        * [GetItemPluginResultHandler][TypeAliasDeclaration-1]
+        * [IsPluginResultExistsHandler][TypeAliasDeclaration-2]
+    * Enums
+        * [ApiItemKindsAdditional][EnumDeclaration-0]
+
 # contracts
 
 ## Interfaces
@@ -246,3 +255,24 @@ enum ApiItemKindsAdditional {
 | ---- | ----- |
 | Any  | "any" |
 
+[SourceFile-0]: contracts.md#contracts
+[InterfaceDeclaration-0]: contracts.md#apiitemreference
+[InterfaceDeclaration-1]: contracts.md#pluginheading
+[InterfaceDeclaration-2]: contracts.md#pluginmember
+[InterfaceDeclaration-0]: contracts.md#apiitemreference
+[InterfaceDeclaration-3]: contracts.md#pluginresult
+[InterfaceDeclaration-5]: contracts.md#pluginoptions
+[InterfaceDeclaration-0]: contracts.md#apiitemreference
+[InterfaceDeclaration-4]: contracts.md#pluginresultdata
+[InterfaceDeclaration-1]: contracts.md#pluginheading
+[InterfaceDeclaration-2]: contracts.md#pluginmember
+[InterfaceDeclaration-3]: contracts.md#pluginresult
+[InterfaceDeclaration-4]: contracts.md#pluginresultdata
+[InterfaceDeclaration-0]: contracts.md#apiitemreference
+[InterfaceDeclaration-6]: contracts.md#plugin
+[InterfaceDeclaration-5]: contracts.md#pluginoptions
+[InterfaceDeclaration-3]: contracts.md#pluginresult
+[TypeAliasDeclaration-0]: contracts.md#supportedapiitemkindtype
+[TypeAliasDeclaration-1]: contracts.md#getitempluginresulthandler
+[TypeAliasDeclaration-2]: contracts.md#ispluginresultexistshandler
+[EnumDeclaration-0]: contracts.md#apiitemkindsadditional
