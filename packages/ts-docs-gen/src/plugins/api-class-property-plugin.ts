@@ -21,7 +21,8 @@ export class ApiClassPropertyPlugin extends BasePlugin<Contracts.ApiClassPropert
                     ApiItemId: options.Reference.Id,
                     Heading: heading
                 }
-            ]
+            ],
+            UsedReferences: [options.Reference.Id]
         };
 
         // Header

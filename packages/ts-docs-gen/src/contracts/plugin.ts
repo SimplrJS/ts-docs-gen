@@ -11,11 +11,12 @@ export type SupportedApiItemKindType = Contracts.ApiItemKinds | ApiItemKindsAddi
 export interface PluginHeading {
     Heading: string;
     ApiItemId: string;
+    Members?: PluginHeading[];
 }
 
-export interface PluginMember {
+export interface PluginMember<TKind> {
     Reference: ApiItemReference;
-    PluginResult: PluginResult;
+    PluginResult: PluginResult<TKind>;
 }
 
 export type GetItemPluginResultHandler = (reference: ApiItemReference) => PluginResult;
@@ -29,7 +30,7 @@ export interface PluginOptions<TKind = Contracts.ApiItemDto> {
     IsPluginResultExists: IsPluginResultExistsHandler;
 }
 
-export interface PluginResultData {
+export interface PluginResultData<TKind = Contracts.ApiItemDto> {
     /**
      * All headings used in `Result` with ApiItemIds.
      */
@@ -42,10 +43,10 @@ export interface PluginResultData {
      * Plugin rendered result.
      */
     Result: string[];
-    Members: PluginMember[];
+    Members: Array<PluginMember<TKind>>;
 }
 
-export interface PluginResult<TKind = Contracts.ApiItemDto> extends PluginResultData {
+export interface PluginResult<TKind = Contracts.ApiItemDto> extends PluginResultData<TKind> {
     Reference: ApiItemReference;
     ApiItem: TKind;
 }

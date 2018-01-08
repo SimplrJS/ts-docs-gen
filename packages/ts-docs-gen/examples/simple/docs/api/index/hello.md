@@ -1,3 +1,11 @@
+# Table of contents
+
+* [Hello][ClassDeclaration-0]
+    * Constructor
+        * [constructor(arg)][Constructor-0]
+    * Methods
+        * [render(arg)][MethodDeclaration-0]
+
 # Hello
 
 ```typescript
@@ -47,3 +55,6 @@ public render<T extends String = String>(arg: T): T
 
 T
 
+[ClassDeclaration-0]: hello.md#hello
+[Constructor-0]: hello.md#constructorarg
+[MethodDeclaration-0]: hello.md#renderarg

@@ -56,7 +56,8 @@ export class ApiClassAccessorPlugin extends BasePlugin<Kind> {
                     ApiItemId: options.Reference.Id,
                     Heading: heading
                 }
-            ]
+            ],
+            UsedReferences: [options.Reference.Id]
         };
 
         // Header

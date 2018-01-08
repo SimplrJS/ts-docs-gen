@@ -112,6 +112,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
         }
 
         pluginResultData.Result = builder.GetOutput();
+
         return pluginResultData;
     }
 }

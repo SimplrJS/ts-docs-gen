@@ -157,7 +157,7 @@ export namespace GeneratorHelpers {
         return a;
     }
 
-    export function GetDefaultPluginResultData(): PluginResultData {
+    export function GetDefaultPluginResultData<TKind = Contracts.ApiItemDto>(): PluginResultData<TKind> {
         return {
             Headings: [],
             Result: [],
