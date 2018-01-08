@@ -59,14 +59,22 @@ export class ApiNamespacePlugin extends ContainerPlugin<Contracts.ApiNamespaceDt
             .GetOutput();
 
         // Members
-        const renderedMembers = this.RenderMembersGroups(ApiNamespacePlugin.MemberKindsList, options);
-        GeneratorHelpers.MergePluginResultData(pluginResult, renderedMembers);
+        const membersResult = this.RenderMembersGroups(ApiNamespacePlugin.MemberKindsList, options);
+
+        // Treat members' headings as members of namespace heading.
+        const membersHeadings = membersResult.Headings;
+
+        // Clearing headings from members result to prevent repeated inclusion.
+        membersResult.Headings = [];
 
         pluginResult.Headings.push({
             Heading: heading,
             ApiItemId: options.Reference.Id,
-            Members: this.HeadingMembers
+            Members: membersHeadings
         });
+
+        // Merging rest of the members result
+        GeneratorHelpers.MergePluginResultData(pluginResult, membersResult);
 
         return pluginResult;
     }

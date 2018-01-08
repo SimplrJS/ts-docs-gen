@@ -60,14 +60,22 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
             .GetOutput();
 
         // ApiMembers
-        const members = this.RenderMembersGroups(ApiClassPlugin.MemberKindsList, options);
-        GeneratorHelpers.MergePluginResultData(pluginResult, members);
+        const membersResult = this.RenderMembersGroups(ApiClassPlugin.MemberKindsList, options);
+
+        // Treat members' headings as members of class heading.
+        const membersHeadings = membersResult.Headings;
+
+        // Clearing headings from members result to prevent repeated inclusion.
+        membersResult.Headings = [];
 
         pluginResult.Headings.push({
             Heading: heading,
             ApiItemId: options.Reference.Id,
-            Members: this.HeadingMembers
+            Members: membersHeadings
         });
+
+        // Merging rest of the members result
+        GeneratorHelpers.MergePluginResultData(pluginResult, membersResult);
 
         return pluginResult;
     }

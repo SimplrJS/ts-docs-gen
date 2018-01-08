@@ -59,14 +59,22 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
             .GetOutput();
 
         // Members
-        const members = this.RenderMembersGroups(ApiSourceFilePlugin.MemberKindsList, options);
-        GeneratorHelpers.MergePluginResultData(pluginResult, members);
+        const membersResult = this.RenderMembersGroups(ApiSourceFilePlugin.MemberKindsList, options);
+
+        // Treat members' headings as members of source file heading.
+        const membersHeadings = membersResult.Headings;
+
+        // Clearing headings from members result to prevent repeated inclusion.
+        membersResult.Headings = [];
 
         pluginResult.Headings.push({
             Heading: heading,
             ApiItemId: options.Reference.Id,
-            Members: this.HeadingMembers,
+            Members: membersHeadings,
         });
+
+        // Merging rest of the members result
+        GeneratorHelpers.MergePluginResultData(pluginResult, membersResult);
 
         return pluginResult;
     }
