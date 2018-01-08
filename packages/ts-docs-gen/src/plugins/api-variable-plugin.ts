@@ -21,7 +21,8 @@ export class ApiVariablePlugin extends BasePlugin<Contracts.ApiVariableDto> {
                     Heading: heading,
                     ApiItemId: options.Reference.Id
                 }
-            ]
+            ],
+            UsedReferences: [options.Reference.Id]
         };
 
         // Type
