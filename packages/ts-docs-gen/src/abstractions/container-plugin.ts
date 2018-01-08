@@ -51,17 +51,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
         return result;
     }
 
-    // -----
-
-    // protected abstract ContainerMembersKindsGroups
-
     protected HeadingMembers: PluginHeading[] = [];
-
-    // protected RenderTableOfContents(): string[] {
-    //     return [];
-    // }
-
-    // -----
 
     protected RenderMembersGroups(list: ContainerMembersKindsGroup[], options: PluginOptions<TKind>): PluginResultData {
         const membersReferences = this.getItemsReferenceByKind(list, options.ApiItem.Members, options.ExtractedData);
