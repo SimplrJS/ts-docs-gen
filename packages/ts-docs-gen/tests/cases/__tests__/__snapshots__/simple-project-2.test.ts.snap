@@ -5,9 +5,6 @@ Array [
   Object {
     "FileLocation": "index.md",
     "Result": Array [
-      "[SourceFile-0]: index.md#index",
-      "[ClassDeclaration-0]: index/foo.md#foo",
-      "[ClassDeclaration-1]: index/foostart.md#foostart",
       "# index",
       "",
       "## Classes",
@@ -18,14 +15,14 @@ Array [
       "",
       "### [FooStart][ClassDeclaration-1]",
       "",
+      "[SourceFile-0]: index.md#index",
+      "[ClassDeclaration-0]: index/foo.md#foo",
+      "[ClassDeclaration-1]: index/foostart.md#foostart",
     ],
   },
   Object {
     "FileLocation": "index/foo.md",
     "Result": Array [
-      "[ClassDeclaration-0]: foo.md#foo",
-      "[MethodDeclaration-0]: foo.md#getmessagemessage",
-      "[PropertyDeclaration-0]: foo.md#defaultmessage",
       "# Table of contents",
       "",
       "* [Foo][ClassDeclaration-0]",
@@ -69,13 +66,14 @@ Array [
       "",
       "string",
       "",
+      "[ClassDeclaration-0]: foo.md#foo",
+      "[MethodDeclaration-0]: foo.md#getmessagemessage",
+      "[PropertyDeclaration-0]: foo.md#defaultmessage",
     ],
   },
   Object {
     "FileLocation": "index/foostart.md",
     "Result": Array [
-      "[ClassDeclaration-1]: foostart.md#foostart",
-      "[MethodDeclaration-1]: foostart.md#handlemessagemessage",
       "# Table of contents",
       "",
       "* [FooStart][ClassDeclaration-1]",
@@ -105,19 +103,21 @@ Array [
       "",
       "string",
       "",
+      "[ClassDeclaration-1]: foostart.md#foostart",
+      "[MethodDeclaration-1]: foostart.md#handlemessagemessage",
     ],
   },
   Object {
     "FileLocation": "foo.md",
     "Result": Array [
-      "[SourceFile-1]: foo.md#foo",
-      "[ClassDeclaration-0]: index/foo.md#foo",
       "# foo",
       "",
       "## Classes",
       "",
       "### [Foo][ClassDeclaration-0]",
       "",
+      "[SourceFile-1]: foo.md#foo",
+      "[ClassDeclaration-0]: index/foo.md#foo",
     ],
   },
 ]
