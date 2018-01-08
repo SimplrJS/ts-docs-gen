@@ -1,6 +1,3 @@
-[ClassDeclaration-0]: hello.md#hello
-[Constructor-0]: hello.md#constructorarg
-[MethodDeclaration-0]: hello.md#renderarg
 # Table of contents
 
 * [Hello][ClassDeclaration-0]
@@ -57,3 +54,7 @@ public render<T extends String = String>(arg: T): T
 **Return type**
 
 T
+
+[ClassDeclaration-0]: hello.md#hello
+[Constructor-0]: hello.md#constructorarg
+[MethodDeclaration-0]: hello.md#renderarg

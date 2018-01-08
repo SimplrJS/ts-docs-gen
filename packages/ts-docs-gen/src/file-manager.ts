@@ -155,9 +155,9 @@ export class FileManager {
             files.push({
                 FileLocation: GeneratorHelpers.StandardisePath(fileLocation),
                 Result: [
-                    ...linkDefinitions,
                     ...this.renderTableOfContents(item),
-                    ...item.Result
+                    ...item.Result,
+                    ...linkDefinitions
                 ]
             });
         }

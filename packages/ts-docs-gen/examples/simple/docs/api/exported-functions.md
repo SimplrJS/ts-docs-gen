@@ -1,6 +1,3 @@
-[SourceFile-0]: exported-functions.md#exported-functions
-[FunctionDeclaration-0]: exported-functions.md#foo
-[FunctionDeclaration-1]: exported-functions.md#bar
 # Table of contents
 
 * [exported-functions][SourceFile-0]
@@ -33,3 +30,7 @@ function Bar(): string
 **Return type**
 
 string
+
+[SourceFile-0]: exported-functions.md#exported-functions
+[FunctionDeclaration-0]: exported-functions.md#foo
+[FunctionDeclaration-1]: exported-functions.md#bar
