@@ -1,6 +1,8 @@
 // #region Types
 export type SimpleType = { Property1: string; Property2: string; };
 
+export type SimpleTypeParameters = keyof SimpleType;
+
 export type GenericType<T> = { Property: T; };
 
 /**
