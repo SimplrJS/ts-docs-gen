@@ -3,8 +3,16 @@ export type SimpleType = { Property1: string; Property2: string; };
 
 export type GenericType<T> = { Property: T; };
 
+/**
+ * General comment about UnionType type.
+ */
 export type UnionType = string | undefined;
 
+/**
+ * General comment about UnionTypeWithLiterals.
+ * @deprecated
+ * @beta
+ */
 export type UnionTypeWithLiterals = { Property1: string; } | { Property2: number; };
 
 export type IntersectionType = SimpleType & GenericType<number>;
