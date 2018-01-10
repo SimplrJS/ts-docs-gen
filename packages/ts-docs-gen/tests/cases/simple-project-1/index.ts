@@ -190,7 +190,65 @@ export enum EnumListWithStringValues {
 
 // #endregion Enums
 
+// #region Variables
+
 export const SampleConst: string = "sample-const";
+
+export const ArrowFunctionConst = (a: string) => `return-${a}`;
+
+export let letString = "let";
+
+// tslint:disable-next-line:no-var-keyword
+export var varString = "var";
+
+// tslint:disable-next-line:no-var-keyword only-arrow-functions
+export var functionVar = function(): string {
+    return "functionVar";
+};
+
+export const ObjectLiteralConst = { Property: "value" };
+
+export const SymbolConst = Symbol("Some description");
+
+export const MapConst = new Map<string, string>();
+
+export const AnyMap = new Map();
+
+export const RegexConst = /^[A-Za-z]+$/;
+
+export const NumberLiteralConst = 120;
+
+export const PredefinedArray = [1, 2];
+
+export const Tuple: [number, string] = [10, "ten"];
+
+export const TrueConst = true;
+
+export const BooleanConst: boolean = false;
+
+export const FooConst: Boo & ExtendedBar = {
+    Boos: [],
+    Name: "Name",
+    OtherStuff: [],
+    Surname: "Surname",
+    Type: 12
+};
+
+export let FooLet: Boo | ExtendedBar = {
+    Boos: []
+};
+
+export const GetFooConst = GetFoo;
+
+// TODO: check why no reference to `NameResolver` in Types section.
+export const NameResolverConst: NameResolver = () => "resolved";
+
+export const StringOrNull: string | null = null;
+
+// TODO: check why no reference to `NameResolver` in Types section.
+export const FunctionConst: () => NameResolver = () => () => "string";
+
+// #endregion Variables
 
 export class Foo {
     public HandleMessage(message: string): string {
