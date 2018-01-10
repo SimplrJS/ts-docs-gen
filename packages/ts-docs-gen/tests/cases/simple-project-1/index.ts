@@ -58,6 +58,37 @@ export type TypeWithMultipleTypeParameters<T, V, U> = {
     PropertyV: V;
     PropertyU: U;
 };
+
+// #region Integrated types
+
+// TODO: uncomment when supported (MappedType).
+
+// export type Readonly<T> = {
+//     readonly [P in keyof T]: T[P];
+// };
+
+// export type Partial<T> = {
+//     [P in keyof T]?: T[P];
+// };
+
+// export type Nullable<T> = {
+//     [P in keyof T]: T[P] | null;
+// };
+
+// export type Proxify<T> = {
+//     [P in keyof T]: Proxy<T[P]>;
+// };
+
+// export type Pick<T, K extends keyof T> = {
+//     [P in K]: T[P];
+// };
+
+// export type Record<K extends string, T> = {
+//     [P in K]: T;
+// };
+
+// #endregion Integrated types
+
 // #endregion Types
 
 // #region Interfaces
