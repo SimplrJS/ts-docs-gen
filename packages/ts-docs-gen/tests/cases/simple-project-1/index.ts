@@ -194,19 +194,22 @@ export enum EnumListWithStringValues {
 
 export const SampleConst: string = "sample-const";
 
-export const ArrowFunctionConst = (a: string) => `return-${a}`;
+// TODO: uncomment when supported (ArrowFunction).
+// export const ArrowFunctionConst = (a: string) => `return-${a}`;
 
 export let letString = "let";
 
 // tslint:disable-next-line:no-var-keyword
 export var varString = "var";
 
-// tslint:disable-next-line:no-var-keyword only-arrow-functions
-export var functionVar = function(): string {
-    return "functionVar";
-};
+// TODO: uncomment when supported (FunctionExpression).
+// // tslint:disable-next-line:no-var-keyword only-arrow-functions
+// export var functionVar = function(): string {
+//     return "functionVar";
+// };
 
-export const ObjectLiteralConst = { Property: "value" };
+// TODO: uncomment when supported (ObjectLiteralExpression).
+// export const ObjectLiteralConst = { Property: "value" };
 
 export const SymbolConst = Symbol("Some description");
 
