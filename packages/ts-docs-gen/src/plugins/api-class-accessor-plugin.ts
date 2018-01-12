@@ -26,8 +26,8 @@ export class ApiClassAccessorPlugin extends BasePlugin<Kind> {
         return `${accessorType} ${data.Reference.Alias}`;
     }
 
-    private resolveType(apiItem: Kind, extractedData: ExtractDto): Contracts.TypeDto | undefined {
-        let type: Contracts.TypeDto | undefined;
+    private resolveType(apiItem: Kind, extractedData: ExtractDto): Contracts.ApiType | undefined {
+        let type: Contracts.ApiType | undefined;
         if (apiItem.ApiKind === Contracts.ApiItemKinds.GetAccessor) {
             // GetAccessor
 
@@ -73,7 +73,7 @@ export class ApiClassAccessorPlugin extends BasePlugin<Kind> {
             .GetOutput();
 
         // Type
-        const typeResult = this.RenderType(type);
+        const typeResult = this.RenderType(type, options.ExtractedData);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;

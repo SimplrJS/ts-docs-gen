@@ -1,12 +1,11 @@
-import { Contracts, ExtractDto, TSHelpers } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { LogLevel } from "simplr-logger";
-import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
+import { MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import * as path from "path";
 
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
-import { Helpers } from "./utils/helpers";
 
 export namespace GeneratorHelpers {
     export type TypeToStringDto = ReferenceDto<string>;

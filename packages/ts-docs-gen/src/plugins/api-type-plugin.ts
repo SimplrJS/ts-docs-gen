@@ -5,12 +5,12 @@ import { GeneratorHelpers } from "../generator-helpers";
 import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
 import { BasePlugin } from "../abstractions/base-plugin";
 
-export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
+export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeAliasDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Type];
+        return [GeneratorHelpers.ApiItemKinds.TypeAlias];
     }
 
-    public Render(options: PluginOptions<Contracts.ApiTypeDto>): PluginResult {
+    public Render(options: PluginOptions<Contracts.ApiTypeAliasDto>): PluginResult {
         const heading = options.Reference.Alias;
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
@@ -25,12 +25,6 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
             UsedReferences: [options.Reference.Id]
         };
 
-        if (options.ApiItem.Name === "SupportedApiItemKindType") {
-            debugger;
-            //@ts-ignore
-            const a = GeneratorHelpers.TypeDtoToString(options.ApiItem.Type, options.ExtractedData);
-        }
-
         const codeInline = GeneratorHelpers.ApiTypeAliasToString(options.Reference.Alias, options.ApiItem.Type, options.ExtractedData);
 
         // Header
@@ -40,15 +34,16 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(codeInline, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
-            .Text(GeneratorHelpers.TypeDtoToString(options.ApiItem.Type, options.ExtractedData))
+            .Text(GeneratorHelpers.ApiTypeToString(options.ApiItem.Type, options.ExtractedData))
             .GetOutput();
 
         // TypeParameters
         const apiTypeParameters = GeneratorHelpers
             .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ApiItem.TypeParameters, options.ExtractedData);
-        const typeParametersResult = this.RenderTypeParameters(apiTypeParameters);
+        const typeParametersResult = this.RenderTypeParameters(apiTypeParameters, options.ExtractedData);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
+        // FIXME:
         // // Type
         // const typeResult = this.RenderType(options.ApiItem.Type);
         // GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);

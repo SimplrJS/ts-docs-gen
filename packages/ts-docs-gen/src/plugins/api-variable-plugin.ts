@@ -26,7 +26,8 @@ export class ApiVariablePlugin extends BasePlugin<Contracts.ApiVariableDto> {
         };
 
         // Type
-        const typeStringDto = GeneratorHelpers.TypeDtoToMarkdownString(options.ApiItem.Type);
+        // FIXME: References.
+        const typeStringDto = GeneratorHelpers.ApiTypeToString(options.ApiItem.Type, options.ExtractedData);
 
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
@@ -36,7 +37,7 @@ export class ApiVariablePlugin extends BasePlugin<Contracts.ApiVariableDto> {
             .EmptyLine()
             .Bold("Type")
             .EmptyLine()
-            .Text(typeStringDto.Text)
+            .Text(typeStringDto)
             .GetOutput();
 
         return pluginResult;

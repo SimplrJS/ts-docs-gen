@@ -22,7 +22,7 @@ export class ApiNamespacePlugin extends ContainerPlugin<Contracts.ApiNamespaceDt
         },
         {
             Heading: "Types",
-            Kinds: [Contracts.ApiItemKinds.Type]
+            Kinds: [Contracts.ApiItemKinds.TypeAlias]
         },
         {
             Heading: "Enums",

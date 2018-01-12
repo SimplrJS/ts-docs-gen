@@ -20,12 +20,13 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
         const parameter = options.ExtractedData.Registry[options.ApiItem.Parameter] as Contracts.ApiParameterDto;
 
         // Types
-        const parameterType = GeneratorHelpers.TypeDtoToMarkdownString(parameter.Type);
-        const indexType = GeneratorHelpers.TypeDtoToMarkdownString(options.ApiItem.Type);
+        const parameterType = GeneratorHelpers.ApiTypeToString(parameter.Type, options.ExtractedData);
+        const indexType = GeneratorHelpers.ApiTypeToString(options.ApiItem.Type, options.ExtractedData);
         GeneratorHelpers.MergePluginResultData(pluginResult, {
             UsedReferences: [
-                ...parameterType.References,
-                ...indexType.References
+                // FIXME:
+                // ...parameterType.References,
+                // ...indexType.References
             ]
         });
 
@@ -37,8 +38,8 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
 
         pluginResult.Result = builder
             .UnorderedList([
-                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Name)} - ${parameterType.Text}`,
-                `${md.Italic("Type")} ${indexType.Text}`
+                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Name)} - ${parameterType}`,
+                `${md.Italic("Type")} ${indexType}`
             ])
             .GetOutput();
 

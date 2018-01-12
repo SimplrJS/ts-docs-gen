@@ -22,7 +22,7 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
         },
         {
             Heading: "Types",
-            Kinds: [Contracts.ApiItemKinds.Type]
+            Kinds: [Contracts.ApiItemKinds.TypeAlias]
         },
         {
             Heading: "Enums",

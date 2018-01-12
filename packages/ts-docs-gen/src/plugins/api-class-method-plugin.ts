@@ -50,15 +50,15 @@ export class ApiClassMethodPlugin extends FunctionLikePlugin<Contracts.ApiClassM
             .GetOutput();
 
         // TypeParameters
-        const typeParametersResult = this.RenderTypeParameters(apiTypeParameters);
+        const typeParametersResult = this.RenderTypeParameters(apiTypeParameters, options.ExtractedData);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
         // Parameters
-        const parametersResult = this.RenderParameters(apiParameters);
+        const parametersResult = this.RenderParameters(apiParameters, options.ExtractedData);
         GeneratorHelpers.MergePluginResultData(pluginResult, parametersResult);
 
         // ReturnType
-        const returnTypeResult = this.RenderReturnType(options.ApiItem.ReturnType);
+        const returnTypeResult = this.RenderReturnType(options.ApiItem.ReturnType, options.ExtractedData);
         GeneratorHelpers.MergePluginResultData(pluginResult, returnTypeResult);
 
         return pluginResult;
