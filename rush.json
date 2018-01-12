@@ -7,11 +7,6 @@
             "packageName": "ts-docs-gen",
             "projectFolder": "packages/ts-docs-gen",
             "shouldPublish": false
-        },
-        {
-            "packageName": "test-generator-cli",
-            "projectFolder": "tools/test-generator-cli",
-            "shouldPublish": false
         }
     ]
 }
