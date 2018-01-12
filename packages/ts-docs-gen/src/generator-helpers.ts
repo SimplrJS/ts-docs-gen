@@ -170,7 +170,10 @@ export namespace GeneratorHelpers {
     // #region Render helpers
 
     export function FunctionTypeToString(apiItem: Contracts.ApiFunctionTypeDto, extractedData: ExtractDto): string {
-        return "() _=> {}";
+        const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(apiItem.TypeParameters, extractedData);
+        const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(apiItem.Parameters, extractedData);
+
+        return ApiCallToString(typeParameters, parameters, apiItem.ReturnType, " =>");
     }
 
     export function TypeLikeToString(referenceId: string, extractedData: ExtractDto): string {
@@ -221,9 +224,9 @@ export namespace GeneratorHelpers {
 
                 // Generics
                 if (type.Name != null && type.Generics != null) {
-                    const generics = type.Generics.map(TypeDtoToMarkdownString);
+                    const generics = type.Generics.map(x => TypeDtoToString(x, extractedData));
 
-                    result += `<${generics.map(x => x.Text).join(", ")}>`;
+                    result += `\<${generics.join(", ")}\>`;
                 }
 
                 return result;
@@ -698,7 +701,8 @@ export namespace GeneratorHelpers {
     export function ApiCallToString(
         typeParameters?: Contracts.ApiTypeParameterDto[],
         parameters?: Contracts.ApiParameterDto[],
-        returnType?: Contracts.TypeDto
+        returnType?: Contracts.TypeDto,
+        typeDefChar: string = ":"
     ): string {
         // TypeParameters
         const typeParametersString = TypeParametersToString(typeParameters);
@@ -714,7 +718,7 @@ export namespace GeneratorHelpers {
         }
 
         // ReturnType
-        const returnTypeString = returnType != null ? `: ${returnType.Text}` : "";
+        const returnTypeString = returnType != null ? `${typeDefChar} ${returnType.Text}` : "";
 
         return `${typeParametersString}(${parametersString})${returnTypeString}`;
     }
@@ -728,6 +732,7 @@ export namespace GeneratorHelpers {
         // FIXME: `?` and `| undefined` in a single statement.
         const initializerString = apiItem.Initializer ? ` = ${apiItem.Initializer}` : "";
         const isOptionalString = apiItem.IsOptional ? "?" : "";
+
         return `${apiItem.Name}${isOptionalString}: ${apiItem.Type.Text}${initializerString}`;
     }
 

@@ -10,17 +10,6 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
         return [GeneratorHelpers.ApiItemKinds.Type];
     }
 
-    private resolveTypeDto(options: PluginOptions<Contracts.ApiTypeDto>): Contracts.TypeDto {
-        const resultType: Contracts.TypeDto = { ...options.ApiItem.Type };
-
-        // Remove reference to itself.
-        if (resultType.ReferenceId === options.Reference.Id) {
-            resultType.ReferenceId = undefined;
-        }
-
-        return resultType;
-    }
-
     public Render(options: PluginOptions<Contracts.ApiTypeDto>): PluginResult {
         const heading = options.Reference.Alias;
         const pluginResult: PluginResult = {
@@ -36,8 +25,13 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
             UsedReferences: [options.Reference.Id]
         };
 
-        const resolvedType = this.resolveTypeDto(options);
-        const codeInline = GeneratorHelpers.ApiTypeToString(options.Reference.Alias, resolvedType, options.ExtractedData);
+        if (options.ApiItem.Name === "SupportedApiItemKindType") {
+            debugger;
+            //@ts-ignore
+            const a = GeneratorHelpers.TypeDtoToString(options.ApiItem.Type, options.ExtractedData);
+        }
+
+        const codeInline = GeneratorHelpers.ApiTypeToString(options.Reference.Alias, options.ApiItem.Type, options.ExtractedData);
 
         // Header
         pluginResult.Result = new MarkdownBuilder()
@@ -46,7 +40,7 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(codeInline, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
-            .Text(GeneratorHelpers.TypeDtoToString(this.resolveTypeDto(options), options.ExtractedData))
+            .Text(GeneratorHelpers.TypeDtoToString(options.ApiItem.Type, options.ExtractedData))
             .GetOutput();
 
         // TypeParameters

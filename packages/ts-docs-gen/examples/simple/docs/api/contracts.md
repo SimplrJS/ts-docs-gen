@@ -94,13 +94,13 @@ interface PluginOptions<TKind = ApiItemDto> {
 
 **Properties**
 
-| Name                 | Type                                       |
-| -------------------- | ------------------------------------------ |
-| Reference            | [ApiItemReference][InterfaceDeclaration-0] |
-| ApiItem              | TKind                                      |
-| ExtractedData        | ExtractDto                                 |
-| GetItemPluginResult  | GetItemPluginResultHandler                 |
-| IsPluginResultExists | IsPluginResultExistsHandler                |
+| Name                 | Type                                                  |
+| -------------------- | ----------------------------------------------------- |
+| Reference            | [ApiItemReference][InterfaceDeclaration-0]            |
+| ApiItem              | TKind                                                 |
+| ExtractedData        | ExtractDto                                            |
+| GetItemPluginResult  | [GetItemPluginResultHandler][TypeAliasDeclaration-1]  |
+| IsPluginResultExists | [IsPluginResultExistsHandler][TypeAliasDeclaration-2] |
 
 ----------
 
@@ -213,30 +213,30 @@ Render(options: PluginOptions<TKind>): PluginResult<ApiItemDto>
 ### SupportedApiItemKindType
 
 ```typescript
-type SupportedApiItemKindType = SupportedApiItemKindType;
+type SupportedApiItemKindType = ApiItemKinds | Any;
 ```
 
-SupportedApiItemKindType
+ApiItemKinds | Any
 
 ----------
 
 ### GetItemPluginResultHandler
 
 ```typescript
-type GetItemPluginResultHandler = () _=> {};
+type GetItemPluginResultHandler = (reference: ApiItemReference) => PluginResult<ApiItemDto>;
 ```
 
-() _=> {}
+(reference: ApiItemReference) => PluginResult<ApiItemDto>
 
 ----------
 
 ### IsPluginResultExistsHandler
 
 ```typescript
-type IsPluginResultExistsHandler = () _=> {};
+type IsPluginResultExistsHandler = (reference: ApiItemReference) => boolean;
 ```
 
-() _=> {}
+(reference: ApiItemReference) => boolean
 
 ## Enums
 
@@ -263,6 +263,8 @@ enum ApiItemKindsAdditional {
 [InterfaceDeclaration-3]: contracts.md#pluginresult
 [InterfaceDeclaration-5]: contracts.md#pluginoptions
 [InterfaceDeclaration-0]: contracts.md#apiitemreference
+[TypeAliasDeclaration-1]: contracts.md#getitempluginresulthandler
+[TypeAliasDeclaration-2]: contracts.md#ispluginresultexistshandler
 [InterfaceDeclaration-4]: contracts.md#pluginresultdata
 [InterfaceDeclaration-1]: contracts.md#pluginheading
 [InterfaceDeclaration-2]: contracts.md#pluginmember
