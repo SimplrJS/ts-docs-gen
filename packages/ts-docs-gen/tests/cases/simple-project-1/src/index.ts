@@ -5,6 +5,7 @@ export type SimpleTypeParameters = keyof SimpleType;
 
 export type GenericType<T> = { Property: T; };
 
+// TODO: fix GeneratorHelpers.ApiTypeToString to generate correct type in code block.
 /**
  * General comment about UnionType type.
  */
@@ -27,6 +28,7 @@ export type Numbers = 1 | 2 | 3 | 4 | 5 | 6;
 
 export type Name = string;
 
+// TODO: fix wrong type resolved.
 export type NameResolver = () => string;
 
 export type NameOrResolver = Name | NameResolver;
@@ -37,6 +39,7 @@ export type Tree<T> = {
     right: Tree<T>;
 };
 
+// TODO: add link to type from type literal (LinkedList in this case).
 export type LinkedList<T> = T & { next: LinkedList<T> };
 
 export type Negative = void | never;
@@ -45,6 +48,7 @@ export type IndexType = { [key: string]: number; };
 
 export type SelectedNumbers = Readonly<Numbers>;
 
+// TODO: fix wrong symbols escaped.
 export type PartialSimpleType = Partial<SimpleType>;
 
 export type Proxy<T> = {

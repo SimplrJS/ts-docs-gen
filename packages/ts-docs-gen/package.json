@@ -10,7 +10,7 @@
     "test-watch": "start npm run build-tests -- --watchAll && jest --watchAll",
     "tslint": "tslint --project . --config ./tslint.json && echo Successfully passed tslint test.",
     "build": "tsc -p .",
-    "build-tests": "node ../../tools/test-generator-cli/dist/index.js"
+    "build-tests": "test-generator-cli"
   },
   "engine": "node >= 7.5.0",
   "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
@@ -24,6 +24,7 @@
     "typescript": "^2.6.2"
   },
   "devDependencies": {
+    "@simplrjs/test-generator-cli": "^0.1.2",
     "@types/jest": "^22.0.0",
     "@types/sinon": "^4.1.2",
     "jest": "^22.0.4",
