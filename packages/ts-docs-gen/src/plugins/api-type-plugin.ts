@@ -31,7 +31,7 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeDto> {
             const a = GeneratorHelpers.TypeDtoToString(options.ApiItem.Type, options.ExtractedData);
         }
 
-        const codeInline = GeneratorHelpers.ApiTypeToString(options.Reference.Alias, options.ApiItem.Type, options.ExtractedData);
+        const codeInline = GeneratorHelpers.ApiTypeAliasToString(options.Reference.Alias, options.ApiItem.Type, options.ExtractedData);
 
         // Header
         pluginResult.Result = new MarkdownBuilder()
