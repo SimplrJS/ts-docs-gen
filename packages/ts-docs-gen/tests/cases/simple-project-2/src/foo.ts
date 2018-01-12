@@ -56,9 +56,8 @@ export class Foo {
     }
 
     // TODO: fix falsy escaped characters in complex types links.
-    public PrintMessage<T extends Object>(messageDto: MessageDto<T>): void {
-        console.info(messageDto);
-    }
+    // tslint:disable-next-line:no-empty
+    public PrintMessage<T extends Object>(messageDto: MessageDto<T>): void { }
 
     public ResolveSimpleMessageObject<T>(message: T): { Message: T } {
         return {
