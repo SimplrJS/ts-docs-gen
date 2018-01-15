@@ -26,7 +26,6 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeAliasDto> {
         };
 
         const codeInline = GeneratorHelpers.ApiTypeAliasToString(options.ExtractedData, options.Reference.Alias, options.ApiItem.Type);
-        const typeAliasType = GeneratorHelpers.ApiTypeToString(options.ExtractedData, options.ApiItem.Type);
 
         // Header
         pluginResult.Result = new MarkdownBuilder()
@@ -34,8 +33,6 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeAliasDto> {
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(codeInline, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
-            .EmptyLine()
-            .Text(typeAliasType)
             .GetOutput();
 
         // TypeParameters
@@ -44,10 +41,9 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeAliasDto> {
         const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, apiTypeParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
-        // FIXME:
-        // // Type
-        // const typeResult = this.RenderType(options.ApiItem.Type);
-        // GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
+        // Type
+        const typeResult = this.RenderType(options.ExtractedData, options.ApiItem.Type);
+        GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;
     }
