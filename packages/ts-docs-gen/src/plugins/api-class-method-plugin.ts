@@ -42,6 +42,7 @@ export class ApiClassMethodPlugin extends FunctionLikePlugin<Contracts.ApiClassM
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(GeneratorHelpers.ApiClassMethodToString(
+                options.ExtractedData,
                 options.ApiItem,
                 apiTypeParameters,
                 apiParameters,
