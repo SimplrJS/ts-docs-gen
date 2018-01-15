@@ -50,7 +50,7 @@ export class ApiClassMethodPlugin extends FunctionLikePlugin<Contracts.ApiClassM
             .GetOutput();
 
         // TypeParameters
-        const typeParametersResult = this.RenderTypeParameters(apiTypeParameters, options.ExtractedData);
+        const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, apiTypeParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
         // Parameters

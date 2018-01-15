@@ -13,8 +13,8 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
 
     // TODO: Escape string!
     protected RenderTypeParameters(
-        typeParameters: Contracts.ApiTypeParameterDto[],
-        extractedData: ExtractDto
+        extractedData: ExtractDto,
+        typeParameters: Contracts.ApiTypeParameterDto[]
     ): PluginResultData | undefined {
         if (typeParameters.length === 0) {
             return undefined;

@@ -1,11 +1,12 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { LogLevel } from "simplr-logger";
-import { MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
+import { MarkdownBuilder, Contracts as MarkdownContracts, MarkdownGenerator } from "@simplrjs/markdown";
 import * as path from "path";
 
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
+import { Helpers } from "./utils/helpers";
 
 export namespace GeneratorHelpers {
     export type TypeToStringDto = ReferenceDto<string>;
@@ -266,6 +267,7 @@ export namespace GeneratorHelpers {
                     .map(x => x.trim())
                     .join(" ");
             }
+            // TODO: Error.
             // case Contracts.ApiItemKinds.Mapped: {
             //     break;
             // }
@@ -692,93 +694,115 @@ export namespace GeneratorHelpers {
     // #endregion Stringifiers
 
     // #region Tables
-    // export function ApiPropertiesToTableString(properties: Contracts.ApiPropertyDto[]): ReferenceDto<string[]> {
-    //     const headers = ["Name", "Type", "Optional"];
-    //     return ApiItemsToTableString<Contracts.ApiPropertyDto>(headers, properties, ApiPropertyToTableRow);
-    // }
+    export function ApiPropertiesToTableString(
+        extractedData: ExtractDto,
+        properties: Contracts.ApiPropertyDto[]
+    ): ReferenceDto<string[]> {
+        const headers = ["Name", "Type", "Optional"];
 
-    // export function ApiPropertyToTableRow(property: Contracts.ApiPropertyDto): ReferenceDto<string[]> {
-    //     const parameterTypeDto = TypeDtoToMarkdownString(property.Type);
-    //     const isOptionalString = property.IsOptional ? "Yes" : "";
+        return ApiItemsToTableString<Contracts.ApiPropertyDto>(
+            headers,
+            properties,
+            x => ApiPropertyToTableRow(extractedData, x)
+        );
+    }
 
-    //     return {
-    //         Text: [property.Name, parameterTypeDto.Text, isOptionalString],
-    //         References: parameterTypeDto.References
-    //     };
-    // }
+    export function ApiPropertyToTableRow(extractedData: ExtractDto, property: Contracts.ApiPropertyDto): ReferenceDto<string[]> {
+        const parameterTypeDto = ApiTypeToString(extractedData, property.Type);
+        const isOptionalString = property.IsOptional ? "Yes" : "";
 
-    // export function ApiParametersToTableString(parameters: Contracts.ApiParameterDto[]): ReferenceDto<string[]> {
-    //     const headers = ["Name", "Type", "Optional", "Initial value", "Description"];
-    //     return ApiItemsToTableString<Contracts.ApiParameterDto>(headers, parameters, ApiParameterToTableRow);
-    // }
+        return {
+            Text: [property.Name, parameterTypeDto, isOptionalString],
+            References: [] // FIXME: parameterTypeDto.References
+        };
+    }
 
-    // // TODO: implement description.
-    // // TODO: implement IsSpread.
-    // export function ApiParameterToTableRow(parameter: Contracts.ApiParameterDto): ReferenceDto<string[]> {
-    //     const parameterTypeDto = TypeDtoToMarkdownString(parameter.Type);
-    //     const isOptionalString = parameter.IsOptional ? "Yes" : "";
-    //     const initializerString = parameter.Initializer || "";
+    export function ApiParametersToTableString(extractedData: ExtractDto, parameters: Contracts.ApiParameterDto[]): ReferenceDto<string[]> {
+        const headers = ["Name", "Type", "Optional", "Initial value", "Description"];
+        return ApiItemsToTableString<Contracts.ApiParameterDto>(
+            headers,
+            parameters,
+            x => ApiParameterToTableRow(extractedData, x)
+        );
+    }
 
-    //     return {
-    //         Text: [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text), isOptionalString, initializerString],
-    //         References: parameterTypeDto.References
-    //     };
-    // }
+    // TODO: implement description.
+    // TODO: implement IsSpread.
+    export function ApiParameterToTableRow(extractedData: ExtractDto, parameter: Contracts.ApiParameterDto): ReferenceDto<string[]> {
+        const parameterTypeDto = ApiTypeToString(extractedData, parameter.Type);
+        const isOptionalString = parameter.IsOptional ? "Yes" : "";
+        const initializerString = parameter.Initializer || "";
 
-    // export function ApiTypeParametersTableToString(typeParameters: Contracts.ApiTypeParameterDto[]): ReferenceDto<string[]> {
-    //     const headers = ["Name", "Constraint type", "Default type"];
-    //     return ApiItemsToTableString<Contracts.ApiTypeParameterDto>(headers, typeParameters, ApiTypeParameterToTableRow);
-    // }
+        return {
+            Text: [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto), isOptionalString, initializerString],
+            References: [] // FIXME: parameterTypeDto.References
+        };
+    }
 
-    // // TODO: add description from @template jsdoc tag.
-    // export function ApiTypeParameterToTableRow(typeParameter: Contracts.ApiTypeParameterDto): ReferenceDto<string[]> {
-    //     let referenceIds: string[] = [];
-    //     let constraintType: string = "";
-    //     let defaultType: string = "";
+    export function ApiTypeParametersTableToString(
+        extractedData: ExtractDto,
+        typeParameters: Contracts.ApiTypeParameterDto[]
+    ): ReferenceDto<string[]> {
+        const headers = ["Name", "Constraint type", "Default type"];
+        return ApiItemsToTableString<Contracts.ApiTypeParameterDto>(
+            headers,
+            typeParameters,
+            x => ApiTypeParameterToTableRow(extractedData, x)
+        );
+    }
 
-    //     if (typeParameter.ConstraintType) {
-    //         const parsedConstraintType = TypeDtoToMarkdownString(typeParameter.ConstraintType);
+    // TODO: add description from @template jsdoc tag.
+    export function ApiTypeParameterToTableRow(
+        extractedData: ExtractDto,
+        typeParameter: Contracts.ApiTypeParameterDto
+    ): ReferenceDto<string[]> {
+        let referenceIds: string[] = [];
+        let constraintType: string = "";
+        let defaultType: string = "";
 
-    //         referenceIds = referenceIds.concat(parsedConstraintType.References);
-    //         constraintType = MarkdownGenerator.EscapeString(parsedConstraintType.Text);
-    //     }
+        if (typeParameter.ConstraintType) {
+            const parsedConstraintType = ApiTypeToString(extractedData, typeParameter.ConstraintType);
 
-    //     if (typeParameter.DefaultType) {
-    //         const parsedDefaultType = TypeDtoToMarkdownString(typeParameter.DefaultType);
+            // FIXME: referenceIds = referenceIds.concat(parsedConstraintType.References);
+            constraintType = MarkdownGenerator.EscapeString(parsedConstraintType);
+        }
 
-    //         referenceIds = referenceIds.concat(parsedDefaultType.References);
-    //         defaultType = MarkdownGenerator.EscapeString(parsedDefaultType.Text);
-    //     }
+        if (typeParameter.DefaultType) {
+            const parsedDefaultType = ApiTypeToString(extractedData, typeParameter.DefaultType);
 
-    //     return {
-    //         Text: [typeParameter.Name, constraintType, defaultType],
-    //         References: referenceIds
-    //     };
-    // }
+            // FIXME: referenceIds = referenceIds.concat(parsedDefaultType.References);
+            defaultType = MarkdownGenerator.EscapeString(parsedDefaultType);
+        }
 
-    // export function ApiItemsToTableString<TApiDto extends Contracts.ApiItemDto>(
-    //     headers: string[],
-    //     items: TApiDto[],
-    //     itemToString: (item: TApiDto) => ReferenceDto<string[]>
-    // ): ReferenceDto<string[]> {
-    //     if (items.length === 0) {
-    //         return {
-    //             References: [],
-    //             Text: []
-    //         };
-    //     }
+        return {
+            Text: [typeParameter.Name, constraintType, defaultType],
+            References: referenceIds
+        };
+    }
 
-    //     const rows = items.map(itemToString);
-    //     const content = rows.map(row => row.Text);
-    //     const referenceIds = Helpers.Flatten(rows.map(row => row.References));
+    export function ApiItemsToTableString<TApiDto extends Contracts.ApiItemDto>(
+        headers: string[],
+        items: TApiDto[],
+        itemToString: (item: TApiDto) => ReferenceDto<string[]>
+    ): ReferenceDto<string[]> {
+        if (items.length === 0) {
+            return {
+                References: [],
+                Text: []
+            };
+        }
 
-    //     return {
-    //         Text: MarkdownGenerator.Table(headers, content, DEFAULT_TABLE_OPTIONS),
-    //         References: referenceIds
-    //     };
-    // }
+        const rows = items.map(itemToString);
+        const content = rows.map(row => row.Text);
+        const referenceIds = Helpers.Flatten(rows.map(row => row.References));
 
-    //#endregion Tables
+        return {
+            Text: MarkdownGenerator.Table(headers, content, DEFAULT_TABLE_OPTIONS),
+            References: referenceIds
+        };
+    }
+
+    // #endregion Tables
 
     // #region Call strings
     /**
