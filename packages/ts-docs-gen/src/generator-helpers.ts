@@ -109,8 +109,8 @@ export namespace GeneratorHelpers {
     }
 
     export function GetApiItemsFromReference<T extends Contracts.ApiItemDto>(
-        items: Contracts.ApiItemReference[],
         extractedData: ExtractDto,
+        items: Contracts.ApiItemReference[],
         apiItemKind?: Contracts.ApiItemKinds
     ): T[] {
         const apiItems: T[] = [];
@@ -168,19 +168,24 @@ export namespace GeneratorHelpers {
 
     // #region Render helpers
 
-    export function FunctionTypeToString(apiItem: Contracts.ApiFunctionTypeDto, extractedData: ExtractDto): string {
-        const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(apiItem.TypeParameters, extractedData);
-        const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(apiItem.Parameters, extractedData);
+    export function FunctionTypeToString(extractedData: ExtractDto, apiItem: Contracts.ApiFunctionTypeDto): string {
+        const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, apiItem.TypeParameters);
+        const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, apiItem.Parameters);
 
         return ApiCallToString(typeParameters, parameters, apiItem.ReturnType, " =>");
     }
 
     // TODO: WIP.
-    export function ApiTypeToString(type: Contracts.ApiType, extractedData: ExtractDto): string {
+    export function ApiTypeToString(extractedData: ExtractDto, type: Contracts.ApiType | undefined): string {
+        if (type == null) {
+            // TODO: Add Logging Missing type.
+            return "???";
+        }
+
         switch (type.ApiTypeKind) {
             case Contracts.ApiTypeKind.Array: {
                 // Foo[]
-                return `${ApiTypeToString(type.Type, extractedData)}[]`;
+                return `${ApiTypeToString(extractedData, type.Type)}[]`;
             }
             case Contracts.ApiTypeKind.Reference: {
                 // Foo or Foo<string>
@@ -190,25 +195,24 @@ export namespace GeneratorHelpers {
             case Contracts.ApiTypeKind.Intersection: {
                 // string | number
                 const character = type.ApiTypeKind === Contracts.ApiTypeKind.Union ? "|" : "&";
-                const resolvedTypes = type.Members.map(x => ApiTypeToString(x, extractedData));
+                const resolvedTypes = type.Members.map(x => ApiTypeToString(extractedData, x));
 
                 return resolvedTypes.join(` ${character} `);
             }
             case Contracts.ApiTypeKind.Tuple: {
                 // [string, number]
-                const resolvedTypes = type.Members.map(x => ApiTypeToString(x, extractedData));
+                const resolvedTypes = type.Members.map(x => ApiTypeToString(extractedData, x));
                 return `[${resolvedTypes.join(", ")}]`;
             }
             case Contracts.ApiTypeKind.TypePredicate: {
                 // arg is string
-                return `${type.ParameterName} is ${ApiTypeToString(type.Type, extractedData)}`;
+                return `${type.ParameterName} is ${ApiTypeToString(extractedData, type.Type)}`;
             }
             case Contracts.ApiTypeKind.IndexedAccess: {
                 // Foo[T]
-                return `${ApiTypeToString(type.ObjectType, extractedData)}[${type.IndexType.Text}]`;
+                return `${ApiTypeToString(extractedData, type.ObjectType)}[${type.IndexType.Text}]`;
             }
-            // TODO: Fix this after ts-extractor update.
-            // case Contracts.ApiTypeKind.FunctionType:
+            case Contracts.ApiTypeKind.FunctionType:
             case Contracts.ApiTypeKind.TypeLiteral:
             case Contracts.ApiTypeKind.Mapped:
             case Contracts.ApiTypeKind.This:
@@ -221,11 +225,11 @@ export namespace GeneratorHelpers {
             }
             case Contracts.ApiTypeKind.TypeOperator: {
                 // keyof Foo
-                return `${type.Keyword} ${ApiTypeToString(type.Type, extractedData)}`;
+                return `${type.Keyword} ${ApiTypeToString(extractedData, type.Type)}`;
             }
             case Contracts.ApiTypeKind.Parenthesized: {
                 // (string | number)
-                return `(${ApiTypeToString(type.Type, extractedData)})`;
+                return `(${ApiTypeToString(extractedData, type.Type)})`;
             }
             case Contracts.ApiTypeKind.Basic: {
                 return type.Text;
@@ -233,14 +237,14 @@ export namespace GeneratorHelpers {
         }
 
         // --
-        return "???";
+        return "???_";
     }
 
     export function _TypeParametersToString(types: Contracts.ApiType[] | undefined, extractedData: ExtractDto): string {
         if (types == null) {
             return "";
         }
-        const typesString = types.map(x => ApiTypeToString(x, extractedData));
+        const typesString = types.map(x => ApiTypeToString(extractedData, x));
 
         return `<${typesString.join(", ")}>`;
     }
@@ -255,13 +259,16 @@ export namespace GeneratorHelpers {
 
         switch (apiItem.ApiKind) {
             case Contracts.ApiItemKinds.FunctionType: {
-                return FunctionTypeToString(apiItem, extractedData);
+                return FunctionTypeToString(extractedData, apiItem);
             }
             case Contracts.ApiItemKinds.TypeLiteral: {
-                return ApiObjectToString(apiItem, extractedData)
+                return ApiObjectToString(extractedData, apiItem)
                     .map(x => x.trim())
                     .join(" ");
             }
+            // case Contracts.ApiItemKinds.Mapped: {
+            //     break;
+            // }
             default: {
                 Logger.Warn(`"${apiItem.ApiKind}" is not supported.`);
                 return "???";
@@ -448,57 +455,57 @@ export namespace GeneratorHelpers {
         Members: Contracts.ApiItemReference[];
     }
 
-    export function ApiObjectToString(apiItem: ApiItemObject, extractedData: ExtractDto, title?: string): string[] {
+    export function ApiObjectToString(extractedData: ExtractDto, apiItem: ApiItemObject, title?: string): string[] {
         const builder = new MarkdownBuilder()
             .Text(`${title != null ? title : ""} {`.trim());
 
         const constructMembers = GetApiItemsFromReference<Contracts.ApiConstructDto>(
-            apiItem.Members,
             extractedData,
+            apiItem.Members,
             Contracts.ApiItemKinds.Construct
         );
         constructMembers.forEach(member => {
-            const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(member.Parameters, extractedData);
-            const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(member.TypeParameters, extractedData);
+            const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, member.Parameters);
+            const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, member.TypeParameters);
             builder.Text(`${Tab(1)}${ApiConstructToString(memberTypeParameters, parameters, member.ReturnType)};`);
         });
 
         const callMembers = GetApiItemsFromReference<Contracts.ApiCallDto>(
-            apiItem.Members,
             extractedData,
+            apiItem.Members,
             Contracts.ApiItemKinds.Call
         );
         callMembers.forEach(member => {
-            const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(member.Parameters, extractedData);
-            const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(member.TypeParameters, extractedData);
+            const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, member.Parameters);
+            const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, member.TypeParameters);
             builder.Text(`${Tab(1)}${ApiCallToString(memberTypeParameters, parameters, member.ReturnType)};`);
         });
 
         const indexMembers = GetApiItemsFromReference<Contracts.ApiIndexDto>(
-            apiItem.Members,
             extractedData,
+            apiItem.Members,
             Contracts.ApiItemKinds.Index
         );
         indexMembers.forEach(member => {
             const parameter = extractedData.Registry[member.Parameter] as Contracts.ApiParameterDto;
-            builder.Text(`${Tab(1)}${ApiIndexToString(parameter, member.Type, member.IsReadonly)};`);
+            builder.Text(`${Tab(1)}${ApiIndexToString(extractedData, parameter, member.Type, member.IsReadonly)};`);
         });
 
         const methodMembers = GetApiItemsFromReference<Contracts.ApiConstructDto>(
-            apiItem.Members,
             extractedData,
+            apiItem.Members,
             Contracts.ApiItemKinds.Method
         );
         methodMembers.forEach(member => {
-            const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(member.Parameters, extractedData);
-            const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(member.TypeParameters, extractedData);
+            const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, member.Parameters);
+            const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, member.TypeParameters);
 
             builder.Text(`${Tab(1)}${ApiMethodToString(member.Name, memberTypeParameters, parameters, member.ReturnType)};`);
         });
 
         const propertyMembers = GetApiItemsFromReference<Contracts.ApiPropertyDto>(
-            apiItem.Members,
             extractedData,
+            apiItem.Members,
             Contracts.ApiItemKinds.Property
         );
         propertyMembers.forEach(member => {
@@ -512,10 +519,10 @@ export namespace GeneratorHelpers {
 
     // TODO: optimize.
     export function ApiInterfaceToString(
-        apiItem: Contracts.ApiInterfaceDto,
-        extractedData: ExtractDto
+        extractedData: ExtractDto,
+        apiItem: Contracts.ApiInterfaceDto
     ): string[] {
-        const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(apiItem.TypeParameters, extractedData);
+        const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, apiItem.TypeParameters);
         const typeParametersString = TypeParametersToString(typeParameters);
 
         let extendsString: string;
@@ -532,15 +539,13 @@ export namespace GeneratorHelpers {
         const heading = `interface ${apiItem.Name}${typeParametersString}${extendsString}`;
 
         const builder = new MarkdownBuilder()
-            .Text(ApiObjectToString(apiItem, extractedData, heading));
+            .Text(ApiObjectToString(extractedData, apiItem, heading));
 
         return builder.GetOutput();
     }
 
-    // TODO: FIX.
-    export function ApiTypeAliasToString(name: string, type: Contracts.ApiType, extractedData: ExtractDto): string {
-        //return `type ${name} = ${TypeDtoToString(type, extractedData)};`;
-        return "type __type";
+    export function ApiTypeAliasToString(extractedData: ExtractDto, name: string, type: Contracts.ApiType): string {
+        return `type ${name} = ${ApiTypeToString(extractedData, type)};`;
     }
 
     export function ApiInterfaceToSimpleString(alias: string, apiItem: Contracts.ApiInterfaceDto): string {
@@ -548,9 +553,13 @@ export namespace GeneratorHelpers {
         return `interface ${name}`;
     }
 
-    // TODO: Fix
-    export function ApiIndexToString(parameter: Contracts.ApiParameterDto, type: Contracts.ApiType, readOnly: boolean = false): string {
-        const typeString = "???"; //TypeDtoToMarkdownString(type).Text;
+    export function ApiIndexToString(
+        extractedData: ExtractDto,
+        parameter: Contracts.ApiParameterDto,
+        type: Contracts.ApiType,
+        readOnly: boolean = false
+    ): string {
+        const typeString = ApiTypeToString(extractedData, type); //TypeDtoToMarkdownString(type).Text;
         const parameterTypeString = "???"; //TypeDtoToMarkdownString(parameter.Type).Text;
 
         const readOnlyString = readOnly ? "readonly " : "";
@@ -566,6 +575,7 @@ export namespace GeneratorHelpers {
     }
 
     export function ApiAccessorToString(
+        extractedData: ExtractDto,
         apiItem: Contracts.ApiGetAccessorDto | Contracts.ApiSetAccessorDto,
         type: Contracts.ApiType | undefined,
         alias?: string
@@ -574,7 +584,7 @@ export namespace GeneratorHelpers {
         const abstract = apiItem.IsAbstract ? " abstract" : "";
         const $static = apiItem.IsStatic ? " static" : "";
 
-        const typeString = type != null ? type.Text : "???";
+        const typeString = ApiTypeToString(extractedData, type);
         let accessorType: string;
         if (apiItem.ApiKind === Contracts.ApiItemKinds.SetAccessor) {
             accessorType = "set";

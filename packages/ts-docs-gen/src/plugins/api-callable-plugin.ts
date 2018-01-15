@@ -43,10 +43,10 @@ export class ApiCallablePlugin extends FunctionLikePlugin<CallableApiItem> {
 
         // ApiParameters
         const apiParameters =
-            GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ApiItem.Parameters, options.ExtractedData);
+            GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ExtractedData, options.ApiItem.Parameters);
         // ApiTypeParameters
         const apiTypeParameters =
-            GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ApiItem.TypeParameters, options.ExtractedData);
+            GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
 
         pluginResult.Result = new MarkdownBuilder()
             .Code(this.resolveItemCode(options.ApiItem, apiParameters, apiTypeParameters), GeneratorHelpers.DEFAULT_CODE_OPTIONS)

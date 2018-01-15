@@ -66,6 +66,7 @@ export class ApiClassAccessorPlugin extends BasePlugin<Kind> {
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(GeneratorHelpers.ApiAccessorToString(
+                options.ExtractedData, 
                 options.ApiItem,
                 type,
                 options.Reference.Alias

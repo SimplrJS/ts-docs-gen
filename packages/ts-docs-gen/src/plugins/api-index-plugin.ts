@@ -20,8 +20,8 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
         const parameter = options.ExtractedData.Registry[options.ApiItem.Parameter] as Contracts.ApiParameterDto;
 
         // Types
-        const parameterType = GeneratorHelpers.ApiTypeToString(parameter.Type, options.ExtractedData);
-        const indexType = GeneratorHelpers.ApiTypeToString(options.ApiItem.Type, options.ExtractedData);
+        const parameterType = GeneratorHelpers.ApiTypeToString(options.ExtractedData, parameter.Type);
+        const indexType = GeneratorHelpers.ApiTypeToString(options.ExtractedData, options.ApiItem.Type);
         GeneratorHelpers.MergePluginResultData(pluginResult, {
             UsedReferences: [
                 // FIXME:
@@ -31,7 +31,12 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
         });
 
         // Header
-        const indexDeclarationString = GeneratorHelpers.ApiIndexToString(parameter, options.ApiItem.Type, options.ApiItem.IsReadonly);
+        const indexDeclarationString = GeneratorHelpers.ApiIndexToString(
+            options.ExtractedData,
+            parameter, options.ApiItem.Type,
+            options.ApiItem.IsReadonly
+        );
+
         const builder = new MarkdownBuilder()
             .Code(indexDeclarationString, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine();

@@ -27,7 +27,7 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
             // ConstraintType
             let constraintType: string;
             if (typeParameter.ConstraintType != null) {
-                constraintType = GeneratorHelpers.ApiTypeToString(typeParameter.ConstraintType, extractedData);
+                constraintType = GeneratorHelpers.ApiTypeToString(extractedData, typeParameter.ConstraintType);
                 GeneratorHelpers.MergePluginResultData(pluginResult, {
                     // UsedReferences: constraintType.References
                 });
@@ -39,7 +39,7 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
             // DefaultType
             let defaultType: string;
             if (typeParameter.DefaultType != null) {
-                defaultType = GeneratorHelpers.ApiTypeToString(typeParameter.DefaultType, extractedData);
+                defaultType = GeneratorHelpers.ApiTypeToString(extractedData, typeParameter.DefaultType);
                 GeneratorHelpers.MergePluginResultData(pluginResult, {
                     // UsedReferences: defaultType.References
                 });
@@ -71,7 +71,7 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
         }
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-        const parsedReturnType = GeneratorHelpers.ApiTypeToString(type, extractedData);
+        const parsedReturnType = GeneratorHelpers.ApiTypeToString(extractedData, type);
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()

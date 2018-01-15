@@ -27,7 +27,7 @@ export class ApiVariablePlugin extends BasePlugin<Contracts.ApiVariableDto> {
 
         // Type
         // FIXME: References.
-        const typeStringDto = GeneratorHelpers.ApiTypeToString(options.ApiItem.Type, options.ExtractedData);
+        const typeStringDto = GeneratorHelpers.ApiTypeToString(options.ExtractedData, options.ApiItem.Type);
 
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)

@@ -25,7 +25,8 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeAliasDto> {
             UsedReferences: [options.Reference.Id]
         };
 
-        const codeInline = GeneratorHelpers.ApiTypeAliasToString(options.Reference.Alias, options.ApiItem.Type, options.ExtractedData);
+        const codeInline = GeneratorHelpers.ApiTypeAliasToString(options.ExtractedData, options.Reference.Alias, options.ApiItem.Type);
+        const typeAliasType = GeneratorHelpers.ApiTypeToString(options.ExtractedData, options.ApiItem.Type);
 
         // Header
         pluginResult.Result = new MarkdownBuilder()
@@ -34,12 +35,12 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeAliasDto> {
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(codeInline, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
-            .Text(GeneratorHelpers.ApiTypeToString(options.ApiItem.Type, options.ExtractedData))
+            .Text(typeAliasType)
             .GetOutput();
 
         // TypeParameters
         const apiTypeParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ApiItem.TypeParameters, options.ExtractedData);
+            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
         const typeParametersResult = this.RenderTypeParameters(apiTypeParameters, options.ExtractedData);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 

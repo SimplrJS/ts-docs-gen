@@ -10,19 +10,6 @@
 
 ## Interfaces
 
-### Foo
-
-```typescript
-interface Foo {
-    A: string;
-}
-```
-
-**Properties**
-
-| Name | Type   |
-| ---- | ------ |
-| A    | string |
 
 ## Types
 

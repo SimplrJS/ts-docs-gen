@@ -16,7 +16,7 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         const header = ["Name", "Type", "Description"];
 
         const content = parameters.map(parameter => {
-            const parameterTypeDto = GeneratorHelpers.ApiTypeToString(parameter.Type, extractedData);
+            const parameterTypeDto = GeneratorHelpers.ApiTypeToString(extractedData, parameter.Type);
             GeneratorHelpers.MergePluginResultData(pluginResult, {
                 // UsedReferences: parameterTypeDto.References
             });
@@ -40,7 +40,7 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         }
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-        const parsedReturnType = GeneratorHelpers.ApiTypeToString(type, extractedData);
+        const parsedReturnType = GeneratorHelpers.ApiTypeToString(extractedData, type);
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
