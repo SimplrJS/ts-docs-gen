@@ -58,3 +58,5 @@ export interface Plugin<TKind = Contracts.ApiItemDto> {
     CheckApiItem(item: TKind): boolean;
     Render(options: PluginOptions<TKind>): PluginResult;
 }
+
+export type MappedType = {[K in "a-b-c"]: number};

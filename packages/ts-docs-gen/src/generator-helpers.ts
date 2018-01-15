@@ -169,11 +169,28 @@ export namespace GeneratorHelpers {
 
     // #region Render helpers
 
+    export function MappedTypeToString(extractedData: ExtractDto, apiItem: Contracts.ApiMappedDto): string {
+        const readonly = apiItem.IsReadonly ? "readonly " : "";
+        const optional = apiItem.IsOptional ? "?" : "";
+
+        let typeParameter: string;
+        if (apiItem.TypeParameter != null) {
+            const apiTypeParameter = extractedData.Registry[apiItem.TypeParameter] as Contracts.ApiTypeParameterDto;
+            typeParameter = TypeParameterToString(apiTypeParameter, true);
+        } else {
+            typeParameter = "???";
+        }
+
+        const type = ApiTypeToString(extractedData, apiItem.Type);
+
+        return `{${readonly}[${typeParameter}]${optional}: ${type}}`;
+    }
+
     export function FunctionTypeToString(extractedData: ExtractDto, apiItem: Contracts.ApiFunctionTypeDto): string {
         const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, apiItem.TypeParameters);
         const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, apiItem.Parameters);
 
-        return ApiCallToString(typeParameters, parameters, apiItem.ReturnType, " =>");
+        return ApiCallToString(extractedData, typeParameters, parameters, apiItem.ReturnType, " =>");
     }
 
     // TODO: WIP.
@@ -267,119 +284,21 @@ export namespace GeneratorHelpers {
                     .map(x => x.trim())
                     .join(" ");
             }
-            // TODO: Error.
-            // case Contracts.ApiItemKinds.Mapped: {
-            //     break;
-            // }
+            case Contracts.ApiItemKinds.Mapped: {
+                return MappedTypeToString(extractedData, apiItem);
+            }
+            case Contracts.ApiItemKinds.Construct: {
+                const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, apiItem.TypeParameters);
+                const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, apiItem.TypeParameters);
+
+                return ApiConstructToString(extractedData, typeParameters, parameters, apiItem.ReturnType);
+            }
             default: {
                 Logger.Warn(`"${apiItem.ApiKind}" is not supported.`);
                 return "???";
             }
         }
     }
-
-    // export function TypeDtoToString(type: Contracts.TypeDto, extractedData: ExtractDto): string {
-    //     if (type.ReferenceId == null &&
-    //         type.Text === type.Name) {
-    //         return type.Text;
-    //     }
-
-    //     switch (type.ApiTypeKind) {
-    //         case Contracts.TypeKinds.Union:
-    //         case Contracts.TypeKinds.Intersection: {
-    //             const separator = type.ApiTypeKind === Contracts.TypeKinds.Union ? "|" : "&";
-    //             const result = type.Types
-    //                 .map(x => TypeDtoToString(x, extractedData))
-    //                 .join(` ${separator} `);
-
-    //             return result;
-    //         }
-    //         case Contracts.TypeKinds.Basic:
-    //         default: {
-    //             let result: string = type.Name || type.Text;
-
-    //             if (
-    //                 type.Name != null &&
-    //                 type.ReferenceId != null &&
-    //                 TSHelpers.IsInternalSymbolName(type.Name)
-    //             ) {
-    //                 result = TypeLikeToString(type.ReferenceId, extractedData);
-    //             }
-
-    //             // Generics
-    //             if (type.Name != null && type.Generics != null) {
-    //                 const generics = type.Generics.map(x => TypeDtoToString(x, extractedData));
-
-    //                 result += `\<${generics.join(", ")}\>`;
-    //             }
-
-    //             return result;
-    //         }
-    //     }
-    // }
-
-    // // TODO: implement type literal and function type.
-    // export function TypeDtoToMarkdownString(type: Contracts.TypeDto): TypeToStringDto {
-    //     let references: string[] = [];
-    //     let text: string = "";
-
-    //     switch (type.ApiTypeKind) {
-    //         case Contracts.TypeKinds.Union:
-    //         case Contracts.TypeKinds.Intersection: {
-    //             const symbol = type.ApiTypeKind === Contracts.TypeKinds.Union ? "|" : "&";
-
-    //             if (type.Name === type.Text) {
-    //                 text = type.Text;
-    //                 break;
-    //             }
-
-    //             if (type.ReferenceId != null) {
-    //                 text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
-    //                 references.push(type.ReferenceId);
-    //                 break;
-    //             }
-
-    //             type.Types
-    //                 .map(TypeDtoToMarkdownString)
-    //                 .forEach(typeItem => {
-    //                     references = references.concat(typeItem.References);
-
-    //                     if (text === "") {
-    //                         text = typeItem.Text;
-    //                     } else {
-    //                         text += ` ${symbol} ${typeItem.Text}`;
-    //                     }
-    //                 });
-    //             break;
-    //         }
-    //         default: {
-    //             // Basic type with reference.
-    //             if (type.Name == null || TSHelpers.IsInternalSymbolName(type.Name)) {
-    //                 text = type.Text;
-    //             } else {
-    //                 if (type.ApiTypeKind !== Contracts.TypeKinds.TypeParameter && type.ReferenceId != null) {
-    //                     text = MarkdownGenerator.Link(type.Name || type.Text, type.ReferenceId, true);
-    //                     references.push(type.ReferenceId);
-    //                 } else {
-    //                     text = type.Name || type.Text;
-    //                 }
-    //             }
-
-    //             // Generics
-    //             if (type.Name != null && type.Generics != null) {
-    //                 const generics = type.Generics.map(TypeDtoToMarkdownString);
-    //                 references = references.concat(...generics.map(x => x.References));
-
-    //                 text += `&lt;${generics.map(x => x.Text).join(", ")}&gt;`;
-    //             }
-    //         }
-    //     }
-
-    //     return {
-    //         References: references,
-    //         Text: text
-    //     };
-    // }
 
     export function RenderApiItemMetadata(apiItem: Contracts.ApiItemDto): string[] {
         const builder = new MarkdownBuilder();
@@ -469,7 +388,7 @@ export namespace GeneratorHelpers {
         constructMembers.forEach(member => {
             const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, member.Parameters);
             const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, member.TypeParameters);
-            builder.Text(`${Tab(1)}${ApiConstructToString(memberTypeParameters, parameters, member.ReturnType)};`);
+            builder.Text(`${Tab(1)}${ApiConstructToString(extractedData, memberTypeParameters, parameters, member.ReturnType)};`);
         });
 
         const callMembers = GetApiItemsFromReference<Contracts.ApiCallDto>(
@@ -480,7 +399,7 @@ export namespace GeneratorHelpers {
         callMembers.forEach(member => {
             const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, member.Parameters);
             const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, member.TypeParameters);
-            builder.Text(`${Tab(1)}${ApiCallToString(memberTypeParameters, parameters, member.ReturnType)};`);
+            builder.Text(`${Tab(1)}${ApiCallToString(extractedData, memberTypeParameters, parameters, member.ReturnType)};`);
         });
 
         const indexMembers = GetApiItemsFromReference<Contracts.ApiIndexDto>(
@@ -502,7 +421,7 @@ export namespace GeneratorHelpers {
             const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, member.Parameters);
             const memberTypeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, member.TypeParameters);
 
-            builder.Text(`${Tab(1)}${ApiMethodToString(member.Name, memberTypeParameters, parameters, member.ReturnType)};`);
+            builder.Text(`${Tab(1)}${ApiMethodToString(extractedData, member.Name, memberTypeParameters, parameters, member.ReturnType)};`);
         });
 
         const propertyMembers = GetApiItemsFromReference<Contracts.ApiPropertyDto>(
@@ -677,18 +596,19 @@ export namespace GeneratorHelpers {
 
     export function TypeParametersToString(typeParameters?: Contracts.ApiTypeParameterDto[]): string {
         if (typeParameters != null && typeParameters.length > 0) {
-            const params: string[] = typeParameters.map(TypeParameterToString);
+            const params: string[] = typeParameters.map(x => TypeParameterToString(x, false));
             return `<${params.join(", ")}>`;
         } else {
             return "";
         }
     }
 
-    export function TypeParameterToString(apiItem: Contracts.ApiTypeParameterDto): string {
-        const extendsString = apiItem.ConstraintType != null ? ` extends ${apiItem.ConstraintType.Text}` : "";
+    export function TypeParameterToString(apiItem: Contracts.ApiTypeParameterDto, mapped?: boolean): string {
+        const constraintKeyword = mapped ? "in" : "extends";
+        const constraintString = apiItem.ConstraintType != null ? ` ${constraintKeyword} ${apiItem.ConstraintType.Text}` : "";
         const defaultType = apiItem.DefaultType != null ? ` = ${apiItem.DefaultType.Text}` : "";
 
-        return `${apiItem.Name}${extendsString}${defaultType}`;
+        return `${apiItem.Name}${constraintString}${defaultType}`;
     }
 
     // #endregion Stringifiers
@@ -811,6 +731,7 @@ export namespace GeneratorHelpers {
      * Return example: `<TValue>(arg: TValue): void`.
      */
     export function ApiCallToString(
+        extractedData: ExtractDto,
         typeParameters?: Contracts.ApiTypeParameterDto[],
         parameters?: Contracts.ApiParameterDto[],
         returnType?: Contracts.ApiType,
@@ -830,7 +751,8 @@ export namespace GeneratorHelpers {
         }
 
         // ReturnType
-        const returnTypeString = returnType != null ? `${typeDefChar} ${returnType.Text}` : "";
+        const type = ApiTypeToString(extractedData, returnType);
+        const returnTypeString = returnType != null ? `${typeDefChar} ${type}` : "";
 
         return `${typeParametersString}(${parametersString})${returnTypeString}`;
     }
@@ -849,11 +771,12 @@ export namespace GeneratorHelpers {
     }
 
     export function ApiClassConstructorToString(
+        extractedData: ExtractDto,
         apiItem: Contracts.ApiClassConstructorDto,
         parameters?: Contracts.ApiParameterDto[],
         returnType?: Contracts.ApiType
     ): string {
-        const callString = ApiCallToString(undefined, parameters, returnType);
+        const callString = ApiCallToString(extractedData, undefined, parameters, returnType);
         return `${apiItem.AccessModifier} constructor${callString}`;
     }
 
@@ -863,13 +786,14 @@ export namespace GeneratorHelpers {
      * Return example: `function foo<TValue>(arg: TValue): void`.
      */
     export function ApiFunctionToString(
+        extractedData: ExtractDto,
         apiItem: Contracts.ApiFunctionDto,
         typeParameters?: Contracts.ApiTypeParameterDto[],
         parameters?: Contracts.ApiParameterDto[],
         alias?: string
     ): string {
         const name = alias || apiItem.Name;
-        const callString = ApiCallToString(typeParameters, parameters, apiItem.ReturnType);
+        const callString = ApiCallToString(extractedData, typeParameters, parameters, apiItem.ReturnType);
 
         return `function ${name}${callString}`;
     }
@@ -880,11 +804,12 @@ export namespace GeneratorHelpers {
      * Return example: `new <TValue>(arg: TValue): void`.
      */
     export function ApiConstructToString(
+        extractedData: ExtractDto,
         typeParameters?: Contracts.ApiTypeParameterDto[],
         parameters?: Contracts.ApiParameterDto[],
         returnType?: Contracts.ApiType
     ): string {
-        const callString = ApiCallToString(typeParameters, parameters, returnType);
+        const callString = ApiCallToString(extractedData, typeParameters, parameters, returnType);
 
         return `new ${callString}`;
     }
@@ -895,12 +820,13 @@ export namespace GeneratorHelpers {
      * Return example: `someMethod<TValue>(arg: TValue): void`.
      */
     export function ApiMethodToString(
+        extractedData: ExtractDto,
         name: string,
         typeParameters?: Contracts.ApiTypeParameterDto[],
         parameters?: Contracts.ApiParameterDto[],
         returnType?: Contracts.ApiType
     ): string {
-        const callString = ApiCallToString(typeParameters, parameters, returnType);
+        const callString = ApiCallToString(extractedData, typeParameters, parameters, returnType);
 
         return `${name}${callString}`;
     }
@@ -911,6 +837,7 @@ export namespace GeneratorHelpers {
      * Return example: `public static SomeMethod<TValue>(arg: TValue): void`.
      */
     export function ApiClassMethodToString(
+        extractedData: ExtractDto,
         apiItem: Contracts.ApiClassMethodDto,
         typeParameters: Contracts.ApiTypeParameterDto[],
         parameters: Contracts.ApiParameterDto[],
@@ -922,7 +849,7 @@ export namespace GeneratorHelpers {
         const abstract = apiItem.IsAbstract ? " abstract" : "";
         const async = apiItem.IsAsync ? " async" : "";
         const $static = apiItem.IsStatic ? " static" : "";
-        const functionHeader = ApiMethodToString(`${name}${optional}`, typeParameters, parameters, apiItem.ReturnType);
+        const functionHeader = ApiMethodToString(extractedData, `${name}${optional}`, typeParameters, parameters, apiItem.ReturnType);
 
         return `${apiItem.AccessModifier}${$static}${abstract}${async} ${functionHeader}`.trim();
     }

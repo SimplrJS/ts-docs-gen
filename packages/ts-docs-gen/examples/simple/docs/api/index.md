@@ -4,7 +4,7 @@
     * Interfaces
         * [Foo][InterfaceDeclaration-7]
     * Types
-        * [SelectedNumbers][TypeAliasDeclaration-3]
+        * [SelectedNumbers][TypeAliasDeclaration-4]
 
 # index
 
@@ -36,4 +36,4 @@ Readonly<Foo>
 
 [SourceFile-1]: index.md#index
 [InterfaceDeclaration-7]: index.md#foo
-[TypeAliasDeclaration-3]: index.md#selectednumbers
+[TypeAliasDeclaration-4]: index.md#selectednumbers

@@ -13,6 +13,7 @@
         * [SupportedApiItemKindType][TypeAliasDeclaration-0]
         * [GetItemPluginResultHandler][TypeAliasDeclaration-1]
         * [IsPluginResultExistsHandler][TypeAliasDeclaration-2]
+        * [MappedType][TypeAliasDeclaration-3]
     * Enums
         * [ApiItemKindsAdditional][EnumDeclaration-0]
 
@@ -238,6 +239,16 @@ type IsPluginResultExistsHandler = (reference: ApiItemReference) => boolean;
 
 (reference: ApiItemReference) => boolean
 
+----------
+
+### MappedType
+
+```typescript
+type MappedType = {[K in "a-b-c"]: number};
+```
+
+{[K in "a-b-c"]: number}
+
 ## Enums
 
 ### ApiItemKindsAdditional
@@ -266,4 +277,5 @@ enum ApiItemKindsAdditional {
 [TypeAliasDeclaration-0]: contracts.md#supportedapiitemkindtype
 [TypeAliasDeclaration-1]: contracts.md#getitempluginresulthandler
 [TypeAliasDeclaration-2]: contracts.md#ispluginresultexistshandler
+[TypeAliasDeclaration-3]: contracts.md#mappedtype
 [EnumDeclaration-0]: contracts.md#apiitemkindsadditional
