@@ -253,9 +253,6 @@ export namespace GeneratorHelpers {
                 return type.Text;
             }
         }
-
-        // --
-        return "???_";
     }
 
     export function _TypeParametersToString(types: Contracts.ApiType[] | undefined, extractedData: ExtractDto): string {
@@ -291,7 +288,7 @@ export namespace GeneratorHelpers {
                 const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, apiItem.TypeParameters);
                 const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, apiItem.TypeParameters);
 
-                return ApiConstructToString(extractedData, typeParameters, parameters, apiItem.ReturnType);
+                return ApiConstructToString(extractedData, typeParameters, parameters, apiItem.ReturnType, " =>");
             }
             default: {
                 Logger.Warn(`"${apiItem.ApiKind}" is not supported.`);
@@ -676,7 +673,7 @@ export namespace GeneratorHelpers {
         extractedData: ExtractDto,
         typeParameter: Contracts.ApiTypeParameterDto
     ): ReferenceDto<string[]> {
-        let referenceIds: string[] = [];
+        const referenceIds: string[] = [];
         let constraintType: string = "";
         let defaultType: string = "";
 
@@ -735,7 +732,7 @@ export namespace GeneratorHelpers {
         typeParameters?: Contracts.ApiTypeParameterDto[],
         parameters?: Contracts.ApiParameterDto[],
         returnType?: Contracts.ApiType,
-        typeDefChar: string = ":"
+        typeDefChar: string = ": "
     ): string {
         // TypeParameters
         const typeParametersString = TypeParametersToString(typeParameters);
@@ -752,7 +749,7 @@ export namespace GeneratorHelpers {
 
         // ReturnType
         const type = ApiTypeToString(extractedData, returnType);
-        const returnTypeString = returnType != null ? `${typeDefChar} ${type}` : "";
+        const returnTypeString = returnType != null ? `${typeDefChar}${type}` : "";
 
         return `${typeParametersString}(${parametersString})${returnTypeString}`;
     }
@@ -807,9 +804,10 @@ export namespace GeneratorHelpers {
         extractedData: ExtractDto,
         typeParameters?: Contracts.ApiTypeParameterDto[],
         parameters?: Contracts.ApiParameterDto[],
-        returnType?: Contracts.ApiType
+        returnType?: Contracts.ApiType,
+        typeDefChar?: string
     ): string {
-        const callString = ApiCallToString(extractedData, typeParameters, parameters, returnType);
+        const callString = ApiCallToString(extractedData, typeParameters, parameters, returnType, typeDefChar);
 
         return `new ${callString}`;
     }
