@@ -38,7 +38,7 @@ export class ApiClassConstructorPlugin extends FunctionLikePlugin<Contracts.ApiC
             .GetOutput();
 
         // Parameters
-        const parametersResult = this.RenderParameters(apiParameters, options.ExtractedData);
+        const parametersResult = this.RenderParameters(options.ExtractedData, apiParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, parametersResult);
 
         return pluginResult;

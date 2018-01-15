@@ -74,7 +74,7 @@ export class ApiClassAccessorPlugin extends BasePlugin<Kind> {
             .GetOutput();
 
         // Type
-        const typeResult = this.RenderType(type, options.ExtractedData);
+        const typeResult = this.RenderType(options.ExtractedData, type);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;

@@ -65,7 +65,7 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
         return pluginResult;
     }
 
-    protected RenderType(type: Contracts.ApiType | undefined, extractedData: ExtractDto): PluginResultData | undefined {
+    protected RenderType(extractedData: ExtractDto, type: Contracts.ApiType | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }

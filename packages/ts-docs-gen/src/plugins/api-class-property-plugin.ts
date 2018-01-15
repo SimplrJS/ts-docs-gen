@@ -36,7 +36,7 @@ export class ApiClassPropertyPlugin extends BasePlugin<Contracts.ApiClassPropert
             ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
-        const typeResult = this.RenderType(options.ApiItem.Type, options.ExtractedData);
+        const typeResult = this.RenderType(options.ExtractedData, options.ApiItem.Type);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;

@@ -20,24 +20,193 @@
 
 ## Interfaces
 
+### ApiItemReference
+
+```typescript
+interface ApiItemReference {
+    Id: string;
+    Alias: string;
+}
+```
+
+**Properties**
+
+| Name  | Type   |
+| ----- | ------ |
+| Id    | string |
+| Alias | string |
 
 ----------
 
+### PluginHeading
+
+```typescript
+interface PluginHeading {
+    Heading: string;
+    ApiItemId: string;
+}
+```
+
+**Properties**
+
+| Name      | Type   |
+| --------- | ------ |
+| Heading   | string |
+| ApiItemId | string |
 
 ----------
 
+### PluginMember
+
+```typescript
+interface PluginMember {
+    Reference: ApiItemReference;
+    PluginResult: PluginResult<ApiItemDto>;
+}
+```
+
+**Properties**
+
+| Name         | Type                     |
+| ------------ | ------------------------ |
+| Reference    | ApiItemReference         |
+| PluginResult | PluginResult<ApiItemDto> |
 
 ----------
 
+### PluginOptions
+
+```typescript
+interface PluginOptions<TKind = ApiItemDto> {
+    Reference: ApiItemReference;
+    ApiItem: TKind;
+    ExtractedData: ExtractDto;
+    GetItemPluginResult: GetItemPluginResultHandler;
+    IsPluginResultExists: IsPluginResultExistsHandler;
+}
+```
+
+**Type parameters**
+
+| Name  | Default type |
+| ----- | ------------ |
+| TKind | ApiItemDto   |
+
+**Properties**
+
+| Name                 | Type                        |
+| -------------------- | --------------------------- |
+| Reference            | ApiItemReference            |
+| ApiItem              | TKind                       |
+| ExtractedData        | ExtractDto                  |
+| GetItemPluginResult  | GetItemPluginResultHandler  |
+| IsPluginResultExists | IsPluginResultExistsHandler |
 
 ----------
 
+### PluginResultData
+
+```typescript
+interface PluginResultData {
+    Headings: PluginHeading[];
+    UsedReferences: string[];
+    Result: string[];
+    Members: PluginMember[];
+}
+```
+
+**Properties**
+
+| Name           | Type            |
+| -------------- | --------------- |
+| Headings       | PluginHeading[] |
+| UsedReferences | string[]        |
+| Result         | string[]        |
+| Members        | PluginMember[]  |
 
 ----------
 
+### PluginResult
+
+```typescript
+interface PluginResult<TKind = ApiItemDto> extends PluginResultData {
+    Reference: ApiItemReference;
+    ApiItem: TKind;
+}
+```
+
+**Type parameters**
+
+| Name  | Default type |
+| ----- | ------------ |
+| TKind | ApiItemDto   |
+
+**Extends**
+
+PluginResultData
+
+**Properties**
+
+| Name      | Type             |
+| --------- | ---------------- |
+| Reference | ApiItemReference |
+| ApiItem   | TKind            |
 
 ----------
 
+### Plugin
+
+```typescript
+interface Plugin<TKind = ApiItemDto> {
+    SupportedApiItemKinds(): SupportedApiItemKindType[];
+    CheckApiItem(item: TKind): boolean;
+    Render(options: PluginOptions<TKind>): PluginResult<ApiItemDto>;
+}
+```
+
+**Type parameters**
+
+| Name  | Default type |
+| ----- | ------------ |
+| TKind | ApiItemDto   |
+
+#### Methods
+
+```typescript
+SupportedApiItemKinds(): SupportedApiItemKindType[]
+```
+
+**Return type**
+
+SupportedApiItemKindType[]
+
+```typescript
+CheckApiItem(item: TKind): boolean
+```
+
+**Parameters**
+
+| Name | Type  |
+| ---- | ----- |
+| item | TKind |
+
+**Return type**
+
+boolean
+
+```typescript
+Render(options: PluginOptions<TKind>): PluginResult<ApiItemDto>
+```
+
+**Parameters**
+
+| Name    | Type                 |
+| ------- | -------------------- |
+| options | PluginOptions<TKind> |
+
+**Return type**
+
+PluginResult<ApiItemDto>
 
 ## Types
 

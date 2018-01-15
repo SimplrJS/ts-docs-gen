@@ -7,7 +7,7 @@ import { GeneratorHelpers } from "../generator-helpers";
 
 export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends BasePlugin<TKind> {
     // TODO: Escape string!
-    protected RenderParameters(parameters: Contracts.ApiParameterDto[], extractedData: ExtractDto): PluginResultData | undefined {
+    protected RenderParameters(extractedData: ExtractDto, parameters: Contracts.ApiParameterDto[]): PluginResultData | undefined {
         if (parameters.length === 0) {
             return undefined;
         }
@@ -34,7 +34,7 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         return pluginResult;
     }
 
-    protected RenderReturnType(type: Contracts.ApiType | undefined, extractedData: ExtractDto): PluginResultData | undefined {
+    protected RenderReturnType(extractedData: ExtractDto, type: Contracts.ApiType | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
