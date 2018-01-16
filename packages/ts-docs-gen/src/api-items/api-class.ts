@@ -3,7 +3,7 @@ import { ApiBase } from "./api-base";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export class ApiClass extends ApiBase<Contracts.ApiClassDto> {
-    public ToStringArray(alias?: string | undefined): string[] {
+    public ToText(alias?: string | undefined): string[] {
         const name = alias || this.Data.Name;
 
         // Abstract
@@ -37,7 +37,7 @@ export class ApiClass extends ApiBase<Contracts.ApiClassDto> {
         ];
     }
 
-    public ToSimpleString(alias?: string | undefined): string {
+    public ToHeadingText(alias?: string | undefined): string {
         return alias || this.Data.Name;
     }
 }

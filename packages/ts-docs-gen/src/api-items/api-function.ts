@@ -2,7 +2,7 @@ import { Contracts } from "ts-extractor";
 import { ApiCallable } from "./api-callable";
 
 export class ApiFunction extends ApiCallable<Contracts.ApiFunctionDto> {
-    public ToStringArray(alias?: string): string[] {
+    public ToText(alias?: string): string[] {
         const name = alias || this.Data.Name;
 
         return [
@@ -10,7 +10,7 @@ export class ApiFunction extends ApiCallable<Contracts.ApiFunctionDto> {
         ];
     }
 
-    public ToSimpleString(): string {
+    public ToHeadingText(): string {
         return this.Data.Name;
     }
 }

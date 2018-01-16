@@ -18,7 +18,7 @@ export abstract class ApiBase<TKind extends Contracts.ApiBaseItemDto> extends Ba
 
     protected TypeParametersToString(apiItem: ApiItemWithTypeParameters): string {
         const members = this.GetTypeParameters(apiItem)
-            .map(x => x.ToString())
+            .map(x => x.ToText())
             .join(", ");
 
         return `<${members}>`;

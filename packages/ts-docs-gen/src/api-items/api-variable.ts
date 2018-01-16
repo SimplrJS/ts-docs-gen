@@ -4,7 +4,7 @@ import { BaseApiItem } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export class ApiVariable extends BaseApiItem<Contracts.ApiVariableDto> {
-    public ToStringArray(alias?: string): string[] {
+    public ToText(alias?: string): string[] {
         const name = alias || this.Data.Name;
         const type = GeneratorHelpers.ApiTypeToString(this.ExtractedData, this.Data.Type);
 
@@ -13,7 +13,7 @@ export class ApiVariable extends BaseApiItem<Contracts.ApiVariableDto> {
         ];
     }
 
-    public ToSimpleString(alias?: string): string {
+    public ToHeadingText(alias?: string): string {
         return alias || this.Data.Name;
     }
 }

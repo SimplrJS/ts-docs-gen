@@ -10,16 +10,16 @@ export class ApiIndex extends BaseApiItem<Contracts.ApiIndexDto> {
         return new ApiParameter(this.ExtractedData, apiItem);
     }
 
-    public ToStringArray(): string[] {
+    public ToText(): string[] {
         const parameter = this.GetParameter();
 
         const readonly: string = this.Data.IsReadonly ? "readonly " : "";
         const type: string = GeneratorHelpers.ApiTypeToString(this.ExtractedData, this.Data.Type);
 
-        return [`${readonly}[${parameter.ToString()}]: ${type}`];
+        return [`${readonly}[${parameter.ToText()}]: ${type}`];
     }
 
-    public ToSimpleString(): string {
+    public ToHeadingText(): string {
         return this.Data.Name;
     }
 }

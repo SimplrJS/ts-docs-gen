@@ -11,7 +11,7 @@ export class ApiEnum extends BaseApiItem<Contracts.ApiEnumDto> {
             .map(x => new ApiEnumMember(this.ExtractedData, x));
     }
 
-    public ToStringArray(alias?: string): string[] {
+    public ToText(alias?: string): string[] {
         const enumMembers = this.getEnumMembers();
 
         const name = alias || this.Data.Name;
@@ -19,7 +19,7 @@ export class ApiEnum extends BaseApiItem<Contracts.ApiEnumDto> {
 
         // Constructing enum body.
         const membersStrings = enumMembers.map((memberItem, index, array) => {
-            let memberString = `${GeneratorHelpers.Tab()} ${memberItem.ToString()}`;
+            let memberString = `${GeneratorHelpers.Tab()} ${memberItem.ToText()}`;
 
             // Add a comma if current item is not the last item
             if (index !== enumMembers.length - 1) {
@@ -37,7 +37,7 @@ export class ApiEnum extends BaseApiItem<Contracts.ApiEnumDto> {
         ];
     }
 
-    public ToSimpleString(): string {
+    public ToHeadingText(): string {
         return this.Data.Name;
     }
 }

@@ -4,7 +4,7 @@ import { BaseApiItem } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export class ApiTypeParameter extends BaseApiItem<Contracts.ApiTypeParameterDto> {
-    public ToStringArray(alias?: string, mapped?: boolean): string[] {
+    public ToText(alias?: string, mapped?: boolean): string[] {
         const name = alias || this.Data.Name;
 
         const constraintKeyword = mapped ? "in" : "extends";
@@ -28,7 +28,7 @@ export class ApiTypeParameter extends BaseApiItem<Contracts.ApiTypeParameterDto>
         return [`${name}${constraintString}${defaultTypeString}`];
     }
 
-    public ToSimpleString(): string {
+    public ToHeadingText(): string {
         return this.Data.Name;
     }
 }

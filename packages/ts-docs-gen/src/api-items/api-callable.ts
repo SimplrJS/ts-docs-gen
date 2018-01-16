@@ -25,7 +25,7 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
 
     protected ParametersToString(): string {
         return this.GetParameters()
-            .map(x => x.ToString())
+            .map(x => x.ToText())
             .join(", ");
     }
 

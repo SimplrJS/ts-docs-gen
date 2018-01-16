@@ -3,7 +3,7 @@ import { Contracts } from "ts-extractor";
 import { BaseApiItem } from "../abstractions/base-api-item";
 
 export class ApiEnumMember extends BaseApiItem<Contracts.ApiEnumMemberDto> {
-    public ToStringArray(): string[] {
+    public ToText(): string[] {
         const name = this.Data.Name;
 
         let value: string;
@@ -16,7 +16,7 @@ export class ApiEnumMember extends BaseApiItem<Contracts.ApiEnumMemberDto> {
         return [`${name}${value}`];
     }
 
-    public ToSimpleString(): string {
+    public ToHeadingText(): string {
         return this.Data.Name;
     }
 }

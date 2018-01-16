@@ -4,7 +4,7 @@ import { BaseApiItem } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export class ApiParameter extends BaseApiItem<Contracts.ApiParameterDto> {
-    public ToStringArray(): string[] {
+    public ToText(): string[] {
         const name = this.Data.Name;
 
         const initializerString = this.Data.Initializer ? ` = ${this.Data.Initializer}` : "";
@@ -17,7 +17,7 @@ export class ApiParameter extends BaseApiItem<Contracts.ApiParameterDto> {
         ];
     }
 
-    public ToSimpleString(): string {
+    public ToHeadingText(): string {
         return this.Data.Name;
     }
 }

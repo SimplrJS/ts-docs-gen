@@ -3,7 +3,7 @@ import { ApiBase } from "./api-base";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export class ApiInterface extends ApiBase<Contracts.ApiInterfaceDto> {
-    public ToStringArray(alias?: string | undefined): string[] {
+    public ToText(alias?: string | undefined): string[] {
         const name = alias || this.Data.Name;
 
         // TypeParameters
@@ -20,13 +20,12 @@ export class ApiInterface extends ApiBase<Contracts.ApiInterfaceDto> {
             extendsString = "";
         }
 
-
         return [
             `interface ${name}${typeParameters}${extendsString}`
         ];
     }
 
-    public ToSimpleString(alias?: string | undefined): string {
+    public ToHeadingText(alias?: string | undefined): string {
         return alias || this.Data.Name;
     }
 }

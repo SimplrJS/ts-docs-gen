@@ -4,7 +4,7 @@ import { BaseApiItem } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export class ApiProperty extends BaseApiItem<Contracts.ApiPropertyDto> {
-    public ToStringArray(): string[] {
+    public ToText(): string[] {
         const optional = this.Data.IsOptional ? "?" : "";
         const readOnly = this.Data.IsReadonly ? "readonly " : "";
         const type = GeneratorHelpers.ApiTypeToString(this.ExtractedData, this.Data.Type);
@@ -12,7 +12,7 @@ export class ApiProperty extends BaseApiItem<Contracts.ApiPropertyDto> {
         return [`${readOnly}${this.Data.Name}${optional}: ${type};`];
     }
 
-    public ToSimpleString(): string {
+    public ToHeadingText(): string {
         return this.Data.Name;
     }
 }

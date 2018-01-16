@@ -11,12 +11,7 @@ export abstract class BaseApiItem<TKind extends Contracts.ApiBaseItemDto = Contr
         return this.apiItem;
     }
 
-    // TODO: Naming.
-    public abstract ToStringArray(alias?: string): string[];
+    public abstract ToText(alias?: string): string[];
 
-    public ToString(alias?: string): string {
-        return this.ToStringArray(alias).join("\n");
-    }
-
-    public abstract ToSimpleString(alias?: string): string;
+    public abstract ToHeadingText(alias?: string): string;
 }

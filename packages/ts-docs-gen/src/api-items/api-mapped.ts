@@ -14,14 +14,14 @@ export class ApiMapped extends BaseApiItem<Contracts.ApiMappedDto> {
         return new ApiTypeParameter(this.ExtractedData, apiItem);
     }
 
-    public ToStringArray(): string[] {
+    public ToText(): string[] {
         const readonly = this.Data.IsReadonly ? "readonly " : "";
         const optional = this.Data.IsOptional ? "?" : "";
 
         const typeParameter = this.GetTypeParameter();
         let typeParameterString: string;
         if (typeParameter != null) {
-            typeParameterString = typeParameter.ToString();
+            typeParameterString = typeParameter.ToText();
         } else {
             // TODO: Add logger for missing TypeParameter.
             typeParameterString = "???";
@@ -32,7 +32,7 @@ export class ApiMapped extends BaseApiItem<Contracts.ApiMappedDto> {
         return [`{${readonly}[${typeParameterString}]${optional}: ${type}}`];
     }
 
-    public ToSimpleString(): string {
+    public ToHeadingText(): string {
         return this.Data.Name;
     }
 }
