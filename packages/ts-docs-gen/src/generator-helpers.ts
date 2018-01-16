@@ -734,6 +734,7 @@ export namespace GeneratorHelpers {
      *
      * Return example: `<TValue>(arg: TValue): void`.
      */
+    // TODO: Remove me.
     export function ApiCallToString(
         extractedData: ExtractDto,
         typeParameters?: Contracts.ApiTypeParameterDto[],
@@ -790,6 +791,7 @@ export namespace GeneratorHelpers {
      *
      * Return example: `function foo<TValue>(arg: TValue): void`.
      */
+    // TODO: Remove me.
     export function ApiFunctionToString(
         extractedData: ExtractDto,
         apiItem: Contracts.ApiFunctionDto,
