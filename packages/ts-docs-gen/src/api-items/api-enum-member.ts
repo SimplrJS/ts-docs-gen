@@ -1,8 +1,8 @@
 import { Contracts } from "ts-extractor";
 
-import { BaseApiItem } from "../abstractions/base-api-item";
+import { BaseApiItemClass } from "../abstractions/base-api-item";
 
-export class ApiEnumMember extends BaseApiItem<Contracts.ApiEnumMemberDto> {
+export class ApiEnumMember extends BaseApiItemClass<Contracts.ApiEnumMemberDto> {
     public ToText(): string[] {
         const name = this.Data.Name;
 

@@ -1,9 +1,9 @@
 import { Contracts } from "ts-extractor";
 
-import { BaseApiItem } from "../abstractions/base-api-item";
+import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 
-export class ApiTypeParameter extends BaseApiItem<Contracts.ApiTypeParameterDto> {
+export class ApiTypeParameter extends BaseApiItemClass<Contracts.ApiTypeParameterDto> {
     public ToText(alias?: string, mapped?: boolean): string[] {
         const name = alias || this.Data.Name;
 

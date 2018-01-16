@@ -1,9 +1,9 @@
 import { Contracts } from "ts-extractor";
 
-import { BaseApiItem } from "../abstractions/base-api-item";
+import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 
-export class ApiParameter extends BaseApiItem<Contracts.ApiParameterDto> {
+export class ApiParameter extends BaseApiItemClass<Contracts.ApiParameterDto> {
     public ToText(): string[] {
         const name = this.Data.Name;
 

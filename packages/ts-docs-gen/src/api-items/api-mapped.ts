@@ -1,10 +1,10 @@
 import { Contracts } from "ts-extractor";
 
-import { BaseApiItem } from "../abstractions/base-api-item";
+import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiTypeParameter } from "./api-type-parameter";
 
-export class ApiMapped extends BaseApiItem<Contracts.ApiMappedDto> {
+export class ApiMapped extends BaseApiItemClass<Contracts.ApiMappedDto> {
     protected GetTypeParameter(): ApiTypeParameter | undefined {
         if (this.Data.TypeParameter == null) {
             return undefined;
@@ -21,7 +21,7 @@ export class ApiMapped extends BaseApiItem<Contracts.ApiMappedDto> {
         const typeParameter = this.GetTypeParameter();
         let typeParameterString: string;
         if (typeParameter != null) {
-            typeParameterString = typeParameter.ToText();
+            typeParameterString = typeParameter.ToText().join("\n");
         } else {
             // TODO: Add logger for missing TypeParameter.
             typeParameterString = "???";

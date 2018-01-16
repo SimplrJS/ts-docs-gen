@@ -7,8 +7,23 @@ import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
 import { Helpers } from "./utils/helpers";
+import { BaseApiItem, BaseApiItemConstructor } from "./contracts/base-api-item";
+import { ApiItemsList } from "./api-items/api-items-list";
 
 export namespace GeneratorHelpers {
+    export function SerializeApiItem(extractedData: ExtractDto, apiItem: Contracts.ApiItemDto): BaseApiItem | undefined {
+        for (const [kind, constructorItem] of ApiItemsList) {
+            if (kind === apiItem.ApiKind) {
+                const constructor$: BaseApiItemConstructor = constructorItem;
+
+                return new constructor$(extractedData, apiItem);
+            }
+        }
+
+        // TODO: Add logger: "This api kind is not supported".
+        return undefined;
+    }
+
     export type TypeToStringDto = ReferenceDto<string>;
 
     export interface ReferenceDto<T = string | string[]> {

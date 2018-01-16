@@ -1,10 +1,10 @@
 import { Contracts } from "ts-extractor";
 
-import { BaseApiItem } from "../abstractions/base-api-item";
+import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { ApiEnumMember } from "./api-enum-member";
 import { GeneratorHelpers } from "../generator-helpers";
 
-export class ApiEnum extends BaseApiItem<Contracts.ApiEnumDto> {
+export class ApiEnum extends BaseApiItemClass<Contracts.ApiEnumDto> {
     private getEnumMembers(): ApiEnumMember[] {
         return GeneratorHelpers
             .GetApiItemsFromReference<Contracts.ApiEnumMemberDto>(this.ExtractedData, this.Data.Members)

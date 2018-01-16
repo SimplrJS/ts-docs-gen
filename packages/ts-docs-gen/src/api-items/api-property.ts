@@ -1,9 +1,9 @@
 import { Contracts } from "ts-extractor";
 
-import { BaseApiItem } from "../abstractions/base-api-item";
+import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 
-export class ApiProperty extends BaseApiItem<Contracts.ApiPropertyDto> {
+export class ApiProperty extends BaseApiItemClass<Contracts.ApiPropertyDto> {
     public ToText(): string[] {
         const optional = this.Data.IsOptional ? "?" : "";
         const readOnly = this.Data.IsReadonly ? "readonly " : "";
