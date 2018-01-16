@@ -178,6 +178,7 @@ export namespace GeneratorHelpers {
             const apiTypeParameter = extractedData.Registry[apiItem.TypeParameter] as Contracts.ApiTypeParameterDto;
             typeParameter = TypeParameterToString(apiTypeParameter, true);
         } else {
+            // TODO: Add logging.
             typeParameter = "???";
         }
 
@@ -207,7 +208,7 @@ export namespace GeneratorHelpers {
             }
             case Contracts.ApiTypeKind.Reference: {
                 // Foo or Foo<string>
-                return `${type.SymbolName}${TypeTypeParametersToString(type.TypeParameters, extractedData)}`;
+                return `${type.SymbolName}${TypeParametersTypeToString(type.TypeParameters, extractedData)}`;
             }
             case Contracts.ApiTypeKind.Union:
             case Contracts.ApiTypeKind.Intersection: {
@@ -255,7 +256,7 @@ export namespace GeneratorHelpers {
         }
     }
 
-    export function TypeTypeParametersToString(types: Contracts.ApiType[] | undefined, extractedData: ExtractDto): string {
+    export function TypeParametersTypeToString(types: Contracts.ApiType[] | undefined, extractedData: ExtractDto): string {
         if (types == null) {
             return "";
         }
@@ -294,6 +295,7 @@ export namespace GeneratorHelpers {
                 return ApiConstructToString(extractedData, typeParameters, parameters, apiItem.ReturnType, " => ");
             }
             default: {
+                // TODO: Add location?
                 Logger.Warn(`"${apiItem.ApiKind}" is not supported.`);
                 return "???";
             }
