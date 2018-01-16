@@ -10,11 +10,11 @@ import { ApiBase } from "./api-base";
  */
 export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extends ApiBase<TKind> {
     protected GetTypeParameters(): ApiTypeParameter[] {
-        return super.GetTypeParameters(this.Data.TypeParameters);
+        return super.GetTypeParameters(this.Data);
     }
 
     protected TypeParametersToString(): string {
-        return super.TypeParametersToString(this.Data.TypeParameters);
+        return super.TypeParametersToString(this.Data);
     }
 
     protected GetParameters(): ApiParameter[] {
