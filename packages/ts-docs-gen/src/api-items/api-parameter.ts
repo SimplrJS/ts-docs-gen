@@ -4,8 +4,8 @@ import { BaseApiItem } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export class ApiParameter extends BaseApiItem<Contracts.ApiParameterDto> {
-    public ToStringArray(alias?: string): string[] {
-        const name = alias || this.Data.Name;
+    public ToStringArray(): string[] {
+        const name = this.Data.Name;
 
         const initializerString = this.Data.Initializer ? ` = ${this.Data.Initializer}` : "";
         const isOptionalString = this.Data.IsOptional ? "?" : "";
