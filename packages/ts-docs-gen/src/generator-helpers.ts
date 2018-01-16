@@ -190,7 +190,7 @@ export namespace GeneratorHelpers {
         const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, apiItem.TypeParameters);
         const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, apiItem.Parameters);
 
-        return ApiCallToString(extractedData, typeParameters, parameters, apiItem.ReturnType, " =>");
+        return ApiCallToString(extractedData, typeParameters, parameters, apiItem.ReturnType, " => ");
     }
 
     // TODO: WIP.
@@ -274,21 +274,24 @@ export namespace GeneratorHelpers {
 
         switch (apiItem.ApiKind) {
             case Contracts.ApiItemKinds.FunctionType: {
+                // () => void
                 return FunctionTypeToString(extractedData, apiItem);
             }
             case Contracts.ApiItemKinds.TypeLiteral: {
+                // { name: string; }
                 return ApiObjectToString(extractedData, apiItem)
                     .map(x => x.trim())
                     .join(" ");
             }
             case Contracts.ApiItemKinds.Mapped: {
+                // {[T in key Foo]: any}
                 return MappedTypeToString(extractedData, apiItem);
             }
             case Contracts.ApiItemKinds.Construct: {
                 const typeParameters = GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(extractedData, apiItem.TypeParameters);
                 const parameters = GetApiItemsFromReference<Contracts.ApiParameterDto>(extractedData, apiItem.TypeParameters);
 
-                return ApiConstructToString(extractedData, typeParameters, parameters, apiItem.ReturnType, " =>");
+                return ApiConstructToString(extractedData, typeParameters, parameters, apiItem.ReturnType, " => ");
             }
             default: {
                 Logger.Warn(`"${apiItem.ApiKind}" is not supported.`);
@@ -352,7 +355,7 @@ export namespace GeneratorHelpers {
         return result;
     }
 
-    export function FixSentence(sentence: string, punctuationMark: string = "."): string {
+    export function EnsureFullStop(sentence: string, punctuationMark: string = "."): string {
         const trimmedSentence = sentence.trim();
         const punctuationMarks = ".!:;,-";
 
@@ -373,9 +376,9 @@ export namespace GeneratorHelpers {
         Members: Contracts.ApiItemReference[];
     }
 
-    export function ApiObjectToString(extractedData: ExtractDto, apiItem: ApiItemObject, title?: string): string[] {
+    export function ApiObjectToString(extractedData: ExtractDto, apiItem: ApiItemObject, heading?: string): string[] {
         const builder = new MarkdownBuilder()
-            .Text(`${title != null ? title : ""} {`.trim());
+            .Text(`${heading != null ? heading : ""} {`.trim());
 
         const constructMembers = GetApiItemsFromReference<Contracts.ApiConstructDto>(
             extractedData,
@@ -477,8 +480,8 @@ export namespace GeneratorHelpers {
         type: Contracts.ApiType,
         readOnly: boolean = false
     ): string {
-        const typeString = ApiTypeToString(extractedData, type); //TypeDtoToMarkdownString(type).Text;
-        const parameterTypeString = "???"; //TypeDtoToMarkdownString(parameter.Type).Text;
+        const typeString = ApiTypeToString(extractedData, type); 
+        const parameterTypeString = ApiTypeToString(extractedData, parameter.Type);
 
         const readOnlyString = readOnly ? "readonly " : "";
 
