@@ -13,7 +13,7 @@ export class ApiClassConstructorPlugin extends FunctionLikePlugin<Contracts.ApiC
     public Render(options: PluginOptions<Contracts.ApiClassConstructorDto>): PluginResult {
         // ApiParameters
         const apiParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ApiItem.Parameters, options.ExtractedData);
+            .GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ExtractedData, options.ApiItem.Parameters);
 
         const heading = GeneratorHelpers.MethodToSimpleString("constructor", apiParameters);
         const pluginResult: PluginResult = {
@@ -34,11 +34,15 @@ export class ApiClassConstructorPlugin extends FunctionLikePlugin<Contracts.ApiC
             .Header(heading, 3)
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
-            .Code(GeneratorHelpers.ApiClassConstructorToString(options.ApiItem, apiParameters), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(GeneratorHelpers.ApiClassConstructorToString(
+                options.ExtractedData,
+                options.ApiItem,
+                apiParameters
+            ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
         // Parameters
-        const parametersResult = this.RenderParameters(apiParameters);
+        const parametersResult = this.RenderParameters(options.ExtractedData, apiParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, parametersResult);
 
         return pluginResult;

@@ -20,25 +20,31 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
         const parameter = options.ExtractedData.Registry[options.ApiItem.Parameter] as Contracts.ApiParameterDto;
 
         // Types
-        const parameterType = GeneratorHelpers.TypeDtoToMarkdownString(parameter.Type);
-        const indexType = GeneratorHelpers.TypeDtoToMarkdownString(options.ApiItem.Type);
+        const parameterType = GeneratorHelpers.ApiTypeToString(options.ExtractedData, parameter.Type);
+        const indexType = GeneratorHelpers.ApiTypeToString(options.ExtractedData, options.ApiItem.Type);
         GeneratorHelpers.MergePluginResultData(pluginResult, {
             UsedReferences: [
-                ...parameterType.References,
-                ...indexType.References
+                // FIXME:
+                // ...parameterType.References,
+                // ...indexType.References
             ]
         });
 
         // Header
-        const indexDeclarationString = GeneratorHelpers.ApiIndexToString(parameter, options.ApiItem.Type, options.ApiItem.IsReadonly);
+        const indexDeclarationString = GeneratorHelpers.ApiIndexToString(
+            options.ExtractedData,
+            parameter, options.ApiItem.Type,
+            options.ApiItem.IsReadonly
+        );
+
         const builder = new MarkdownBuilder()
             .Code(indexDeclarationString, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine();
 
         pluginResult.Result = builder
             .UnorderedList([
-                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Name)} - ${parameterType.Text}`,
-                `${md.Italic("Type")} ${indexType.Text}`
+                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Name)} - ${parameterType}`,
+                `${md.Italic("Type")} ${indexType}`
             ])
             .GetOutput();
 

@@ -1,4 +1,4 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginResultData } from "../contracts/plugin";
@@ -12,7 +12,10 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
     }
 
     // TODO: Escape string!
-    protected RenderTypeParameters(typeParameters: Contracts.ApiTypeParameterDto[]): PluginResultData | undefined {
+    protected RenderTypeParameters(
+        extractedData: ExtractDto,
+        typeParameters: Contracts.ApiTypeParameterDto[]
+    ): PluginResultData | undefined {
         if (typeParameters.length === 0) {
             return undefined;
         }
@@ -22,31 +25,33 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
 
         const content = typeParameters.map(typeParameter => {
             // ConstraintType
-            let constraintType: GeneratorHelpers.TypeToStringDto;
+            let constraintType: string;
             if (typeParameter.ConstraintType != null) {
-                constraintType = GeneratorHelpers.TypeDtoToMarkdownString(typeParameter.ConstraintType);
+                constraintType = GeneratorHelpers.ApiTypeToString(extractedData, typeParameter.ConstraintType);
                 GeneratorHelpers.MergePluginResultData(pluginResult, {
-                    UsedReferences: constraintType.References
+                    // UsedReferences: constraintType.References
                 });
             } else {
-                constraintType = { References: [], Text: "" };
+                constraintType = "";
+                // constraintType = { References: [], Text: "" };
             }
 
             // DefaultType
-            let defaultType: GeneratorHelpers.TypeToStringDto;
+            let defaultType: string;
             if (typeParameter.DefaultType != null) {
-                defaultType = GeneratorHelpers.TypeDtoToMarkdownString(typeParameter.DefaultType);
+                defaultType = GeneratorHelpers.ApiTypeToString(extractedData, typeParameter.DefaultType);
                 GeneratorHelpers.MergePluginResultData(pluginResult, {
-                    UsedReferences: defaultType.References
+                    // UsedReferences: defaultType.References
                 });
             } else {
-                defaultType = { References: [], Text: "" };
+                defaultType = "";
+                // defaultType = { References: [], Text: "" };
             }
 
             return [
                 typeParameter.Name,
-                constraintType.Text,
-                defaultType.Text
+                constraintType,
+                defaultType
             ];
         });
 
@@ -60,22 +65,22 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
         return pluginResult;
     }
 
-    protected RenderType(type?: Contracts.TypeDto): PluginResultData | undefined {
+    protected RenderType(extractedData: ExtractDto, type: Contracts.ApiType | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-        const parsedReturnType = GeneratorHelpers.TypeDtoToMarkdownString(type);
+        const parsedReturnType = GeneratorHelpers.ApiTypeToString(extractedData, type);
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
             .Bold("Type")
             .EmptyLine()
-            .Text(parsedReturnType.Text)
+            .Text(parsedReturnType)
             .GetOutput();
 
-        pluginResult.UsedReferences = parsedReturnType.References;
+        // pluginResult.UsedReferences = parsedReturnType.References;
         return pluginResult;
     }
 

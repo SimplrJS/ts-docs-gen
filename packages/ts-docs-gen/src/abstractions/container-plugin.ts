@@ -21,9 +21,9 @@ interface ContainerMembersReferencesGroup {
 
 export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePlugin<TKind> {
     private getItemsReferenceByKind(
+        extractedData: ExtractDto,
         list: ContainerMembersKindsGroup[],
-        members: Contracts.ApiItemReference[],
-        extractedData: ExtractDto
+        members: Contracts.ApiItemReference[]
     ): ContainerMembersReferencesGroup[] {
         const result: ContainerMembersReferencesGroup[] = [];
         let membersReferences = GeneratorHelpers.GetApiItemReferences(extractedData, members);
@@ -51,8 +51,8 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
         return result;
     }
 
-    protected RenderMembersGroups(list: ContainerMembersKindsGroup[], options: PluginOptions<TKind>): PluginResultData {
-        const membersReferences = this.getItemsReferenceByKind(list, options.ApiItem.Members, options.ExtractedData);
+    protected RenderMembersGroups(options: PluginOptions<TKind>, list: ContainerMembersKindsGroup[]): PluginResultData {
+        const membersReferences = this.getItemsReferenceByKind(options.ExtractedData, list, options.ApiItem.Members);
         const pluginResultData = GeneratorHelpers.GetDefaultPluginResultData();
         const builder = new MarkdownBuilder();
 
@@ -82,6 +82,8 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
 
                                 builder
                                     .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, reference.Id, true), 3))
+                                    .EmptyLine()
+                                    .Text(GeneratorHelpers.RenderApiItemMetadata(renderedItem.ApiItem))
                                     .EmptyLine();
                                 pluginResultData.UsedReferences.push(reference.Id);
                                 break;

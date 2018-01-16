@@ -45,7 +45,7 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
 
         // Resolve ApiItems from references.
         const typeParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ApiItem.TypeParameters, options.ExtractedData);
+            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
 
         // Header
         pluginResult.Result = new MarkdownBuilder()
@@ -60,7 +60,7 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
             .GetOutput();
 
         // ApiMembers
-        const membersResult = this.RenderMembersGroups(ApiClassPlugin.MemberKindsList, options);
+        const membersResult = this.RenderMembersGroups(options, ApiClassPlugin.MemberKindsList);
 
         // Treat members' headings as members of class heading.
         const membersHeadings = membersResult.Headings;

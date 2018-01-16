@@ -22,7 +22,7 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
         },
         {
             Heading: "Types",
-            Kinds: [Contracts.ApiItemKinds.Type]
+            Kinds: [Contracts.ApiItemKinds.TypeAlias]
         },
         {
             Heading: "Enums",
@@ -59,7 +59,7 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
             .GetOutput();
 
         // Members
-        const membersResult = this.RenderMembersGroups(ApiSourceFilePlugin.MemberKindsList, options);
+        const membersResult = this.RenderMembersGroups(options, ApiSourceFilePlugin.MemberKindsList);
 
         // Treat members' headings as members of source file heading.
         const membersHeadings = membersResult.Headings;

@@ -1,4 +1,4 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
 
 import {
@@ -22,7 +22,7 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
         return [GeneratorHelpers.ApiItemKinds.Interface];
     }
 
-    private renderConstraintTypes(apiItem: Contracts.ApiInterfaceDto): PluginResultData | undefined {
+    private renderConstraintTypes(extractedData: ExtractDto, apiItem: Contracts.ApiInterfaceDto): PluginResultData | undefined {
         if (apiItem.Extends.length === 0) {
             return undefined;
         }
@@ -31,14 +31,15 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
             .EmptyLine()
             .Bold("Extends");
 
-        const references = [];
+        const references: string[] = [];
 
         for (const type of apiItem.Extends) {
-            const typeDto = GeneratorHelpers.TypeDtoToMarkdownString(type);
-            references.push(...typeDto.References);
+            const typeDto = GeneratorHelpers.ApiTypeToString(extractedData, type);
+            // FIXME:
+            //references.push(...typeDto.References);
             builder
                 .EmptyLine()
-                .Text(typeDto.Text);
+                .Text(typeDto);
         }
 
         return {
@@ -48,7 +49,7 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
         };
     }
 
-    private renderPropertyMembers(memberItems: ExtractedItemDto[]): PluginResultData | undefined {
+    private renderPropertyMembers(extractedData: ExtractDto, memberItems: ExtractedItemDto[]): PluginResultData | undefined {
         const apiItems = memberItems.filter<ExtractedItemDto<Contracts.ApiPropertyDto>>(
             this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Property)
         ).map(x => x.ApiItem);
@@ -57,7 +58,7 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
             return undefined;
         }
 
-        const table = GeneratorHelpers.ApiPropertiesToTableString(apiItems);
+        const table = GeneratorHelpers.ApiPropertiesToTableString(extractedData, apiItems);
         const builder = new MarkdownBuilder()
             .EmptyLine()
             .Bold("Properties")
@@ -115,7 +116,7 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
                     Heading: heading
                 }
             ],
-            UsedReferences: [ options.Reference.Id ]
+            UsedReferences: [options.Reference.Id]
         };
 
         const memberReferences = GeneratorHelpers.GetApiItemReferences(options.ExtractedData, options.ApiItem.Members);
@@ -124,7 +125,7 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
             ApiItem: options.ExtractedData.Registry[itemReference.Id]
         }));
 
-        const interfaceString = GeneratorHelpers.ApiInterfaceToString(options.ApiItem, options.ExtractedData);
+        const interfaceString = GeneratorHelpers.ApiInterfaceToString(options.ExtractedData, options.ApiItem);
         const builder = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()
@@ -135,12 +136,12 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
 
         // Type parameters
         const apiTypeParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ApiItem.TypeParameters, options.ExtractedData);
-        const typeParametersResult = this.RenderTypeParameters(apiTypeParameters);
+            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
+        const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, apiTypeParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
         // Constraint types
-        const constraintTypesResult = this.renderConstraintTypes(options.ApiItem);
+        const constraintTypesResult = this.renderConstraintTypes(options.ExtractedData, options.ApiItem);
         GeneratorHelpers.MergePluginResultData(pluginResult, constraintTypesResult);
 
         // Construct items
@@ -180,7 +181,7 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
         GeneratorHelpers.MergePluginResultData(pluginResult, methodMembersResult);
 
         // Property items
-        const propertyMembersResult = this.renderPropertyMembers(memberItems);
+        const propertyMembersResult = this.renderPropertyMembers(options.ExtractedData, memberItems);
         GeneratorHelpers.MergePluginResultData(pluginResult, propertyMembersResult);
 
         return pluginResult;

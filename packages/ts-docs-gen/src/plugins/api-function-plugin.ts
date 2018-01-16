@@ -13,10 +13,10 @@ export class ApiFunctionPlugin extends FunctionLikePlugin<Contracts.ApiFunctionD
     public Render(options: PluginOptions<Contracts.ApiFunctionDto>): PluginResult {
         // Parameters
         const apiParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ApiItem.Parameters, options.ExtractedData);
+            .GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ExtractedData, options.ApiItem.Parameters);
         // TypeParameters
         const apiTypeParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ApiItem.TypeParameters, options.ExtractedData);
+            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
 
         const heading = GeneratorHelpers.MethodToSimpleString(options.Reference.Alias, apiParameters);
         const pluginResult: PluginResult = {
@@ -29,7 +29,7 @@ export class ApiFunctionPlugin extends FunctionLikePlugin<Contracts.ApiFunctionD
                     ApiItemId: options.Reference.Id
                 }
             ],
-            UsedReferences: [ options.Reference.Id ]
+            UsedReferences: [options.Reference.Id]
         };
 
         // Header
@@ -38,6 +38,7 @@ export class ApiFunctionPlugin extends FunctionLikePlugin<Contracts.ApiFunctionD
             .EmptyLine()
             .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
             .Code(GeneratorHelpers.ApiFunctionToString(
+                options.ExtractedData,
                 options.ApiItem,
                 apiTypeParameters,
                 apiParameters,
@@ -46,15 +47,15 @@ export class ApiFunctionPlugin extends FunctionLikePlugin<Contracts.ApiFunctionD
             .GetOutput();
 
         // TypeParameters
-        const typeParametersResult = this.RenderTypeParameters(apiTypeParameters);
+        const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, apiTypeParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
         // Parameters
-        const parametersResult = this.RenderParameters(apiParameters);
+        const parametersResult = this.RenderParameters(options.ExtractedData, apiParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, parametersResult);
 
         // ReturnType
-        const returnTypeResult = this.RenderReturnType(options.ApiItem.ReturnType);
+        const returnTypeResult = this.RenderReturnType(options.ExtractedData, options.ApiItem.ReturnType);
         GeneratorHelpers.MergePluginResultData(pluginResult, returnTypeResult);
 
         return pluginResult;
