@@ -18,24 +18,31 @@ import { ApiProperty } from "./api-property";
 import { ApiTypeAlias } from "./api-type-alias";
 import { ApiTypeParameter } from "./api-type-parameter";
 import { ApiVariable } from "./api-variable";
+import { ApiTypeLiteral } from "./api-type-literal";
 
 // TODO: Fix any.
 export const ApiItemsList: Array<[Contracts.ApiItemKinds, any]> = [
-    [Contracts.ApiItemKinds.Call, ApiCall],
-    [Contracts.ApiItemKinds.Class, ApiClass],
-    [Contracts.ApiItemKinds.Construct, ApiConstruct],
     [Contracts.ApiItemKinds.Enum, ApiEnum],
     [Contracts.ApiItemKinds.EnumMember, ApiEnumMember],
     [Contracts.ApiItemKinds.Function, ApiFunction],
-    [Contracts.ApiItemKinds.FunctionType, ApiFunctionType],
-    [Contracts.ApiItemKinds.Index, ApiIndex],
     [Contracts.ApiItemKinds.Interface, ApiInterface],
-    [Contracts.ApiItemKinds.Mapped, ApiMapped],
     [Contracts.ApiItemKinds.Method, ApiMethod],
     [Contracts.ApiItemKinds.Namespace, ApiNamespace],
     [Contracts.ApiItemKinds.Parameter, ApiParameter],
     [Contracts.ApiItemKinds.Property, ApiProperty],
+    [Contracts.ApiItemKinds.Variable, ApiVariable],
     [Contracts.ApiItemKinds.TypeAlias, ApiTypeAlias],
+    [Contracts.ApiItemKinds.Class, ApiClass],
+    [Contracts.ApiItemKinds.ClassProperty, undefined],
+    [Contracts.ApiItemKinds.ClassConstructor, undefined],
+    [Contracts.ApiItemKinds.ClassMethod, undefined],
+    [Contracts.ApiItemKinds.GetAccessor, undefined],
+    [Contracts.ApiItemKinds.SetAccessor, undefined],
+    [Contracts.ApiItemKinds.Index, ApiIndex],
+    [Contracts.ApiItemKinds.Call, ApiCall],
+    [Contracts.ApiItemKinds.Construct, ApiConstruct],
     [Contracts.ApiItemKinds.TypeParameter, ApiTypeParameter],
-    [Contracts.ApiItemKinds.Variable, ApiVariable]
+    [Contracts.ApiItemKinds.TypeLiteral, ApiTypeLiteral],
+    [Contracts.ApiItemKinds.FunctionType, ApiFunctionType],
+    [Contracts.ApiItemKinds.Mapped, ApiMapped]
 ];

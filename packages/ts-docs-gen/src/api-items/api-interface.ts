@@ -20,8 +20,13 @@ export class ApiInterface extends ApiBase<Contracts.ApiInterfaceDto> {
             extendsString = "";
         }
 
+        // Members
+        const members = this.MembersToText(this.Data.Members, 1);
+
         return [
-            `interface ${name}${typeParameters}${extendsString}`
+            `interface ${name}${typeParameters}${extendsString} {`,
+            ...members,
+            `}`
         ];
     }
 
