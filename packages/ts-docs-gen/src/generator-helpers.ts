@@ -606,6 +606,7 @@ export namespace GeneratorHelpers {
         }
     }
 
+    // TODO: Remove me.
     export function TypeParameterToString(apiItem: Contracts.ApiTypeParameterDto, mapped?: boolean): string {
         const constraintKeyword = mapped ? "in" : "extends";
         const constraintString = apiItem.ConstraintType != null ? ` ${constraintKeyword} ${apiItem.ConstraintType.Text}` : "";
@@ -765,6 +766,7 @@ export namespace GeneratorHelpers {
      *
      * Return example: `arg: TValue`.
      */
+    // TODO: Remove me.
     export function ApiParameterToString(apiItem: Contracts.ApiParameterDto): string {
         // FIXME: `?` and `| undefined` in a single statement.
         const initializerString = apiItem.Initializer ? ` = ${apiItem.Initializer}` : "";
