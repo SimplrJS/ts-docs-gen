@@ -1,26 +1,20 @@
 import { Contracts } from "ts-extractor";
 
-import { BaseApiItem } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiTypeParameter } from "./api-type-parameter";
 import { ApiParameter } from "./api-parameter";
+import { ApiBase } from "./api-base";
 
 /**
  * Base class for callable api items.
  */
-export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extends BaseApiItem<TKind> {
+export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extends ApiBase<TKind> {
     protected GetTypeParameters(): ApiTypeParameter[] {
-        return GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(this.ExtractedData, this.Data.TypeParameters)
-            .map(x => new ApiTypeParameter(this.ExtractedData, x));
+        return super.GetTypeParameters(this.Data.TypeParameters);
     }
 
     protected TypeParametersToString(): string {
-        const members = this.GetTypeParameters()
-            .map(x => x.ToString())
-            .join(", ");
-
-        return `<${members}>`;
+        return super.TypeParametersToString(this.Data.TypeParameters);
     }
 
     protected GetParameters(): ApiParameter[] {
