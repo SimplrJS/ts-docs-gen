@@ -207,7 +207,7 @@ export namespace GeneratorHelpers {
             }
             case Contracts.ApiTypeKind.Reference: {
                 // Foo or Foo<string>
-                return `${type.SymbolName}${_TypeParametersToString(type.TypeParameters, extractedData)}`;
+                return `${type.SymbolName}${TypeTypeParametersToString(type.TypeParameters, extractedData)}`;
             }
             case Contracts.ApiTypeKind.Union:
             case Contracts.ApiTypeKind.Intersection: {
@@ -235,11 +235,11 @@ export namespace GeneratorHelpers {
             case Contracts.ApiTypeKind.Mapped:
             case Contracts.ApiTypeKind.This:
             case Contracts.ApiTypeKind.Constructor: {
-                return _TypeLikeToString(type.ReferenceId, extractedData);
+                return TypeLikeToString(type.ReferenceId, extractedData);
             }
             case Contracts.ApiTypeKind.TypeQuery: {
                 // typeof Foo
-                return `${type.Keyword} ${_TypeLikeToString(type.ReferenceId, extractedData)}`;
+                return `${type.Keyword} ${TypeLikeToString(type.ReferenceId, extractedData)}`;
             }
             case Contracts.ApiTypeKind.TypeOperator: {
                 // keyof Foo
@@ -255,7 +255,7 @@ export namespace GeneratorHelpers {
         }
     }
 
-    export function _TypeParametersToString(types: Contracts.ApiType[] | undefined, extractedData: ExtractDto): string {
+    export function TypeTypeParametersToString(types: Contracts.ApiType[] | undefined, extractedData: ExtractDto): string {
         if (types == null) {
             return "";
         }
@@ -264,7 +264,7 @@ export namespace GeneratorHelpers {
         return `<${typesString.join(", ")}>`;
     }
 
-    export function _TypeLikeToString(referenceId: string | undefined, extractedData: ExtractDto): string {
+    export function TypeLikeToString(referenceId: string | undefined, extractedData: ExtractDto): string {
         if (referenceId == null) {
             // TODO: Add error of missing value.
             return "???";
