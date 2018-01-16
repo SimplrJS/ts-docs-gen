@@ -1,6 +1,7 @@
 import { Contracts } from "ts-extractor";
 
 import { BaseApiItem } from "../abstractions/base-api-item";
+import { GeneratorHelpers } from "../generator-helpers";
 
 export class ApiTypeParameter extends BaseApiItem<Contracts.ApiTypeParameterDto> {
     public ToStringArray(alias?: string, mapped?: boolean): string[] {
@@ -10,14 +11,21 @@ export class ApiTypeParameter extends BaseApiItem<Contracts.ApiTypeParameterDto>
 
         let constraintString: string;
         if (this.Data.ConstraintType != null) {
-            constraintString = ` ${constraintKeyword} ${this.Data.ConstraintType.Text}`;
+            const type = GeneratorHelpers.ApiTypeToString(this.ExtractedData, this.Data.ConstraintType);
+            constraintString = ` ${constraintKeyword} ${type}`;
         } else {
             constraintString = "";
         }
 
-        const defaultType = this.Data.DefaultType != null ? ` = ${this.Data.DefaultType.Text}` : "";
+        let defaultTypeString: string;
+        if (this.Data.DefaultType != null) {
+            const type = GeneratorHelpers.ApiTypeToString(this.ExtractedData, this.Data.DefaultType);
+            defaultTypeString = ` = ${type}`;
+        } else {
+            defaultTypeString = "";
+        }
 
-        return [`${name}${constraintString}${defaultType}`];
+        return [`${name}${constraintString}${defaultTypeString}`];
     }
 
     public ToSimpleString(): string {
