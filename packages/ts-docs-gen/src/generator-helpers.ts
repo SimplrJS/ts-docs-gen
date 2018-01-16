@@ -480,7 +480,7 @@ export namespace GeneratorHelpers {
         type: Contracts.ApiType,
         readOnly: boolean = false
     ): string {
-        const typeString = ApiTypeToString(extractedData, type); 
+        const typeString = ApiTypeToString(extractedData, type);
         const parameterTypeString = ApiTypeToString(extractedData, parameter.Type);
 
         const readOnlyString = readOnly ? "readonly " : "";
