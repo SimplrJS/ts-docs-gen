@@ -5,6 +5,9 @@ import { GeneratorHelpers } from "../generator-helpers";
 import { ApiTypeParameter } from "./api-type-parameter";
 import { ApiParameter } from "./api-parameter";
 
+/**
+ * Base class for callable api items.
+ */
 export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extends BaseApiItem<TKind> {
     protected GetTypeParameters(): ApiTypeParameter[] {
         return GeneratorHelpers
