@@ -3,6 +3,9 @@ import { ApiTypeBase } from "../api-type-base";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { SerializedApiType } from "../../contracts/serialized-api-item";
 
+/**
+ * Example: `Foo[]`
+ */
 export class ApiTypeArray extends ApiTypeBase<Contracts.ArrayType> {
     constructor(extractedData: ExtractDto, apiItem: Contracts.ArrayType) {
         super(extractedData, apiItem);

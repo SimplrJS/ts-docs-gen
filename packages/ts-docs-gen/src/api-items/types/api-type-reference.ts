@@ -2,6 +2,9 @@ import { Contracts, ExtractDto } from "ts-extractor";
 import { ApiTypeReferenceBase } from "../api-type-reference-base";
 import { SerializedApiType } from "../../contracts/serialized-api-item";
 
+/**
+ * Example: `Foo` or `Foo<string>`.
+ */
 export class ApiTypeReference extends ApiTypeReferenceBase<Contracts.ApiReferenceType> {
     constructor(extractedData: ExtractDto, apiItem: Contracts.ApiReferenceType) {
         super(extractedData, apiItem);
