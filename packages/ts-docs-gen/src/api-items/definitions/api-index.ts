@@ -19,7 +19,7 @@ export class ApiIndex extends ApiDefinitionWithType<Contracts.ApiIndexDto> {
 
     private getParameter(): ApiParameter {
         const apiItem = this.ExtractedData.Registry[this.Data.Parameter] as Contracts.ApiParameterDto;
-        return new ApiParameter(this.ExtractedData, apiItem);
+        return new ApiParameter(this.ExtractedData, apiItem, { Alias: "", Id: this.Data.Parameter });
     }
 
     public ToText(): string[] {

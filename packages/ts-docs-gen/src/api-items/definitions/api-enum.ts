@@ -20,8 +20,11 @@ export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
 
     private getEnumMembers(): ApiEnumMember[] {
         return GeneratorHelpers
-            .GetApiItemsFromReferenceList<Contracts.ApiEnumMemberDto>(this.ExtractedData, this.Data.Members)
-            .map(x => new ApiEnumMember(this.ExtractedData, x));
+            .GetApiItemReferences(this.ExtractedData, this.Data.Members)
+            .map<[ApiItemReference, Contracts.ApiEnumMemberDto]>(reference =>
+                [reference, this.ExtractedData.Registry[reference.Id] as Contracts.ApiEnumMemberDto]
+            )
+            .map(([reference, enumMember]) => new ApiEnumMember(this.ExtractedData, enumMember, reference));
     }
 
     public ToText(alias?: string): string[] {

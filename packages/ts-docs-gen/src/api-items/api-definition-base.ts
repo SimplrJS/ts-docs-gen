@@ -40,8 +40,11 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
 
     protected GetTypeParameters(apiItem: ApiItemWithTypeParameters): ApiTypeParameter[] {
         return GeneratorHelpers
-            .GetApiItemsFromReferenceList<Contracts.ApiTypeParameterDto>(this.ExtractedData, apiItem.TypeParameters)
-            .map(x => new ApiTypeParameter(this.ExtractedData, x));
+            .GetApiItemReferences(this.ExtractedData, apiItem.TypeParameters)
+            .map<[ApiItemReference, Contracts.ApiTypeParameterDto]>(reference =>
+                [reference, this.ExtractedData.Registry[reference.Id] as Contracts.ApiTypeParameterDto]
+            )
+            .map(([reference, typeParameter]) => new ApiTypeParameter(this.ExtractedData, typeParameter, reference));
     }
 
     protected TypeParametersToString(apiItem: ApiItemWithTypeParameters): string {

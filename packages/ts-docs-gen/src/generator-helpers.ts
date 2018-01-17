@@ -18,15 +18,15 @@ import { ApiDefinitionDefault } from "./api-items/api-definition-default";
 import { ApiTypeDefault } from "./api-items/api-type-default";
 
 export namespace GeneratorHelpers {
-    export function SerializeApiDefinition(
+    export function SerializeApiDefinition<TKind extends Contracts.ApiBaseItemDto>(
         extractedData: ExtractDto,
-        apiItem: Contracts.ApiItemDto,
+        apiItem: TKind,
         reference: ApiItemReference
-    ): SerializedApiDefinition<Contracts.ApiItemDto> {
+    ): SerializedApiDefinition<TKind> {
         if (apiItem != null) {
             for (const [kind, constructorItem] of ApiDefinitionList) {
                 if (kind === apiItem.ApiKind) {
-                    const $constructor: SerializedApiDefinitionConstructor<Contracts.ApiItemDto> = constructorItem;
+                    const $constructor: SerializedApiDefinitionConstructor<TKind> = constructorItem;
 
                     return new $constructor(extractedData, apiItem, reference);
                 }
@@ -34,7 +34,7 @@ export namespace GeneratorHelpers {
         }
 
         // TODO: Add logger: "This kind is not supported".
-        return new ApiDefinitionDefault(extractedData, apiItem);
+        return new ApiDefinitionDefault(extractedData, apiItem, reference);
     }
 
     export function SerializeApiType(extractedData: ExtractDto, apiType: Contracts.ApiType): SerializedApiType<Contracts.ApiType> {

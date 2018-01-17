@@ -23,7 +23,7 @@ export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
         }
 
         const apiItem = this.ExtractedData.Registry[this.Data.TypeParameter] as Contracts.ApiTypeParameterDto;
-        return new ApiTypeParameter(this.ExtractedData, apiItem);
+        return new ApiTypeParameter(this.ExtractedData, apiItem, { Alias: "", Id: this.Data.TypeParameter });
     }
 
     public ToText(): string[] {
