@@ -1,14 +1,46 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiTypeParameter } from "./definitions/api-type-parameter";
 import { ApiParameter } from "./definitions/api-parameter";
 import { ApiDefinitionBase } from "./api-definition-base";
+import { SerializedApiType } from "../contracts/serialized-api-item";
 
 /**
  * Base class for callable api items.
  */
 export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extends ApiDefinitionBase<TKind> {
+    constructor(extractedData: ExtractDto, apiItem: TKind) {
+        super(extractedData, apiItem);
+
+        this.parameters = GeneratorHelpers
+            .GetApiItemReferences(this.ExtractedData, this.Data.Parameters)
+            .map(x => this.GetSerializedApiDefinition(x.Id))
+            .filter((x): x is ApiParameter => x != null);
+
+        this.typeParameters = this.GetTypeParameters();
+
+        this.returnType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ReturnType);
+    }
+
+    private parameters: ApiParameter[];
+
+    public get Parameters(): ApiParameter[] {
+        return this.parameters;
+    }
+
+    private typeParameters: ApiTypeParameter[];
+
+    public get TypeParameters(): ApiTypeParameter[] {
+        return this.typeParameters;
+    }
+
+    private returnType: SerializedApiType | undefined;
+
+    public get ReturnType(): SerializedApiType | undefined {
+        return this.returnType;
+    }
+
     protected GetTypeParameters(): ApiTypeParameter[] {
         return super.GetTypeParameters(this.Data);
     }
@@ -17,14 +49,8 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
         return super.TypeParametersToString(this.Data);
     }
 
-    protected GetParameters(): ApiParameter[] {
-        return GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiParameterDto>(this.ExtractedData, this.Data.Parameters)
-            .map(x => new ApiParameter(this.ExtractedData, x));
-    }
-
     protected ParametersToString(): string {
-        return this.GetParameters()
+        return this.parameters
             .map(x => x.ToText())
             .join(", ");
     }
@@ -41,8 +67,8 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
         const parametersString = this.ParametersToString();
 
         // ReturnType
-        const type = GeneratorHelpers.ApiTypeToString(this.ExtractedData, this.Data.ReturnType);
-        const returnTypeString = typeDefChar != null ? `${typeDefChar}${type}` : "";
+        const type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ReturnType);
+        const returnTypeString = typeDefChar != null && type != null ? `${typeDefChar}${type.ToText().join(" ")}` : "";
 
         return `${typeParametersString}(${parametersString})${returnTypeString}`;
     }

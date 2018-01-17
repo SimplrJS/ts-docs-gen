@@ -1,10 +1,23 @@
-import { Contracts } from "ts-extractor";
-import { BaseApiItemClass } from "../../abstractions/base-api-item";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { GeneratorHelpers } from "../../generator-helpers";
+import { SerializedApiType } from "../../contracts/serialized-api-item";
+import { ApiDefinitionBase } from "../api-definition-base";
 
 export type ApiAccessorKinds = Contracts.ApiGetAccessorDto | Contracts.ApiSetAccessorDto;
 
-export class ApiAccessor extends BaseApiItemClass<ApiAccessorKinds> {
+export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
+    constructor(extractedData: ExtractDto, apiItem: ApiAccessorKinds) {
+        super(extractedData, apiItem);
+
+        this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.resolveType());
+    }
+
+    private type: SerializedApiType | undefined;
+
+    public get Type(): SerializedApiType | undefined {
+        return this.type;
+    }
+
     private resolveType(): Contracts.ApiType | undefined {
         let type: Contracts.ApiType | undefined;
         if (this.Data.ApiKind === Contracts.ApiItemKinds.GetAccessor) {
@@ -28,7 +41,7 @@ export class ApiAccessor extends BaseApiItemClass<ApiAccessorKinds> {
         const abstract = this.Data.IsAbstract ? " abstract" : "";
         const $static = this.Data.IsStatic ? " static" : "";
 
-        const typeString = GeneratorHelpers.ApiTypeToString(this.ExtractedData, this.resolveType());
+        const typeString = this.SerializedTypeToString(this.Type);
         let accessorType: string;
         if (this.Data.ApiKind === Contracts.ApiItemKinds.SetAccessor) {
             accessorType = "set";

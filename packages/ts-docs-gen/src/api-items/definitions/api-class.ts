@@ -1,8 +1,38 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { ApiDefinitionBase } from "../api-definition-base";
 import { GeneratorHelpers } from "../../generator-helpers";
+import { SerializedApiType, SerializedApiDefinition } from "../../contracts/serialized-api-item";
 
 export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
+    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiClassDto) {
+        super(extractedData, apiItem);
+
+        this.extends = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Extends);
+        this.implements = this.Data.Implements
+            .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
+            .filter((x): x is SerializedApiType => x != null);
+
+        this.members = this.GetMembers(this.Data.Members);
+    }
+
+    private extends: SerializedApiType | undefined;
+
+    public get Extends(): SerializedApiType | undefined {
+        return this.extends;
+    }
+
+    private implements: SerializedApiType[];
+
+    public get Implements(): SerializedApiType[] {
+        return this.implements;
+    }
+
+    private members: SerializedApiDefinition[];
+
+    public get Members(): SerializedApiDefinition[] {
+        return this.members;
+    }
+
     public ToText(alias?: string | undefined): string[] {
         const name = alias || this.Data.Name;
 
@@ -14,20 +44,18 @@ export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
 
         // Extends
         let extendsString: string;
-        if (this.Data.Extends != null) {
-            const type = GeneratorHelpers.ApiTypeToString(this.ExtractedData, this.Data.Extends);
-            extendsString = ` extends ${type}`;
+        if (this.Extends != null) {
+            extendsString = ` extends ${this.Extends.ToText().join(" ")}`;
         } else {
             extendsString = "";
         }
 
         // Implements
         let implementsString: string;
-        if (this.Data.Implements != null && this.Data.Implements.length > 0) {
-            const typesList = this.Data.Implements
-                .map(x => GeneratorHelpers.ApiTypeToString(this.ExtractedData, x));
+        if (this.Implements.length > 0) {
+            const implementsList = this.Implements.map(x => this.SerializedTypeToString(x));
 
-            implementsString = ` implements ${typesList.join(", ")}`;
+            implementsString = ` implements ${implementsList.join(", ")}`;
         } else {
             implementsString = "";
         }
