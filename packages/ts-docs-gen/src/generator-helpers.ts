@@ -14,43 +14,41 @@ import {
 } from "./contracts/serialized-api-item";
 import { ApiDefinitionList } from "./api-items/api-definition-list";
 import { ApiTypeList } from "./api-items/api-type-list";
+import { ApiDefinitionDefault } from "./api-items/api-definition-default";
+import { ApiTypeDefault } from "./api-items/api-type-default";
 
 export namespace GeneratorHelpers {
     export function SerializeApiDefinition(
         extractedData: ExtractDto,
         apiItem: Contracts.ApiItemDto
-    ): SerializedApiDefinition | undefined {
-        if (apiItem == null) {
-            return undefined;
-        }
+    ): SerializedApiDefinition<Contracts.ApiItemDto> {
+        if (apiItem != null) {
+            for (const [kind, constructorItem] of ApiDefinitionList) {
+                if (kind === apiItem.ApiKind) {
+                    const $constructor: SerializedApiDefinitionConstructor<Contracts.ApiItemDto> = constructorItem;
 
-        for (const [kind, constructorItem] of ApiDefinitionList) {
-            if (kind === apiItem.ApiKind) {
-                const $constructor: SerializedApiDefinitionConstructor<Contracts.ApiItemDto> = constructorItem;
-
-                return new $constructor(extractedData, apiItem);
+                    return new $constructor(extractedData, apiItem);
+                }
             }
         }
 
         // TODO: Add logger: "This kind is not supported".
-        return undefined;
+        return new ApiDefinitionDefault(extractedData, apiItem);
     }
 
-    export function SerializeApiType(extractedData: ExtractDto, apiType: Contracts.ApiType | undefined): SerializedApiType | undefined {
-        if (apiType == null) {
-            return undefined;
-        }
+    export function SerializeApiType(extractedData: ExtractDto, apiType: Contracts.ApiType): SerializedApiType<Contracts.ApiType> {
+        if (apiType != null) {
+            for (const [kind, constructorItem] of ApiTypeList) {
+                if (kind === apiType.ApiTypeKind) {
+                    const $constructor: SerializedApiTypeConstructor<Contracts.ApiType> = constructorItem;
 
-        for (const [kind, constructorItem] of ApiTypeList) {
-            if (kind === apiType.ApiTypeKind) {
-                const $constructor: SerializedApiTypeConstructor<Contracts.ApiBaseType> = constructorItem;
-
-                return new $constructor(extractedData, apiType);
+                    return new $constructor(extractedData, apiType);
+                }
             }
         }
 
         // TODO: Add logger: "This kind is not supported".
-        return undefined;
+        return new ApiTypeDefault(extractedData, apiType);
     }
     export type TypeToStringDto = ReferenceDto<string>;
 
