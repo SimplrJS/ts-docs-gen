@@ -10,10 +10,16 @@ import { DefaultPlugins } from "../default-plugins";
 
 // TODO: Add method to read compiler options from tsconfig.
 export class GeneratorConfigurationBuilder {
-    constructor(private projectDirectory: string) { }
+    constructor(private projectDirectory: string) {
+        this.configuration.ProjectDirectory = projectDirectory;
+    }
 
     private configuration: Partial<WorkingGeneratorConfiguration> = {};
     private compilerOptions: Partial<ts.CompilerOptions>;
+
+    private resolveProjectDirectory(): string {
+        return this.configuration.ProjectDirectory || this.projectDirectory;
+    }
 
     public OverrideCompilerOptions(compilerOptions: Partial<ts.CompilerOptions>): this {
         this.compilerOptions = {
@@ -71,16 +77,18 @@ export class GeneratorConfigurationBuilder {
         // Resolve tsconfig
         let compilerOptions = this.compilerOptions;
         if (compilerOptions == null) {
-            compilerOptions = await GetCompilerOptions(path.join(this.projectDirectory, "tsconfig.json"));
+            compilerOptions = await GetCompilerOptions(path.join(this.resolveProjectDirectory(), "tsconfig.json"));
         }
 
         // Extractor
         const extractor = new Extractor({
             CompilerOptions: compilerOptions,
-            ProjectDirectory: this.projectDirectory
+            ProjectDirectory: this.resolveProjectDirectory(),
+            Exclude: this.configuration.Exclude,
+            OutputPathSeparator: this.configuration.OutputPathSeparator
         });
 
-        const outputDirectory = this.configuration.OutputDirectory || path.join(this.projectDirectory, "/docs/");
+        const outputDirectory = this.configuration.OutputDirectory || path.join(this.resolveProjectDirectory(), "/docs/");
 
         return {
             PluginManager: pluginManager,
