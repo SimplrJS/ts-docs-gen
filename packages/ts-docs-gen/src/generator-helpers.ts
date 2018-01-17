@@ -8,14 +8,14 @@ import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
 import { Helpers } from "./utils/helpers";
 import { SerializedApiDefinition, SerializedApiDefinitionConstructor } from "./contracts/serialized-api-item";
-import { ApiItemsList } from "./api-items/api-items-list";
+import { ApiDefinitionList } from "./api-items/api-definition-list";
 
 export namespace GeneratorHelpers {
     export function SerializeApiItem(
         extractedData: ExtractDto,
         apiItem: Contracts.ApiItemDto
     ): SerializedApiDefinition | undefined {
-        for (const [kind, constructorItem] of ApiItemsList) {
+        for (const [kind, constructorItem] of ApiDefinitionList) {
             if (kind === apiItem.ApiKind) {
                 const $constructor: SerializedApiDefinitionConstructor<Contracts.ApiItemDto> = constructorItem;
 

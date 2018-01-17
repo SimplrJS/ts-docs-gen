@@ -26,7 +26,7 @@ import { ApiClassMethod } from "./definitions/api-class-method";
 import { ApiAccessor } from "./definitions/api-accessor";
 
 // TODO: Fix any.
-export const ApiItemsList: Array<[Contracts.ApiItemKinds, SerializedApiDefinitionConstructor<any>]> = [
+export const ApiDefinitionList: Array<[Contracts.ApiItemKinds, SerializedApiDefinitionConstructor<any>]> = [
     [Contracts.ApiItemKinds.Enum, ApiEnum],
     [Contracts.ApiItemKinds.EnumMember, ApiEnumMember],
     [Contracts.ApiItemKinds.Function, ApiFunction],
