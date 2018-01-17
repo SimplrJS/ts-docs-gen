@@ -9,7 +9,7 @@ import { ApiTypeParameter } from "./definitions/api-type-parameter";
 export type ApiItemWithTypeParameters = Contracts.ApiBaseItemDto & { TypeParameters: Contracts.ApiItemReference[] };
 
 /**
- * Base class with helper functions.
+ * Base definition class with helper functions.
  */
 export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto> extends BaseApiItemClass<TKind>
     implements SerializedApiDefinition<TKind> {
