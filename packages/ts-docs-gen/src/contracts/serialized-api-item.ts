@@ -14,3 +14,7 @@ export interface SerializedApiDefinition<TKind extends Contracts.ApiBaseItemDto 
     ToText(alias?: string): string[];
     ToHeadingText(alias?: string): string;
 }
+
+export interface SerializedApiType<TKind extends Contracts.ApiBaseType = Contracts.ApiBaseType>
+    extends SerializedApiItem<TKind> {
+}
