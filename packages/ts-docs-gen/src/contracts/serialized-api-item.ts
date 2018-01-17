@@ -15,6 +15,10 @@ export interface SerializedApiDefinition<TKind extends Contracts.ApiBaseItemDto 
     ToHeadingText(alias?: string): string;
 }
 
+export interface SerializedApiTypeConstructor<TKind extends Contracts.ApiBaseType = Contracts.ApiBaseType> {
+    new(extractedData: ExtractDto, apiItem: TKind): SerializedApiType<TKind>;
+}
+
 export interface SerializedApiType<TKind extends Contracts.ApiBaseType = Contracts.ApiBaseType>
     extends SerializedApiItem<TKind> {
 }

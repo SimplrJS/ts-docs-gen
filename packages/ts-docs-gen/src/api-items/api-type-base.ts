@@ -1,7 +1,15 @@
 import { Contracts } from "ts-extractor";
-import { SerializedApiType } from "../contracts/serialized-api-item";
+import { SerializedApiType, SerializedApiDefinition } from "../contracts/serialized-api-item";
 import { BaseApiItemClass } from "../abstractions/base-api-item";
+import { GeneratorHelpers } from "../generator-helpers";
 
 export abstract class ApiTypeBase<TKind extends Contracts.ApiBaseType> extends BaseApiItemClass<TKind> implements SerializedApiType<TKind> {
+    protected GetSerializedApiDefinition(referenceId?: string): SerializedApiDefinition | undefined {
+        if (referenceId == null) {
+            return undefined;
+        }
 
+        const apiItem = this.ExtractedData.Registry[referenceId];
+        return GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, apiItem);
+    }
 }
