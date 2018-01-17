@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`simple-project-4 1`] = `
+Array [
+  Object {
+    "FileLocation": "custom.md",
+    "Result": Array [
+      "# Table of contents",
+      "",
+      "* [custom][SourceFile-0]",
+      "    * Variables",
+      "        * [My variable CustomSecretRandomNumber][VariableDeclaration-0]",
+      "",
+      "# custom",
+      "",
+      "## Variables",
+      "",
+      "### My variable CustomSecretRandomNumber",
+      "",
+      "Variable plugin result.",
+      "",
+      "[SourceFile-0]: custom.md#custom",
+      "[VariableDeclaration-0]: custom.md#my-variable-customsecretrandomnumber",
+    ],
+  },
+  Object {
+    "FileLocation": "to-exclude.md",
+    "Result": Array [
+      "# Table of contents",
+      "",
+      "* [to-exclude][SourceFile-1]",
+      "    * Variables",
+      "        * [My variable ExcludedFileValue][VariableDeclaration-1]",
+      "",
+      "# to-exclude",
+      "",
+      "## Variables",
+      "",
+      "### My variable ExcludedFileValue",
+      "",
+      "Variable plugin result.",
+      "",
+      "[SourceFile-1]: to-exclude.md#to-exclude",
+      "[VariableDeclaration-1]: to-exclude.md#my-variable-excludedfilevalue",
+    ],
+  },
+]
+`;

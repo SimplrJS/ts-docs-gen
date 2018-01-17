@@ -1,0 +1,6 @@
+{
+    "EntryFiles": [
+        "./custom.ts",
+        "./to-exclude.ts"
+    ]
+}
