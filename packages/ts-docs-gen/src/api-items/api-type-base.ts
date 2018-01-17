@@ -12,4 +12,12 @@ export abstract class ApiTypeBase<TKind extends Contracts.ApiBaseType> extends B
         const apiItem = this.ExtractedData.Registry[referenceId];
         return GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, apiItem);
     }
+
+    protected SerializedTypeToString(apiType: SerializedApiType | undefined): string {
+        if (apiType == null) {
+            return "???";
+        }
+
+        return apiType.ToText().join(" ");
+    }
 }
