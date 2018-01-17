@@ -9,7 +9,7 @@ export class ApiInterface extends ApiDefinitionBase<Contracts.ApiInterfaceDto> {
 
         this.extends = this.Data.Extends
             .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
-            .filter((x): x is SerializedApiType => x != null);
+            .filter((x): x is SerializedApiType<Contracts.ApiType> => x != null);
 
         this.members = this.GetMembers(this.Data.Members);
     }
@@ -20,9 +20,9 @@ export class ApiInterface extends ApiDefinitionBase<Contracts.ApiInterfaceDto> {
         return this.extends;
     }
 
-    private members: SerializedApiDefinition[];
+    private members: Array<SerializedApiDefinition<Contracts.ApiItemDto>>;
 
-    public get Members(): SerializedApiDefinition[] {
+    public get Members(): Array<SerializedApiDefinition<Contracts.ApiItemDto>> {
         return this.members;
     }
 

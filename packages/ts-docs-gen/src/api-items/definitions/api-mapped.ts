@@ -13,9 +13,9 @@ export class ApiMapped extends ApiDefinitionBase<Contracts.ApiMappedDto> {
         this.typeParameter = this.getTypeParameter();
     }
 
-    private type: SerializedApiType | undefined;
+    private type: SerializedApiType<Contracts.ApiType> | undefined;
 
-    public get Type(): SerializedApiType | undefined {
+    public get Type(): SerializedApiType<Contracts.ApiType> | undefined {
         return this.type;
     }
 

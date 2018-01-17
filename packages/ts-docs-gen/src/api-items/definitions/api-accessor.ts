@@ -9,7 +9,10 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
     constructor(extractedData: ExtractDto, apiItem: ApiAccessorKinds) {
         super(extractedData, apiItem);
 
-        this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.resolveType());
+        const resolvedType = this.resolveType();
+        if (resolvedType != null) {
+            this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, resolvedType);
+        }
     }
 
     private type: SerializedApiType | undefined;

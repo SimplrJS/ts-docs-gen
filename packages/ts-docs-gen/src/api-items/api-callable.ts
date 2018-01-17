@@ -20,7 +20,9 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
 
         this.typeParameters = this.GetTypeParameters();
 
-        this.returnType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ReturnType);
+        if (this.Data.ReturnType != null) {
+            this.returnType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ReturnType);
+        }
     }
 
     private parameters: ApiParameter[];
@@ -67,8 +69,8 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
         const parametersString = this.ParametersToString();
 
         // ReturnType
-        const type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ReturnType);
-        const returnTypeString = typeDefChar != null && type != null ? `${typeDefChar}${type.ToText().join(" ")}` : "";
+        const type = this.SerializedTypeToString(this.ReturnType);
+        const returnTypeString = typeDefChar != null && type != null ? `${typeDefChar}${type}` : "";
 
         return `${typeParametersString}(${parametersString})${returnTypeString}`;
     }

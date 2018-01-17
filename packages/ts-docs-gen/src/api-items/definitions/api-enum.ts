@@ -7,7 +7,7 @@ import { ApiEnumMember } from "./api-enum-member";
 export class ApiEnum extends BaseApiItemClass<Contracts.ApiEnumDto> {
     private getEnumMembers(): ApiEnumMember[] {
         return GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiEnumMemberDto>(this.ExtractedData, this.Data.Members)
+            .GetApiItemsFromReferenceList<Contracts.ApiEnumMemberDto>(this.ExtractedData, this.Data.Members)
             .map(x => new ApiEnumMember(this.ExtractedData, x));
     }
 

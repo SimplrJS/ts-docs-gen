@@ -10,9 +10,9 @@ export abstract class ApiTypeReferenceBase<TKind extends Contracts.ApiReferenceB
         this.referenceItem = this.GetSerializedApiDefinition(this.Data.ReferenceId);
     }
 
-    private referenceItem: SerializedApiDefinition | undefined;
+    private referenceItem: SerializedApiDefinition<Contracts.ApiItemDto> | undefined;
 
-    public get ReferenceItem(): SerializedApiDefinition | undefined {
+    public get ReferenceItem(): SerializedApiDefinition<Contracts.ApiItemDto> | undefined {
         return this.referenceItem;
     }
 
@@ -23,7 +23,7 @@ export abstract class ApiTypeReferenceBase<TKind extends Contracts.ApiReferenceB
 
         return typeParameters
             .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
-            .filter((x): x is SerializedApiType => x != null);
+            .filter((x): x is SerializedApiType<Contracts.ApiType> => x != null);
     }
 
     protected TypeParametersToString(apiItem: SerializedApiType[] | undefined): string {

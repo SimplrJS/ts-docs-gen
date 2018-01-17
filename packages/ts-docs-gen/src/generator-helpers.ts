@@ -20,14 +20,15 @@ import { ApiTypeDefault } from "./api-items/api-type-default";
 export namespace GeneratorHelpers {
     export function SerializeApiDefinition(
         extractedData: ExtractDto,
-        apiItem: Contracts.ApiItemDto
+        apiItem: Contracts.ApiItemDto,
+        reference: ApiItemReference
     ): SerializedApiDefinition<Contracts.ApiItemDto> {
         if (apiItem != null) {
             for (const [kind, constructorItem] of ApiDefinitionList) {
                 if (kind === apiItem.ApiKind) {
                     const $constructor: SerializedApiDefinitionConstructor<Contracts.ApiItemDto> = constructorItem;
 
-                    return new $constructor(extractedData, apiItem);
+                    return new $constructor(extractedData, apiItem, reference);
                 }
             }
         }
@@ -150,7 +151,7 @@ export namespace GeneratorHelpers {
         return overallReferences;
     }
 
-    export function GetApiItemsFromReference<T extends Contracts.ApiItemDto>(
+    export function GetApiItemsFromReferenceList<T extends Contracts.ApiItemDto>(
         extractedData: ExtractDto,
         items: Contracts.ApiItemReference[],
         apiItemKind?: Contracts.ApiItemKinds
@@ -158,11 +159,22 @@ export namespace GeneratorHelpers {
         const apiItems: T[] = [];
 
         for (const itemReferences of items) {
-            for (const referenceId of itemReferences.Ids) {
-                const apiItem = extractedData.Registry[referenceId] as T;
-                if (apiItemKind == null || apiItemKind != null && apiItem.ApiKind === apiItemKind) {
-                    apiItems.push(apiItem);
-                }
+            apiItems.push(...GetApiItemsFromReference<T>(extractedData, itemReferences, apiItemKind));
+        }
+
+        return apiItems;
+    }
+
+    export function GetApiItemsFromReference<T extends Contracts.ApiItemDto>(
+        extractedData: ExtractDto,
+        reference: Contracts.ApiItemReference,
+        apiItemKind?: Contracts.ApiItemKinds
+    ): T[] {
+        const apiItems: T[] = [];
+        for (const referenceId of reference.Ids) {
+            const apiItem = extractedData.Registry[referenceId] as T;
+            if (apiItemKind == null || apiItemKind != null && apiItem.ApiKind === apiItemKind) {
+                apiItems.push(apiItem);
             }
         }
 

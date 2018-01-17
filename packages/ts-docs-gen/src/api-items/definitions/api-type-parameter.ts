@@ -8,8 +8,12 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
     constructor(extractedData: ExtractDto, apiItem: Contracts.ApiTypeParameterDto) {
         super(extractedData, apiItem);
 
-        this.constraintType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ConstraintType);
-        this.defaultType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.DefaultType);
+        if (this.Data.ConstraintType != null) {
+            this.constraintType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ConstraintType);
+        }
+        if (this.Data.DefaultType != null) {
+            this.defaultType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.DefaultType);
+        }
     }
 
     private constraintType: SerializedApiType | undefined;

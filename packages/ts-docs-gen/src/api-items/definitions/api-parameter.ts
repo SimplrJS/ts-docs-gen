@@ -23,7 +23,7 @@ export class ApiParameter extends ApiDefinitionBase<Contracts.ApiParameterDto> {
         const initializerString = this.Data.Initializer ? ` = ${this.Data.Initializer}` : "";
         const isOptionalString = this.Data.IsOptional ? "?" : "";
 
-        const type = this.SerializedTypeToString(this.Data.Type);
+        const type = this.SerializedTypeToString(this.Type);
 
         return [
             `${name}${isOptionalString}: ${type}${initializerString}`

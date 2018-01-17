@@ -3,19 +3,18 @@ import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
+import { SerializedApiDefinition, SerializedApiType } from "../contracts/serialized-api-item";
+import { ApiTypeParameter } from "../api-items/definitions/api-type-parameter";
 
-export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin<TKind> {
+export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> implements Plugin<TKind> {
     public abstract SupportedApiItemKinds(): SupportedApiItemKindType[];
 
-    public CheckApiItem(item: TKind): boolean {
+    public CheckApiItem(item: SerializedApiDefinition<TKind>): boolean {
         return true;
     }
 
     // TODO: Escape string!
-    protected RenderTypeParameters(
-        extractedData: ExtractDto,
-        typeParameters: Contracts.ApiTypeParameterDto[]
-    ): PluginResultData | undefined {
+    protected RenderTypeParameters(typeParameters: ApiTypeParameter[]): PluginResultData | undefined {
         if (typeParameters.length === 0) {
             return undefined;
         }
@@ -27,29 +26,33 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
             // ConstraintType
             let constraintType: string;
             if (typeParameter.ConstraintType != null) {
-                constraintType = GeneratorHelpers.ApiTypeToString(extractedData, typeParameter.ConstraintType);
+                constraintType = typeParameter.ConstraintType.ToText().join(" ");
                 GeneratorHelpers.MergePluginResultData(pluginResult, {
+                    // FIXME: References.
                     // UsedReferences: constraintType.References
                 });
             } else {
                 constraintType = "";
+                // FIXME: References.
                 // constraintType = { References: [], Text: "" };
             }
 
             // DefaultType
             let defaultType: string;
             if (typeParameter.DefaultType != null) {
-                defaultType = GeneratorHelpers.ApiTypeToString(extractedData, typeParameter.DefaultType);
+                defaultType = typeParameter.DefaultType.ToText().join(" ");
                 GeneratorHelpers.MergePluginResultData(pluginResult, {
+                    // FIXME: References.
                     // UsedReferences: defaultType.References
                 });
             } else {
+                // FIXME: References.
                 defaultType = "";
                 // defaultType = { References: [], Text: "" };
             }
 
             return [
-                typeParameter.Name,
+                typeParameter.Data.Name,
                 constraintType,
                 defaultType
             ];
@@ -65,13 +68,13 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
         return pluginResult;
     }
 
-    protected RenderType(extractedData: ExtractDto, type: Contracts.ApiType | undefined): PluginResultData | undefined {
+    protected RenderType(extractedData: ExtractDto, type: SerializedApiType | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
-        const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-        const parsedReturnType = GeneratorHelpers.ApiTypeToString(extractedData, type);
+        const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
+        const parsedReturnType = type.ToText().join(" ");
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
@@ -80,6 +83,7 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
             .Text(parsedReturnType)
             .GetOutput();
 
+        //FIXME: Reference
         // pluginResult.UsedReferences = parsedReturnType.References;
         return pluginResult;
     }

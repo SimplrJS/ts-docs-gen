@@ -4,13 +4,13 @@ import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 
 export abstract class ApiTypeBase<TKind extends Contracts.ApiBaseType> extends BaseApiItemClass<TKind> implements SerializedApiType<TKind> {
-    protected GetSerializedApiDefinition(referenceId?: string): SerializedApiDefinition | undefined {
+    protected GetSerializedApiDefinition(referenceId?: string): SerializedApiDefinition<Contracts.ApiItemDto> | undefined {
         if (referenceId == null) {
             return undefined;
         }
 
         const apiItem = this.ExtractedData.Registry[referenceId];
-        return GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, apiItem);
+        return GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, apiItem, { Alias: "", Id: referenceId });
     }
 
     protected SerializedTypeToString(apiType: SerializedApiType | undefined): string {

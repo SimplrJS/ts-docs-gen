@@ -9,7 +9,7 @@ export abstract class ApiTypeMembersBase<TKind extends Contracts.ApiMembersBaseT
 
         this.members = this.Data.Members
             .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
-            .filter((x): x is SerializedApiType => x != null);
+            .filter((x): x is SerializedApiType<Contracts.ApiType> => x != null);
     }
 
     private members: SerializedApiType[];

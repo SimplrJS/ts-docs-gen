@@ -7,10 +7,12 @@ export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
     constructor(extractedData: ExtractDto, apiItem: Contracts.ApiClassDto) {
         super(extractedData, apiItem);
 
-        this.extends = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Extends);
+        if (this.Data.Extends != null) {
+            this.extends = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Extends);
+        }
         this.implements = this.Data.Implements
             .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
-            .filter((x): x is SerializedApiType => x != null);
+            .filter((x): x is SerializedApiType<Contracts.ApiType> => x != null);
 
         this.members = this.GetMembers(this.Data.Members);
     }
@@ -27,9 +29,9 @@ export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
         return this.implements;
     }
 
-    private members: SerializedApiDefinition[];
+    private members: Array<SerializedApiDefinition<Contracts.ApiItemDto>>;
 
-    public get Members(): SerializedApiDefinition[] {
+    public get Members(): Array<SerializedApiDefinition<Contracts.ApiItemDto>> {
         return this.members;
     }
 

@@ -11,6 +11,7 @@ import { PluginResult, PluginOptions, GetItemPluginResultHandler } from "./contr
 import { FileResult } from "./contracts/file-result";
 import { PluginResultRegistry } from "./contracts/plugin-result-registry";
 import { PluginResultRegistry as PluginResultRegistryClass } from "./registries/plugin-result-registry";
+import { GeneratorHelpers } from "./generator-helpers";
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
@@ -72,17 +73,18 @@ export class Generator {
         apiItem: Contracts.ApiItemDto
     ): PluginResult {
         const plugins = this.configuration.PluginManager.GetPluginsByKind(apiItem.ApiKind);
+        const serializedApiDefinition = GeneratorHelpers.SerializeApiDefinition(this.configuration.ExtractedData, apiItem);
 
         const pluginOptions: PluginOptions = {
             ExtractedData: this.configuration.ExtractedData,
             Reference: apiItemReference,
-            ApiItem: apiItem,
+            SerializedApiItem: serializedApiDefinition,
             GetItemPluginResult: this.getItemPluginResult,
             IsPluginResultExists: reference => this.pluginResultRegistry.Exists(reference)
         };
 
         for (const plugin of plugins) {
-            if (plugin.CheckApiItem(apiItem)) {
+            if (plugin.CheckApiItem(serializedApiDefinition)) {
                 return plugin.Render(pluginOptions);
             }
         }

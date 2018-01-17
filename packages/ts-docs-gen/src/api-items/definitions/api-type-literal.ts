@@ -9,9 +9,9 @@ export class ApiTypeLiteral extends ApiDefinitionBase<Contracts.ApiTypeLiteralDt
         this.members = this.GetMembers(this.Data.Members);
     }
 
-    private members: SerializedApiDefinition[];
+    private members: Array<SerializedApiDefinition<Contracts.ApiItemDto>>;
 
-    public get Members(): SerializedApiDefinition[] {
+    public get Members(): Array<SerializedApiDefinition<Contracts.ApiItemDto>> {
         return this.members;
     }
 
