@@ -1,11 +1,10 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { ExtractDto } from "ts-extractor";
 
-export interface BaseApiItemConstructor<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> {
-    new(extractedData: ExtractDto, apiItem: TKind): BaseApiItem<TKind>;
+export interface SerializedApiItemConstructor<TKind> {
+    new(extractedData: ExtractDto, apiItem: TKind): SerializedApiItem<TKind>;
 }
 
-// TODO: Rename it to "SerializedApiItem" ?
-export interface BaseApiItem<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> {
+export interface SerializedApiItem<TKind> {
     Data: TKind;
     ToText(alias?: string): string[];
     ToHeadingText(alias?: string): string;

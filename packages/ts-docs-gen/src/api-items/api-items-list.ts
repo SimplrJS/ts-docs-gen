@@ -23,9 +23,10 @@ import { ApiClassConstructor } from "./api-class-constructor";
 import { ApiClassProperty } from "./api-class-property";
 import { ApiClassMethod } from "./api-class-method";
 import { ApiAccessor } from "./api-accessor";
+import { SerializedApiItemConstructor } from "../contracts/base-api-item";
 
 // TODO: Fix any.
-export const ApiItemsList: Array<[Contracts.ApiItemKinds, any]> = [
+export const ApiItemsList: Array<[Contracts.ApiItemKinds, SerializedApiItemConstructor<any>]> = [
     [Contracts.ApiItemKinds.Enum, ApiEnum],
     [Contracts.ApiItemKinds.EnumMember, ApiEnumMember],
     [Contracts.ApiItemKinds.Function, ApiFunction],
