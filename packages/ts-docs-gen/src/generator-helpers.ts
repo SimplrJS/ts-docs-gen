@@ -7,7 +7,7 @@ import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
 import { Helpers } from "./utils/helpers";
-import { SerializedApiDefinition, SerializedApiDefinitionConstructor } from "./contracts/base-api-item";
+import { SerializedApiDefinition, SerializedApiDefinitionConstructor } from "./contracts/serialized-api-item";
 import { ApiItemsList } from "./api-items/api-items-list";
 
 export namespace GeneratorHelpers {

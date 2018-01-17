@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { SerializedApiDefinitionConstructor } from "../contracts/base-api-item";
+import { SerializedApiDefinitionConstructor } from "../contracts/serialized-api-item";
 
 // ApiItems
 import { ApiCall } from "./definitions/api-call";
