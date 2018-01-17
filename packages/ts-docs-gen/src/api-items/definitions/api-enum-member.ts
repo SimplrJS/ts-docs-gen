@@ -1,8 +1,7 @@
 import { Contracts } from "ts-extractor";
+import { ApiDefinitionBase } from "../api-definition-base";
 
-import { BaseApiItemClass } from "../../abstractions/base-api-item";
-
-export class ApiEnumMember extends BaseApiItemClass<Contracts.ApiEnumMemberDto> {
+export class ApiEnumMember extends ApiDefinitionBase<Contracts.ApiEnumMemberDto> {
     public ToText(): string[] {
         const name = this.Data.Name;
 
@@ -17,6 +16,6 @@ export class ApiEnumMember extends BaseApiItemClass<Contracts.ApiEnumMemberDto> 
     }
 
     public ToHeadingText(): string {
-        return this.Data.Name;
+        return this.Reference.Alias || this.Data.Name;
     }
 }

@@ -1,28 +1,15 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 
-import { ApiDefinitionBase } from "../api-definition-base";
-import { SerializedApiDefinition } from "../../contracts/serialized-api-item";
+import { ApiDefinitionContainer } from "../api-definition-container";
 
-export class ApiNamespace extends ApiDefinitionBase<Contracts.ApiNamespaceDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiNamespaceDto) {
-        super(extractedData, apiItem);
-
-        this.members = this.GetMembers(this.Data.Members);
-    }
-
-    private members: Array<SerializedApiDefinition<Contracts.ApiItemDto>>;
-
-    public get Members(): Array<SerializedApiDefinition<Contracts.ApiItemDto>> {
-        return this.members;
-    }
-
-    public ToText(alias?: string): string[] {
-        const name = alias || this.Data.Name;
+export class ApiNamespace extends ApiDefinitionContainer<Contracts.ApiNamespaceDto> {
+    public ToText(): string[] {
+        const name = this.Reference.Alias || this.Data.Name;
 
         return [`namespace ${name}`];
     }
 
     public ToHeadingText(): string {
-        return this.Data.Name;
+        return this.Reference.Alias || this.Data.Name;
     }
 }

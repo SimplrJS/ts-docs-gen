@@ -1,22 +1,8 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 
-import { GeneratorHelpers } from "../../generator-helpers";
-import { SerializedApiType } from "../../contracts/serialized-api-item";
-import { ApiDefinitionBase } from "../api-definition-base";
+import { ApiDefinitionWithType } from "../api-definition-with-type";
 
-export class ApiProperty extends ApiDefinitionBase<Contracts.ApiPropertyDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiPropertyDto) {
-        super(extractedData, apiItem);
-
-        this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Type);
-    }
-
-    private type: SerializedApiType | undefined;
-
-    public get Type(): SerializedApiType | undefined {
-        return this.type;
-    }
-
+export class ApiProperty extends ApiDefinitionWithType<Contracts.ApiPropertyDto> {
     public ToText(): string[] {
         const optional = this.Data.IsOptional ? "?" : "";
         const readOnly = this.Data.IsReadonly ? "readonly " : "";
@@ -26,6 +12,6 @@ export class ApiProperty extends ApiDefinitionBase<Contracts.ApiPropertyDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Data.Name;
+        return this.Reference.Alias || this.Data.Name;
     }
 }

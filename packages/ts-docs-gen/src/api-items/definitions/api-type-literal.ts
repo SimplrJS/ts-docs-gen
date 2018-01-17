@@ -1,21 +1,8 @@
-import { Contracts, ExtractDto } from "ts-extractor";
-import { ApiDefinitionBase } from "../api-definition-base";
-import { SerializedApiDefinition } from "../../contracts/serialized-api-item";
+import { Contracts } from "ts-extractor";
+import { ApiDefinitionContainer } from "../api-definition-container";
 
-export class ApiTypeLiteral extends ApiDefinitionBase<Contracts.ApiTypeLiteralDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiTypeLiteralDto) {
-        super(extractedData, apiItem);
-
-        this.members = this.GetMembers(this.Data.Members);
-    }
-
-    private members: Array<SerializedApiDefinition<Contracts.ApiItemDto>>;
-
-    public get Members(): Array<SerializedApiDefinition<Contracts.ApiItemDto>> {
-        return this.members;
-    }
-
-    public ToText(alias?: string): string[] {
+export class ApiTypeLiteral extends ApiDefinitionContainer<Contracts.ApiTypeLiteralDto> {
+    public ToText(): string[] {
         // Members
         const members = this.MembersToText(this.Members, 1);
 
@@ -26,7 +13,7 @@ export class ApiTypeLiteral extends ApiDefinitionBase<Contracts.ApiTypeLiteralDt
         ];
     }
 
-    public ToHeadingText(alias?: string | undefined): string {
-        return alias || this.Data.Name;
+    public ToHeadingText(): string {
+        return this.Reference.Alias || this.Data.Name;
     }
 }

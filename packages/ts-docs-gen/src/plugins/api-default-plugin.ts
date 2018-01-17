@@ -5,12 +5,12 @@ import { PluginOptions, PluginResult, SupportedApiItemKindType } from "../contra
 import { GeneratorHelpers } from "../generator-helpers";
 import { BasePlugin } from "../abstractions/base-plugin";
 
-export class ApiDefaultPlugin extends BasePlugin<Contracts.ApiItemDto> {
+export class ApiDefaultPlugin extends BasePlugin {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.Any];
     }
 
-    public Render(options: PluginOptions<Contracts.ApiItemDto>): PluginResult {
+    public Render(options: PluginOptions): PluginResult {
         const heading = `${options.ApiItem.ApiKind}: ${options.Reference.Alias}`;
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),

@@ -1,6 +1,7 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 
 import { ApiItemReference } from "./api-item-reference";
+import { SerializedApiDefinition } from "./serialized-api-item";
 
 export enum ApiItemKindsAdditional {
     Any = "any"
@@ -22,9 +23,9 @@ export interface PluginMember<TKind> {
 export type GetItemPluginResultHandler = (reference: ApiItemReference) => PluginResult;
 export type IsPluginResultExistsHandler = (reference: ApiItemReference) => boolean;
 
-export interface PluginOptions<TKind = Contracts.ApiItemDto> {
+export interface PluginOptions<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> {
     Reference: ApiItemReference;
-    ApiItem: TKind;
+    SerializedApiItem: SerializedApiDefinition<TKind>;
     ExtractedData: ExtractDto;
     GetItemPluginResult: GetItemPluginResultHandler;
     IsPluginResultExists: IsPluginResultExistsHandler;
@@ -51,8 +52,8 @@ export interface PluginResult<TKind = Contracts.ApiItemDto> extends PluginResult
     ApiItem: TKind;
 }
 
-export interface Plugin<TKind = Contracts.ApiItemDto> {
+export interface Plugin<TKind extends Contracts.ApiBaseItemDto> {
     SupportedApiItemKinds(): SupportedApiItemKindType[];
-    CheckApiItem(item: TKind): boolean;
+    CheckApiItem(item: SerializedApiDefinition<TKind>): boolean;
     Render(options: PluginOptions<TKind>): PluginResult;
 }

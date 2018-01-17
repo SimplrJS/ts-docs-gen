@@ -1,10 +1,23 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 
-import { BaseApiItemClass } from "../../abstractions/base-api-item";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiEnumMember } from "./api-enum-member";
+import { ApiDefinitionBase } from "../api-definition-base";
+import { ApiItemReference } from "../../contracts/api-item-reference";
 
-export class ApiEnum extends BaseApiItemClass<Contracts.ApiEnumDto> {
+export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
+    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiEnumDto, reference: ApiItemReference) {
+        super(extractedData, apiItem, reference);
+
+        this.enumMembers = this.getEnumMembers();
+    }
+
+    private enumMembers: ApiEnumMember[];
+
+    public get EnumMembers(): ApiEnumMember[] {
+        return this.enumMembers;
+    }
+
     private getEnumMembers(): ApiEnumMember[] {
         return GeneratorHelpers
             .GetApiItemsFromReferenceList<Contracts.ApiEnumMemberDto>(this.ExtractedData, this.Data.Members)
@@ -38,6 +51,6 @@ export class ApiEnum extends BaseApiItemClass<Contracts.ApiEnumDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Data.Name;
+        return this.Reference.Alias || this.Data.Name;
     }
 }

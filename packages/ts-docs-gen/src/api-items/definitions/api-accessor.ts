@@ -2,12 +2,13 @@ import { Contracts, ExtractDto } from "ts-extractor";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { SerializedApiType } from "../../contracts/serialized-api-item";
 import { ApiDefinitionBase } from "../api-definition-base";
+import { ApiItemReference } from "../../contracts/api-item-reference";
 
 export type ApiAccessorKinds = Contracts.ApiGetAccessorDto | Contracts.ApiSetAccessorDto;
 
 export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
-    constructor(extractedData: ExtractDto, apiItem: ApiAccessorKinds) {
-        super(extractedData, apiItem);
+    constructor(extractedData: ExtractDto, apiItem: ApiAccessorKinds, reference: ApiItemReference) {
+        super(extractedData, apiItem, reference);
 
         const resolvedType = this.resolveType();
         if (resolvedType != null) {
@@ -39,8 +40,8 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
         return type;
     }
 
-    public ToText(alias?: string | undefined): string[] {
-        const name = alias || this.Data.Name;
+    public ToText(): string[] {
+        const name = this.Reference.Alias || this.Data.Name;
         const abstract = this.Data.IsAbstract ? " abstract" : "";
         const $static = this.Data.IsStatic ? " static" : "";
 
@@ -55,7 +56,7 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
         return [`${this.Data.AccessModifier}${$static}${abstract} ${accessorType} ${name}: ${typeString};`];
     }
 
-    public ToHeadingText(alias?: string | undefined): string {
-        return alias || this.Data.Name;
+    public ToHeadingText(): string {
+        return this.Reference.Alias || this.Data.Name;
     }
 }

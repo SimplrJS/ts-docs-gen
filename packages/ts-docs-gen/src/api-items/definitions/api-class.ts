@@ -1,11 +1,12 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { ApiDefinitionBase } from "../api-definition-base";
 import { GeneratorHelpers } from "../../generator-helpers";
-import { SerializedApiType, SerializedApiDefinition } from "../../contracts/serialized-api-item";
+import { SerializedApiType } from "../../contracts/serialized-api-item";
+import { ApiItemReference } from "../../contracts/api-item-reference";
 
 export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiClassDto) {
-        super(extractedData, apiItem);
+    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiClassDto, reference: ApiItemReference) {
+        super(extractedData, apiItem, reference);
 
         if (this.Data.Extends != null) {
             this.extends = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Extends);
@@ -13,8 +14,6 @@ export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
         this.implements = this.Data.Implements
             .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
             .filter((x): x is SerializedApiType<Contracts.ApiType> => x != null);
-
-        this.members = this.GetMembers(this.Data.Members);
     }
 
     private extends: SerializedApiType | undefined;
@@ -29,14 +28,8 @@ export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
         return this.implements;
     }
 
-    private members: Array<SerializedApiDefinition<Contracts.ApiItemDto>>;
-
-    public get Members(): Array<SerializedApiDefinition<Contracts.ApiItemDto>> {
-        return this.members;
-    }
-
-    public ToText(alias?: string | undefined): string[] {
-        const name = alias || this.Data.Name;
+    public ToText(): string[] {
+        const name = this.Reference.Alias || this.Data.Name;
 
         // Abstract
         const abstract = this.Data.IsAbstract ? "abstract " : "";
@@ -67,7 +60,7 @@ export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
         ];
     }
 
-    public ToHeadingText(alias?: string | undefined): string {
-        return alias || this.Data.Name;
+    public ToHeadingText(): string {
+        return this.Reference.Alias || this.Data.Name;
     }
 }

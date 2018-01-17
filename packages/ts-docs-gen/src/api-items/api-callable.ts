@@ -5,13 +5,14 @@ import { ApiTypeParameter } from "./definitions/api-type-parameter";
 import { ApiParameter } from "./definitions/api-parameter";
 import { ApiDefinitionBase } from "./api-definition-base";
 import { SerializedApiType } from "../contracts/serialized-api-item";
+import { ApiItemReference } from "../contracts/api-item-reference";
 
 /**
  * Base class for callable api items.
  */
 export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extends ApiDefinitionBase<TKind> {
-    constructor(extractedData: ExtractDto, apiItem: TKind) {
-        super(extractedData, apiItem);
+    constructor(extractedData: ExtractDto, apiItem: TKind, reference: ApiItemReference) {
+        super(extractedData, apiItem, reference);
 
         this.parameters = GeneratorHelpers
             .GetApiItemReferences(this.ExtractedData, this.Data.Parameters)

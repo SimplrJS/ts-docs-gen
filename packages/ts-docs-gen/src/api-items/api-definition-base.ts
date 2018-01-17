@@ -14,13 +14,17 @@ export type ApiItemWithTypeParameters = Contracts.ApiBaseItemDto & { TypeParamet
  */
 export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> extends BaseApiItemClass<TKind>
     implements SerializedApiDefinition<TKind> {
-    constructor(extractedData: ExtractDto, apiItem: TKind) {
+    constructor(extractedData: ExtractDto, apiItem: TKind, private reference: ApiItemReference) {
         super(extractedData, apiItem);
 
         if (this.Data.ParentId != null) {
             const parentReference = { Alias: "", Id: this.Data.ParentId };
             this.parentItem = this.GetSerializedApiDefinition(parentReference);
         }
+    }
+
+    public get Reference(): ApiItemReference {
+        return this.reference;
     }
 
     private parentItem: SerializedApiDefinition<Contracts.ApiItemDto> | undefined;
@@ -69,6 +73,6 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
         return apiType.ToText().join(" ");
     }
 
-    public abstract ToText(alias?: string): string[];
-    public abstract ToHeadingText(alias?: string): string;
+    public abstract ToText(): string[];
+    public abstract ToHeadingText(): string;
 }

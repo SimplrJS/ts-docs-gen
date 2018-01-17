@@ -3,10 +3,11 @@ import { Contracts, ExtractDto } from "ts-extractor";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { SerializedApiType } from "../../contracts/serialized-api-item";
 import { ApiDefinitionBase } from "../api-definition-base";
+import { ApiItemReference } from "../../contracts/api-item-reference";
 
 export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParameterDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiTypeParameterDto) {
-        super(extractedData, apiItem);
+    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiTypeParameterDto, reference: ApiItemReference) {
+        super(extractedData, apiItem, reference);
 
         if (this.Data.ConstraintType != null) {
             this.constraintType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ConstraintType);
@@ -28,8 +29,8 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
         return this.defaultType;
     }
 
-    public ToText(alias?: string, mapped?: boolean): string[] {
-        const name = alias || this.Data.Name;
+    public ToText(mapped?: boolean): string[] {
+        const name = this.Reference.Alias || this.Data.Name;
 
         const constraintKeyword = mapped ? "in" : "extends";
 

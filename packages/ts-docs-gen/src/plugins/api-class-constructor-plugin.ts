@@ -13,7 +13,7 @@ export class ApiClassConstructorPlugin extends FunctionLikePlugin<Contracts.ApiC
     public Render(options: PluginOptions<Contracts.ApiClassConstructorDto>): PluginResult {
         // ApiParameters
         const apiParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ExtractedData, options.ApiItem.Parameters);
+            .GetApiItemsFromReferenceList<Contracts.ApiParameterDto>(options.ExtractedData, options.ApiItem.Parameters);
 
         const heading = GeneratorHelpers.MethodToSimpleString("constructor", apiParameters);
         const pluginResult: PluginResult = {

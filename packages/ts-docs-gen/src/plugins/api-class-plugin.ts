@@ -45,7 +45,7 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
 
         // Resolve ApiItems from references.
         const typeParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
+            .GetApiItemsFromReferenceList<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
 
         // Header
         pluginResult.Result = new MarkdownBuilder()

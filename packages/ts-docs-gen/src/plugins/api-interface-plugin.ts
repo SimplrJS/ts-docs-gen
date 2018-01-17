@@ -136,7 +136,7 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
 
         // Type parameters
         const apiTypeParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
+            .GetApiItemsFromReferenceList<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
         const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, apiTypeParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 

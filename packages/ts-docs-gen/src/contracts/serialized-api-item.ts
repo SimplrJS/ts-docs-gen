@@ -1,4 +1,5 @@
 import { Contracts, ExtractDto } from "ts-extractor";
+import { ApiItemReference } from "./api-item-reference";
 
 export interface SerializedApiItem<TKind> {
     Data: TKind;
@@ -6,13 +7,13 @@ export interface SerializedApiItem<TKind> {
 }
 
 export interface SerializedApiDefinitionConstructor<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> {
-    new(extractedData: ExtractDto, apiItem: TKind): SerializedApiDefinition<TKind>;
+    new(extractedData: ExtractDto, apiItem: TKind, reference: ApiItemReference): SerializedApiDefinition<TKind>;
 }
 
-export interface SerializedApiDefinition<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto>
+export interface SerializedApiDefinition<TKind extends Contracts.ApiBaseItemDto>
     extends SerializedApiItem<TKind> {
-    ToText(alias?: string): string[];
-    ToHeadingText(alias?: string): string;
+    ToText(): string[];
+    ToHeadingText(): string;
 }
 
 export interface SerializedApiTypeConstructor<TKind extends Contracts.ApiBaseType = Contracts.ApiBaseType> {

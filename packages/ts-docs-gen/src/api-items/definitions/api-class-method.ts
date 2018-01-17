@@ -2,8 +2,8 @@ import { Contracts } from "ts-extractor";
 import { ApiCallable } from "../api-callable";
 
 export class ApiClassMethod extends ApiCallable<Contracts.ApiClassMethodDto> {
-    public ToText(alias?: string): string[] {
-        const name = alias || this.Data.Name;
+    public ToText(): string[] {
+        const name = this.Reference.Alias || this.Data.Name;
 
         const optional = this.Data.IsOptional ? "?" : "";
         const abstract = this.Data.IsAbstract ? " abstract" : "";

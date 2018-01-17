@@ -38,7 +38,7 @@ export class ApiEnumPlugin extends BasePlugin<Contracts.ApiEnumDto> {
         };
 
         // Enum members
-        const enumMembers = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiEnumMemberDto>(
+        const enumMembers = GeneratorHelpers.GetApiItemsFromReferenceList<Contracts.ApiEnumMemberDto>(
             options.ExtractedData,
             options.ApiItem.Members
         );

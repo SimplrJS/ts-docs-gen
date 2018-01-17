@@ -1,22 +1,14 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 
-import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiParameter } from "./api-parameter";
-import { SerializedApiType } from "../../contracts/serialized-api-item";
-import { ApiDefinitionBase } from "../api-definition-base";
+import { ApiDefinitionWithType } from "../api-definition-with-type";
+import { ApiItemReference } from "../../contracts/api-item-reference";
 
-export class ApiIndex extends ApiDefinitionBase<Contracts.ApiIndexDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiIndexDto) {
-        super(extractedData, apiItem);
+export class ApiIndex extends ApiDefinitionWithType<Contracts.ApiIndexDto> {
+    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiIndexDto, reference: ApiItemReference) {
+        super(extractedData, apiItem, reference);
 
-        this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Type);
         this.parameter = this.getParameter();
-    }
-
-    private type: SerializedApiType | undefined;
-
-    public get Type(): SerializedApiType | undefined {
-        return this.type;
     }
 
     private parameter: ApiParameter;
@@ -38,6 +30,6 @@ export class ApiIndex extends ApiDefinitionBase<Contracts.ApiIndexDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Data.Name;
+        return this.Reference.Alias || this.Data.Name;
     }
 }
