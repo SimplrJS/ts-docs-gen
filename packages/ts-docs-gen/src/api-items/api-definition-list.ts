@@ -25,6 +25,7 @@ import { ApiClassProperty } from "./definitions/api-class-property";
 import { ApiClassMethod } from "./definitions/api-class-method";
 import { ApiAccessor } from "./definitions/api-accessor";
 
+// TODO: Add tests from Contracts.ApiItemKinds
 // TODO: Fix any.
 export const ApiDefinitionList: Array<[Contracts.ApiItemKinds, SerializedApiDefinitionConstructor<any>]> = [
     [Contracts.ApiItemKinds.Enum, ApiEnum],
