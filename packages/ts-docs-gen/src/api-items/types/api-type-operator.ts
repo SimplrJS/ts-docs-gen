@@ -4,10 +4,10 @@ import { GeneratorHelpers } from "../../generator-helpers";
 import { SerializedApiType } from "../../contracts/serialized-api-item";
 
 /**
- * Example: `arg is string`
+ * Example: `keyof Foo`
  */
-export class ApiTypePredicateType extends ApiTypeBase<Contracts.TypePredicateType> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.TypePredicateType) {
+export class ApiTypeOperator extends ApiTypeBase<Contracts.TypeOperatorType> {
+    constructor(extractedData: ExtractDto, apiItem: Contracts.TypeOperatorType) {
         super(extractedData, apiItem);
 
         this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Type);
@@ -21,9 +21,8 @@ export class ApiTypePredicateType extends ApiTypeBase<Contracts.TypePredicateTyp
 
     public ToText(): string[] {
         const type: string = this.SerializedTypeToString(this.Type);
-
         return [
-            `${this.Data.ParameterName} is ${type}`
+            `${this.Data.Keyword} ${type}`
         ];
     }
 }
