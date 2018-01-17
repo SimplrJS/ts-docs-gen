@@ -7,13 +7,13 @@ export abstract class ApiTypeReferenceBase<TKind extends Contracts.ApiReferenceB
     constructor(extractedData: ExtractDto, apiItem: TKind) {
         super(extractedData, apiItem);
 
-        this.apiDefinition = this.GetSerializedApiDefinition(this.Data.ReferenceId);
+        this.referenceItem = this.GetSerializedApiDefinition(this.Data.ReferenceId);
     }
 
-    private apiDefinition: SerializedApiDefinition | undefined;
+    private referenceItem: SerializedApiDefinition | undefined;
 
-    public get ApiDefinition(): SerializedApiDefinition | undefined {
-        return this.apiDefinition;
+    public get ReferenceItem(): SerializedApiDefinition | undefined {
+        return this.referenceItem;
     }
 
     protected GetTypeParameters(typeParameters: Contracts.ApiType[] | undefined): SerializedApiType[] | undefined {
