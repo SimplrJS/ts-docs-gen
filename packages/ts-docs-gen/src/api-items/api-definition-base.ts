@@ -11,7 +11,7 @@ export type ApiItemWithTypeParameters = Contracts.ApiBaseItemDto & { TypeParamet
 /**
  * Base definition class with helper functions.
  */
-export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto> extends BaseApiItemClass<TKind>
+export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> extends BaseApiItemClass<TKind>
     implements SerializedApiDefinition<TKind> {
     protected GetTypeParameters(apiItem: ApiItemWithTypeParameters): ApiTypeParameter[] {
         return GeneratorHelpers
@@ -29,7 +29,7 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto> 
 
     protected GetMembers(members: Contracts.ApiItemReference[]): SerializedApiDefinition[] {
         return GeneratorHelpers.GetApiItemsFromReference(this.ExtractedData, members)
-            .map(x => GeneratorHelpers.SerializeApiItem(this.ExtractedData, x))
+            .map(x => GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, x))
             .filter<SerializedApiDefinition>((x): x is SerializedApiDefinition => x != null);
     }
 

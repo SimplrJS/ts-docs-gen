@@ -7,11 +7,17 @@ import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
 import { Helpers } from "./utils/helpers";
-import { SerializedApiDefinition, SerializedApiDefinitionConstructor } from "./contracts/serialized-api-item";
+import {
+    SerializedApiDefinition,
+    SerializedApiDefinitionConstructor,
+    SerializedApiType,
+    SerializedApiTypeConstructor
+} from "./contracts/serialized-api-item";
 import { ApiDefinitionList } from "./api-items/api-definition-list";
+import { ApiTypeList } from "./api-items/api-type-list";
 
 export namespace GeneratorHelpers {
-    export function SerializeApiItem(
+    export function SerializeApiDefinition(
         extractedData: ExtractDto,
         apiItem: Contracts.ApiItemDto
     ): SerializedApiDefinition | undefined {
@@ -23,10 +29,22 @@ export namespace GeneratorHelpers {
             }
         }
 
-        // TODO: Add logger: "This api kind is not supported".
+        // TODO: Add logger: "This kind is not supported".
         return undefined;
     }
 
+    export function SerializeApiType(extractedData: ExtractDto, apiType: Contracts.ApiType): SerializedApiType | undefined {
+        for (const [kind, constructorItem] of ApiTypeList) {
+            if (kind === apiType.ApiTypeKind) {
+                const $constructor: SerializedApiTypeConstructor<Contracts.ApiBaseType> = constructorItem;
+
+                return new $constructor(extractedData, apiType);
+            }
+        }
+
+        // TODO: Add logger: "This kind is not supported".
+        return undefined;
+    }
     export type TypeToStringDto = ReferenceDto<string>;
 
     export interface ReferenceDto<T = string | string[]> {
