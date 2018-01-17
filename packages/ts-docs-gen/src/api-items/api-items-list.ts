@@ -1,32 +1,32 @@
 import { Contracts } from "ts-extractor";
+import { SerializedApiDefinitionConstructor } from "../contracts/base-api-item";
 
 // ApiItems
-import { ApiCall } from "./api-call";
-import { ApiClass } from "./api-class";
-import { ApiConstruct } from "./api-construct";
-import { ApiEnum } from "./api-enum";
-import { ApiEnumMember } from "./api-enum-member";
-import { ApiFunction } from "./api-function";
-import { ApiFunctionType } from "./api-function-type";
-import { ApiIndex } from "./api-index";
-import { ApiInterface } from "./api-interface";
-import { ApiMapped } from "./api-mapped";
-import { ApiMethod } from "./api-method";
-import { ApiNamespace } from "./api-namespace";
-import { ApiParameter } from "./api-parameter";
-import { ApiProperty } from "./api-property";
-import { ApiTypeAlias } from "./api-type-alias";
-import { ApiTypeParameter } from "./api-type-parameter";
-import { ApiVariable } from "./api-variable";
-import { ApiTypeLiteral } from "./api-type-literal";
-import { ApiClassConstructor } from "./api-class-constructor";
-import { ApiClassProperty } from "./api-class-property";
-import { ApiClassMethod } from "./api-class-method";
-import { ApiAccessor } from "./api-accessor";
-import { SerializedApiItemConstructor } from "../contracts/base-api-item";
+import { ApiCall } from "./definitions/api-call";
+import { ApiClass } from "./definitions/api-class";
+import { ApiConstruct } from "./definitions/api-construct";
+import { ApiEnum } from "./definitions/api-enum";
+import { ApiEnumMember } from "./definitions/api-enum-member";
+import { ApiFunction } from "./definitions/api-function";
+import { ApiFunctionType } from "./definitions/api-function-type";
+import { ApiIndex } from "./definitions/api-index";
+import { ApiInterface } from "./definitions/api-interface";
+import { ApiMapped } from "./definitions/api-mapped";
+import { ApiMethod } from "./definitions/api-method";
+import { ApiNamespace } from "./definitions/api-namespace";
+import { ApiParameter } from "./definitions/api-parameter";
+import { ApiProperty } from "./definitions/api-property";
+import { ApiTypeAlias } from "./definitions/api-type-alias";
+import { ApiTypeParameter } from "./definitions/api-type-parameter";
+import { ApiVariable } from "./definitions/api-variable";
+import { ApiTypeLiteral } from "./definitions/api-type-literal";
+import { ApiClassConstructor } from "./definitions/api-class-constructor";
+import { ApiClassProperty } from "./definitions/api-class-property";
+import { ApiClassMethod } from "./definitions/api-class-method";
+import { ApiAccessor } from "./definitions/api-accessor";
 
 // TODO: Fix any.
-export const ApiItemsList: Array<[Contracts.ApiItemKinds, SerializedApiItemConstructor<any>]> = [
+export const ApiItemsList: Array<[Contracts.ApiItemKinds, SerializedApiDefinitionConstructor<any>]> = [
     [Contracts.ApiItemKinds.Enum, ApiEnum],
     [Contracts.ApiItemKinds.EnumMember, ApiEnumMember],
     [Contracts.ApiItemKinds.Function, ApiFunction],

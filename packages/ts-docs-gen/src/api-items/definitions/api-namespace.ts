@@ -1,6 +1,6 @@
 import { Contracts } from "ts-extractor";
 
-import { BaseApiItemClass } from "../abstractions/base-api-item";
+import { BaseApiItemClass } from "../../abstractions/base-api-item";
 
 export class ApiNamespace extends BaseApiItemClass<Contracts.ApiNamespaceDto> {
     public ToText(alias?: string): string[] {

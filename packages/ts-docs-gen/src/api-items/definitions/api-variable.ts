@@ -1,7 +1,7 @@
 import { Contracts } from "ts-extractor";
 
-import { BaseApiItemClass } from "../abstractions/base-api-item";
-import { GeneratorHelpers } from "../generator-helpers";
+import { BaseApiItemClass } from "../../abstractions/base-api-item";
+import { GeneratorHelpers } from "../../generator-helpers";
 
 export class ApiVariable extends BaseApiItemClass<Contracts.ApiVariableDto> {
     public ToText(alias?: string): string[] {

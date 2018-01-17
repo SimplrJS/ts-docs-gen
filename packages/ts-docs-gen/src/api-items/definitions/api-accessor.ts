@@ -1,6 +1,6 @@
 import { Contracts } from "ts-extractor";
-import { BaseApiItemClass } from "../abstractions/base-api-item";
-import { GeneratorHelpers } from "../generator-helpers";
+import { BaseApiItemClass } from "../../abstractions/base-api-item";
+import { GeneratorHelpers } from "../../generator-helpers";
 
 export type ApiAccessorKinds = Contracts.ApiGetAccessorDto | Contracts.ApiSetAccessorDto;
 

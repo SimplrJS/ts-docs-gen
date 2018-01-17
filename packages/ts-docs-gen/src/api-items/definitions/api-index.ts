@@ -1,7 +1,7 @@
 import { Contracts } from "ts-extractor";
 
-import { BaseApiItemClass } from "../abstractions/base-api-item";
-import { GeneratorHelpers } from "../generator-helpers";
+import { BaseApiItemClass } from "../../abstractions/base-api-item";
+import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiParameter } from "./api-parameter";
 
 export class ApiIndex extends BaseApiItemClass<Contracts.ApiIndexDto> {

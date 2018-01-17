@@ -1,8 +1,7 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { ExtractDto } from "ts-extractor";
 import { SerializedApiItem } from "../contracts/base-api-item";
 
-export abstract class BaseApiItemClass<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto>
-    implements SerializedApiItem<TKind> {
+export abstract class BaseApiItemClass<TKind> implements SerializedApiItem<TKind> {
     constructor(private extractedData: ExtractDto, private apiItem: TKind) { }
 
     protected get ExtractedData(): ExtractDto {
@@ -13,7 +12,5 @@ export abstract class BaseApiItemClass<TKind extends Contracts.ApiBaseItemDto = 
         return this.apiItem;
     }
 
-    public abstract ToText(alias?: string): string[];
-
-    public abstract ToHeadingText(alias?: string): string;
+    public abstract ToText(): string[];
 }

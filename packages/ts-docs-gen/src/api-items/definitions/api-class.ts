@@ -1,8 +1,8 @@
 import { Contracts } from "ts-extractor";
-import { ApiBase } from "./api-base";
-import { GeneratorHelpers } from "../generator-helpers";
+import { ApiDefinitionBase } from "../api-definition-base";
+import { GeneratorHelpers } from "../../generator-helpers";
 
-export class ApiClass extends ApiBase<Contracts.ApiClassDto> {
+export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
     public ToText(alias?: string | undefined): string[] {
         const name = alias || this.Data.Name;
 

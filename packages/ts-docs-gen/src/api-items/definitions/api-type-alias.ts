@@ -1,8 +1,9 @@
 import { Contracts } from "ts-extractor";
-import { ApiBase } from "./api-base";
-import { GeneratorHelpers } from "../generator-helpers";
 
-export class ApiTypeAlias extends ApiBase<Contracts.ApiTypeAliasDto> {
+import { GeneratorHelpers } from "../../generator-helpers";
+import { ApiDefinitionBase } from "../api-definition-base";
+
+export class ApiTypeAlias extends ApiDefinitionBase<Contracts.ApiTypeAliasDto> {
     public ToText(alias?: string): string[] {
         const name = alias || this.Data.Name;
         const typeParameters = this.GetTypeParameters(this.Data);

@@ -1,6 +1,6 @@
 import { Contracts } from "ts-extractor";
-import { BaseApiItemClass } from "../abstractions/base-api-item";
-import { GeneratorHelpers } from "../generator-helpers";
+import { BaseApiItemClass } from "../../abstractions/base-api-item";
+import { GeneratorHelpers } from "../../generator-helpers";
 
 export class ApiClassProperty extends BaseApiItemClass<Contracts.ApiClassPropertyDto> {
     public ToText(alias?: string | undefined): string[] {

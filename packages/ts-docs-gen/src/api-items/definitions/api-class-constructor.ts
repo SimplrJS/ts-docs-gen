@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { ApiCallable } from "./api-callable";
+import { ApiCallable } from "../api-callable";
 
 export class ApiClassConstructor extends ApiCallable<Contracts.ApiClassConstructorDto> {
     public ToText(): string[] {

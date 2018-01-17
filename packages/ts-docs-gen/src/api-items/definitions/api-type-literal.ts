@@ -1,8 +1,8 @@
 import { Contracts } from "ts-extractor";
-import { ApiBase } from "./api-base";
+import { ApiDefinitionBase } from "../api-definition-base";
 
-export class ApiTypeLiteral extends ApiBase<Contracts.ApiTypeLiteralDto> {
-    public ToText(): string[] {
+export class ApiTypeLiteral extends ApiDefinitionBase<Contracts.ApiTypeLiteralDto> {
+    public ToText(alias?: string): string[] {
         // Members
         const members = this.MembersToText(this.Data.Members, 1);
 

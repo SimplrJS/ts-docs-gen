@@ -7,19 +7,19 @@ import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
 import { Helpers } from "./utils/helpers";
-import { SerializedApiItem, SerializedApiItemConstructor } from "./contracts/base-api-item";
+import { SerializedApiDefinition, SerializedApiDefinitionConstructor } from "./contracts/base-api-item";
 import { ApiItemsList } from "./api-items/api-items-list";
 
 export namespace GeneratorHelpers {
     export function SerializeApiItem(
         extractedData: ExtractDto,
         apiItem: Contracts.ApiItemDto
-    ): SerializedApiItem<Contracts.ApiItemDto> | undefined {
+    ): SerializedApiDefinition | undefined {
         for (const [kind, constructorItem] of ApiItemsList) {
             if (kind === apiItem.ApiKind) {
-                const constructor$: SerializedApiItemConstructor<Contracts.ApiItemDto> = constructorItem;
+                const $constructor: SerializedApiDefinitionConstructor<Contracts.ApiItemDto> = constructorItem;
 
-                return new constructor$(extractedData, apiItem);
+                return new $constructor(extractedData, apiItem);
             }
         }
 
