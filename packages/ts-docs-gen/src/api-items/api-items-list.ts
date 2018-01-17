@@ -19,6 +19,10 @@ import { ApiTypeAlias } from "./api-type-alias";
 import { ApiTypeParameter } from "./api-type-parameter";
 import { ApiVariable } from "./api-variable";
 import { ApiTypeLiteral } from "./api-type-literal";
+import { ApiClassConstructor } from "./api-class-constructor";
+import { ApiClassProperty } from "./api-class-property";
+import { ApiClassMethod } from "./api-class-method";
+import { ApiAccessor } from "./api-accessor";
 
 // TODO: Fix any.
 export const ApiItemsList: Array<[Contracts.ApiItemKinds, any]> = [
@@ -33,11 +37,11 @@ export const ApiItemsList: Array<[Contracts.ApiItemKinds, any]> = [
     [Contracts.ApiItemKinds.Variable, ApiVariable],
     [Contracts.ApiItemKinds.TypeAlias, ApiTypeAlias],
     [Contracts.ApiItemKinds.Class, ApiClass],
-    [Contracts.ApiItemKinds.ClassProperty, undefined],
-    [Contracts.ApiItemKinds.ClassConstructor, undefined],
-    [Contracts.ApiItemKinds.ClassMethod, undefined],
-    [Contracts.ApiItemKinds.GetAccessor, undefined],
-    [Contracts.ApiItemKinds.SetAccessor, undefined],
+    [Contracts.ApiItemKinds.ClassConstructor, ApiClassConstructor],
+    [Contracts.ApiItemKinds.ClassProperty, ApiClassProperty],
+    [Contracts.ApiItemKinds.ClassMethod, ApiClassMethod],
+    [Contracts.ApiItemKinds.GetAccessor, ApiAccessor],
+    [Contracts.ApiItemKinds.SetAccessor, ApiAccessor],
     [Contracts.ApiItemKinds.Index, ApiIndex],
     [Contracts.ApiItemKinds.Call, ApiCall],
     [Contracts.ApiItemKinds.Construct, ApiConstruct],
