@@ -10,6 +10,7 @@ export type TypeDefinitions = Contracts.TypeLiteralType |
 export class ApiTypeDefinition<TKind extends Contracts.ApiReferenceBaseType = TypeDefinitions> extends ApiTypeReferenceBase<TKind> {
     public ToText(): string[] {
         if (this.ReferenceItem == null) {
+            // TODO: Add log for missing reference.
             return ["???"];
         }
 

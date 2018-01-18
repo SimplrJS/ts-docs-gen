@@ -10,6 +10,7 @@ export class ApiTypeQuery extends ApiTypeReferenceBase<Contracts.TypeQueryType> 
         if (this.ReferenceItem != null) {
             name = this.ReferenceItem.Data.Name;
         } else {
+            // TODO: Add Log for missing reference.
             name = "???";
         }
 

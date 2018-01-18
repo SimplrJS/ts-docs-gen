@@ -61,7 +61,7 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
             .GetOutput();
 
         // Members
-        const membersResult = this.RenderMembersGroups(options, ApiSourceFilePlugin.MemberKindsList, serializedApiItem.Members);
+        const membersResult = this.RenderMemberGroups(options, ApiSourceFilePlugin.MemberKindsList, serializedApiItem.Members);
 
         // Treat members' headings as members of source file heading.
         const membersHeadings = membersResult.Headings;

@@ -120,13 +120,15 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
         GeneratorHelpers.MergePluginResultData(pluginResult, constraintTypesResult);
 
         // Members
-        const membersResult = this.RenderMembersGroups(
+        const membersResult = this.RenderMemberGroups(
             options,
             ApiInterfacePlugin.MemberKindsList,
             serializedApiItem.Members,
-            false,
-            4,
-            false
+            {
+                IncludeHr: false,
+                ShouldRenderUnlistedMembers: false,
+                StartingHeadingLevel: 4
+            }
         );
         GeneratorHelpers.MergePluginResultData(pluginResult, membersResult);
 

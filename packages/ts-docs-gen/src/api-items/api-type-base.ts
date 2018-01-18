@@ -12,6 +12,7 @@ export abstract class ApiTypeBase<TKind extends Contracts.ApiBaseType> extends B
 
     protected SerializedTypeToString(apiType: SerializedApiType | undefined): string {
         if (apiType == null) {
+            // TODO: Add Log for missing type.
             return "???";
         }
 

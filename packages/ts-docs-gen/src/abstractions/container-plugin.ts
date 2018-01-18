@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { MarkdownBuilder } from "@simplrjs/markdown";
+import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
 
 import { BasePlugin } from "./base-plugin";
 import { PluginResultData, PluginOptions } from "../contracts/plugin";
@@ -13,6 +13,12 @@ export interface ApiContainer extends Contracts.ApiBaseItemDto {
 export interface ContainerMembersKindsGroup {
     Heading: string;
     Kinds: Contracts.ApiItemKinds[];
+}
+
+export interface RenderMemberGroupsOptions {
+    IncludeHr: boolean;
+    StartingHeadingLevel: number;
+    ShouldRenderUnlistedMembers: boolean;
 }
 
 interface ContainerMembersGroup {
@@ -53,41 +59,49 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
     }
 
     // TODO: Remake options.
-    protected RenderMembersGroups(
-        options: PluginOptions,
+    protected RenderMemberGroups(
+        pluginOptions: PluginOptions,
         list: ContainerMembersKindsGroup[],
         members: ApiDefinitions[],
-        includeHr = true,
-        headingLevel = 2,
-        other = true
+        options?: Partial<RenderMemberGroupsOptions>
     ): PluginResultData {
-        const memberGroups = this.getItemsReferenceByKind(list, members, other);
+        const resolvedOptions: RenderMemberGroupsOptions = {
+            IncludeHr: true,
+            ShouldRenderUnlistedMembers: true,
+            StartingHeadingLevel: 2,
+            ...options
+        };
+
+        const memberGroups = this.getItemsReferenceByKind(list, members, resolvedOptions.ShouldRenderUnlistedMembers);
         const pluginResultData = GeneratorHelpers.GetDefaultPluginResultData();
         const builder = new MarkdownBuilder();
 
         for (const { Heading, MembersList } of memberGroups) {
             if (MembersList.length > 0) {
                 builder
-                    .Header(Heading, headingLevel)
+                    .Header(Heading, resolvedOptions.StartingHeadingLevel)
                     .EmptyLine();
 
                 for (const member of MembersList) {
-                    if (options.IsPluginResultExists(member.Reference)) {
+                    if (pluginOptions.IsPluginResultExists(member.Reference)) {
+                        const headingLink = MarkdownGenerator.Link(member.ToHeadingText(), member.Reference.Id, true);
+
                         builder
-                            .Text(md => md.Header(md.Link(member.ToHeadingText(), member.Reference.Id, true), headingLevel + 1))
+                            .Text(md => md.Header(headingLink, resolvedOptions.StartingHeadingLevel + 1))
                             .EmptyLine();
                     } else {
                         switch (member.Data.ApiKind) {
                             case Contracts.ApiItemKinds.Namespace:
                             case Contracts.ApiItemKinds.Class: {
-                                const renderedItem = options.GetItemPluginResult(member.Reference);
+                                const renderedItem = pluginOptions.GetItemPluginResult(member.Reference);
                                 pluginResultData.Members.push({
                                     Reference: member.Reference,
                                     PluginResult: renderedItem
                                 });
 
+                                const headingLink = MarkdownGenerator.Link(member.ToHeadingText(), member.Reference.Id, true);
                                 builder
-                                    .Text(md => md.Header(md.Link(member.ToHeadingText(), member.Reference.Id, true), headingLevel + 1))
+                                    .Text(md => md.Header(headingLink, resolvedOptions.StartingHeadingLevel + 1))
                                     .EmptyLine()
                                     .Text(this.RenderApiItemMetadata(renderedItem.ApiItem))
                                     .EmptyLine();
@@ -95,7 +109,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                                 break;
                             }
                             default: {
-                                const renderedItem = options.GetItemPluginResult(member.Reference);
+                                const renderedItem = pluginOptions.GetItemPluginResult(member.Reference);
                                 builder
                                     .Text(renderedItem.Result)
                                     .EmptyLine();
@@ -108,7 +122,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                         }
                     }
 
-                    if ((MembersList.indexOf(member) + 1) !== MembersList.length && includeHr) {
+                    if ((MembersList.indexOf(member) + 1) !== MembersList.length && resolvedOptions.IncludeHr) {
                         builder
                             .HorizontalRule(undefined, 10)
                             .EmptyLine();
