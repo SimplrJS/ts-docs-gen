@@ -45,7 +45,7 @@ export class ApiEnumPlugin extends BasePlugin<Contracts.ApiEnumDto> {
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(apiItem))
+            .Text(this.RenderApiItemMetadata(apiItem))
             .EmptyLine()
             .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()

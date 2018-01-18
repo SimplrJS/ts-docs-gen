@@ -50,7 +50,7 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 1)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(apiItem))
+            .Text(this.RenderApiItemMetadata(apiItem))
             .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 

@@ -32,7 +32,7 @@ export class ApiClassConstructorPlugin extends FunctionLikePlugin<Contracts.ApiC
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(apiItem))
+            .Text(this.RenderApiItemMetadata(apiItem))
             .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 

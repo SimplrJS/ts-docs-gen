@@ -89,7 +89,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                                 builder
                                     .Text(md => md.Header(md.Link(member.ToHeadingText(), member.Reference.Id, true), headingLevel + 1))
                                     .EmptyLine()
-                                    .Text(GeneratorHelpers.RenderApiItemMetadata(renderedItem.ApiItem))
+                                    .Text(this.RenderApiItemMetadata(renderedItem.ApiItem))
                                     .EmptyLine();
                                 pluginResultData.UsedReferences.push(member.Reference.Id);
                                 break;

@@ -33,7 +33,7 @@ export class ApiDefaultPlugin extends BasePlugin {
             .EmptyLine()
             .Text(md => md.Bold(`Warning: unsupported api item kind ${md.Italic(apiItem.ApiKind)}!`))
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(apiItem))
+            .Text(this.RenderApiItemMetadata(apiItem))
             .GetOutput();
 
         return pluginResult;

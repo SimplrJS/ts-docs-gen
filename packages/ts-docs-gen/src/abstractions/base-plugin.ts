@@ -13,6 +13,51 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         return true;
     }
 
+    protected RenderApiItemMetadata(apiItem: Contracts.ApiItemDto): string[] {
+        const builder = new MarkdownBuilder();
+
+        // Optimise?
+        const isBeta = apiItem.Metadata.JSDocTags.findIndex(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Beta) !== -1;
+        const deprecated = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Deprecated);
+        const internal = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Internal);
+        const summary = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Summary);
+        const jSDocComment = apiItem.Metadata.DocumentationComment;
+
+        if (isBeta) {
+            builder
+                .Text(`<span style="color: #d2d255;">Warning: Beta!</span>`)
+                .EmptyLine();
+        }
+
+        if (deprecated != null) {
+            const message = Boolean(deprecated.text) ? `: ${deprecated.text}` : "";
+            builder
+                .Text(`<span style="color: red;">Deprecated${message}!</span>`)
+                .EmptyLine();
+        }
+
+        if (internal != null) {
+            const message = Boolean(internal.text) ? `: ${internal.text}` : "";
+            builder
+                .Bold(`Internal${message}`)
+                .EmptyLine();
+        }
+
+        if (jSDocComment.length > 0) {
+            builder
+                .Text(jSDocComment)
+                .EmptyLine();
+        }
+
+        if (summary != null && Boolean(summary.text)) {
+            builder
+                .Blockquote(summary.text!.split("\n"))
+                .EmptyLine();
+        }
+
+        return builder.GetOutput();
+    }
+
     // TODO: Escape string!
     protected RenderTypeParameters(typeParameters: ApiTypeParameter[]): PluginResultData | undefined {
         if (typeParameters.length === 0) {

@@ -58,7 +58,7 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 1)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(apiItem))
+            .Text(this.RenderApiItemMetadata(apiItem))
             .GetOutput();
 
         // Members
