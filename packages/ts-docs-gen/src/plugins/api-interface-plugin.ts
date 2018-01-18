@@ -1,22 +1,22 @@
-import { Contracts, ExtractDto } from "ts-extractor";
-import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
+import { Contracts } from "ts-extractor";
+// import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
 
 import {
     SupportedApiItemKindType,
     PluginResult,
     PluginOptions,
-    GetItemPluginResultHandler,
-    PluginResultData
+    // GetItemPluginResultHandler,
+    // PluginResultData
 } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
-import { ApiItemReference } from "../contracts/api-item-reference";
+// import { ApiItemReference } from "../contracts/api-item-reference";
 import { BasePlugin } from "../abstractions/base-plugin";
-import { ApiInterface } from "../api-items/definitions/api-interface";
+// import { ApiInterface } from "../api-items/definitions/api-interface";
 
-interface ExtractedItemDto<TApiItemDto extends Contracts.ApiItemDto = Contracts.ApiItemDto> {
-    Reference: ApiItemReference;
-    ApiItem: TApiItemDto;
-}
+// interface ExtractedItemDto<TApiItemDto extends Contracts.ApiItemDto = Contracts.ApiItemDto> {
+//     Reference: ApiItemReference;
+//     ApiItem: TApiItemDto;
+// }
 
 export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {

@@ -1,6 +1,5 @@
 import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
-import * as path from "path";
 
 import { GeneratorHelpers } from "../generator-helpers";
 import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";

@@ -1,7 +1,6 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 
 import { ApiItemReference } from "./api-item-reference";
-import { SerializedApiDefinition } from "./serialized-api-item";
 
 export enum ApiItemKindsAdditional {
     Any = "any"

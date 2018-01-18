@@ -1,7 +1,7 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { ApiTypeBase } from "../api-type-base";
 import { GeneratorHelpers } from "../../generator-helpers";
-import { SerializedApiType } from "../../contracts/serialized-api-item";
+import { ApiTypes } from "../api-type-list";
 
 /**
  * Example: `keyof Foo`

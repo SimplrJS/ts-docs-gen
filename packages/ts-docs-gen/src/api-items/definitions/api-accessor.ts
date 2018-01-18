@@ -1,8 +1,8 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { GeneratorHelpers } from "../../generator-helpers";
-import { SerializedApiType } from "../../contracts/serialized-api-item";
 import { ApiDefinitionBase } from "../api-definition-base";
 import { ApiItemReference } from "../../contracts/api-item-reference";
+import { ApiTypes } from "../api-type-list";
 
 export type ApiAccessorKinds = Contracts.ApiGetAccessorDto | Contracts.ApiSetAccessorDto;
 
@@ -16,9 +16,9 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
         }
     }
 
-    private type: SerializedApiType | undefined;
+    private type: ApiTypes | undefined;
 
-    public get Type(): SerializedApiType | undefined {
+    public get Type(): ApiTypes | undefined {
         return this.type;
     }
 

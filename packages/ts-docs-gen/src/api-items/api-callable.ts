@@ -4,7 +4,6 @@ import { GeneratorHelpers } from "../generator-helpers";
 import { ApiTypeParameter } from "./definitions/api-type-parameter";
 import { ApiParameter } from "./definitions/api-parameter";
 import { ApiDefinitionBase } from "./api-definition-base";
-import { SerializedApiType } from "../contracts/serialized-api-item";
 import { ApiItemReference } from "../contracts/api-item-reference";
 import { ApiTypes } from "./api-type-list";
 
@@ -50,7 +49,7 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
     }
 
     protected TypeParametersToString(): string {
-        return super.TypeParametersToString(this.Data);
+        return super.TypeParametersToString(this.TypeParameters);
     }
 
     protected ParametersToString(): string {

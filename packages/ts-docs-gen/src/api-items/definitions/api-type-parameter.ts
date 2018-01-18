@@ -1,7 +1,6 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 
 import { GeneratorHelpers } from "../../generator-helpers";
-import { SerializedApiType } from "../../contracts/serialized-api-item";
 import { ApiDefinitionBase } from "../api-definition-base";
 import { ApiItemReference } from "../../contracts/api-item-reference";
 import { ApiTypes } from "../api-type-list";

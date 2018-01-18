@@ -1,6 +1,6 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { ApiTypeReferenceBase } from "../api-type-reference-base";
-import { SerializedApiType } from "../../contracts/serialized-api-item";
+import { ApiTypes } from "../api-type-list";
 
 /**
  * Example: `Foo` or `Foo<string>`.
