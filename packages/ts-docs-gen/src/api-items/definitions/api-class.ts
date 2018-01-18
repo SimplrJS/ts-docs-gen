@@ -1,19 +1,31 @@
 import { Contracts, ExtractDto } from "ts-extractor";
-import { ApiDefinitionBase } from "../api-definition-base";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiItemReference } from "../../contracts/api-item-reference";
 import { ApiTypes } from "../api-type-list";
+import { ApiDefinitionContainer } from "../api-definition-container";
+import { ApiTypeParameter } from "./api-type-parameter";
 
-export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
+export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
     constructor(extractedData: ExtractDto, apiItem: Contracts.ApiClassDto, reference: ApiItemReference) {
         super(extractedData, apiItem, reference);
 
+        this.typeParameters = this.GetTypeParameters(apiItem);
+
+        // Extends
         if (this.Data.Extends != null) {
             this.extends = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Extends);
         }
+
+        // Implements
         this.implements = this.Data.Implements
             .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
             .filter((x): x is ApiTypes => x != null);
+    }
+
+    private typeParameters: ApiTypeParameter[];
+
+    public get TypeParameters(): ApiTypeParameter[] {
+        return this.typeParameters;
     }
 
     private extends: ApiTypes | undefined;
@@ -35,7 +47,7 @@ export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
         const abstract = this.Data.IsAbstract ? "abstract " : "";
 
         // TypeParameters
-        const typeParameters: string = this.TypeParametersToString(this.Data);
+        const typeParameters: string = this.TypeParametersToString(this.TypeParameters);
 
         // Extends
         let extendsString: string;
