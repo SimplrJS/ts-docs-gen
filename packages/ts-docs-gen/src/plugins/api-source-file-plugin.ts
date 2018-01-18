@@ -5,6 +5,7 @@ import * as path from "path";
 import { GeneratorHelpers } from "../generator-helpers";
 import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
 import { ContainerPlugin, ContainerMembersKindsGroup } from "../abstractions/container-plugin";
+import { ApiSourceFile } from "../api-items/definitions/api-source-file";
 
 export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFileDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
@@ -42,24 +43,27 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
         }
     ];
 
-    public Render(options: PluginOptions<Contracts.ApiSourceFileDto>): PluginResult {
-        const heading = path.basename(options.ApiItem.Name, path.extname(options.ApiItem.Name));
+    public Render(options: PluginOptions, apiItem: Contracts.ApiSourceFileDto): PluginResult {
+        const serializedApiItem = new ApiSourceFile(options.ExtractedData, apiItem, options.Reference);
+
+        const heading = serializedApiItem.ToHeadingText();
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: options.ApiItem,
+            ApiItem: apiItem,
             Reference: options.Reference,
             UsedReferences: [options.Reference.Id]
         };
+
 
         // Header
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 1)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
+            .Text(GeneratorHelpers.RenderApiItemMetadata(apiItem))
             .GetOutput();
 
         // Members
-        const membersResult = this.RenderMembersGroups(options, ApiSourceFilePlugin.MemberKindsList);
+        const membersResult = this.RenderMembersGroups(ApiSourceFilePlugin.MemberKindsList, serializedApiItem.Members);
 
         // Treat members' headings as members of source file heading.
         const membersHeadings = membersResult.Headings;

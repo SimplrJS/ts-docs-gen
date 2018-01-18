@@ -51,8 +51,8 @@ export interface PluginResult<TKind = Contracts.ApiItemDto> extends PluginResult
     ApiItem: TKind;
 }
 
-export interface Plugin<TKind extends Contracts.ApiBaseItemDto> {
+export interface Plugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> {
     SupportedApiItemKinds(): SupportedApiItemKindType[];
-    CheckApiItem(item: SerializedApiDefinition<TKind>): boolean;
+    CheckApiItem(item: TKind): boolean;
     Render(options: PluginOptions, apiItem: TKind): PluginResult;
 }

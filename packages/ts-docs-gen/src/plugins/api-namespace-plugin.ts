@@ -5,6 +5,7 @@ import * as path from "path";
 import { GeneratorHelpers } from "../generator-helpers";
 import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
 import { ContainerPlugin, ContainerMembersKindsGroup } from "../abstractions/container-plugin";
+import { ApiNamespace } from "../api-items/definitions/api-namespace";
 
 export class ApiNamespacePlugin extends ContainerPlugin<Contracts.ApiNamespaceDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
@@ -42,24 +43,27 @@ export class ApiNamespacePlugin extends ContainerPlugin<Contracts.ApiNamespaceDt
         }
     ];
 
-    public Render(options: PluginOptions<Contracts.ApiNamespaceDto>): PluginResult {
-        const heading = path.basename(options.ApiItem.Name, path.extname(options.ApiItem.Name));
+    public Render(options: PluginOptions, apiItem: Contracts.ApiNamespaceDto): PluginResult {
+        const serializedApiItem = new ApiNamespace(options.ExtractedData, apiItem, options.Reference);
+
+        const heading = serializedApiItem.ToHeadingText();
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: options.ApiItem,
+            ApiItem: apiItem,
             Reference: options.Reference,
             UsedReferences: [options.Reference.Id]
         };
+
 
         // Header
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 1)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
+            .Text(GeneratorHelpers.RenderApiItemMetadata(apiItem))
             .GetOutput();
 
         // Members
-        const membersResult = this.RenderMembersGroups(options, ApiNamespacePlugin.MemberKindsList);
+        const membersResult = this.RenderMembersGroups(ApiNamespacePlugin.MemberKindsList, serializedApiItem.Members);
 
         // Treat members' headings as members of namespace heading.
         const membersHeadings = membersResult.Headings;

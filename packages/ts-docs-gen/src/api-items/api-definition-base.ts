@@ -49,8 +49,8 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
             .map(([reference, typeParameter]) => new ApiTypeParameter(this.ExtractedData, typeParameter, reference));
     }
 
-    protected TypeParametersToString(apiItem: ApiItemWithTypeParameters): string {
-        const members = this.GetTypeParameters(apiItem)
+    protected TypeParametersToString(apiTypeParameters: ApiTypeParameter[]): string {
+        const members = apiTypeParameters
             .map(x => x.ToText())
             .join(", ");
 
@@ -64,7 +64,7 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
             .map(([reference, apiItem]) => GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, apiItem, reference));
     }
 
-    protected MembersToText(members: Array<SerializedApiDefinition<Contracts.ApiItemDto>>, tab: number = 0): string[] {
+    protected MembersToText(members: ApiDefinitions[], tab: number = 0): string[] {
         return Helpers.Flatten(
             members.map(x => x.ToText().map(y => `${GeneratorHelpers.Tab(tab)}${y}`))
         );

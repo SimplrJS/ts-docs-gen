@@ -4,17 +4,20 @@ import { MarkdownBuilder } from "@simplrjs/markdown";
 import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 import { BasePlugin } from "../abstractions/base-plugin";
+import { ApiClassProperty } from "../api-items/definitions/api-class-property";
 
 export class ApiClassPropertyPlugin extends BasePlugin<Contracts.ApiClassPropertyDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.ClassProperty];
     }
 
-    public Render(options: PluginOptions<Contracts.ApiClassPropertyDto>): PluginResult {
-        const heading = options.Reference.Alias;
+    public Render(options: PluginOptions, apiItem: Contracts.ApiClassPropertyDto): PluginResult {
+        const serializedApiItem = new ApiClassProperty(options.ExtractedData, apiItem, options.Reference);
+
+        const heading = serializedApiItem.ToHeadingText();
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: options.ApiItem,
+            ApiItem: apiItem,
             Reference: options.Reference,
             Headings: [
                 {
@@ -29,14 +32,11 @@ export class ApiClassPropertyPlugin extends BasePlugin<Contracts.ApiClassPropert
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
-            .Code(GeneratorHelpers.ApiClassPropertyToString(
-                options.ApiItem,
-                options.Reference.Alias
-            ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Text(GeneratorHelpers.RenderApiItemMetadata(apiItem))
+            .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
-        const typeResult = this.RenderType(options.ExtractedData, options.ApiItem.Type);
+        const typeResult = this.RenderType(serializedApiItem.Type);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;

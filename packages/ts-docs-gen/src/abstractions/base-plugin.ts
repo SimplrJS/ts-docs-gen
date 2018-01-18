@@ -1,15 +1,15 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
-import { SerializedApiDefinition, SerializedApiType } from "../contracts/serialized-api-item";
+import { SerializedApiType } from "../contracts/serialized-api-item";
 import { ApiTypeParameter } from "../api-items/definitions/api-type-parameter";
 
-export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> implements Plugin<TKind> {
+export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> implements Plugin<TKind> {
     public abstract SupportedApiItemKinds(): SupportedApiItemKindType[];
 
-    public CheckApiItem(item: SerializedApiDefinition<TKind>): boolean {
+    public CheckApiItem(item: TKind): boolean {
         return true;
     }
 
@@ -68,7 +68,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         return pluginResult;
     }
 
-    protected RenderType(extractedData: ExtractDto, type: SerializedApiType | undefined): PluginResultData | undefined {
+    protected RenderType(type: SerializedApiType | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }

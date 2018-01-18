@@ -5,6 +5,7 @@ import { BasePlugin } from "./base-plugin";
 import { PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 import { SerializedApiDefinition } from "../contracts/serialized-api-item";
+import { ApiDefinitions } from "../api-items/api-definition-list";
 
 export interface ApiContainer extends Contracts.ApiBaseItemDto {
     Members: Contracts.ApiItemReference[];
@@ -53,7 +54,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
 
     protected RenderMembersGroups(
         list: ContainerMembersKindsGroup[],
-        members: Array<SerializedApiDefinition<Contracts.ApiItemDto>>
+        members: ApiDefinitions[]
     ): PluginResultData {
         // const membersReferences = this.getItemsReferenceByKind(list, members);
         const pluginResultData = GeneratorHelpers.GetDefaultPluginResultData();

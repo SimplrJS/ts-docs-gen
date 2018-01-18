@@ -5,7 +5,9 @@ export class ApiDefinitionDefault<TKind extends Contracts.ApiBaseItemDto = Contr
     public ToText(): string[] {
         return [this.Reference.Alias || this.Data.Name];
     }
+
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Data.Name;
+        const name = this.Reference.Alias || this.Data.Name;
+        return `${this.Data.ApiKind}: ${name}`;
     }
 }
