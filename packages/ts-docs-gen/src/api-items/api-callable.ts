@@ -6,6 +6,7 @@ import { ApiParameter } from "./definitions/api-parameter";
 import { ApiDefinitionBase } from "./api-definition-base";
 import { SerializedApiType } from "../contracts/serialized-api-item";
 import { ApiItemReference } from "../contracts/api-item-reference";
+import { ApiTypes } from "./api-type-list";
 
 /**
  * Base class for callable api items.
@@ -16,7 +17,7 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
 
         this.parameters = GeneratorHelpers
             .GetApiItemReferences(this.ExtractedData, this.Data.Parameters)
-            .map(x => this.GetSerializedApiDefinition(x.Id))
+            .map(x => this.GetSerializedApiDefinition(x))
             .filter((x): x is ApiParameter => x != null);
 
         this.typeParameters = this.GetTypeParameters();
@@ -38,9 +39,9 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
         return this.typeParameters;
     }
 
-    private returnType: SerializedApiType | undefined;
+    private returnType: ApiTypes | undefined;
 
-    public get ReturnType(): SerializedApiType | undefined {
+    public get ReturnType(): ApiTypes | undefined {
         return this.returnType;
     }
 

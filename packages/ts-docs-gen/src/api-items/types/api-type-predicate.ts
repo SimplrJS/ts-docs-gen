@@ -1,7 +1,7 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { ApiTypeBase } from "../api-type-base";
 import { GeneratorHelpers } from "../../generator-helpers";
-import { SerializedApiType } from "../../contracts/serialized-api-item";
+import { ApiTypes } from "../api-type-list";
 
 /**
  * Example: `arg is string`
@@ -13,9 +13,9 @@ export class ApiTypePredicate extends ApiTypeBase<Contracts.TypePredicateType> {
         this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Type);
     }
 
-    private type: SerializedApiType | undefined;
+    private type: ApiTypes | undefined;
 
-    public get Type(): SerializedApiType | undefined {
+    public get Type(): ApiTypes | undefined {
         return this.type;
     }
 

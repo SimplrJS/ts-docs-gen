@@ -88,5 +88,5 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         return pluginResult;
     }
 
-    public abstract Render(data: PluginOptions<TKind>): PluginResult;
+    public abstract Render(data: PluginOptions, apiItem: TKind): PluginResult;
 }

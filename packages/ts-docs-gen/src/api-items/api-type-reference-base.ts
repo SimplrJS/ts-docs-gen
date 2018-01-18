@@ -1,32 +1,35 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { ApiTypeBase } from "./api-type-base";
-import { SerializedApiDefinition, SerializedApiType } from "../contracts/serialized-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
+import { ApiDefinitions } from "./api-definition-list";
+import { ApiTypes } from "./api-type-list";
 
 export abstract class ApiTypeReferenceBase<TKind extends Contracts.ApiReferenceBaseType> extends ApiTypeBase<TKind> {
     constructor(extractedData: ExtractDto, apiItem: TKind) {
         super(extractedData, apiItem);
 
-        this.referenceItem = this.GetSerializedApiDefinition(this.Data.ReferenceId);
+        if (this.Data.ReferenceId != null) {
+            this.referenceItem = this.GetSerializedApiDefinition(this.Data.ReferenceId);
+        }
     }
 
-    private referenceItem: SerializedApiDefinition<Contracts.ApiItemDto> | undefined;
+    private referenceItem: ApiDefinitions | undefined;
 
-    public get ReferenceItem(): SerializedApiDefinition<Contracts.ApiItemDto> | undefined {
+    public get ReferenceItem(): ApiDefinitions | undefined {
         return this.referenceItem;
     }
 
-    protected GetTypeParameters(typeParameters: Contracts.ApiType[] | undefined): SerializedApiType[] | undefined {
+    protected GetTypeParameters(typeParameters: Contracts.ApiType[] | undefined): ApiTypes[] | undefined {
         if (typeParameters == null) {
             return undefined;
         }
 
         return typeParameters
             .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
-            .filter((x): x is SerializedApiType<Contracts.ApiType> => x != null);
+            .filter((x): x is ApiTypes => x != null);
     }
 
-    protected TypeParametersToString(apiItem: SerializedApiType[] | undefined): string {
+    protected TypeParametersToString(apiItem: ApiTypes[] | undefined): string {
         if (apiItem == null) {
             return "";
         }

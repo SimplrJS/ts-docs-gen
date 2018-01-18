@@ -12,9 +12,9 @@ export class ApiTypeReference extends ApiTypeReferenceBase<Contracts.ApiReferenc
         this.typeParameters = this.GetTypeParameters(this.Data.TypeParameters);
     }
 
-    private typeParameters: SerializedApiType[] | undefined;
+    private typeParameters: ApiTypes[] | undefined;
 
-    public get TypeParameters(): SerializedApiType[] | undefined {
+    public get TypeParameters(): ApiTypes[] | undefined {
         return this.typeParameters;
     }
 

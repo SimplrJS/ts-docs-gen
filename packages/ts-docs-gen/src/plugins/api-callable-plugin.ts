@@ -4,6 +4,11 @@ import { MarkdownBuilder } from "@simplrjs/markdown";
 import { SupportedApiItemKindType, PluginResult, PluginOptions } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 import { FunctionLikePlugin } from "../abstractions/function-like-plugin";
+import { ApiConstruct } from "../api-items/definitions/api-construct";
+import { ApiItemReference } from "../contracts/api-item-reference";
+import { ApiCall } from "../api-items/definitions/api-call";
+import { ApiMethod } from "../api-items/definitions/api-method";
+import { ApiCallable } from "../api-items/api-callable";
 
 export type CallableApiItem = Contracts.ApiCallDto | Contracts.ApiMethodDto | Contracts.ApiConstructDto;
 
@@ -16,58 +21,47 @@ export class ApiCallablePlugin extends FunctionLikePlugin<CallableApiItem> {
         ];
     }
 
-    private resolveItemCode(
+    private resolveSerializedApiItem(
         extractedData: ExtractDto,
         apiItem: CallableApiItem,
-        parameters: Contracts.ApiParameterDto[],
-        typeParameters: Contracts.ApiTypeParameterDto[]
-    ): string {
+        reference: ApiItemReference
+    ): ApiCallable<CallableApiItem> {
         switch (apiItem.ApiKind) {
             case Contracts.ApiItemKinds.Construct: {
-                return GeneratorHelpers.ApiConstructToString(extractedData, typeParameters, parameters, apiItem.ReturnType);
+                return new ApiConstruct(extractedData, apiItem, reference);
             }
             case Contracts.ApiItemKinds.Call: {
-                return GeneratorHelpers.ApiCallToString(extractedData, typeParameters, parameters, apiItem.ReturnType);
+                return new ApiCall(extractedData, apiItem, reference);
             }
             case Contracts.ApiItemKinds.Method: {
-                return GeneratorHelpers.ApiMethodToString(extractedData, apiItem.Name, typeParameters, parameters, apiItem.ReturnType);
+                return new ApiMethod(extractedData, apiItem, reference);
             }
         }
     }
 
-    public Render(options: PluginOptions<CallableApiItem>): PluginResult<CallableApiItem> {
+    public Render(options: PluginOptions, apiItem: CallableApiItem): PluginResult<CallableApiItem> {
         const pluginResult: PluginResult<CallableApiItem> = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: options.ApiItem,
+            ApiItem: apiItem,
             Reference: options.Reference
         };
 
-        // ApiParameters
-        const apiParameters =
-            GeneratorHelpers.GetApiItemsFromReferenceList<Contracts.ApiParameterDto>(options.ExtractedData, options.ApiItem.Parameters);
-        // ApiTypeParameters
-        const apiTypeParameters =
-            GeneratorHelpers.GetApiItemsFromReferenceList<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
+        const serializedApiItem = this.resolveSerializedApiItem(options.ExtractedData, apiItem, options.Reference);
 
         pluginResult.Result = new MarkdownBuilder()
-            .Code(this.resolveItemCode(
-                options.ExtractedData,
-                options.ApiItem,
-                apiParameters,
-                apiTypeParameters
-            ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(serializedApiItem.ToText().join(" "), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
         // TypeParameters
-        const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, apiTypeParameters);
+        const typeParametersResult = this.RenderTypeParameters(serializedApiItem.TypeParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
         // Parameters
-        const parametersResult = this.RenderParameters(options.ExtractedData, apiParameters);
+        const parametersResult = this.RenderParameters(serializedApiItem.Parameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, parametersResult);
 
         // ReturnType
-        const returnTypeResult = this.RenderReturnType(options.ExtractedData, options.ApiItem.ReturnType);
+        const returnTypeResult = this.RenderReturnType(serializedApiItem.ReturnType);
         GeneratorHelpers.MergePluginResultData(pluginResult, returnTypeResult);
 
         return pluginResult;

@@ -23,9 +23,8 @@ export interface PluginMember<TKind> {
 export type GetItemPluginResultHandler = (reference: ApiItemReference) => PluginResult;
 export type IsPluginResultExistsHandler = (reference: ApiItemReference) => boolean;
 
-export interface PluginOptions<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> {
+export interface PluginOptions {
     Reference: ApiItemReference;
-    SerializedApiItem: SerializedApiDefinition<TKind>;
     ExtractedData: ExtractDto;
     GetItemPluginResult: GetItemPluginResultHandler;
     IsPluginResultExists: IsPluginResultExistsHandler;
@@ -55,5 +54,5 @@ export interface PluginResult<TKind = Contracts.ApiItemDto> extends PluginResult
 export interface Plugin<TKind extends Contracts.ApiBaseItemDto> {
     SupportedApiItemKinds(): SupportedApiItemKindType[];
     CheckApiItem(item: SerializedApiDefinition<TKind>): boolean;
-    Render(options: PluginOptions<TKind>): PluginResult;
+    Render(options: PluginOptions, apiItem: TKind): PluginResult;
 }

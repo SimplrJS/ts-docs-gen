@@ -1,8 +1,8 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { ApiDefinitionBase } from "../api-definition-base";
 import { GeneratorHelpers } from "../../generator-helpers";
-import { SerializedApiType } from "../../contracts/serialized-api-item";
 import { ApiItemReference } from "../../contracts/api-item-reference";
+import { ApiTypes } from "../api-type-list";
 
 export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
     constructor(extractedData: ExtractDto, apiItem: Contracts.ApiClassDto, reference: ApiItemReference) {
@@ -13,18 +13,18 @@ export class ApiClass extends ApiDefinitionBase<Contracts.ApiClassDto> {
         }
         this.implements = this.Data.Implements
             .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
-            .filter((x): x is SerializedApiType<Contracts.ApiType> => x != null);
+            .filter((x): x is ApiTypes => x != null);
     }
 
-    private extends: SerializedApiType | undefined;
+    private extends: ApiTypes | undefined;
 
-    public get Extends(): SerializedApiType | undefined {
+    public get Extends(): ApiTypes | undefined {
         return this.extends;
     }
 
-    private implements: SerializedApiType[];
+    private implements: ApiTypes[];
 
-    public get Implements(): SerializedApiType[] {
+    public get Implements(): ApiTypes[] {
         return this.implements;
     }
 

@@ -1,7 +1,7 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { ApiDefinitionBase } from "./api-definition-base";
 import { ApiItemReference } from "../contracts/api-item-reference";
-import { SerializedApiDefinition } from "../contracts/serialized-api-item";
+import { ApiDefinitions } from "./api-definition-list";
 
 export type ApiBaseItemContainerDto = Contracts.ApiBaseItemDto & { Members: Contracts.ApiItemReference[] };
 
@@ -13,9 +13,9 @@ export abstract class ApiDefinitionContainer<TKind extends ApiBaseItemContainerD
         this.members = this.GetMembers(this.Data.Members);
     }
 
-    private members: Array<SerializedApiDefinition<Contracts.ApiItemDto>>;
+    private members: ApiDefinitions[];
 
-    public get Members(): Array<SerializedApiDefinition<Contracts.ApiItemDto>> {
+    public get Members(): ApiDefinitions[] {
         return this.members;
     }
 }

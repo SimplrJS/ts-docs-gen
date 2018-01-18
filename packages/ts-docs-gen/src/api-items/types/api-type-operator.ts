@@ -13,9 +13,9 @@ export class ApiTypeOperator extends ApiTypeBase<Contracts.TypeOperatorType> {
         this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Type);
     }
 
-    private type: SerializedApiType | undefined;
+    private type: ApiTypes | undefined;
 
-    public get Type(): SerializedApiType | undefined {
+    public get Type(): ApiTypes | undefined {
         return this.type;
     }
 

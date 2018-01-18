@@ -4,6 +4,7 @@ import { GeneratorHelpers } from "../../generator-helpers";
 import { SerializedApiType } from "../../contracts/serialized-api-item";
 import { ApiDefinitionBase } from "../api-definition-base";
 import { ApiItemReference } from "../../contracts/api-item-reference";
+import { ApiTypes } from "../api-type-list";
 
 export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParameterDto> {
     constructor(extractedData: ExtractDto, apiItem: Contracts.ApiTypeParameterDto, reference: ApiItemReference) {
@@ -17,15 +18,15 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
         }
     }
 
-    private constraintType: SerializedApiType | undefined;
+    private constraintType: ApiTypes | undefined;
 
-    public get ConstraintType(): SerializedApiType | undefined {
+    public get ConstraintType(): ApiTypes | undefined {
         return this.constraintType;
     }
 
-    private defaultType: SerializedApiType | undefined;
+    private defaultType: ApiTypes | undefined;
 
-    public get DefaultType(): SerializedApiType | undefined {
+    public get DefaultType(): ApiTypes | undefined {
         return this.defaultType;
     }
 

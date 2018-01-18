@@ -1,8 +1,8 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { GeneratorHelpers } from "../../generator-helpers";
-import { SerializedApiType } from "../../contracts/serialized-api-item";
 import { ApiDefinitionContainer } from "../api-definition-container";
 import { ApiItemReference } from "../../contracts/api-item-reference";
+import { ApiTypes } from "../api-type-list";
 
 export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceDto> {
     constructor(extractedData: ExtractDto, apiItem: Contracts.ApiInterfaceDto, reference: ApiItemReference) {
@@ -10,12 +10,12 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
 
         this.extends = this.Data.Extends
             .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
-            .filter((x): x is SerializedApiType<Contracts.ApiType> => x != null);
+            .filter((x): x is ApiTypes => x != null);
     }
 
-    private extends: SerializedApiType[];
+    private extends: ApiTypes[];
 
-    public get Extends(): SerializedApiType[] {
+    public get Extends(): ApiTypes[] {
         return this.extends;
     }
 

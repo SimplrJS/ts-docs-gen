@@ -55,64 +55,65 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
         list: ContainerMembersKindsGroup[],
         members: Array<SerializedApiDefinition<Contracts.ApiItemDto>>
     ): PluginResultData {
-        const membersReferences = this.getItemsReferenceByKind(list, members);
+        // const membersReferences = this.getItemsReferenceByKind(list, members);
         const pluginResultData = GeneratorHelpers.GetDefaultPluginResultData();
         const builder = new MarkdownBuilder();
 
-        for (const { Heading, MembersList } of membersReferences) {
-            if (MembersList.length > 0) {
-                builder
-                    .Header(Heading, 2)
-                    .EmptyLine();
+        // FIXME: Fix this monstrosity.
+        // for (const { Heading, MembersList } of membersReferences) {
+        //     if (MembersList.length > 0) {
+        //         builder
+        //             .Header(Heading, 2)
+        //             .EmptyLine();
 
-                for (const reference of MembersList) {
-                    const apiItem = options.ExtractedData.Registry[reference.Id];
+        //         for (const reference of MembersList) {
+        //             const apiItem = options.ExtractedData.Registry[reference.Id];
 
-                    if (options.IsPluginResultExists(reference)) {
-                        builder
-                            .Text(md => md.Header(md.Link(apiItem.Name, reference.Id, true), 3))
-                            .EmptyLine();
-                        pluginResultData.UsedReferences.push(reference.Id);
-                    } else {
-                        switch (apiItem.ApiKind) {
-                            case Contracts.ApiItemKinds.Namespace:
-                            case Contracts.ApiItemKinds.Class: {
-                                const renderedItem = options.GetItemPluginResult(reference);
-                                pluginResultData.Members.push({
-                                    Reference: reference,
-                                    PluginResult: renderedItem
-                                });
+        //             if (options.IsPluginResultExists(reference)) {
+        //                 builder
+        //                     .Text(md => md.Header(md.Link(apiItem.Name, reference.Id, true), 3))
+        //                     .EmptyLine();
+        //                 pluginResultData.UsedReferences.push(reference.Id);
+        //             } else {
+        //                 switch (apiItem.ApiKind) {
+        //                     case Contracts.ApiItemKinds.Namespace:
+        //                     case Contracts.ApiItemKinds.Class: {
+        //                         const renderedItem = options.GetItemPluginResult(reference);
+        //                         pluginResultData.Members.push({
+        //                             Reference: reference,
+        //                             PluginResult: renderedItem
+        //                         });
 
-                                builder
-                                    .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, reference.Id, true), 3))
-                                    .EmptyLine()
-                                    .Text(GeneratorHelpers.RenderApiItemMetadata(renderedItem.ApiItem))
-                                    .EmptyLine();
-                                pluginResultData.UsedReferences.push(reference.Id);
-                                break;
-                            }
-                            default: {
-                                const renderedItem = options.GetItemPluginResult(reference);
-                                builder
-                                    .Text(renderedItem.Result)
-                                    .EmptyLine();
+        //                         builder
+        //                             .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, reference.Id, true), 3))
+        //                             .EmptyLine()
+        //                             .Text(GeneratorHelpers.RenderApiItemMetadata(renderedItem.ApiItem))
+        //                             .EmptyLine();
+        //                         pluginResultData.UsedReferences.push(reference.Id);
+        //                         break;
+        //                     }
+        //                     default: {
+        //                         const renderedItem = options.GetItemPluginResult(reference);
+        //                         builder
+        //                             .Text(renderedItem.Result)
+        //                             .EmptyLine();
 
-                                GeneratorHelpers.MergePluginResultData(pluginResultData, {
-                                    Headings: renderedItem.Headings,
-                                    UsedReferences: renderedItem.UsedReferences
-                                });
-                            }
-                        }
-                    }
+        //                         GeneratorHelpers.MergePluginResultData(pluginResultData, {
+        //                             Headings: renderedItem.Headings,
+        //                             UsedReferences: renderedItem.UsedReferences
+        //                         });
+        //                     }
+        //                 }
+        //             }
 
-                    if ((MembersList.indexOf(reference) + 1) !== MembersList.length) {
-                        builder
-                            .HorizontalRule(undefined, 10)
-                            .EmptyLine();
-                    }
-                }
-            }
-        }
+        //             if ((MembersList.indexOf(reference) + 1) !== MembersList.length) {
+        //                 builder
+        //                     .HorizontalRule(undefined, 10)
+        //                     .EmptyLine();
+        //             }
+        //         }
+        //     }
+        // }
 
         pluginResultData.Result = builder.GetOutput();
 

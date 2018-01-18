@@ -2,10 +2,12 @@ import { Contracts, ExtractDto } from "ts-extractor";
 
 import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
-import { SerializedApiDefinition, SerializedApiType } from "../contracts/serialized-api-item";
+import { SerializedApiDefinition } from "../contracts/serialized-api-item";
 import { Helpers } from "../utils/helpers";
 import { ApiTypeParameter } from "./definitions/api-type-parameter";
 import { ApiItemReference } from "../contracts/api-item-reference";
+import { ApiDefinitions } from "./api-definition-list";
+import { ApiTypes } from "./api-type-list";
 
 export type ApiItemWithTypeParameters = Contracts.ApiBaseItemDto & { TypeParameters: Contracts.ApiItemReference[] };
 
@@ -27,13 +29,13 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
         return this.reference;
     }
 
-    private parentItem: SerializedApiDefinition<Contracts.ApiItemDto> | undefined;
+    private parentItem: ApiDefinitions | undefined;
 
-    public get ParentItem(): SerializedApiDefinition<Contracts.ApiItemDto> | undefined {
+    public get ParentItem(): ApiDefinitions | undefined {
         return this.parentItem;
     }
 
-    protected GetSerializedApiDefinition(reference: ApiItemReference): SerializedApiDefinition<Contracts.ApiItemDto> | undefined {
+    protected GetSerializedApiDefinition(reference: ApiItemReference): ApiDefinitions | undefined {
         const apiItem = this.ExtractedData.Registry[reference.Id];
         return GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, apiItem, reference);
     }
@@ -55,7 +57,7 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
         return `<${members}>`;
     }
 
-    protected GetMembers(members: Contracts.ApiItemReference[]): Array<SerializedApiDefinition<Contracts.ApiItemDto>> {
+    protected GetMembers(members: Contracts.ApiItemReference[]): ApiDefinitions[] {
         return GeneratorHelpers
             .GetApiItemReferences(this.ExtractedData, members)
             .map<[ApiItemReference, Contracts.ApiItemDto]>(x => [x, this.ExtractedData.Registry[x.Id]])
@@ -68,7 +70,7 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
         );
     }
 
-    protected SerializedTypeToString(apiType: SerializedApiType | undefined): string {
+    protected SerializedTypeToString(apiType: ApiTypes | undefined): string {
         if (apiType == null) {
             return "???";
         }
