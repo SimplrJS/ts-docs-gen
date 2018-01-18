@@ -1,8 +1,8 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { BasePlugin } from "./base-plugin";
-import { PluginOptions, PluginResultData } from "../contracts/plugin";
+import { PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 import { SerializedApiDefinition } from "../contracts/serialized-api-item";
 

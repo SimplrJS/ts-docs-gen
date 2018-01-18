@@ -5,7 +5,7 @@ import { BasePlugin } from "./base-plugin";
 import { PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 
-export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends BasePlugin<TKind> {
+export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> extends BasePlugin<TKind> {
     // TODO: Escape string!
     protected RenderParameters(extractedData: ExtractDto, parameters: Contracts.ApiParameterDto[]): PluginResultData | undefined {
         if (parameters.length === 0) {
@@ -16,12 +16,12 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         const header = ["Name", "Type", "Description"];
 
         const content = parameters.map(parameter => {
-            const parameterTypeDto = GeneratorHelpers.ApiTypeToString(extractedData, parameter.Type);
+            const parameterTypeDto = GeneratorHelpers.SerializeApiType(extractedData, parameter.Type);
             GeneratorHelpers.MergePluginResultData(pluginResult, {
                 // UsedReferences: parameterTypeDto.References
             });
 
-            return [parameter.Name, parameterTypeDto, parameter.Metadata.DocumentationComment];
+            return [parameter.Name, parameterTypeDto.ToText().join(" "), parameter.Metadata.DocumentationComment];
         });
 
         pluginResult.Result = new MarkdownBuilder()
@@ -40,13 +40,13 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         }
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-        const parsedReturnType = GeneratorHelpers.ApiTypeToString(extractedData, type);
+        const parsedReturnType = GeneratorHelpers.SerializeApiType(extractedData, type);
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
             .Bold("Return type")
             .EmptyLine()
-            .Text(parsedReturnType)
+            .Text(parsedReturnType.ToText().join(" "))
             .GetOutput();
 
         // pluginResult.UsedReferences = parsedReturnType.References;

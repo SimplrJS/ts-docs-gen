@@ -1,6 +1,7 @@
 import { Contracts } from "ts-extractor";
 import { SerializedApiTypeConstructor } from "../contracts/serialized-api-item";
 
+import { ApiTypeDefault } from "./api-type-default";
 // ApiType
 import { ApiTypeBasic } from "./types/api-type-basic";
 import { ApiTypeReference } from "./types/api-type-reference";
@@ -13,6 +14,19 @@ import { ApiTypeOperator } from "./types/api-type-operator";
 import { ApiIndexedAccess } from "./types/api-type-indexed-access";
 import { ApiTypeParenthesized } from "./types/api-type-parenthesized";
 import { ApiTypeQuery } from "./types/api-type-query";
+
+export type ApiTypes = ApiTypeDefault |
+    ApiTypeBasic |
+    ApiTypeReference |
+    ApiTypeUnionOrIntersection |
+    ApiTypeArray |
+    ApiTypeTuple |
+    ApiTypeDefinition |
+    ApiTypePredicate |
+    ApiTypeOperator |
+    ApiIndexedAccess |
+    ApiTypeParenthesized |
+    ApiTypeQuery;
 
 export const ApiTypeList: Array<[Contracts.ApiTypeKind, SerializedApiTypeConstructor<any>]> = [
     [Contracts.ApiTypeKind.Basic, ApiTypeBasic],

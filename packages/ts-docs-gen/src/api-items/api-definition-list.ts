@@ -1,6 +1,7 @@
 import { Contracts } from "ts-extractor";
 import { SerializedApiDefinitionConstructor } from "../contracts/serialized-api-item";
 
+import { ApiDefinitionDefault } from "./api-definition-default";
 // ApiItems
 import { ApiCall } from "./definitions/api-call";
 import { ApiClass } from "./definitions/api-class";
@@ -24,6 +25,31 @@ import { ApiClassConstructor } from "./definitions/api-class-constructor";
 import { ApiClassProperty } from "./definitions/api-class-property";
 import { ApiClassMethod } from "./definitions/api-class-method";
 import { ApiAccessor } from "./definitions/api-accessor";
+
+export type ApiDefinitions = ApiDefinitionDefault |
+    ApiEnum |
+    ApiEnumMember |
+    ApiFunction |
+    ApiInterface |
+    ApiMethod |
+    ApiNamespace |
+    ApiParameter |
+    ApiProperty |
+    ApiVariable |
+    ApiTypeAlias |
+    ApiClass |
+    ApiClassConstructor |
+    ApiClassProperty |
+    ApiClassMethod |
+    ApiAccessor |
+    ApiAccessor |
+    ApiIndex |
+    ApiCall |
+    ApiConstruct |
+    ApiTypeParameter |
+    ApiTypeLiteral |
+    ApiFunctionType |
+    ApiMapped;
 
 // TODO: Add tests from Contracts.ApiItemKinds
 // TODO: Fix any.

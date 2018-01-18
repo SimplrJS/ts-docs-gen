@@ -6,14 +6,9 @@ import * as path from "path";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
-import {
-    SerializedApiDefinition,
-    SerializedApiDefinitionConstructor,
-    SerializedApiType,
-    SerializedApiTypeConstructor
-} from "./contracts/serialized-api-item";
-import { ApiDefinitionList } from "./api-items/api-definition-list";
-import { ApiTypeList } from "./api-items/api-type-list";
+import { SerializedApiDefinitionConstructor, SerializedApiTypeConstructor } from "./contracts/serialized-api-item";
+import { ApiDefinitionList, ApiDefinitions } from "./api-items/api-definition-list";
+import { ApiTypeList, ApiTypes } from "./api-items/api-type-list";
 import { ApiDefinitionDefault } from "./api-items/api-definition-default";
 import { ApiTypeDefault } from "./api-items/api-type-default";
 
@@ -22,7 +17,7 @@ export namespace GeneratorHelpers {
         extractedData: ExtractDto,
         apiItem: TKind,
         reference: ApiItemReference
-    ): SerializedApiDefinition<TKind> {
+    ): ApiDefinitions {
         if (apiItem != null) {
             for (const [kind, constructorItem] of ApiDefinitionList) {
                 if (kind === apiItem.ApiKind) {
@@ -37,7 +32,7 @@ export namespace GeneratorHelpers {
         return new ApiDefinitionDefault(extractedData, apiItem, reference);
     }
 
-    export function SerializeApiType(extractedData: ExtractDto, apiType: Contracts.ApiType): SerializedApiType<Contracts.ApiType> {
+    export function SerializeApiType(extractedData: ExtractDto, apiType: Contracts.ApiType): ApiTypes {
         if (apiType != null) {
             for (const [kind, constructorItem] of ApiTypeList) {
                 if (kind === apiType.ApiTypeKind) {
