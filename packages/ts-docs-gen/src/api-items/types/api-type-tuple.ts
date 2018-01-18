@@ -7,7 +7,7 @@ import { ApiTypeMembersBase } from "../api-type-members-base";
 export class ApiTypeTuple extends ApiTypeMembersBase<Contracts.TupleType> {
     public ToText(): string[] {
         return [
-            `[${this.Members.join(`, `)}]`
+            `[${this.Members.map(x => x.ToText().join(" ")).join(`, `)}]`
         ];
     }
 }

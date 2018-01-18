@@ -22,7 +22,7 @@ export class ApiTypeAlias extends ApiDefinitionWithType<Contracts.ApiTypeAliasDt
         const typeParameters = this.TypeParametersToString(this.TypeParameters);
 
         return [
-            `type ${name}${typeParameters} = ${type}`
+            `type ${name}${typeParameters} = ${type};`
         ];
     }
 
