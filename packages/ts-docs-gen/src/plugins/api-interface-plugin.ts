@@ -1,112 +1,96 @@
 import { Contracts } from "ts-extractor";
-// import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
+import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import {
     SupportedApiItemKindType,
     PluginResult,
     PluginOptions,
-    // GetItemPluginResultHandler,
-    // PluginResultData
+    PluginResultData
 } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
-// import { ApiItemReference } from "../contracts/api-item-reference";
-import { BasePlugin } from "../abstractions/base-plugin";
-// import { ApiInterface } from "../api-items/definitions/api-interface";
+import { ApiInterface } from "../api-items/definitions/api-interface";
+import { ApiTypes } from "../api-items/api-type-list";
+import { ContainerPlugin, ContainerMembersKindsGroup } from "../abstractions/container-plugin";
+import { ApiDefinitions } from "../api-items/api-definition-list";
+import { ApiProperty } from "../api-items/definitions/api-property";
 
-// interface ExtractedItemDto<TApiItemDto extends Contracts.ApiItemDto = Contracts.ApiItemDto> {
-//     Reference: ApiItemReference;
-//     ApiItem: TApiItemDto;
-// }
-
-export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
+export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.Interface];
     }
 
-    // private renderConstraintTypes(extractedData: ExtractDto, apiItem: Contracts.ApiInterfaceDto): PluginResultData | undefined {
-    //     if (apiItem.Extends.length === 0) {
-    //         return undefined;
-    //     }
+    public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
+        {
+            Heading: "Construct",
+            Kinds: [Contracts.ApiItemKinds.Construct]
+        },
+        {
+            Heading: "Call",
+            Kinds: [Contracts.ApiItemKinds.Call]
+        },
+        {
+            Heading: "Index",
+            Kinds: [Contracts.ApiItemKinds.Index]
+        },
+        {
+            Heading: "Method",
+            Kinds: [Contracts.ApiItemKinds.Method]
+        }
+    ];
 
-    //     const builder = new MarkdownBuilder()
-    //         .EmptyLine()
-    //         .Bold("Extends");
+    private renderConstraintTypes(extendsItems: ApiTypes[]): PluginResultData | undefined {
+        if (extendsItems.length === 0) {
+            return undefined;
+        }
 
-    //     const references: string[] = [];
+        const builder = new MarkdownBuilder()
+            .EmptyLine()
+            .Bold("Extends");
 
-    //     for (const type of apiItem.Extends) {
-    //         const typeDto = GeneratorHelpers.ApiTypeToString(extractedData, type);
-    //         // FIXME:
-    //         //references.push(...typeDto.References);
-    //         builder
-    //             .EmptyLine()
-    //             .Text(typeDto);
-    //     }
+        const references: string[] = [];
 
-    //     return {
-    //         ...GeneratorHelpers.GetDefaultPluginResultData(),
-    //         UsedReferences: references,
-    //         Result: builder.GetOutput(),
-    //     };
-    // }
+        for (const type of extendsItems) {
+            // FIXME:
+            //references.push(...typeDto.References);
+            builder
+                .EmptyLine()
+                .Text(type.ToText().join(" "));
+        }
 
-    // private renderPropertyMembers(extractedData: ExtractDto, memberItems: ExtractedItemDto[]): PluginResultData | undefined {
-    //     const apiItems = memberItems.filter<ExtractedItemDto<Contracts.ApiPropertyDto>>(
-    //         this.isReferenceOfApiItemKind.bind(undefined, Contracts.ApiItemKinds.Property)
-    //     ).map(x => x.ApiItem);
+        return {
+            ...GeneratorHelpers.GetDefaultPluginResultData(),
+            UsedReferences: references,
+            Result: builder.GetOutput(),
+        };
+    }
 
-    //     if (apiItems.length === 0) {
-    //         return undefined;
-    //     }
+    private renderPropertyMembers(members: ApiDefinitions[]): PluginResultData | undefined {
+        const properties: ApiProperty[] = members
+            .filter((x): x is ApiProperty => x.Data.ApiKind === Contracts.ApiItemKinds.Property);
 
-    //     const table = GeneratorHelpers.ApiPropertiesToTableString(extractedData, apiItems);
-    //     const builder = new MarkdownBuilder()
-    //         .EmptyLine()
-    //         .Bold("Properties")
-    //         .EmptyLine()
-    //         .Text(table.Text);
+        if (properties.length === 0) {
+            return undefined;
+        }
+        const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-    //     return {
-    //         ...GeneratorHelpers.GetDefaultPluginResultData(),
-    //         UsedReferences: table.References,
-    //         Result: builder.GetOutput(),
-    //     };
-    // }
+        const headers = ["Name", "Type", "Optional"];
+        const content = properties
+            .map(x => [x.Data.Name, x.Type.ToText().join(" "), String(x.Data.IsOptional)]);
 
-    // private isReferenceOfApiItemKind<TKindDto extends Contracts.ApiItemDto>(
-    //     itemKind: Contracts.ApiItemKinds,
-    //     extractedItem: ExtractedItemDto<TKindDto>
-    // ): extractedItem is ExtractedItemDto<TKindDto> {
-    //     return extractedItem.ApiItem.ApiKind === itemKind;
-    // }
+        pluginResult.Result = new MarkdownBuilder()
+            .EmptyLine()
+            .Bold("Properties")
+            .EmptyLine()
+            .Table(headers, content, { removeColumnIfEmpty: true, removeRowIfEmpty: true })
+            .GetOutput();
 
-    // private renderMemberItemsGroup(
-    //     title: string,
-    //     apiItemKind: Contracts.ApiItemKinds,
-    //     memberItems: ExtractedItemDto[],
-    //     getPluginResult: GetItemPluginResultHandler
-    // ): PluginResultData | undefined {
-    //     const items = memberItems.filter<ExtractedItemDto>(this.isReferenceOfApiItemKind.bind(undefined, apiItemKind));
-
-    //     if (items.length === 0) {
-    //         return undefined;
-    //     }
-
-    //     const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-    //     pluginResult.Result.push("", MarkdownGenerator.Header(title, 4));
-
-    //     for (const item of items) {
-    //         pluginResult.Result.push("");
-    //         const itemPluginResult = getPluginResult(item.Reference);
-
-    //         GeneratorHelpers.MergePluginResultData(pluginResult, itemPluginResult);
-    //     }
-
-    //     return pluginResult;
-    // }
+        return pluginResult;
+    }
 
     public Render(options: PluginOptions, apiItem: Contracts.ApiInterfaceDto): PluginResult {
-        const heading = options.Reference.Alias;
+        const serializedApiItem = new ApiInterface(options.ExtractedData, apiItem, options.Reference);
+
+        const heading = serializedApiItem.ToHeadingText();
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
             ApiItem: apiItem,
@@ -120,72 +104,35 @@ export class ApiInterfacePlugin extends BasePlugin<Contracts.ApiInterfaceDto> {
             UsedReferences: [options.Reference.Id]
         };
 
-        // const serializedApiItem = new ApiInterface(options.ExtractedData, apiItem, options.Reference);
+        pluginResult.Result = new MarkdownBuilder()
+            .Header(heading, 3)
+            .EmptyLine()
+            .Text(GeneratorHelpers.RenderApiItemMetadata(apiItem))
+            .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .GetOutput();
 
-        // const memberReferences = GeneratorHelpers.GetApiItemReferences(options.ExtractedData, apiItem.Members);
-        // const memberItems = memberReferences.map<ExtractedItemDto>(itemReference => ({
-        //     Reference: itemReference,
-        //     ApiItem: options.ExtractedData.Registry[itemReference.Id]
-        // }));
+        // Type parameters
+        const typeParametersResult = this.RenderTypeParameters(serializedApiItem.TypeParameters);
+        GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
-        // const interfaceString = GeneratorHelpers.ApiInterfaceToString(options.ExtractedData, options.ApiItem);
-        // const builder = new MarkdownBuilder()
-        //     .Header(heading, 3)
-        //     .EmptyLine()
-        //     .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
-        //     .Code(interfaceString, GeneratorHelpers.DEFAULT_CODE_OPTIONS);
+        // Constraint types
+        const constraintTypesResult = this.renderConstraintTypes(serializedApiItem.Extends);
+        GeneratorHelpers.MergePluginResultData(pluginResult, constraintTypesResult);
 
-        // pluginResult.Result = builder.GetOutput();
+        // Members
+        const membersResult = this.RenderMembersGroups(
+            options,
+            ApiInterfacePlugin.MemberKindsList,
+            serializedApiItem.Members,
+            false,
+            4,
+            false
+        );
+        GeneratorHelpers.MergePluginResultData(pluginResult, membersResult);
 
-        // // Type parameters
-        // const apiTypeParameters = GeneratorHelpers
-        //     .GetApiItemsFromReferenceList<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
-        // const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, apiTypeParameters);
-        // GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
-
-        // // Constraint types
-        // const constraintTypesResult = this.renderConstraintTypes(options.ExtractedData, options.ApiItem);
-        // GeneratorHelpers.MergePluginResultData(pluginResult, constraintTypesResult);
-
-        // // Construct items
-        // const constructMembersResult = this.renderMemberItemsGroup(
-        //     "Construct",
-        //     Contracts.ApiItemKinds.Construct,
-        //     memberItems,
-        //     options.GetItemPluginResult
-        // );
-        // GeneratorHelpers.MergePluginResultData(pluginResult, constructMembersResult);
-
-        // // Call items
-        // const callMembersResult = this.renderMemberItemsGroup(
-        //     "Call",
-        //     Contracts.ApiItemKinds.Call,
-        //     memberItems,
-        //     options.GetItemPluginResult
-        // );
-        // GeneratorHelpers.MergePluginResultData(pluginResult, callMembersResult);
-
-        // // Index items
-        // const indexMembersResult = this.renderMemberItemsGroup(
-        //     "Index signatures",
-        //     Contracts.ApiItemKinds.Index,
-        //     memberItems,
-        //     options.GetItemPluginResult
-        // );
-        // GeneratorHelpers.MergePluginResultData(pluginResult, indexMembersResult);
-
-        // // Method items
-        // const methodMembersResult = this.renderMemberItemsGroup(
-        //     "Methods",
-        //     Contracts.ApiItemKinds.Method,
-        //     memberItems,
-        //     options.GetItemPluginResult
-        // );
-        // GeneratorHelpers.MergePluginResultData(pluginResult, methodMembersResult);
-
-        // // Property items
-        // const propertyMembersResult = this.renderPropertyMembers(options.ExtractedData, memberItems);
-        // GeneratorHelpers.MergePluginResultData(pluginResult, propertyMembersResult);
+        // Property items
+        const propertyMembersResult = this.renderPropertyMembers(serializedApiItem.Members);
+        GeneratorHelpers.MergePluginResultData(pluginResult, propertyMembersResult);
 
         return pluginResult;
     }

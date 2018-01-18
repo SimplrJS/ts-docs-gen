@@ -21,7 +21,11 @@ interface ContainerMembersGroup {
 }
 
 export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePlugin<TKind> {
-    private getItemsReferenceByKind(list: ContainerMembersKindsGroup[], members: ApiDefinitions[]): ContainerMembersGroup[] {
+    private getItemsReferenceByKind(
+        list: ContainerMembersKindsGroup[],
+        members: ApiDefinitions[],
+        other: boolean
+    ): ContainerMembersGroup[] {
         const result: ContainerMembersGroup[] = [];
         let membersList = [...members];
 
@@ -38,7 +42,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
         }
 
         // TODO: Using ApiKind.Any to add everything to other if some kind is not supported.
-        if (membersList.length !== 0) {
+        if (membersList.length !== 0 && other) {
             result.push({
                 Heading: "Other",
                 MembersList: membersList
@@ -48,25 +52,29 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
         return result;
     }
 
+    // TODO: Remake options.
     protected RenderMembersGroups(
         options: PluginOptions,
         list: ContainerMembersKindsGroup[],
-        members: ApiDefinitions[]
+        members: ApiDefinitions[],
+        includeHr = true,
+        headingLevel = 2,
+        other = true
     ): PluginResultData {
-        const memberGroups = this.getItemsReferenceByKind(list, members);
+        const memberGroups = this.getItemsReferenceByKind(list, members, other);
         const pluginResultData = GeneratorHelpers.GetDefaultPluginResultData();
         const builder = new MarkdownBuilder();
 
         for (const { Heading, MembersList } of memberGroups) {
             if (MembersList.length > 0) {
                 builder
-                    .Header(Heading, 2)
+                    .Header(Heading, headingLevel)
                     .EmptyLine();
 
                 for (const member of MembersList) {
                     if (options.IsPluginResultExists(member.Reference)) {
                         builder
-                            .Text(md => md.Header(md.Link(member.ToHeadingText(), member.Reference.Id, true), 3))
+                            .Text(md => md.Header(md.Link(member.ToHeadingText(), member.Reference.Id, true), headingLevel + 1))
                             .EmptyLine();
                     } else {
                         switch (member.Data.ApiKind) {
@@ -79,7 +87,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                                 });
 
                                 builder
-                                    .Text(md => md.Header(md.Link(member.ToHeadingText(), member.Reference.Id, true), 3))
+                                    .Text(md => md.Header(md.Link(member.ToHeadingText(), member.Reference.Id, true), headingLevel + 1))
                                     .EmptyLine()
                                     .Text(GeneratorHelpers.RenderApiItemMetadata(renderedItem.ApiItem))
                                     .EmptyLine();
@@ -100,7 +108,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                         }
                     }
 
-                    if ((MembersList.indexOf(member) + 1) !== MembersList.length) {
+                    if ((MembersList.indexOf(member) + 1) !== MembersList.length && includeHr) {
                         builder
                             .HorizontalRule(undefined, 10)
                             .EmptyLine();
