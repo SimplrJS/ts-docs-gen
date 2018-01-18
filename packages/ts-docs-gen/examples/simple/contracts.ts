@@ -59,4 +59,8 @@ export interface Plugin<TKind = Contracts.ApiItemDto> {
     Render(options: PluginOptions<TKind>): PluginResult;
 }
 
-export type MappedType = {[K in "a-b-c"]: number};
+export type MappedType = {
+    [K in "a-b-c"]: number
+};
+
+export type FooTuple = [string, number];
