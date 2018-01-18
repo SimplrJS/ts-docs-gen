@@ -7,7 +7,7 @@ export abstract class ApiTypeMembersBase<TKind extends Contracts.ApiMembersBaseT
     private members: ApiTypes[];
 
     public get Members(): ApiTypes[] {
-        if (this.members != null) {
+        if (this.members == null) {
             this.members = this.Data.Members
                 .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
                 .filter((x): x is ApiTypes => x != null);

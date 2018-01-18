@@ -62,7 +62,7 @@ export class ApiNamespacePlugin extends ContainerPlugin<Contracts.ApiNamespaceDt
             .GetOutput();
 
         // Members
-        const membersResult = this.RenderMembersGroups(ApiNamespacePlugin.MemberKindsList, serializedApiItem.Members);
+        const membersResult = this.RenderMembersGroups(options, ApiNamespacePlugin.MemberKindsList, serializedApiItem.Members);
 
         // Treat members' headings as members of namespace heading.
         const membersHeadings = membersResult.Headings;
