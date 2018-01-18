@@ -1,22 +1,18 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 
 import { ApiDefinitionWithType } from "../api-definition-with-type";
-import { ApiItemReference } from "../../contracts/api-item-reference";
 import { ApiTypeParameter } from "./api-type-parameter";
 import { GeneratorHelpers } from "../../generator-helpers";
 
 export class ApiTypeAlias extends ApiDefinitionWithType<Contracts.ApiTypeAliasDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiTypeAliasDto, reference: ApiItemReference) {
-        super(extractedData, apiItem, reference);
-
-        this.typeParameters = GeneratorHelpers
-            .GetApiItemReferences(this.ExtractedData, apiItem.TypeParameters)
-            .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
-    }
-
     private typeParameters: ApiTypeParameter[];
 
     public get TypeParameters(): ApiTypeParameter[] {
+        if (this.typeParameters == null) {
+            this.typeParameters = GeneratorHelpers
+                .GetApiItemReferences(this.ExtractedData, this.Data.TypeParameters)
+                .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
+        }
         return this.typeParameters;
     }
 

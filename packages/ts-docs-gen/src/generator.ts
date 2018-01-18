@@ -9,13 +9,12 @@ import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { PluginResult, PluginOptions, GetItemPluginResultHandler } from "./contracts/plugin";
 import { FileResult } from "./contracts/file-result";
-import { PluginResultRegistry } from "./contracts/plugin-result-registry";
-import { PluginResultRegistry as PluginResultRegistryClass } from "./registries/plugin-result-registry";
+import { ApiItemReferenceRegistry } from "./registries/api-item-reference-registry";
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
         this.fileManager = new FileManager(configuration.ExtractedData.Registry);
-        this.pluginResultRegistry = new PluginResultRegistryClass();
+        this.pluginResultRegistry = new ApiItemReferenceRegistry<PluginResult>();
         const { ExtractedData } = this.configuration;
 
         for (const entryFile of ExtractedData.EntryFiles) {
@@ -29,7 +28,7 @@ export class Generator {
         this.outputData = this.fileManager.ToFilesOutput();
     }
 
-    private pluginResultRegistry: PluginResultRegistry;
+    private pluginResultRegistry: ApiItemReferenceRegistry<PluginResult>;
     private fileManager: FileManager;
     private outputData: FileResult[];
 

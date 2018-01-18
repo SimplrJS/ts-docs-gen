@@ -13,13 +13,9 @@ import { ApiTypes } from "./api-type-list";
  */
 export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> extends BaseApiItemClass<TKind>
     implements SerializedApiDefinition<TKind> {
+
     constructor(extractedData: ExtractDto, apiItem: TKind, private reference: ApiItemReference) {
         super(extractedData, apiItem);
-
-        if (this.Data.ParentId != null) {
-            const parentReference = { Alias: "", Id: this.Data.ParentId };
-            this.parentItem = this.GetSerializedApiDefinition(parentReference);
-        }
     }
 
     public get Reference(): ApiItemReference {
@@ -29,6 +25,11 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
     private parentItem: ApiDefinitions | undefined;
 
     public get ParentItem(): ApiDefinitions | undefined {
+        if (this.Data.ParentId != null) {
+            const parentReference = { Alias: "", Id: this.Data.ParentId };
+            this.parentItem = this.GetSerializedApiDefinition(parentReference);
+        }
+
         return this.parentItem;
     }
 

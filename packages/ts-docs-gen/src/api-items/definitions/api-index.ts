@@ -1,25 +1,17 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 
 import { ApiParameter } from "./api-parameter";
 import { ApiDefinitionWithType } from "../api-definition-with-type";
-import { ApiItemReference } from "../../contracts/api-item-reference";
 
 export class ApiIndex extends ApiDefinitionWithType<Contracts.ApiIndexDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiIndexDto, reference: ApiItemReference) {
-        super(extractedData, apiItem, reference);
-
-        this.parameter = this.getParameter();
-    }
-
     private parameter: ApiParameter;
 
     public get Parameter(): ApiParameter {
+        if (this.parameter == null) {
+            const apiItem = this.ExtractedData.Registry[this.Data.Parameter] as Contracts.ApiParameterDto;
+            this.parameter = new ApiParameter(this.ExtractedData, apiItem, { Alias: "", Id: this.Data.Parameter });
+        }
         return this.parameter;
-    }
-
-    private getParameter(): ApiParameter {
-        const apiItem = this.ExtractedData.Registry[this.Data.Parameter] as Contracts.ApiParameterDto;
-        return new ApiParameter(this.ExtractedData, apiItem, { Alias: "", Id: this.Data.Parameter });
     }
 
     public ToText(): string[] {

@@ -1,32 +1,29 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiDefinitionContainer } from "../api-definition-container";
-import { ApiItemReference } from "../../contracts/api-item-reference";
 import { ApiTypes } from "../api-type-list";
 import { ApiTypeParameter } from "./api-type-parameter";
 
 export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiInterfaceDto, reference: ApiItemReference) {
-        super(extractedData, apiItem, reference);
-
-        this.typeParameters = GeneratorHelpers
-            .GetApiItemReferences(this.ExtractedData, apiItem.TypeParameters)
-            .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
-
-        this.extends = this.Data.Extends
-            .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
-            .filter((x): x is ApiTypes => x != null);
-    }
-
     private typeParameters: ApiTypeParameter[];
 
     public get TypeParameters(): ApiTypeParameter[] {
+        if (this.typeParameters == null) {
+            this.typeParameters = GeneratorHelpers
+                .GetApiItemReferences(this.ExtractedData, this.Data.TypeParameters)
+                .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
+        }
         return this.typeParameters;
     }
 
     private extends: ApiTypes[];
 
     public get Extends(): ApiTypes[] {
+        if (this.extends == null) {
+            this.extends = this.Data.Extends
+                .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
+                .filter((x): x is ApiTypes => x != null);
+        }
         return this.extends;
     }
 

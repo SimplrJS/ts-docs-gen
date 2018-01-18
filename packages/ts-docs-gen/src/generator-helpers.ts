@@ -11,20 +11,28 @@ import { ApiDefinitionList, ApiDefinitions } from "./api-items/api-definition-li
 import { ApiTypeList, ApiTypes } from "./api-items/api-type-list";
 import { ApiDefinitionDefault } from "./api-items/api-definition-default";
 import { ApiTypeDefault } from "./api-items/api-type-default";
+import { ApiItemReferenceRegistry } from "./registries/api-item-reference-registry";
 
 export namespace GeneratorHelpers {
+    const serializedReferenceRegistry = new ApiItemReferenceRegistry<ApiDefinitions>();
+
     export function SerializeApiDefinition<TKind extends Contracts.ApiBaseItemDto>(
         extractedData: ExtractDto,
         apiItem: TKind,
         reference: ApiItemReference
     ): ApiDefinitions {
-        if (apiItem != null) {
-            for (const [kind, constructorItem] of ApiDefinitionList) {
-                if (kind === apiItem.ApiKind) {
-                    const $constructor: SerializedApiDefinitionConstructor<TKind> = constructorItem;
+        if (serializedReferenceRegistry.Exists(reference)) {
+            return serializedReferenceRegistry.GetItem(reference)!;
+        }
 
-                    return new $constructor(extractedData, apiItem, reference);
-                }
+        for (const [kind, constructorItem] of ApiDefinitionList) {
+            if (kind === apiItem.ApiKind) {
+                const $constructor: SerializedApiDefinitionConstructor<TKind> = constructorItem;
+                const serializedApiItem = new $constructor(extractedData, apiItem, reference);
+
+                serializedReferenceRegistry.AddItem(reference, serializedApiItem);
+
+                return serializedApiItem;
             }
         }
 

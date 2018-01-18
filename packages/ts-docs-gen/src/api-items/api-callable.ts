@@ -1,53 +1,47 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiTypeParameter } from "./definitions/api-type-parameter";
 import { ApiParameter } from "./definitions/api-parameter";
 import { ApiDefinitionBase } from "./api-definition-base";
-import { ApiItemReference } from "../contracts/api-item-reference";
 import { ApiTypes } from "./api-type-list";
 
 /**
  * Base class for callable api items.
  */
 export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extends ApiDefinitionBase<TKind> {
-    constructor(extractedData: ExtractDto, apiItem: TKind, reference: ApiItemReference) {
-        super(extractedData, apiItem, reference);
-
-        this.parameters = GeneratorHelpers
-            .GetApiItemReferences(this.ExtractedData, this.Data.Parameters)
-            .map(x => this.GetSerializedApiDefinition(x))
-            .filter((x): x is ApiParameter => x != null);
-
-        this.typeParameters = this.GetTypeParameters();
-
-        if (this.Data.ReturnType != null) {
-            this.returnType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ReturnType);
-        }
-    }
-
     private parameters: ApiParameter[];
 
     public get Parameters(): ApiParameter[] {
+        if (this.parameters == null) {
+            this.parameters = GeneratorHelpers
+                .GetApiItemReferences(this.ExtractedData, this.Data.Parameters)
+                .map(x => this.GetSerializedApiDefinition(x))
+                .filter((x): x is ApiParameter => x != null);
+        }
         return this.parameters;
     }
 
     private typeParameters: ApiTypeParameter[];
 
     public get TypeParameters(): ApiTypeParameter[] {
+        if (this.typeParameters == null) {
+            this.typeParameters = GeneratorHelpers
+                .GetApiItemReferences(this.ExtractedData, this.Data.TypeParameters)
+                .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
+        }
+
         return this.typeParameters;
     }
 
     private returnType: ApiTypes | undefined;
 
     public get ReturnType(): ApiTypes | undefined {
-        return this.returnType;
-    }
+        if (this.returnType == null && this.Data.ReturnType != null) {
+            return GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ReturnType);
+        }
 
-    protected GetTypeParameters(): ApiTypeParameter[] {
-        return GeneratorHelpers
-            .GetApiItemReferences(this.ExtractedData, this.Data.TypeParameters)
-            .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
+        return this.returnType;
     }
 
     protected TypeParametersToString(): string {

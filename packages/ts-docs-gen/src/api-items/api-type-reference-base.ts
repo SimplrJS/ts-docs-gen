@@ -1,21 +1,16 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { ApiTypeBase } from "./api-type-base";
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiDefinitions } from "./api-definition-list";
 import { ApiTypes } from "./api-type-list";
 
 export abstract class ApiTypeReferenceBase<TKind extends Contracts.ApiReferenceBaseType> extends ApiTypeBase<TKind> {
-    constructor(extractedData: ExtractDto, apiItem: TKind) {
-        super(extractedData, apiItem);
-
-        if (this.Data.ReferenceId != null) {
-            this.referenceItem = this.GetSerializedApiDefinition(this.Data.ReferenceId);
-        }
-    }
-
     private referenceItem: ApiDefinitions | undefined;
 
     public get ReferenceItem(): ApiDefinitions | undefined {
+        if (this.referenceItem == null && this.Data.ReferenceId != null) {
+            this.referenceItem = this.GetSerializedApiDefinition(this.Data.ReferenceId);
+        }
         return this.referenceItem;
     }
 

@@ -1,32 +1,18 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { GeneratorHelpers } from "../../generator-helpers";
-import { ApiItemReference } from "../../contracts/api-item-reference";
 import { ApiTypes } from "../api-type-list";
 import { ApiDefinitionContainer } from "../api-definition-container";
 import { ApiTypeParameter } from "./api-type-parameter";
 
 export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiClassDto, reference: ApiItemReference) {
-        super(extractedData, apiItem, reference);
-
-        this.typeParameters = GeneratorHelpers
-            .GetApiItemReferences(this.ExtractedData, apiItem.TypeParameters)
-            .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
-
-        // Extends
-        if (this.Data.Extends != null) {
-            this.extends = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Extends);
-        }
-
-        // Implements
-        this.implements = this.Data.Implements
-            .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
-            .filter((x): x is ApiTypes => x != null);
-    }
-
     private typeParameters: ApiTypeParameter[];
 
     public get TypeParameters(): ApiTypeParameter[] {
+        if (this.typeParameters == null) {
+            this.typeParameters = GeneratorHelpers
+                .GetApiItemReferences(this.ExtractedData, this.Data.TypeParameters)
+                .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
+        }
         return this.typeParameters;
     }
 
@@ -39,6 +25,11 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
     private implements: ApiTypes[];
 
     public get Implements(): ApiTypes[] {
+        if (this.implements == null) {
+            this.implements = this.Data.Implements
+                .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
+                .filter((x): x is ApiTypes => x != null);
+        }
         return this.implements;
     }
 

@@ -1,24 +1,20 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiDefinitionBase } from "../api-definition-base";
-import { ApiItemReference } from "../../contracts/api-item-reference";
 import { ApiTypes } from "../api-type-list";
 
 export type ApiAccessorKinds = Contracts.ApiGetAccessorDto | Contracts.ApiSetAccessorDto;
 
 export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
-    constructor(extractedData: ExtractDto, apiItem: ApiAccessorKinds, reference: ApiItemReference) {
-        super(extractedData, apiItem, reference);
-
-        const resolvedType = this.resolveType();
-        if (resolvedType != null) {
-            this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, resolvedType);
-        }
-    }
-
     private type: ApiTypes | undefined;
 
     public get Type(): ApiTypes | undefined {
+        if (this.type != null) {
+            const resolvedType = this.resolveType();
+            if (resolvedType != null) {
+                this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, resolvedType);
+            }
+        }
         return this.type;
     }
 

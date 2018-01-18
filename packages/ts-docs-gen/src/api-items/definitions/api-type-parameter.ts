@@ -1,31 +1,25 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 
 import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiDefinitionBase } from "../api-definition-base";
-import { ApiItemReference } from "../../contracts/api-item-reference";
 import { ApiTypes } from "../api-type-list";
 
 export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParameterDto> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiTypeParameterDto, reference: ApiItemReference) {
-        super(extractedData, apiItem, reference);
-
-        if (this.Data.ConstraintType != null) {
-            this.constraintType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ConstraintType);
-        }
-        if (this.Data.DefaultType != null) {
-            this.defaultType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.DefaultType);
-        }
-    }
-
     private constraintType: ApiTypes | undefined;
 
     public get ConstraintType(): ApiTypes | undefined {
+        if (this.constraintType == null && this.Data.ConstraintType != null) {
+            this.constraintType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ConstraintType);
+        }
         return this.constraintType;
     }
 
     private defaultType: ApiTypes | undefined;
 
     public get DefaultType(): ApiTypes | undefined {
+        if (this.defaultType == null && this.Data.DefaultType != null) {
+            this.defaultType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.DefaultType);
+        }
         return this.defaultType;
     }
 

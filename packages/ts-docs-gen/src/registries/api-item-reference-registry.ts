@@ -1,12 +1,11 @@
 import { ApiItemReference } from "../contracts/api-item-reference";
-import { PluginResult } from "../contracts/plugin";
-import { PluginResultRegistry as PluginResultRegistryInterface } from "../contracts/plugin-result-registry";
+import { ApiItemReferenceRegistry as ApiItemReferenceRegistryInterface } from "../contracts/api-item-reference-registry";
 
-export class PluginResultRegistry implements PluginResultRegistryInterface {
-    private results: Map<ApiItemReference, PluginResult> = new Map();
+export class ApiItemReferenceRegistry<TValue> implements ApiItemReferenceRegistryInterface<TValue> {
+    private map: Map<ApiItemReference, TValue> = new Map();
 
     private getKey(itemReference: ApiItemReference): ApiItemReference | undefined {
-        for (const [reference] of this.results) {
+        for (const [reference] of this.map) {
             if (itemReference.Alias === reference.Alias &&
                 itemReference.Id === reference.Id) {
                 return reference;
@@ -16,15 +15,15 @@ export class PluginResultRegistry implements PluginResultRegistryInterface {
         return undefined;
     }
 
-    public AddItem(itemReference: ApiItemReference, pluginResult: PluginResult): void {
+    public AddItem(itemReference: ApiItemReference, value: TValue): void {
         const key = this.getKey(itemReference) || itemReference;
-        this.results.set(key, pluginResult);
+        this.map.set(key, value);
     }
 
-    public GetItem(itemReference: ApiItemReference): PluginResult | undefined {
+    public GetItem(itemReference: ApiItemReference): TValue | undefined {
         const realKey = this.getKey(itemReference);
         if (realKey != null) {
-            return this.results.get(realKey);
+            return this.map.get(realKey);
         } else {
             return undefined;
         }
