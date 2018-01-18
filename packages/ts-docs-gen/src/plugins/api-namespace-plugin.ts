@@ -53,7 +53,6 @@ export class ApiNamespacePlugin extends ContainerPlugin<Contracts.ApiNamespaceDt
             UsedReferences: [options.Reference.Id]
         };
 
-
         // Header
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 1)

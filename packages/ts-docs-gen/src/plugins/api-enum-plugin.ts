@@ -41,7 +41,6 @@ export class ApiEnumPlugin extends BasePlugin<Contracts.ApiEnumDto> {
             UsedReferences: [options.Reference.Id]
         };
 
-
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()

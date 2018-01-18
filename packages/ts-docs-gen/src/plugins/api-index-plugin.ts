@@ -20,7 +20,6 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
             Reference: options.Reference
         };
 
-
         const parameter = serializedApiItem.Parameter;
         const type = serializedApiItem.Type;
 

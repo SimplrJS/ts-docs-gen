@@ -28,7 +28,6 @@ export class ApiVariablePlugin extends BasePlugin<Contracts.ApiVariableDto> {
             UsedReferences: [options.Reference.Id]
         };
 
-
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()

@@ -53,7 +53,6 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
             UsedReferences: [options.Reference.Id]
         };
 
-
         // Header
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 1)
