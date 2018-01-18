@@ -1,6 +1,6 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { LogLevel } from "simplr-logger";
-import { MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
+import { Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import * as path from "path";
 
 import { ApiItemReference } from "./contracts/api-item-reference";
@@ -14,6 +14,7 @@ import { ApiTypeDefault } from "./api-items/api-type-default";
 import { ApiItemReferenceRegistry } from "./registries/api-item-reference-registry";
 
 export namespace GeneratorHelpers {
+    //#region Serialize ApiItem
     const serializedReferenceRegistry = new ApiItemReferenceRegistry<ApiDefinitions>();
 
     export function SerializeApiDefinition<TKind extends Contracts.ApiBaseItemDto>(
@@ -54,21 +55,16 @@ export namespace GeneratorHelpers {
         // TODO: Add logger: "This kind is not supported".
         return new ApiTypeDefault(extractedData, apiType);
     }
-    export type TypeToStringDto = ReferenceDto<string>;
 
-    export interface ReferenceDto<T = string | string[]> {
-        References: string[];
-        Text: T;
-    }
+    //#endregion Serialize ApiItem
 
+    // #region Defaults and constants
     export enum JSDocTags {
         Beta = "beta",
         Deprecated = "deprecated",
         Internal = "internal",
         Summary = "summary"
     }
-
-    // #region Defaults and constants
 
     export const MARKDOWN_EXT = ".md";
 
@@ -152,36 +148,6 @@ export namespace GeneratorHelpers {
         }
 
         return overallReferences;
-    }
-
-    export function GetApiItemsFromReferenceList<T extends Contracts.ApiItemDto>(
-        extractedData: ExtractDto,
-        items: Contracts.ApiItemReference[],
-        apiItemKind?: Contracts.ApiItemKinds
-    ): T[] {
-        const apiItems: T[] = [];
-
-        for (const itemReferences of items) {
-            apiItems.push(...GetApiItemsFromReference<T>(extractedData, itemReferences, apiItemKind));
-        }
-
-        return apiItems;
-    }
-
-    export function GetApiItemsFromReference<T extends Contracts.ApiItemDto>(
-        extractedData: ExtractDto,
-        reference: Contracts.ApiItemReference,
-        apiItemKind?: Contracts.ApiItemKinds
-    ): T[] {
-        const apiItems: T[] = [];
-        for (const referenceId of reference.Ids) {
-            const apiItem = extractedData.Registry[referenceId] as T;
-            if (apiItemKind == null || apiItemKind != null && apiItem.ApiKind === apiItemKind) {
-                apiItems.push(apiItem);
-            }
-        }
-
-        return apiItems;
     }
 
     export function LogWithApiItemPosition(logLevel: LogLevel, apiItem: Contracts.ApiItemDto, message: string): void {
