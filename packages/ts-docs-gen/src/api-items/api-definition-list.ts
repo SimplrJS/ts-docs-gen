@@ -3,6 +3,7 @@ import { SerializedApiDefinitionConstructor } from "../contracts/serialized-api-
 
 import { ApiDefinitionDefault } from "./api-definition-default";
 // ApiItems
+import { ApiSourceFile } from "./definitions/api-source-file";
 import { ApiCall } from "./definitions/api-call";
 import { ApiClass } from "./definitions/api-class";
 import { ApiConstruct } from "./definitions/api-construct";
@@ -27,6 +28,7 @@ import { ApiClassMethod } from "./definitions/api-class-method";
 import { ApiAccessor } from "./definitions/api-accessor";
 
 export type ApiDefinitions = ApiDefinitionDefault |
+    ApiSourceFile |
     ApiEnum |
     ApiEnumMember |
     ApiFunction |
@@ -54,6 +56,7 @@ export type ApiDefinitions = ApiDefinitionDefault |
 // TODO: Add tests from Contracts.ApiItemKinds
 // TODO: Fix any.
 export const ApiDefinitionList: Array<[Contracts.ApiItemKinds, SerializedApiDefinitionConstructor<any>]> = [
+    [Contracts.ApiItemKinds.SourceFile, ApiSourceFile],
     [Contracts.ApiItemKinds.Enum, ApiEnum],
     [Contracts.ApiItemKinds.EnumMember, ApiEnumMember],
     [Contracts.ApiItemKinds.Function, ApiFunction],
