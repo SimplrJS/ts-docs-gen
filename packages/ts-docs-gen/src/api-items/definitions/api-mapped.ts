@@ -2,6 +2,7 @@ import { Contracts } from "ts-extractor";
 
 import { ApiTypeParameter } from "./api-type-parameter";
 import { ApiDefinitionWithType } from "../api-definition-with-type";
+import { GeneratorHelpers } from "../../generator-helpers";
 
 export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
     private typeParameter: ApiTypeParameter | undefined;
@@ -28,7 +29,11 @@ export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
 
         const type = this.SerializedTypeToString(this.Type);
 
-        return [`{${readonly}[${typeParameterString}]${optional}: ${type}}`];
+        return [
+            `{`,
+            `${GeneratorHelpers.Tab(1)}${readonly}[${typeParameterString}]${optional}: ${type}`,
+            `}`
+        ];
     }
 
     public ToHeadingText(): string {

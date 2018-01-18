@@ -9,7 +9,7 @@ export class ApiTypeUnionOrIntersection extends ApiTypeMembersBase<Contracts.Api
         const character = this.Data.ApiTypeKind === Contracts.ApiTypeKind.Union ? "|" : "&";
 
         return [
-            this.Members.join(` ${character} `)
+            this.Members.map(x => x.ToText().join(" ")).join(` ${character} `)
         ];
     }
 }

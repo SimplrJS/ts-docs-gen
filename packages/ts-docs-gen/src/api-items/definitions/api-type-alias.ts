@@ -18,7 +18,7 @@ export class ApiTypeAlias extends ApiDefinitionWithType<Contracts.ApiTypeAliasDt
 
     public ToText(): string[] {
         const name = this.Reference.Alias || this.Data.Name;
-        const type = this.SerializedTypeToString(this.Type);
+        const type = this.Type.ToText().join("\n");
         const typeParameters = this.TypeParametersToString(this.TypeParameters);
 
         return [

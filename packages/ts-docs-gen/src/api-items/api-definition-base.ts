@@ -39,6 +39,10 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
     }
 
     protected TypeParametersToString(apiTypeParameters: ApiDefinitionBase[]): string {
+        if (apiTypeParameters.length === 0) {
+            return "";
+        }
+
         const members = apiTypeParameters
             .map(x => x.ToText())
             .join(", ");
