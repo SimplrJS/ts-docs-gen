@@ -45,7 +45,9 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
     }
 
     protected GetTypeParameters(): ApiTypeParameter[] {
-        return super.GetTypeParameters(this.Data);
+        return GeneratorHelpers
+            .GetApiItemReferences(this.ExtractedData, this.Data.TypeParameters)
+            .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
     }
 
     protected TypeParametersToString(): string {

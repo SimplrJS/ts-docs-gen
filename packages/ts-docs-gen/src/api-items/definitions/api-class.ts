@@ -9,7 +9,9 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
     constructor(extractedData: ExtractDto, apiItem: Contracts.ApiClassDto, reference: ApiItemReference) {
         super(extractedData, apiItem, reference);
 
-        this.typeParameters = this.GetTypeParameters(apiItem);
+        this.typeParameters = GeneratorHelpers
+            .GetApiItemReferences(this.ExtractedData, apiItem.TypeParameters)
+            .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
 
         // Extends
         if (this.Data.Extends != null) {

@@ -4,12 +4,9 @@ import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 import { SerializedApiDefinition } from "../contracts/serialized-api-item";
 import { Helpers } from "../utils/helpers";
-import { ApiTypeParameter } from "./definitions/api-type-parameter";
 import { ApiItemReference } from "../contracts/api-item-reference";
 import { ApiDefinitions } from "./api-definition-list";
 import { ApiTypes } from "./api-type-list";
-
-export type ApiItemWithTypeParameters = Contracts.ApiBaseItemDto & { TypeParameters: Contracts.ApiItemReference[] };
 
 /**
  * Base definition class with helper functions.
@@ -40,16 +37,7 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
         return GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, apiItem, reference);
     }
 
-    protected GetTypeParameters(apiItem: ApiItemWithTypeParameters): ApiTypeParameter[] {
-        return GeneratorHelpers
-            .GetApiItemReferences(this.ExtractedData, apiItem.TypeParameters)
-            .map<[ApiItemReference, Contracts.ApiTypeParameterDto]>(reference =>
-                [reference, this.ExtractedData.Registry[reference.Id] as Contracts.ApiTypeParameterDto]
-            )
-            .map(([reference, typeParameter]) => new ApiTypeParameter(this.ExtractedData, typeParameter, reference));
-    }
-
-    protected TypeParametersToString(apiTypeParameters: ApiTypeParameter[]): string {
+    protected TypeParametersToString(apiTypeParameters: ApiDefinitionBase[]): string {
         const members = apiTypeParameters
             .map(x => x.ToText())
             .join(", ");

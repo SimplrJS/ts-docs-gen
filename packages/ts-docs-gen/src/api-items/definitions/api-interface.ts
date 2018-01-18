@@ -9,7 +9,9 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
     constructor(extractedData: ExtractDto, apiItem: Contracts.ApiInterfaceDto, reference: ApiItemReference) {
         super(extractedData, apiItem, reference);
 
-        this.typeParameters = this.GetTypeParameters(this.Data);
+        this.typeParameters = GeneratorHelpers
+            .GetApiItemReferences(this.ExtractedData, apiItem.TypeParameters)
+            .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
 
         this.extends = this.Data.Extends
             .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))

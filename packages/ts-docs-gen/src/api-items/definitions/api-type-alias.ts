@@ -3,12 +3,15 @@ import { Contracts, ExtractDto } from "ts-extractor";
 import { ApiDefinitionWithType } from "../api-definition-with-type";
 import { ApiItemReference } from "../../contracts/api-item-reference";
 import { ApiTypeParameter } from "./api-type-parameter";
+import { GeneratorHelpers } from "../../generator-helpers";
 
 export class ApiTypeAlias extends ApiDefinitionWithType<Contracts.ApiTypeAliasDto> {
     constructor(extractedData: ExtractDto, apiItem: Contracts.ApiTypeAliasDto, reference: ApiItemReference) {
         super(extractedData, apiItem, reference);
 
-        this.typeParameters = this.GetTypeParameters(this.Data);
+        this.typeParameters = GeneratorHelpers
+            .GetApiItemReferences(this.ExtractedData, apiItem.TypeParameters)
+            .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
     }
 
     private typeParameters: ApiTypeParameter[];
