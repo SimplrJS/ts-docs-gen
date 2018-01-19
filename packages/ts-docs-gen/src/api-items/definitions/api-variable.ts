@@ -4,7 +4,7 @@ import { ApiDefinitionWithType } from "../api-definition-with-type";
 
 export class ApiVariable extends ApiDefinitionWithType<Contracts.ApiVariableDto> {
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Name;
+        const name = this.Name;
         const type = this.SerializedTypeToString(this.Type);
 
         return [
@@ -13,6 +13,6 @@ export class ApiVariable extends ApiDefinitionWithType<Contracts.ApiVariableDto>
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Name;
+        return this.Name;
     }
 }

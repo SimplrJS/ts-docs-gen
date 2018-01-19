@@ -19,7 +19,7 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
     }
 
     public get Name(): string {
-        return this.Name;
+        return this.Reference.Alias || this.ApiItem.Name;
     }
 
     public get Reference(): ApiItemReference {

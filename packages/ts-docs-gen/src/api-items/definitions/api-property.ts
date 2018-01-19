@@ -12,6 +12,6 @@ export class ApiProperty extends ApiDefinitionWithType<Contracts.ApiPropertyDto>
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Name;
+        return this.Name;
     }
 }

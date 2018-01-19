@@ -24,7 +24,7 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
     }
 
     public ToText(mapped?: boolean): string[] {
-        const name = this.Reference.Alias || this.Name;
+        const name = this.Name;
 
         const constraintKeyword = mapped ? "in" : "extends";
 

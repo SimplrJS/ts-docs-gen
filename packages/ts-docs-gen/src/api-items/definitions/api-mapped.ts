@@ -37,6 +37,6 @@ export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Name;
+        return this.Name;
     }
 }

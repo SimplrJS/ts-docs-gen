@@ -4,7 +4,7 @@ import { ApiDefinitionWithType } from "../api-definition-with-type";
 
 export class ApiParameter extends ApiDefinitionWithType<Contracts.ApiParameterDto> {
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Name;
+        const name = this.Name;
 
         const initializerString = this.ApiItem.Initializer ? ` = ${this.ApiItem.Initializer}` : "";
         const isOptionalString = this.ApiItem.IsOptional ? "?" : "";
@@ -17,6 +17,6 @@ export class ApiParameter extends ApiDefinitionWithType<Contracts.ApiParameterDt
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Name;
+        return this.Name;
     }
 }

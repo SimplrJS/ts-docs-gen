@@ -34,7 +34,7 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
     }
 
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Name;
+        const name = this.Name;
 
         // Abstract
         const $abstract = this.ApiItem.IsAbstract ? "abstract " : "";
@@ -66,6 +66,6 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Name;
+        return this.Name;
     }
 }

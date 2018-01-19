@@ -35,7 +35,7 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
     }
 
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Name;
+        const name = this.Name;
         const $abstract = this.ApiItem.IsAbstract ? " abstract" : "";
         const $static = this.ApiItem.IsStatic ? " static" : "";
 
@@ -51,6 +51,6 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Name;
+        return this.Name;
     }
 }

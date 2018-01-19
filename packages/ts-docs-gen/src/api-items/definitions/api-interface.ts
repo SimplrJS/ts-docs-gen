@@ -28,7 +28,7 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
     }
 
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Name;
+        const name = this.Name;
 
         // TypeParameters
         const typeParameters: string = this.TypeParametersToString(this.TypeParameters);
@@ -54,6 +54,6 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
     }
 
     public ToHeadingText(alias?: string | undefined): string {
-        return this.Reference.Alias || this.Name;
+        return this.Name;
     }
 }

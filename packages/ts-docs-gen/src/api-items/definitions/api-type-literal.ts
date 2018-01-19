@@ -14,6 +14,6 @@ export class ApiTypeLiteral extends ApiDefinitionContainer<Contracts.ApiTypeLite
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Name;
+        return this.Name;
     }
 }

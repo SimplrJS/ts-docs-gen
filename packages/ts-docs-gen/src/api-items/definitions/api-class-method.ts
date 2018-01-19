@@ -3,7 +3,7 @@ import { ApiCallable } from "../api-callable";
 
 export class ApiClassMethod extends ApiCallable<Contracts.ApiClassMethodDto> {
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Name;
+        const name = this.Name;
 
         const optional = this.ApiItem.IsOptional ? "?" : "";
         const $abstract = this.ApiItem.IsAbstract ? " abstract" : "";

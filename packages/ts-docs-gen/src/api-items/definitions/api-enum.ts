@@ -45,6 +45,6 @@ export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Name;
+        return this.Name;
     }
 }

@@ -22,6 +22,6 @@ export class ApiIndex extends ApiDefinitionWithType<Contracts.ApiIndexDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Name;
+        return this.Name;
     }
 }
