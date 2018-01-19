@@ -15,6 +15,8 @@ export abstract class BaseApiItemClass<TKind> implements SerializedApiItem<TKind
     public abstract ToText(): string[];
 
     public ToInlineText(): string {
-        return this.ToText().join(" ");
+        return this.ToText()
+            .map(x => x.trim())
+            .join(" ");
     }
 }

@@ -120,7 +120,7 @@ export class FileManager {
                 const targetFilePath = path.join(
                     path.dirname(filePath),
                     baseName,
-                    member.PluginResult.Name + GeneratorHelpers.MARKDOWN_EXT
+                    member.PluginResult.ApiItem.Name + GeneratorHelpers.MARKDOWN_EXT
                 ).toLowerCase();
 
                 this.AddItem(member.PluginResult, targetFilePath);

@@ -18,7 +18,7 @@ export class ApiTypeReference extends ApiTypeReferenceBase<Contracts.ApiReferenc
     }
 
     public ToText(): string[] {
-        const typeParameters = this.TypeParametersToString(this.typeParameters);
+        const typeParameters = this.TypeParametersToString(this.TypeParameters);
 
         return [
             `${this.ApiItem.SymbolName}${typeParameters}`
