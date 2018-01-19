@@ -1,21 +1,65 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
+import { ApiTypeParameter } from "../api-items/definitions/api-type-parameter";
+import { ApiTypes } from "../api-items/api-type-list";
 
-export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin<TKind> {
+export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> implements Plugin<TKind> {
     public abstract SupportedApiItemKinds(): SupportedApiItemKindType[];
 
     public CheckApiItem(item: TKind): boolean {
         return true;
     }
 
+    protected RenderApiItemMetadata(apiItem: Contracts.ApiItemDto): string[] {
+        const builder = new MarkdownBuilder();
+
+        // Optimise?
+        const isBeta = apiItem.Metadata.JSDocTags.findIndex(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Beta) !== -1;
+        const deprecated = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Deprecated);
+        const internal = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Internal);
+        const summary = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Summary);
+        const jSDocComment = apiItem.Metadata.DocumentationComment;
+
+        if (isBeta) {
+            builder
+                .Text(`<span style="color: #d2d255;">Warning: Beta!</span>`)
+                .EmptyLine();
+        }
+
+        if (deprecated != null) {
+            const message = Boolean(deprecated.text) ? `: ${deprecated.text}` : "";
+            builder
+                .Text(`<span style="color: red;">Deprecated${message}!</span>`)
+                .EmptyLine();
+        }
+
+        if (internal != null) {
+            const message = Boolean(internal.text) ? `: ${internal.text}` : "";
+            builder
+                .Bold(`Internal${message}`)
+                .EmptyLine();
+        }
+
+        if (jSDocComment.length > 0) {
+            builder
+                .Text(jSDocComment)
+                .EmptyLine();
+        }
+
+        if (summary != null && Boolean(summary.text)) {
+            builder
+                .Blockquote(summary.text!.split("\n"))
+                .EmptyLine();
+        }
+
+        return builder.GetOutput();
+    }
+
     // TODO: Escape string!
-    protected RenderTypeParameters(
-        extractedData: ExtractDto,
-        typeParameters: Contracts.ApiTypeParameterDto[]
-    ): PluginResultData | undefined {
+    protected RenderTypeParameters(typeParameters: ApiTypeParameter[]): PluginResultData | undefined {
         if (typeParameters.length === 0) {
             return undefined;
         }
@@ -27,23 +71,27 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
             // ConstraintType
             let constraintType: string;
             if (typeParameter.ConstraintType != null) {
-                constraintType = GeneratorHelpers.ApiTypeToString(extractedData, typeParameter.ConstraintType);
+                constraintType = typeParameter.ConstraintType.ToInlineText();
                 GeneratorHelpers.MergePluginResultData(pluginResult, {
+                    // FIXME: References.
                     // UsedReferences: constraintType.References
                 });
             } else {
                 constraintType = "";
+                // FIXME: References.
                 // constraintType = { References: [], Text: "" };
             }
 
             // DefaultType
             let defaultType: string;
             if (typeParameter.DefaultType != null) {
-                defaultType = GeneratorHelpers.ApiTypeToString(extractedData, typeParameter.DefaultType);
+                defaultType = typeParameter.DefaultType.ToInlineText();
                 GeneratorHelpers.MergePluginResultData(pluginResult, {
+                    // FIXME: References.
                     // UsedReferences: defaultType.References
                 });
             } else {
+                // FIXME: References.
                 defaultType = "";
                 // defaultType = { References: [], Text: "" };
             }
@@ -65,13 +113,13 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
         return pluginResult;
     }
 
-    protected RenderType(extractedData: ExtractDto, type: Contracts.ApiType | undefined): PluginResultData | undefined {
+    protected RenderType(type: ApiTypes | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
-        const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-        const parsedReturnType = GeneratorHelpers.ApiTypeToString(extractedData, type);
+        const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
+        const parsedReturnType = type.ToInlineText();
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
@@ -80,9 +128,10 @@ export abstract class BasePlugin<TKind = Contracts.ApiItemDto> implements Plugin
             .Text(parsedReturnType)
             .GetOutput();
 
+        // FIXME: Reference
         // pluginResult.UsedReferences = parsedReturnType.References;
         return pluginResult;
     }
 
-    public abstract Render(data: PluginOptions<TKind>): PluginResult;
+    public abstract Render(options: PluginOptions, apiItem: TKind): PluginResult;
 }

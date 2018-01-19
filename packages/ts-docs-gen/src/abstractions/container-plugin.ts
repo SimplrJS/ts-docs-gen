@@ -1,9 +1,10 @@
-import { Contracts, ExtractDto } from "ts-extractor";
-import { MarkdownBuilder } from "@simplrjs/markdown";
+import { Contracts } from "ts-extractor";
+import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
+
 import { BasePlugin } from "./base-plugin";
-import { PluginOptions, PluginResultData } from "../contracts/plugin";
+import { PluginResultData, PluginOptions } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
-import { ApiItemReference } from "../contracts/api-item-reference";
+import { ApiDefinitions } from "../api-items/api-definition-list";
 
 export interface ApiContainer extends Contracts.ApiBaseItemDto {
     Members: Contracts.ApiItemReference[];
@@ -14,82 +15,100 @@ export interface ContainerMembersKindsGroup {
     Kinds: Contracts.ApiItemKinds[];
 }
 
-interface ContainerMembersReferencesGroup {
+export interface RenderMemberGroupsOptions {
+    IncludeHr: boolean;
+    StartingHeadingLevel: number;
+    ShouldRenderUnlistedMembers: boolean;
+}
+
+interface ContainerMembersGroup {
     Heading: string;
-    References: ApiItemReference[];
+    MembersList: ApiDefinitions[];
 }
 
 export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePlugin<TKind> {
     private getItemsReferenceByKind(
-        extractedData: ExtractDto,
         list: ContainerMembersKindsGroup[],
-        members: Contracts.ApiItemReference[]
-    ): ContainerMembersReferencesGroup[] {
-        const result: ContainerMembersReferencesGroup[] = [];
-        let membersReferences = GeneratorHelpers.GetApiItemReferences(extractedData, members);
+        members: ApiDefinitions[],
+        other: boolean
+    ): ContainerMembersGroup[] {
+        const result: ContainerMembersGroup[] = [];
+        let membersList = [...members];
 
         for (const item of list) {
             // Filter item references by kind
-            const apiItemsReferenceByKind = membersReferences.filter(x => item.Kinds.indexOf(extractedData.Registry[x.Id].ApiKind) !== -1);
+            const serializedApiItems = membersList.filter(x => item.Kinds.indexOf(x.ApiItem.ApiKind) !== -1);
             // Remove references that was used
-            membersReferences = membersReferences.filter(x => apiItemsReferenceByKind.indexOf(x) === -1);
+            membersList = membersList.filter(x => serializedApiItems.indexOf(x) === -1);
 
             result.push({
                 Heading: item.Heading,
-                References: apiItemsReferenceByKind
+                MembersList: serializedApiItems
             });
         }
 
         // TODO: Using ApiKind.Any to add everything to other if some kind is not supported.
-        if (membersReferences.length !== 0) {
+        if (membersList.length !== 0 && other) {
             result.push({
                 Heading: "Other",
-                References: membersReferences
+                MembersList: membersList
             });
         }
 
         return result;
     }
 
-    protected RenderMembersGroups(options: PluginOptions<TKind>, list: ContainerMembersKindsGroup[]): PluginResultData {
-        const membersReferences = this.getItemsReferenceByKind(options.ExtractedData, list, options.ApiItem.Members);
+    protected RenderMemberGroups(
+        pluginOptions: PluginOptions,
+        list: ContainerMembersKindsGroup[],
+        members: ApiDefinitions[],
+        options?: Partial<RenderMemberGroupsOptions>
+    ): PluginResultData {
+        const resolvedOptions: RenderMemberGroupsOptions = {
+            IncludeHr: true,
+            ShouldRenderUnlistedMembers: true,
+            StartingHeadingLevel: 2,
+            ...options
+        };
+
+        const memberGroups = this.getItemsReferenceByKind(list, members, resolvedOptions.ShouldRenderUnlistedMembers);
         const pluginResultData = GeneratorHelpers.GetDefaultPluginResultData();
         const builder = new MarkdownBuilder();
 
-        for (const { Heading, References } of membersReferences) {
-            if (References.length > 0) {
+        for (const { Heading, MembersList } of memberGroups) {
+            if (MembersList.length > 0) {
                 builder
-                    .Header(Heading, 2)
+                    .Header(Heading, resolvedOptions.StartingHeadingLevel)
                     .EmptyLine();
 
-                for (const reference of References) {
-                    const apiItem = options.ExtractedData.Registry[reference.Id];
+                for (const member of MembersList) {
+                    if (pluginOptions.IsPluginResultExists(member.Reference)) {
+                        const headingLink = MarkdownGenerator.Link(member.ToHeadingText(), member.Reference.Id, true);
 
-                    if (options.IsPluginResultExists(reference)) {
                         builder
-                            .Text(md => md.Header(md.Link(apiItem.Name, reference.Id, true), 3))
+                            .Text(md => md.Header(headingLink, resolvedOptions.StartingHeadingLevel + 1))
                             .EmptyLine();
-                        pluginResultData.UsedReferences.push(reference.Id);
                     } else {
-                        switch (apiItem.ApiKind) {
+                        switch (member.ApiItem.ApiKind) {
                             case Contracts.ApiItemKinds.Namespace:
                             case Contracts.ApiItemKinds.Class: {
-                                const renderedItem = options.GetItemPluginResult(reference);
+                                const renderedItem = pluginOptions.GetItemPluginResult(member.Reference);
                                 pluginResultData.Members.push({
-                                    Reference: reference,
+                                    Reference: member.Reference,
                                     PluginResult: renderedItem
                                 });
 
+                                const headingLink = MarkdownGenerator.Link(member.ToHeadingText(), member.Reference.Id, true);
                                 builder
-                                    .Text(md => md.Header(md.Link(renderedItem.ApiItem.Name, reference.Id, true), 3))
+                                    .Text(md => md.Header(headingLink, resolvedOptions.StartingHeadingLevel + 1))
                                     .EmptyLine()
-                                    .Text(GeneratorHelpers.RenderApiItemMetadata(renderedItem.ApiItem))
+                                    .Text(this.RenderApiItemMetadata(renderedItem.ApiItem))
                                     .EmptyLine();
-                                pluginResultData.UsedReferences.push(reference.Id);
+                                pluginResultData.UsedReferences.push(member.Reference.Id);
                                 break;
                             }
                             default: {
-                                const renderedItem = options.GetItemPluginResult(reference);
+                                const renderedItem = pluginOptions.GetItemPluginResult(member.Reference);
                                 builder
                                     .Text(renderedItem.Result)
                                     .EmptyLine();
@@ -102,7 +121,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                         }
                     }
 
-                    if ((References.indexOf(reference) + 1) !== References.length) {
+                    if ((MembersList.indexOf(member) + 1) !== MembersList.length && resolvedOptions.IncludeHr) {
                         builder
                             .HorizontalRule(undefined, 10)
                             .EmptyLine();
@@ -112,7 +131,6 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
         }
 
         pluginResultData.Result = builder.GetOutput();
-
         return pluginResultData;
     }
 }

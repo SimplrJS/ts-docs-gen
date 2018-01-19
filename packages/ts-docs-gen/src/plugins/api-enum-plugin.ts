@@ -4,29 +4,33 @@ import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
 import { GeneratorHelpers } from "../generator-helpers";
 import { SupportedApiItemKindType, PluginResult, PluginOptions } from "../contracts/plugin";
 import { BasePlugin } from "../abstractions/base-plugin";
+import { ApiEnum } from "../api-items/definitions/api-enum";
+import { ApiEnumMember } from "../api-items/definitions/api-enum-member";
 
 export class ApiEnumPlugin extends BasePlugin<Contracts.ApiEnumDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
         return [GeneratorHelpers.ApiItemKinds.Enum];
     }
 
-    public CheckApiItem(item: Contracts.ApiItemDto): boolean {
+    public CheckApiItem(item: Contracts.ApiEnumDto): boolean {
         return true;
     }
 
-    private renderEnumTable(members: Contracts.ApiEnumMemberDto[]): string[] {
+    private renderEnumTable(members: ApiEnumMember[]): string[] {
         // Table header.
         const header = ["Name", "Value", "Description"];
-        const content = members.map(x => [x.Name, x.Value, x.Metadata.DocumentationComment]);
+        const content = members.map(x => [x.Name, x.ApiItem.Value, x.ApiItem.Metadata.DocumentationComment]);
 
         return MarkdownGenerator.Table(header, content, { removeColumnIfEmpty: true });
     }
 
-    public Render(options: PluginOptions<Contracts.ApiEnumDto>): PluginResult {
-        const heading: string = options.Reference.Alias;
+    public Render(options: PluginOptions, apiItem: Contracts.ApiEnumDto): PluginResult {
+        const serializedApiItem = new ApiEnum(options.ExtractedData, apiItem, options.Reference);
+
+        const heading: string = serializedApiItem.ToHeadingText();
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: options.ApiItem,
+            ApiItem: apiItem,
             Reference: options.Reference,
             Headings: [
                 {
@@ -34,29 +38,19 @@ export class ApiEnumPlugin extends BasePlugin<Contracts.ApiEnumDto> {
                     ApiItemId: options.Reference.Id
                 }
             ],
-            UsedReferences: [ options.Reference.Id ]
+            UsedReferences: [options.Reference.Id]
         };
-
-        // Enum members
-        const enumMembers = GeneratorHelpers.GetApiItemsFromReference<Contracts.ApiEnumMemberDto>(
-            options.ExtractedData,
-            options.ApiItem.Members
-        );
 
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
+            .Text(this.RenderApiItemMetadata(apiItem))
             .EmptyLine()
-            .Code(GeneratorHelpers.ApiEnumToString(
-                options.ApiItem,
-                enumMembers,
-                options.Reference.Alias
-            ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
             .Bold("Members")
             .EmptyLine()
-            .Text(this.renderEnumTable(enumMembers))
+            .Text(this.renderEnumTable(serializedApiItem.EnumMembers))
             .GetOutput();
 
         return pluginResult;

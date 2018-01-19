@@ -1,10 +1,10 @@
 import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
-import * as path from "path";
 
 import { GeneratorHelpers } from "../generator-helpers";
 import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
 import { ContainerPlugin, ContainerMembersKindsGroup } from "../abstractions/container-plugin";
+import { ApiClass } from "../api-items/definitions/api-class";
 
 export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
     public SupportedApiItemKinds(): SupportedApiItemKindType[] {
@@ -34,33 +34,28 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
         }
     ];
 
-    public Render(options: PluginOptions<Contracts.ApiClassDto>): PluginResult {
-        const heading = path.basename(options.ApiItem.Name, path.extname(options.ApiItem.Name));
+    // TODO: Add TypeParameters render.
+    public Render(options: PluginOptions, apiItem: Contracts.ApiClassDto): PluginResult {
+        const serializedApiItem = new ApiClass(options.ExtractedData, apiItem, options.Reference);
+
+        const heading = serializedApiItem.ToHeadingText();
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: options.ApiItem,
+            ApiItem: apiItem,
             Reference: options.Reference,
             UsedReferences: [options.Reference.Id]
         };
-
-        // Resolve ApiItems from references.
-        const typeParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ExtractedData, options.ApiItem.TypeParameters);
 
         // Header
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 1)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
-            .Code(GeneratorHelpers.ClassToString(
-                options.ApiItem,
-                typeParameters,
-                options.Reference.Alias
-            ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Text(this.RenderApiItemMetadata(apiItem))
+            .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
         // ApiMembers
-        const membersResult = this.RenderMembersGroups(options, ApiClassPlugin.MemberKindsList);
+        const membersResult = this.RenderMemberGroups(options, ApiClassPlugin.MemberKindsList, serializedApiItem.Members);
 
         // Treat members' headings as members of class heading.
         const membersHeadings = membersResult.Headings;

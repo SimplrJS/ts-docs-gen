@@ -1,13 +1,15 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { BasePlugin } from "./base-plugin";
 import { PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
+import { ApiTypes } from "../api-items/api-type-list";
+import { ApiParameter } from "../api-items/definitions/api-parameter";
 
-export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends BasePlugin<TKind> {
+export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> extends BasePlugin<TKind> {
     // TODO: Escape string!
-    protected RenderParameters(extractedData: ExtractDto, parameters: Contracts.ApiParameterDto[]): PluginResultData | undefined {
+    protected RenderParameters(parameters: ApiParameter[]): PluginResultData | undefined {
         if (parameters.length === 0) {
             return undefined;
         }
@@ -16,12 +18,12 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         const header = ["Name", "Type", "Description"];
 
         const content = parameters.map(parameter => {
-            const parameterTypeDto = GeneratorHelpers.ApiTypeToString(extractedData, parameter.Type);
             GeneratorHelpers.MergePluginResultData(pluginResult, {
                 // UsedReferences: parameterTypeDto.References
             });
 
-            return [parameter.Name, parameterTypeDto, parameter.Metadata.DocumentationComment];
+            // TODO: Add Resolving simple metadata.
+            return [parameter.Name, parameter.Type.ToInlineText(), parameter.ApiItem.Metadata.DocumentationComment];
         });
 
         pluginResult.Result = new MarkdownBuilder()
@@ -34,19 +36,17 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         return pluginResult;
     }
 
-    protected RenderReturnType(extractedData: ExtractDto, type: Contracts.ApiType | undefined): PluginResultData | undefined {
+    protected RenderReturnType(type: ApiTypes | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-        const parsedReturnType = GeneratorHelpers.ApiTypeToString(extractedData, type);
-
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
             .Bold("Return type")
             .EmptyLine()
-            .Text(parsedReturnType)
+            .Text(type.ToInlineText())
             .GetOutput();
 
         // pluginResult.UsedReferences = parsedReturnType.References;

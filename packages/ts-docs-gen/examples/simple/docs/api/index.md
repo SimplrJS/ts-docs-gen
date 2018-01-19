@@ -1,12 +1,12 @@
 # Table of contents
 
-* [index][SourceFile-1]
+* [index.ts][SourceFile-1]
     * Interfaces
         * [Foo][InterfaceDeclaration-7]
     * Types
-        * [SelectedNumbers][TypeAliasDeclaration-4]
+        * [SelectedNumbers][TypeAliasDeclaration-5]
 
-# index
+# index.ts
 
 ## Interfaces
 
@@ -20,9 +20,9 @@ interface Foo {
 
 **Properties**
 
-| Name | Type   |
-| ---- | ------ |
-| A    | string |
+| Name | Type   | Optional |
+| ---- | ------ | -------- |
+| A    | string | false    |
 
 ## Types
 
@@ -32,8 +32,10 @@ interface Foo {
 type SelectedNumbers = Readonly<Foo>;
 ```
 
+**Type**
+
 Readonly<Foo>
 
-[SourceFile-1]: index.md#index
+[SourceFile-1]: index.md#indexts
 [InterfaceDeclaration-7]: index.md#foo
-[TypeAliasDeclaration-4]: index.md#selectednumbers
+[TypeAliasDeclaration-5]: index.md#selectednumbers
