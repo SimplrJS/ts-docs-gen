@@ -8,8 +8,8 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
     private constraintType: ApiTypes | undefined;
 
     public get ConstraintType(): ApiTypes | undefined {
-        if (this.constraintType == null && this.Data.ConstraintType != null) {
-            this.constraintType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ConstraintType);
+        if (this.constraintType == null && this.ApiItem.ConstraintType != null) {
+            this.constraintType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.ApiItem.ConstraintType);
         }
         return this.constraintType;
     }
@@ -17,19 +17,19 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
     private defaultType: ApiTypes | undefined;
 
     public get DefaultType(): ApiTypes | undefined {
-        if (this.defaultType == null && this.Data.DefaultType != null) {
-            this.defaultType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.DefaultType);
+        if (this.defaultType == null && this.ApiItem.DefaultType != null) {
+            this.defaultType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.ApiItem.DefaultType);
         }
         return this.defaultType;
     }
 
     public ToText(mapped?: boolean): string[] {
-        const name = this.Reference.Alias || this.Data.Name;
+        const name = this.Reference.Alias || this.Name;
 
         const constraintKeyword = mapped ? "in" : "extends";
 
         let constraintString: string;
-        if (this.Data.ConstraintType != null) {
+        if (this.ApiItem.ConstraintType != null) {
             const type = this.SerializedTypeToString(this.ConstraintType);
             constraintString = ` ${constraintKeyword} ${type}`;
         } else {
@@ -37,7 +37,7 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
         }
 
         let defaultTypeString: string;
-        if (this.Data.DefaultType != null) {
+        if (this.ApiItem.DefaultType != null) {
             const type = this.SerializedTypeToString(this.DefaultType);
             defaultTypeString = ` = ${type}`;
         } else {
@@ -48,6 +48,6 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
     }
 
     public ToHeadingText(): string {
-        return this.Data.Name;
+        return this.Name;
     }
 }

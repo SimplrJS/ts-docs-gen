@@ -49,7 +49,7 @@ export class ApiCallablePlugin extends FunctionLikePlugin<CallableApiItem> {
         };
 
         pluginResult.Result = new MarkdownBuilder()
-            .Code(serializedApiItem.ToText().join(" "), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Code(serializedApiItem.ToInlineText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
         // TypeParameters

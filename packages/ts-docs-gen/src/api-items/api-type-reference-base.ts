@@ -8,8 +8,8 @@ export abstract class ApiTypeReferenceBase<TKind extends Contracts.ApiReferenceB
     private referenceItem: ApiDefinitions | undefined;
 
     public get ReferenceItem(): ApiDefinitions | undefined {
-        if (this.referenceItem == null && this.Data.ReferenceId != null) {
-            this.referenceItem = this.GetSerializedApiDefinition(this.Data.ReferenceId);
+        if (this.referenceItem == null && this.ApiItem.ReferenceId != null) {
+            this.referenceItem = this.GetSerializedApiDefinition(this.ApiItem.ReferenceId);
         }
         return this.referenceItem;
     }
@@ -30,7 +30,7 @@ export abstract class ApiTypeReferenceBase<TKind extends Contracts.ApiReferenceB
         }
 
         const members = apiItem
-            .map(x => x.ToText().join(" "))
+            .map(x => x.ToInlineText())
             .join(", ");
 
         return `<${members}>`;

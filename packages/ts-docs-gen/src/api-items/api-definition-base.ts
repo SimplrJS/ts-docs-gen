@@ -18,6 +18,10 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
         super(extractedData, apiItem);
     }
 
+    public get Name(): string {
+        return this.Name;
+    }
+
     public get Reference(): ApiItemReference {
         return this.reference;
     }
@@ -25,8 +29,8 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
     private parentItem: ApiDefinitions | undefined;
 
     public get ParentItem(): ApiDefinitions | undefined {
-        if (this.Data.ParentId != null) {
-            const parentReference = { Alias: "", Id: this.Data.ParentId };
+        if (this.ApiItem.ParentId != null) {
+            const parentReference = { Alias: "", Id: this.ApiItem.ParentId };
             this.parentItem = this.GetSerializedApiDefinition(parentReference);
         }
 
@@ -69,7 +73,7 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
             return "???";
         }
 
-        return apiType.ToText().join(" ");
+        return apiType.ToInlineText();
     }
 
     public abstract ToText(): string[];

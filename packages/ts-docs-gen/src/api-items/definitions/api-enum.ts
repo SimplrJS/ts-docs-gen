@@ -11,7 +11,7 @@ export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
     public get EnumMembers(): ApiEnumMember[] {
         if (this.enumMembers == null) {
             this.enumMembers = GeneratorHelpers
-                .GetApiItemReferences(this.ExtractedData, this.Data.Members)
+                .GetApiItemReferences(this.ExtractedData, this.ApiItem.Members)
                 .map<[ApiItemReference, Contracts.ApiEnumMemberDto]>(reference =>
                     [reference, this.ExtractedData.Registry[reference.Id] as Contracts.ApiEnumMemberDto]
                 )
@@ -21,8 +21,8 @@ export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
     }
 
     public ToText(alias?: string): string[] {
-        const name = alias || this.Data.Name;
-        const $const = this.Data.IsConst ? "const " : "";
+        const name = alias || this.Name;
+        const $const = this.ApiItem.IsConst ? "const " : "";
 
         // Constructing enum body.
         const membersStrings = this.EnumMembers.map((memberItem, index, array) => {
@@ -45,6 +45,6 @@ export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Data.Name;
+        return this.Reference.Alias || this.Name;
     }
 }

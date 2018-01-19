@@ -9,6 +9,6 @@ export class ApiFunctionType extends ApiCallable<Contracts.ApiFunctionTypeDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Data.Name;
+        return this.Name;
     }
 }

@@ -3,8 +3,8 @@ import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
-import { SerializedApiType } from "../contracts/serialized-api-item";
 import { ApiTypeParameter } from "../api-items/definitions/api-type-parameter";
+import { ApiTypes } from "../api-items/api-type-list";
 
 export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> implements Plugin<TKind> {
     public abstract SupportedApiItemKinds(): SupportedApiItemKindType[];
@@ -71,7 +71,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
             // ConstraintType
             let constraintType: string;
             if (typeParameter.ConstraintType != null) {
-                constraintType = typeParameter.ConstraintType.ToText().join(" ");
+                constraintType = typeParameter.ConstraintType.ToInlineText();
                 GeneratorHelpers.MergePluginResultData(pluginResult, {
                     // FIXME: References.
                     // UsedReferences: constraintType.References
@@ -85,7 +85,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
             // DefaultType
             let defaultType: string;
             if (typeParameter.DefaultType != null) {
-                defaultType = typeParameter.DefaultType.ToText().join(" ");
+                defaultType = typeParameter.DefaultType.ToInlineText();
                 GeneratorHelpers.MergePluginResultData(pluginResult, {
                     // FIXME: References.
                     // UsedReferences: defaultType.References
@@ -97,7 +97,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
             }
 
             return [
-                typeParameter.Data.Name,
+                typeParameter.Name,
                 constraintType,
                 defaultType
             ];
@@ -113,13 +113,13 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         return pluginResult;
     }
 
-    protected RenderType(type: SerializedApiType | undefined): PluginResultData | undefined {
+    protected RenderType(type: ApiTypes | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
 
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        const parsedReturnType = type.ToText().join(" ");
+        const parsedReturnType = type.ToInlineText();
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
@@ -128,7 +128,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
             .Text(parsedReturnType)
             .GetOutput();
 
-        //FIXME: Reference
+        // FIXME: Reference
         // pluginResult.UsedReferences = parsedReturnType.References;
         return pluginResult;
     }

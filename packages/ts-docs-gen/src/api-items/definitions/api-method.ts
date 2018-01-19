@@ -3,9 +3,9 @@ import { ApiCallable } from "../api-callable";
 
 export class ApiMethod extends ApiCallable<Contracts.ApiMethodDto> {
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Data.Name;
+        const name = this.Reference.Alias || this.Name;
 
-        const optional = this.Data.IsOptional ? "?" : "";
+        const optional = this.ApiItem.IsOptional ? "?" : "";
 
         return [
             `${name}${this.CallableToString(`${optional}: `)};`
@@ -13,6 +13,6 @@ export class ApiMethod extends ApiCallable<Contracts.ApiMethodDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Data.Name;
+        return this.Reference.Alias || this.Name;
     }
 }

@@ -11,7 +11,7 @@ export abstract class ApiDefinitionWithType<TKind extends ApiBaseItemWithTypeDto
     constructor(extractedData: ExtractDto, apiItem: TKind, reference: ApiItemReference) {
         super(extractedData, apiItem, reference);
 
-        this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.Type);
+        this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.ApiItem.Type);
     }
 
     private type: ApiTypes;

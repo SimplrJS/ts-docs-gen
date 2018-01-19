@@ -3,11 +3,11 @@ import { ApiDefinitionBase } from "../api-definition-base";
 
 export class ApiEnumMember extends ApiDefinitionBase<Contracts.ApiEnumMemberDto> {
     public ToText(): string[] {
-        const name = this.Data.Name;
+        const name = this.Name;
 
         let value: string;
-        if (this.Data.Value !== "") {
-            value = ` = ${this.Data.Value}`;
+        if (this.ApiItem.Value !== "") {
+            value = ` = ${this.ApiItem.Value}`;
         } else {
             value = "";
         }
@@ -16,6 +16,6 @@ export class ApiEnumMember extends ApiDefinitionBase<Contracts.ApiEnumMemberDto>
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Data.Name;
+        return this.Reference.Alias || this.Name;
     }
 }

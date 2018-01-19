@@ -8,14 +8,14 @@ export class ApiTypeQuery extends ApiTypeReferenceBase<Contracts.TypeQueryType> 
     public ToText(): string[] {
         let name: string;
         if (this.ReferenceItem != null) {
-            name = this.ReferenceItem.Data.Name;
+            name = this.ReferenceItem.Name;
         } else {
             // TODO: Add Log for missing reference.
             name = "???";
         }
 
         return [
-            `${this.Data.Keyword} ${name}`
+            `${this.ApiItem.Keyword} ${name}`
         ];
     }
 }

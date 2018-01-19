@@ -3,7 +3,7 @@ import { ApiCallable } from "../api-callable";
 
 export class ApiFunction extends ApiCallable<Contracts.ApiFunctionDto> {
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Data.Name;
+        const name = this.Reference.Alias || this.Name;
 
         return [
             `function ${name}${this.CallableToString()}`
@@ -11,6 +11,6 @@ export class ApiFunction extends ApiCallable<Contracts.ApiFunctionDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Data.Name;
+        return this.Reference.Alias || this.Name;
     }
 }

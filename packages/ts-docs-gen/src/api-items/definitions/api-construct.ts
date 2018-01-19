@@ -9,6 +9,6 @@ export class ApiConstruct extends ApiCallable<Contracts.ApiConstructDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Data.Name;
+        return this.Reference.Alias || this.Name;
     }
 }

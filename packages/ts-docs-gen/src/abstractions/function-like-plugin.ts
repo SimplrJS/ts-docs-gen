@@ -23,7 +23,7 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
             });
 
             // TODO: Add Resolving simple metadata.
-            return [parameter.Data.Name, parameter.Type.ToText().join(" "), parameter.Data.Metadata.DocumentationComment];
+            return [parameter.Name, parameter.Type.ToInlineText(), parameter.ApiItem.Metadata.DocumentationComment];
         });
 
         pluginResult.Result = new MarkdownBuilder()
@@ -46,7 +46,7 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
             .EmptyLine()
             .Bold("Return type")
             .EmptyLine()
-            .Text(type.ToText().join(" "))
+            .Text(type.ToInlineText())
             .GetOutput();
 
         // pluginResult.UsedReferences = parsedReturnType.References;

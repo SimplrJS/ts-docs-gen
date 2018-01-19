@@ -6,8 +6,9 @@ import { ApiDefinitions } from "../api-items/api-definition-list";
 import { ApiTypes } from "../api-items/api-type-list";
 
 export interface SerializedApiItem<TKind> {
-    Data: TKind;
+    ApiItem: TKind;
     ToText(): string[];
+    ToInlineText(): string;
 }
 
 export interface SerializedApiDefinitionConstructor<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> {
@@ -16,6 +17,7 @@ export interface SerializedApiDefinitionConstructor<TKind extends Contracts.ApiB
 
 export interface SerializedApiDefinition<TKind extends Contracts.ApiBaseItemDto>
     extends SerializedApiItem<TKind> {
+    Name: string;
     ToText(): string[];
     ToHeadingText(): string;
 }

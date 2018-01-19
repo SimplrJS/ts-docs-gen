@@ -20,14 +20,12 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
 
     private resolveType(): Contracts.ApiType | undefined {
         let type: Contracts.ApiType | undefined;
-        if (this.Data.ApiKind === Contracts.ApiItemKinds.GetAccessor) {
+        if (this.ApiItem.ApiKind === Contracts.ApiItemKinds.GetAccessor) {
             // GetAccessor
-
-            type = this.Data.Type;
-        } else if (this.Data.Parameter != null) {
+            type = this.ApiItem.Type;
+        } else if (this.ApiItem.Parameter != null) {
             // SetAccessor
-
-            const apiParameter = this.ExtractedData.Registry[this.Data.Parameter.Ids[0]] as Contracts.ApiParameterDto;
+            const apiParameter = this.ExtractedData.Registry[this.ApiItem.Parameter.Ids[0]] as Contracts.ApiParameterDto;
             if (apiParameter != null) {
                 type = apiParameter.Type;
             }
@@ -37,22 +35,22 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
     }
 
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Data.Name;
-        const abstract = this.Data.IsAbstract ? " abstract" : "";
-        const $static = this.Data.IsStatic ? " static" : "";
+        const name = this.Reference.Alias || this.Name;
+        const $abstract = this.ApiItem.IsAbstract ? " abstract" : "";
+        const $static = this.ApiItem.IsStatic ? " static" : "";
 
         const typeString = this.SerializedTypeToString(this.Type);
         let accessorType: string;
-        if (this.Data.ApiKind === Contracts.ApiItemKinds.SetAccessor) {
+        if (this.ApiItem.ApiKind === Contracts.ApiItemKinds.SetAccessor) {
             accessorType = "set";
         } else {
             accessorType = "get";
         }
 
-        return [`${this.Data.AccessModifier}${$static}${abstract} ${accessorType} ${name}: ${typeString};`];
+        return [`${this.ApiItem.AccessModifier}${$static}${$abstract} ${accessorType} ${name}: ${typeString};`];
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Data.Name;
+        return this.Reference.Alias || this.Name;
     }
 }

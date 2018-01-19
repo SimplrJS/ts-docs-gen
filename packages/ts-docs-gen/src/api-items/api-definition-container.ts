@@ -11,7 +11,7 @@ export abstract class ApiDefinitionContainer<TKind extends ApiBaseItemContainerD
 
     public get Members(): ApiDefinitions[] {
         if (this.members == null) {
-            this.members = this.GetMembers(this.Data.Members);
+            this.members = this.GetMembers(this.ApiItem.Members);
         }
         return this.members;
     }

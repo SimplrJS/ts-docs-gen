@@ -37,7 +37,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
 
         for (const item of list) {
             // Filter item references by kind
-            const serializedApiItems = membersList.filter(x => item.Kinds.indexOf(x.Data.ApiKind) !== -1);
+            const serializedApiItems = membersList.filter(x => item.Kinds.indexOf(x.ApiItem.ApiKind) !== -1);
             // Remove references that was used
             membersList = membersList.filter(x => serializedApiItems.indexOf(x) === -1);
 
@@ -58,7 +58,6 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
         return result;
     }
 
-    // TODO: Remake options.
     protected RenderMemberGroups(
         pluginOptions: PluginOptions,
         list: ContainerMembersKindsGroup[],
@@ -90,7 +89,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                             .Text(md => md.Header(headingLink, resolvedOptions.StartingHeadingLevel + 1))
                             .EmptyLine();
                     } else {
-                        switch (member.Data.ApiKind) {
+                        switch (member.ApiItem.ApiKind) {
                             case Contracts.ApiItemKinds.Namespace:
                             case Contracts.ApiItemKinds.Class: {
                                 const renderedItem = pluginOptions.GetItemPluginResult(member.Reference);

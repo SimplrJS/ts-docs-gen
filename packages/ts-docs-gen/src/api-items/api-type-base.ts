@@ -16,6 +16,6 @@ export abstract class ApiTypeBase<TKind extends Contracts.ApiBaseType> extends B
             return "???";
         }
 
-        return apiType.ToText().join(" ");
+        return apiType.ToInlineText();
     }
 }

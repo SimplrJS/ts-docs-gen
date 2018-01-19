@@ -19,7 +19,7 @@ export class ApiEnumPlugin extends BasePlugin<Contracts.ApiEnumDto> {
     private renderEnumTable(members: ApiEnumMember[]): string[] {
         // Table header.
         const header = ["Name", "Value", "Description"];
-        const content = members.map(x => [x.Data.Name, x.Data.Value, x.Data.Metadata.DocumentationComment]);
+        const content = members.map(x => [x.Name, x.ApiItem.Value, x.ApiItem.Metadata.DocumentationComment]);
 
         return MarkdownGenerator.Table(header, content, { removeColumnIfEmpty: true });
     }

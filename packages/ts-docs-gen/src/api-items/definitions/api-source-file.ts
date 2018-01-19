@@ -8,6 +8,6 @@ export class ApiSourceFile extends ApiDefinitionContainer<Contracts.ApiSourceFil
     }
 
     public ToHeadingText(): string {
-        return this.Data.Name;
+        return this.Name;
     }
 }

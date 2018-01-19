@@ -54,7 +54,7 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
             //references.push(...typeDto.References);
             builder
                 .EmptyLine()
-                .Text(type.ToText().join(" "));
+                .Text(type.ToInlineText());
         }
 
         return {
@@ -66,7 +66,7 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
 
     private renderPropertyMembers(members: ApiDefinitions[]): PluginResultData | undefined {
         const properties: ApiProperty[] = members
-            .filter((x): x is ApiProperty => x.Data.ApiKind === Contracts.ApiItemKinds.Property);
+            .filter((x): x is ApiProperty => x.ApiItem.ApiKind === Contracts.ApiItemKinds.Property);
 
         if (properties.length === 0) {
             return undefined;
@@ -75,7 +75,7 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
 
         const headers = ["Name", "Type", "Optional"];
         const content = properties
-            .map(x => [x.Data.Name, x.Type.ToText().join(" "), String(x.Data.IsOptional)]);
+            .map(x => [x.Name, x.Type.ToInlineText(), String(x.ApiItem.IsOptional)]);
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()

@@ -10,7 +10,7 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
     public get TypeParameters(): ApiTypeParameter[] {
         if (this.typeParameters == null) {
             this.typeParameters = GeneratorHelpers
-                .GetApiItemReferences(this.ExtractedData, this.Data.TypeParameters)
+                .GetApiItemReferences(this.ExtractedData, this.ApiItem.TypeParameters)
                 .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
         }
         return this.typeParameters;
@@ -20,7 +20,7 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
 
     public get Extends(): ApiTypes[] {
         if (this.extends == null) {
-            this.extends = this.Data.Extends
+            this.extends = this.ApiItem.Extends
                 .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
                 .filter((x): x is ApiTypes => x != null);
         }
@@ -28,14 +28,14 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
     }
 
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Data.Name;
+        const name = this.Reference.Alias || this.Name;
 
         // TypeParameters
         const typeParameters: string = this.TypeParametersToString(this.TypeParameters);
 
         // Extends
         let extendsString: string;
-        if (this.Data.Extends != null && this.Data.Extends.length > 0) {
+        if (this.ApiItem.Extends != null && this.ApiItem.Extends.length > 0) {
             const typesList = this.Extends.map(x => this.SerializedTypeToString(x));
 
             extendsString = ` extends ${typesList.join(", ")}`;
@@ -54,6 +54,6 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
     }
 
     public ToHeadingText(alias?: string | undefined): string {
-        return this.Reference.Alias || this.Data.Name;
+        return this.Reference.Alias || this.Name;
     }
 }

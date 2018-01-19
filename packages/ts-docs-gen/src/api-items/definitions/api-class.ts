@@ -10,7 +10,7 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
     public get TypeParameters(): ApiTypeParameter[] {
         if (this.typeParameters == null) {
             this.typeParameters = GeneratorHelpers
-                .GetApiItemReferences(this.ExtractedData, this.Data.TypeParameters)
+                .GetApiItemReferences(this.ExtractedData, this.ApiItem.TypeParameters)
                 .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
         }
         return this.typeParameters;
@@ -26,7 +26,7 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
 
     public get Implements(): ApiTypes[] {
         if (this.implements == null) {
-            this.implements = this.Data.Implements
+            this.implements = this.ApiItem.Implements
                 .map(x => GeneratorHelpers.SerializeApiType(this.ExtractedData, x))
                 .filter((x): x is ApiTypes => x != null);
         }
@@ -34,10 +34,10 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
     }
 
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Data.Name;
+        const name = this.Reference.Alias || this.Name;
 
         // Abstract
-        const abstract = this.Data.IsAbstract ? "abstract " : "";
+        const $abstract = this.ApiItem.IsAbstract ? "abstract " : "";
 
         // TypeParameters
         const typeParameters: string = this.TypeParametersToString(this.TypeParameters);
@@ -45,7 +45,7 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
         // Extends
         let extendsString: string;
         if (this.Extends != null) {
-            extendsString = ` extends ${this.Extends.ToText().join(" ")}`;
+            extendsString = ` extends ${this.Extends.ToInlineText()}`;
         } else {
             extendsString = "";
         }
@@ -61,11 +61,11 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
         }
 
         return [
-            `${abstract}class ${name}${typeParameters}${extendsString}${implementsString}`
+            `${$abstract}class ${name}${typeParameters}${extendsString}${implementsString}`
         ];
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Data.Name;
+        return this.Reference.Alias || this.Name;
     }
 }

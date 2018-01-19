@@ -8,20 +8,20 @@ export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
     private typeParameter: ApiTypeParameter | undefined;
 
     public get TypeParameter(): ApiTypeParameter | undefined {
-        if (this.typeParameter == null && this.Data.TypeParameter != null) {
-            const apiItem = this.ExtractedData.Registry[this.Data.TypeParameter] as Contracts.ApiTypeParameterDto;
-            this.typeParameter = new ApiTypeParameter(this.ExtractedData, apiItem, { Alias: "", Id: this.Data.TypeParameter });
+        if (this.typeParameter == null && this.ApiItem.TypeParameter != null) {
+            const apiItem = this.ExtractedData.Registry[this.ApiItem.TypeParameter] as Contracts.ApiTypeParameterDto;
+            this.typeParameter = new ApiTypeParameter(this.ExtractedData, apiItem, { Alias: apiItem.Name, Id: this.ApiItem.TypeParameter });
         }
         return this.typeParameter;
     }
 
     public ToText(): string[] {
-        const readonly = this.Data.IsReadonly ? "readonly " : "";
-        const optional = this.Data.IsOptional ? "?" : "";
+        const readonly = this.ApiItem.IsReadonly ? "readonly " : "";
+        const optional = this.ApiItem.IsOptional ? "?" : "";
 
         let typeParameterString: string;
         if (this.TypeParameter != null) {
-            typeParameterString = this.TypeParameter.ToText().join(" ");
+            typeParameterString = this.TypeParameter.ToInlineText();
         } else {
             // TODO: Add logger for missing TypeParameter.
             typeParameterString = "???";
@@ -37,6 +37,6 @@ export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Data.Name;
+        return this.Reference.Alias || this.Name;
     }
 }

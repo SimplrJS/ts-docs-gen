@@ -1,4 +1,4 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { ApiTypeBase } from "../api-type-base";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { SerializedApiType } from "../../contracts/serialized-api-item";
@@ -7,21 +7,21 @@ import { SerializedApiType } from "../../contracts/serialized-api-item";
  * Example: `Foo[T]`
  */
 export class ApiIndexedAccess extends ApiTypeBase<Contracts.IndexedAccessType> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.IndexedAccessType) {
-        super(extractedData, apiItem);
+    private objectType: SerializedApiType;
 
-        this.objectType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ObjectType);
-        this.indexType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.IndexType);
-    }
-
-    private objectType: SerializedApiType | undefined;
-    private indexType: SerializedApiType | undefined;
-
-    public get ObjectType(): SerializedApiType | undefined {
+    public get ObjectType(): SerializedApiType {
+        if (this.objectType == null) {
+            this.objectType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.ApiItem.ObjectType);
+        }
         return this.objectType;
     }
 
-    public get IndexType(): SerializedApiType | undefined {
+    private indexType: SerializedApiType;
+
+    public get IndexType(): SerializedApiType {
+        if (this.indexType == null) {
+            this.indexType = GeneratorHelpers.SerializeApiType(this.ExtractedData, this.ApiItem.IndexType);
+        }
         return this.indexType;
     }
 

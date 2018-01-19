@@ -1,20 +1,19 @@
-import { Contracts, ExtractDto } from "ts-extractor";
+import { Contracts } from "ts-extractor";
 import { ApiTypeReferenceBase } from "../api-type-reference-base";
 import { ApiTypes } from "../api-type-list";
 
 /**
- * Example: `Foo` or `Foo<string>`.
+ * Examples:
+ * - `Foo`
+ * - `Foo<string>`
  */
 export class ApiTypeReference extends ApiTypeReferenceBase<Contracts.ApiReferenceType> {
-    constructor(extractedData: ExtractDto, apiItem: Contracts.ApiReferenceType) {
-        super(extractedData, apiItem);
-
-        this.typeParameters = this.GetTypeParameters(this.Data.TypeParameters);
-    }
-
     private typeParameters: ApiTypes[] | undefined;
 
     public get TypeParameters(): ApiTypes[] | undefined {
+        if (this.typeParameters == null && this.ApiItem.TypeParameters != null) {
+            this.typeParameters = this.GetTypeParameters(this.ApiItem.TypeParameters);
+        }
         return this.typeParameters;
     }
 
@@ -22,7 +21,7 @@ export class ApiTypeReference extends ApiTypeReferenceBase<Contracts.ApiReferenc
         const typeParameters = this.TypeParametersToString(this.typeParameters);
 
         return [
-            `${this.Data.SymbolName}${typeParameters}`
+            `${this.ApiItem.SymbolName}${typeParameters}`
         ];
     }
 }

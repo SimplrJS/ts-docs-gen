@@ -10,14 +10,14 @@ export class ApiTypeAlias extends ApiDefinitionWithType<Contracts.ApiTypeAliasDt
     public get TypeParameters(): ApiTypeParameter[] {
         if (this.typeParameters == null) {
             this.typeParameters = GeneratorHelpers
-                .GetApiItemReferences(this.ExtractedData, this.Data.TypeParameters)
+                .GetApiItemReferences(this.ExtractedData, this.ApiItem.TypeParameters)
                 .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
         }
         return this.typeParameters;
     }
 
     public ToText(): string[] {
-        const name = this.Reference.Alias || this.Data.Name;
+        const name = this.Reference.Alias || this.Name;
         const type = this.Type.ToText().join("\n");
         const typeParameters = this.TypeParametersToString(this.TypeParameters);
 
@@ -27,6 +27,6 @@ export class ApiTypeAlias extends ApiDefinitionWithType<Contracts.ApiTypeAliasDt
     }
 
     public ToHeadingText(): string {
-        return this.Reference.Alias || this.Data.Name;
+        return this.Reference.Alias || this.Name;
     }
 }

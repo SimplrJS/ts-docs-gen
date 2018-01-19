@@ -27,8 +27,8 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
             .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
             .UnorderedList([
-                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Data.Name)} - ${parameter.Type.ToText().join(" ")}`,
-                `${md.Italic("Type")} ${type.ToText().join(" ")}`
+                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Name)} - ${parameter.Type.ToInlineText()}`,
+                `${md.Italic("Type")} ${type.ToInlineText()}`
             ])
             .GetOutput();
 

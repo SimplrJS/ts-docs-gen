@@ -9,6 +9,6 @@ export class ApiCall extends ApiCallable<Contracts.ApiCallDto> {
     }
 
     public ToHeadingText(): string {
-        return this.Data.Name;
+        return this.Name;
     }
 }

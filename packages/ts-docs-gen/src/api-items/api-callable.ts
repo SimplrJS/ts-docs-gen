@@ -15,7 +15,7 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
     public get Parameters(): ApiParameter[] {
         if (this.parameters == null) {
             this.parameters = GeneratorHelpers
-                .GetApiItemReferences(this.ExtractedData, this.Data.Parameters)
+                .GetApiItemReferences(this.ExtractedData, this.ApiItem.Parameters)
                 .map(x => this.GetSerializedApiDefinition(x))
                 .filter((x): x is ApiParameter => x != null);
         }
@@ -27,7 +27,7 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
     public get TypeParameters(): ApiTypeParameter[] {
         if (this.typeParameters == null) {
             this.typeParameters = GeneratorHelpers
-                .GetApiItemReferences(this.ExtractedData, this.Data.TypeParameters)
+                .GetApiItemReferences(this.ExtractedData, this.ApiItem.TypeParameters)
                 .map(x => this.GetSerializedApiDefinition(x) as ApiTypeParameter);
         }
 
@@ -37,8 +37,8 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
     private returnType: ApiTypes | undefined;
 
     public get ReturnType(): ApiTypes | undefined {
-        if (this.returnType == null && this.Data.ReturnType != null) {
-            return GeneratorHelpers.SerializeApiType(this.ExtractedData, this.Data.ReturnType);
+        if (this.returnType == null && this.ApiItem.ReturnType != null) {
+            return GeneratorHelpers.SerializeApiType(this.ExtractedData, this.ApiItem.ReturnType);
         }
 
         return this.returnType;

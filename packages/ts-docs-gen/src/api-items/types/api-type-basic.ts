@@ -7,7 +7,7 @@ import { ApiTypeBase } from "../api-type-base";
 export class ApiTypeBasic extends ApiTypeBase<Contracts.ApiBasicType> {
     public ToText(): string[] {
         return [
-            this.Data.Text
+            this.ApiItem.Text
         ];
     }
 }

@@ -36,7 +36,7 @@ export class ApiVariablePlugin extends BasePlugin<Contracts.ApiVariableDto> {
             .EmptyLine()
             .Bold("Type")
             .EmptyLine()
-            .Text(serializedApiItem.ToText().join(" "))
+            .Text(serializedApiItem.ToInlineText())
             .GetOutput();
 
         return pluginResult;
