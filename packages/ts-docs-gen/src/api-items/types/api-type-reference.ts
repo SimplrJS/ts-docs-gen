@@ -20,8 +20,15 @@ export class ApiTypeReference extends ApiTypeReferenceBase<Contracts.ApiReferenc
     public ToText(): string[] {
         const typeParameters = this.TypeParametersToString(this.TypeParameters);
 
+        let name: string;
+        if (this.ReferenceItem != null) {
+            name = this.ReferenceItem.Name;
+        } else {
+            name = this.ApiItem.SymbolName || this.ApiItem.Text;
+        }
+
         return [
-            `${this.ApiItem.SymbolName}${typeParameters}`
+            `${name}${typeParameters}`
         ];
     }
 }
