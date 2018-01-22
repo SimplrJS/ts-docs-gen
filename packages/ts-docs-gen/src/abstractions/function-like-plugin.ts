@@ -1,4 +1,4 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { BasePlugin } from "./base-plugin";
@@ -9,7 +9,7 @@ import { ApiParameter } from "../api-items/definitions/api-parameter";
 
 export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> extends BasePlugin<TKind> {
     // TODO: Escape string!
-    protected RenderParameters(parameters: ApiParameter[]): PluginResultData | undefined {
+    protected RenderParameters(extractedData: ExtractDto, parameters: ApiParameter[]): PluginResultData | undefined {
         if (parameters.length === 0) {
             return undefined;
         }
@@ -18,7 +18,8 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
         const header = ["Name", "Type", "Description"];
 
         const content = parameters.map(parameter => {
-            const type = parameter.Type.ToInlineText(this.RenderReferences(pluginResult.UsedReferences));
+            const type = parameter.Type
+                .ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences));
 
             // TODO: Add Resolving simple metadata.
             return [
@@ -38,7 +39,7 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
         return pluginResult;
     }
 
-    protected RenderReturnType(type: ApiTypes | undefined): PluginResultData | undefined {
+    protected RenderReturnType(extractedData: ExtractDto, type: ApiTypes | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
@@ -48,7 +49,7 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
             .EmptyLine()
             .Bold("Return type")
             .EmptyLine()
-            .Text(type.ToInlineText(this.RenderReferences(pluginResult.UsedReferences)))
+            .Text(type.ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences)))
             .GetOutput();
 
         return pluginResult;

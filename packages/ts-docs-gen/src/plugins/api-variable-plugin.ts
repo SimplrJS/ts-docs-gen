@@ -36,7 +36,7 @@ export class ApiVariablePlugin extends BasePlugin<Contracts.ApiVariableDto> {
             .GetOutput();
 
         // Type
-        const typeResult = this.RenderType(serializedApiItem.Type);
+        const typeResult = this.RenderType(options.ExtractedData, serializedApiItem.Type);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;

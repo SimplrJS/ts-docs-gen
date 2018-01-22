@@ -37,11 +37,11 @@ export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeAliasDto> {
             .GetOutput();
 
         // TypeParameters
-        const typeParametersResult = this.RenderTypeParameters(serializedApiItem.TypeParameters);
+        const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, serializedApiItem.TypeParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
         // Type
-        const typeResult = this.RenderType(serializedApiItem.Type);
+        const typeResult = this.RenderType(options.ExtractedData, serializedApiItem.Type);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;

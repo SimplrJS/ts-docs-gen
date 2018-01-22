@@ -23,8 +23,10 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
         const parameter = serializedApiItem.Parameter;
 
         // Types
-        const parameterTypeString = parameter.Type.ToInlineText(this.RenderReferences(pluginResult.UsedReferences));
-        const typeString = serializedApiItem.Type.ToInlineText(this.RenderReferences(pluginResult.UsedReferences));
+        const parameterTypeString = parameter.Type
+            .ToInlineText(this.RenderReferences(options.ExtractedData, pluginResult.UsedReferences));
+        const typeString = serializedApiItem.Type
+            .ToInlineText(this.RenderReferences(options.ExtractedData, pluginResult.UsedReferences));
 
         pluginResult.Result = new MarkdownBuilder()
             .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)

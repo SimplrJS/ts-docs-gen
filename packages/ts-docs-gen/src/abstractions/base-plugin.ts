@@ -1,4 +1,4 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
 
 import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginResultData } from "../contracts/plugin";
@@ -60,7 +60,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
     }
 
     // TODO: Escape string!
-    protected RenderTypeParameters(typeParameters: ApiTypeParameter[]): PluginResultData | undefined {
+    protected RenderTypeParameters(extractedData: ExtractDto, typeParameters: ApiTypeParameter[]): PluginResultData | undefined {
         if (typeParameters.length === 0) {
             return undefined;
         }
@@ -72,7 +72,8 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
             // ConstraintType
             let constraintType: string;
             if (typeParameter.ConstraintType != null) {
-                constraintType = typeParameter.ConstraintType.ToInlineText(this.RenderReferences(pluginResult.UsedReferences));
+                constraintType = typeParameter.ConstraintType
+                    .ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences));
             } else {
                 constraintType = "";
             }
@@ -80,7 +81,8 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
             // DefaultType
             let defaultType: string;
             if (typeParameter.DefaultType != null) {
-                defaultType = typeParameter.DefaultType.ToInlineText(this.RenderReferences(pluginResult.UsedReferences));
+                defaultType = typeParameter.DefaultType
+                    .ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences));
             } else {
                 defaultType = "";
             }
@@ -102,13 +104,13 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         return pluginResult;
     }
 
-    protected RenderType(type: ApiTypes | undefined): PluginResultData | undefined {
+    protected RenderType(extractedData: ExtractDto, type: ApiTypes | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
 
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        const parsedReturnType = type.ToInlineText(this.RenderReferences(pluginResult.UsedReferences));
+        const parsedReturnType = type.ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences));
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
@@ -124,9 +126,13 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
      * Default reference rending with markdown links.
      * @param usedReferences populates given array with used references.
      */
-    protected RenderReferences(usedReferences: string[]): ReferenceRenderHandler {
+    protected RenderReferences(extractedData: ExtractDto, usedReferences: string[]): ReferenceRenderHandler {
         return (name, reference) => {
             if (reference == null) {
+                return name;
+            }
+            const apiItem = extractedData.Registry[reference];
+            if (apiItem.ApiKind === Contracts.ApiItemKinds.TypeParameter) {
                 return name;
             }
 

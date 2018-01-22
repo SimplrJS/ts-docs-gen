@@ -1,4 +1,4 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import {
@@ -38,7 +38,7 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
         }
     ];
 
-    private renderConstraintTypes(extendsItems: ApiTypes[]): PluginResultData | undefined {
+    private renderConstraintTypes(extractedData: ExtractDto, extendsItems: ApiTypes[]): PluginResultData | undefined {
         if (extendsItems.length === 0) {
             return undefined;
         }
@@ -50,11 +50,9 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
         const references: string[] = [];
 
         for (const type of extendsItems) {
-            // FIXME:
-            //references.push(...typeDto.References);
             builder
                 .EmptyLine()
-                .Text(type.ToInlineText(this.RenderReferences(references)));
+                .Text(type.ToInlineText(this.RenderReferences(extractedData, references)));
         }
 
         return {
@@ -64,7 +62,7 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
         };
     }
 
-    private renderPropertyMembers(members: ApiDefinitions[]): PluginResultData | undefined {
+    private renderPropertyMembers(extractedData: ExtractDto, members: ApiDefinitions[]): PluginResultData | undefined {
         const properties: ApiProperty[] = members
             .filter((x): x is ApiProperty => x.ApiItem.ApiKind === Contracts.ApiItemKinds.Property);
 
@@ -77,7 +75,7 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
         const content = properties
             .map(x => [
                 x.Name,
-                x.Type.ToInlineText(this.RenderReferences(pluginResult.UsedReferences)),
+                x.Type.ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences)),
                 String(x.ApiItem.IsOptional)
             ]);
 
@@ -116,11 +114,11 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
             .GetOutput();
 
         // Type parameters
-        const typeParametersResult = this.RenderTypeParameters(serializedApiItem.TypeParameters);
+        const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, serializedApiItem.TypeParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
         // Constraint types
-        const constraintTypesResult = this.renderConstraintTypes(serializedApiItem.Extends);
+        const constraintTypesResult = this.renderConstraintTypes(options.ExtractedData, serializedApiItem.Extends);
         GeneratorHelpers.MergePluginResultData(pluginResult, constraintTypesResult);
 
         // Members
@@ -137,7 +135,7 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
         GeneratorHelpers.MergePluginResultData(pluginResult, membersResult);
 
         // Property items
-        const propertyMembersResult = this.renderPropertyMembers(serializedApiItem.Members);
+        const propertyMembersResult = this.renderPropertyMembers(options.ExtractedData, serializedApiItem.Members);
         GeneratorHelpers.MergePluginResultData(pluginResult, propertyMembersResult);
 
         return pluginResult;
