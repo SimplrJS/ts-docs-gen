@@ -29,7 +29,7 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
     }
 
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = this.Name;
+        const name = render(this.Name, this.Reference.Id);
 
         // TypeParameters
         const typeParameters: string = this.TypeParametersToString(render, this.TypeParameters);

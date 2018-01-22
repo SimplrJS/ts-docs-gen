@@ -22,6 +22,7 @@ export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
     }
 
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
+        const name = render(this.Name, this.Reference.Id);
         const $const = this.ApiItem.IsConst ? "const " : "";
 
         // Constructing enum body.
@@ -38,7 +39,7 @@ export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
 
         // Construct enum code output
         return [
-            `${$const}enum ${this.Name} {`,
+            `${$const}enum ${name} {`,
             ...membersStrings,
             "}"
         ];

@@ -22,7 +22,7 @@ export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
 
         let typeParameterString: string;
         if (this.TypeParameter != null) {
-            typeParameterString = this.TypeParameter.ToInlineText();
+            typeParameterString = this.TypeParameter.ToInlineText(render);
         } else {
             // TODO: Add logger for missing TypeParameter.
             typeParameterString = "???";

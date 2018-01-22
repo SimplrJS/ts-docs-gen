@@ -5,7 +5,7 @@ import { ApiItemReference } from "./api-item-reference";
 import { ApiDefinitions } from "../api-items/api-definition-list";
 import { ApiTypes } from "../api-items/api-type-list";
 
-export type ReferenceRenderHandler = (name: string, reference: ApiItemReference) => string;
+export type ReferenceRenderHandler = (name: string, referenceId?: string) => string;
 
 export interface SerializedApiItem<TKind> {
     ApiItem: TKind;

@@ -4,7 +4,7 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiEnumMember extends ApiDefinitionBase<Contracts.ApiEnumMemberDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = this.Name;
+        const name = render(this.Name, this.Reference.Id);
 
         let value: string;
         if (this.ApiItem.Value !== "") {

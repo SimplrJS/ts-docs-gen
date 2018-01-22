@@ -36,7 +36,7 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
     }
 
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = this.Name;
+        const name = render(this.Name, this.Reference.Id);
         const $abstract = this.ApiItem.IsAbstract ? " abstract" : "";
         const $static = this.ApiItem.IsStatic ? " static" : "";
 

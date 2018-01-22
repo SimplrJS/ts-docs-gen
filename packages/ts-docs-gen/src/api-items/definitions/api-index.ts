@@ -19,7 +19,7 @@ export class ApiIndex extends ApiDefinitionWithType<Contracts.ApiIndexDto> {
         const readonly: string = this.ApiItem.IsReadonly ? "readonly " : "";
         const type: string = this.SerializedTypeToString(render, this.Type);
 
-        return [`${readonly}[${this.Parameter.ToInlineText()}]: ${type}`];
+        return [`${readonly}[${this.Parameter.ToInlineText(render)}]: ${type}`];
     }
 
     public ToHeadingText(): string {

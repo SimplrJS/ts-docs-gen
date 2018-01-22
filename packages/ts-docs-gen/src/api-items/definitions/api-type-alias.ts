@@ -18,7 +18,7 @@ export class ApiTypeAlias extends ApiDefinitionWithType<Contracts.ApiTypeAliasDt
     }
 
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = this.Name;
+        const name = render(this.Name, this.Reference.Id);
         const type = this.Type.ToText().join("\n");
         const typeParameters = this.TypeParametersToString(render, this.TypeParameters);
 
