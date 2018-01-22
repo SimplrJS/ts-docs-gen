@@ -1,12 +1,11 @@
 import { Contracts } from "ts-extractor";
 import { ApiCallable } from "../api-callable";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiFunction extends ApiCallable<Contracts.ApiFunctionDto> {
-    public ToText(): string[] {
-        const name = this.Name;
-
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         return [
-            `function ${name}${this.CallableToString()}`
+            `function ${this.Name}${this.CallableToString(render)};`
         ];
     }
 

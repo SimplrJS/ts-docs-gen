@@ -42,7 +42,7 @@ export class ApiClassAccessorPlugin extends BasePlugin<Kind> {
             .GetOutput();
 
         // Type
-        const typeResult = this.RenderType(serializedApiItem.Type);
+        const typeResult = this.RenderType(options.ExtractedData, serializedApiItem.Type);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;

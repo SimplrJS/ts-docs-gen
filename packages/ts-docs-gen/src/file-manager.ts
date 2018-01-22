@@ -1,4 +1,4 @@
-import { Contracts, ExtractedApiRegistry } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import * as path from "path";
 
@@ -13,7 +13,7 @@ import { ApiNamespacePlugin } from "./plugins/api-namespace-plugin";
 
 // TODO: remove unused files before generating docs.
 export class FileManager {
-    constructor(private registry: ExtractedApiRegistry) { }
+    constructor(private extractedData: ExtractDto) { }
 
     /**
      * <FileLocation, RenderedItems>
@@ -59,7 +59,8 @@ export class FileManager {
 
             memberKindsList.forEach(memberKindGroup => {
                 // Filtering headings by kind group.
-                const membersOfKind = headingMembers.filter(x => memberKindGroup.Kinds.indexOf(this.registry[x.ApiItemId].ApiKind) !== -1);
+                const membersOfKind = headingMembers
+                    .filter(x => memberKindGroup.Kinds.indexOf(this.extractedData.Registry[x.ApiItemId].ApiKind) !== -1);
 
                 if (membersOfKind.length === 0) {
                     return [];
@@ -104,6 +105,18 @@ export class FileManager {
         }
     }
 
+    private resolveReferenceFile(referenceId: string): string | undefined {
+        const apiItem = this.extractedData.Registry[referenceId];
+        const serializedApiItem = GeneratorHelpers
+            .SerializeApiDefinition(this.extractedData, apiItem, { Alias: apiItem.Name, Id: referenceId });
+
+        if (!this.referenceToFile.has(referenceId) && serializedApiItem.ParentItem != null) {
+            return this.resolveReferenceFile(serializedApiItem.ParentItem.Reference.Id);
+        }
+
+        return this.referenceToFile.get(referenceId);
+    }
+
     public AddItem(itemResult: PluginResult<ApiContainer>, filePath: string): void {
         if (this.filesList.get(filePath) == null) {
             this.filesList.set(filePath, itemResult);
@@ -140,7 +153,7 @@ export class FileManager {
                 .forEach(referenceId => {
                     const filePath = path.dirname(fileLocation);
 
-                    const referenceString = this.referenceToFile.get(referenceId);
+                    const referenceString = this.resolveReferenceFile(referenceId);
                     const resolvePath = GeneratorHelpers.StandardisePath(path.relative(filePath, referenceString || "#__error"));
 
                     linkDefinitions.push(

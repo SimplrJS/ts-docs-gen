@@ -4,6 +4,7 @@ import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiEnumMember } from "./api-enum-member";
 import { ApiDefinitionBase } from "../api-definition-base";
 import { ApiItemReference } from "../../contracts/api-item-reference";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
     private enumMembers: ApiEnumMember[];
@@ -20,8 +21,7 @@ export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
         return this.enumMembers;
     }
 
-    public ToText(alias?: string): string[] {
-        const name = alias || this.Name;
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const $const = this.ApiItem.IsConst ? "const " : "";
 
         // Constructing enum body.
@@ -38,7 +38,7 @@ export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
 
         // Construct enum code output
         return [
-            `${$const}enum ${name} {`,
+            `${$const}enum ${this.Name} {`,
             ...membersStrings,
             "}"
         ];

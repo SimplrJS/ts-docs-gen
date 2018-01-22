@@ -1,14 +1,13 @@
 import { Contracts } from "ts-extractor";
 import { ApiCallable } from "../api-callable";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiMethod extends ApiCallable<Contracts.ApiMethodDto> {
-    public ToText(): string[] {
-        const name = this.Name;
-
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const optional = this.ApiItem.IsOptional ? "?" : "";
 
         return [
-            `${name}${this.CallableToString(`${optional}: `)};`
+            `${this.Name}${this.CallableToString(render, `${optional}: `)};`
         ];
     }
 

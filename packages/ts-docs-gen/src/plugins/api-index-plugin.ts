@@ -21,14 +21,19 @@ export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
         };
 
         const parameter = serializedApiItem.Parameter;
-        const type = serializedApiItem.Type;
+
+        // Types
+        const parameterTypeString = parameter.Type
+            .ToInlineText(this.RenderReferences(options.ExtractedData, pluginResult.UsedReferences));
+        const typeString = serializedApiItem.Type
+            .ToInlineText(this.RenderReferences(options.ExtractedData, pluginResult.UsedReferences));
 
         pluginResult.Result = new MarkdownBuilder()
             .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .EmptyLine()
             .UnorderedList([
-                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Name)} - ${parameter.Type.ToInlineText()}`,
-                `${md.Italic("Type")} ${type.ToInlineText()}`
+                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Name)} - ${parameterTypeString}`,
+                `${md.Italic("Type")} ${typeString}`
             ])
             .GetOutput();
 

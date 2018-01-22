@@ -2,7 +2,7 @@ import { Contracts, ExtractDto } from "ts-extractor";
 
 import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
-import { SerializedApiDefinition } from "../contracts/serialized-api-item";
+import { SerializedApiDefinition, ReferenceRenderHandler } from "../contracts/serialized-api-item";
 import { Helpers } from "../utils/helpers";
 import { ApiItemReference } from "../contracts/api-item-reference";
 import { ApiDefinitions } from "./api-definition-list";
@@ -42,13 +42,13 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
         return GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, apiItem, reference);
     }
 
-    protected TypeParametersToString(apiTypeParameters: ApiDefinitionBase[]): string {
+    protected TypeParametersToString(render: ReferenceRenderHandler, apiTypeParameters: ApiDefinitionBase[]): string {
         if (apiTypeParameters.length === 0) {
             return "";
         }
 
         const members = apiTypeParameters
-            .map(x => x.ToInlineText())
+            .map(x => x.ToInlineText(render))
             .join(", ");
 
         return `<${members}>`;
@@ -61,21 +61,21 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
             .map(([reference, apiItem]) => GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, apiItem, reference));
     }
 
-    protected MembersToText(members: ApiDefinitions[], tab: number = 0): string[] {
+    protected MembersToText(render: ReferenceRenderHandler, members: ApiDefinitions[], tab: number = 0): string[] {
         return Helpers.Flatten(
-            members.map(x => x.ToText().map(y => `${GeneratorHelpers.Tab(tab)}${y}`))
+            members.map(x => x.ToText(render).map(y => `${GeneratorHelpers.Tab(tab)}${y}`))
         );
     }
 
-    protected SerializedTypeToString(apiType: ApiTypes | undefined): string {
+    protected SerializedTypeToString(render: ReferenceRenderHandler, apiType: ApiTypes | undefined): string {
         if (apiType == null) {
             // TODO: Add Log for missing type.
             return "???";
         }
 
-        return apiType.ToInlineText();
+        return apiType.ToInlineText(render);
     }
 
-    public abstract ToText(): string[];
+    public abstract ToText(render?: ReferenceRenderHandler): string[];
     public abstract ToHeadingText(): string;
 }

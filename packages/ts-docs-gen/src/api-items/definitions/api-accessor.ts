@@ -2,6 +2,7 @@ import { Contracts } from "ts-extractor";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiDefinitionBase } from "../api-definition-base";
 import { ApiTypes } from "../api-type-list";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export type ApiAccessorKinds = Contracts.ApiGetAccessorDto | Contracts.ApiSetAccessorDto;
 
@@ -9,7 +10,7 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
     private type: ApiTypes | undefined;
 
     public get Type(): ApiTypes | undefined {
-        if (this.type != null) {
+        if (this.type == null) {
             const resolvedType = this.resolveType();
             if (resolvedType != null) {
                 this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, resolvedType);
@@ -34,12 +35,11 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
         return type;
     }
 
-    public ToText(): string[] {
-        const name = this.Name;
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const $abstract = this.ApiItem.IsAbstract ? " abstract" : "";
         const $static = this.ApiItem.IsStatic ? " static" : "";
 
-        const typeString = this.SerializedTypeToString(this.Type);
+        const typeString = this.SerializedTypeToString(render, this.Type);
         let accessorType: string;
         if (this.ApiItem.ApiKind === Contracts.ApiItemKinds.SetAccessor) {
             accessorType = "set";
@@ -47,7 +47,7 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
             accessorType = "get";
         }
 
-        return [`${this.ApiItem.AccessModifier}${$static}${$abstract} ${accessorType} ${name}: ${typeString};`];
+        return [`${this.ApiItem.AccessModifier}${$static}${$abstract} ${accessorType} ${this.Name}: ${typeString};`];
     }
 
     public ToHeadingText(): string {

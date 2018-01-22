@@ -1,6 +1,7 @@
 import { Contracts } from "ts-extractor";
 import { ApiTypeReferenceBase } from "../api-type-reference-base";
 import { ApiTypes } from "../api-type-list";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 /**
  * Examples:
@@ -17,9 +18,10 @@ export class ApiTypeReference extends ApiTypeReferenceBase<Contracts.ApiReferenc
         return this.typeParameters;
     }
 
-    public ToText(): string[] {
-        const typeParameters = this.TypeParametersToString(this.TypeParameters);
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
+        const typeParameters = this.TypeParametersToString(render, this.TypeParameters);
 
+        // Resolve name
         let name: string;
         if (this.ReferenceItem != null) {
             name = this.ReferenceItem.Name;
@@ -27,8 +29,11 @@ export class ApiTypeReference extends ApiTypeReferenceBase<Contracts.ApiReferenc
             name = this.ApiItem.SymbolName || this.ApiItem.Text;
         }
 
+        // Rendered reference
+        const renederedName = render(name, this.ApiItem.ReferenceId);
+
         return [
-            `${name}${typeParameters}`
+            `${renederedName}${typeParameters}`
         ];
     }
 }

@@ -3,6 +3,7 @@ import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiDefinitionContainer } from "../api-definition-container";
 import { ApiTypes } from "../api-type-list";
 import { ApiTypeParameter } from "./api-type-parameter";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceDto> {
     private typeParameters: ApiTypeParameter[];
@@ -27,16 +28,14 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
         return this.extends;
     }
 
-    public ToText(): string[] {
-        const name = this.Name;
-
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         // TypeParameters
-        const typeParameters: string = this.TypeParametersToString(this.TypeParameters);
+        const typeParameters: string = this.TypeParametersToString(render, this.TypeParameters);
 
         // Extends
         let extendsString: string;
         if (this.ApiItem.Extends != null && this.ApiItem.Extends.length > 0) {
-            const typesList = this.Extends.map(x => this.SerializedTypeToString(x));
+            const typesList = this.Extends.map(x => this.SerializedTypeToString(render, x));
 
             extendsString = ` extends ${typesList.join(", ")}`;
         } else {
@@ -44,10 +43,10 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
         }
 
         // Members
-        const members = this.MembersToText(this.Members, 1);
+        const members = this.MembersToText(render, this.Members, 1);
 
         return [
-            `interface ${name}${typeParameters}${extendsString} {`,
+            `interface ${this.Name}${typeParameters}${extendsString} {`,
             ...members,
             `}`
         ];

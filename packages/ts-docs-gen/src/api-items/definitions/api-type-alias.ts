@@ -3,6 +3,7 @@ import { Contracts } from "ts-extractor";
 import { ApiDefinitionWithType } from "../api-definition-with-type";
 import { ApiTypeParameter } from "./api-type-parameter";
 import { GeneratorHelpers } from "../../generator-helpers";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiTypeAlias extends ApiDefinitionWithType<Contracts.ApiTypeAliasDto> {
     private typeParameters: ApiTypeParameter[];
@@ -16,13 +17,12 @@ export class ApiTypeAlias extends ApiDefinitionWithType<Contracts.ApiTypeAliasDt
         return this.typeParameters;
     }
 
-    public ToText(): string[] {
-        const name = this.Name;
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const type = this.Type.ToText().join("\n");
-        const typeParameters = this.TypeParametersToString(this.TypeParameters);
+        const typeParameters = this.TypeParametersToString(render, this.TypeParameters);
 
         return [
-            `type ${name}${typeParameters} = ${type};`
+            `type ${this.Name}${typeParameters} = ${type};`
         ];
     }
 

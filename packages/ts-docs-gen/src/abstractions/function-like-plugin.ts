@@ -1,4 +1,4 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { BasePlugin } from "./base-plugin";
@@ -9,21 +9,25 @@ import { ApiParameter } from "../api-items/definitions/api-parameter";
 
 export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> extends BasePlugin<TKind> {
     // TODO: Escape string!
-    protected RenderParameters(parameters: ApiParameter[]): PluginResultData | undefined {
+    protected RenderParameters(extractedData: ExtractDto, parameters: ApiParameter[]): PluginResultData | undefined {
         if (parameters.length === 0) {
             return undefined;
         }
 
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        const header = ["Name", "Type", "Description"];
+        const header = ["Name", "Type", "Default value", "Description"];
 
         const content = parameters.map(parameter => {
-            GeneratorHelpers.MergePluginResultData(pluginResult, {
-                // UsedReferences: parameterTypeDto.References
-            });
+            const type = parameter.Type
+                .ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences));
 
             // TODO: Add Resolving simple metadata.
-            return [parameter.Name, parameter.Type.ToInlineText(), parameter.ApiItem.Metadata.DocumentationComment];
+            return [
+                parameter.Name,
+                type,
+                parameter.ApiItem.Initializer || "",
+                parameter.ApiItem.Metadata.DocumentationComment
+            ];
         });
 
         pluginResult.Result = new MarkdownBuilder()
@@ -36,7 +40,7 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
         return pluginResult;
     }
 
-    protected RenderReturnType(type: ApiTypes | undefined): PluginResultData | undefined {
+    protected RenderReturnType(extractedData: ExtractDto, type: ApiTypes | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
@@ -46,10 +50,9 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
             .EmptyLine()
             .Bold("Return type")
             .EmptyLine()
-            .Text(type.ToInlineText())
+            .Text(type.ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences)))
             .GetOutput();
 
-        // pluginResult.UsedReferences = parsedReturnType.References;
         return pluginResult;
     }
 }

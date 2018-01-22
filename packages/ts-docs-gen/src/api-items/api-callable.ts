@@ -5,6 +5,7 @@ import { ApiTypeParameter } from "./definitions/api-type-parameter";
 import { ApiParameter } from "./definitions/api-parameter";
 import { ApiDefinitionBase } from "./api-definition-base";
 import { ApiTypes } from "./api-type-list";
+import { ReferenceRenderHandler } from "../contracts/serialized-api-item";
 
 /**
  * Base class for callable api items.
@@ -44,11 +45,11 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
         return this.returnType;
     }
 
-    protected TypeParametersToString(): string {
-        return super.TypeParametersToString(this.TypeParameters);
+    protected TypeParametersToString(render: ReferenceRenderHandler): string {
+        return super.TypeParametersToString(render, this.TypeParameters);
     }
 
-    protected ParametersToString(): string {
+    protected ParametersToString(render: ReferenceRenderHandler): string {
         return this.Parameters
             .map(x => x.ToText())
             .join(", ");
@@ -56,19 +57,25 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
 
     /**
      * Example: `<TValue>(arg: TValue): void`
-     * @param typeDefChar If undefined, return type is not shown. @default ": "
+     * @param typeDefChar If empty string, return type is not shown. @default ": "
      */
-    protected CallableToString(typeDefChar: string = ": "): string {
+    protected CallableToString(render: ReferenceRenderHandler, typeDefChar: string = ": "): string {
         // TypeParameters
-        const typeParametersString = this.TypeParametersToString();
+        const typeParametersString = this.TypeParametersToString(render);
 
         // Parameters
-        const parametersString = this.ParametersToString();
+        const parametersString = this.ParametersToString(render);
 
         // ReturnType
-        const type = this.SerializedTypeToString(this.ReturnType);
-        const returnTypeString = typeDefChar != null && type != null ? `${typeDefChar}${type}` : "";
+        const type = this.SerializedTypeToString(render, this.ReturnType);
+        const returnTypeString = typeDefChar !== "" && type != null ? `${typeDefChar}${type}` : "";
 
         return `${typeParametersString}(${parametersString})${returnTypeString}`;
+    }
+
+    protected CallableToSimpleString(): string {
+        const parameters = this.Parameters.map(x => x.Name);
+
+        return `(${parameters.join(", ")})`;
     }
 }

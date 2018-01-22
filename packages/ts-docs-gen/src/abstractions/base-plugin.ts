@@ -1,10 +1,11 @@
-import { Contracts } from "ts-extractor";
-import { MarkdownBuilder } from "@simplrjs/markdown";
+import { Contracts, ExtractDto } from "ts-extractor";
+import { MarkdownBuilder, MarkdownGenerator } from "@simplrjs/markdown";
 
 import { Plugin, SupportedApiItemKindType, PluginOptions, PluginResult, PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiTypeParameter } from "../api-items/definitions/api-type-parameter";
 import { ApiTypes } from "../api-items/api-type-list";
+import { ReferenceRenderHandler } from "../contracts/serialized-api-item";
 
 export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> implements Plugin<TKind> {
     public abstract SupportedApiItemKinds(): SupportedApiItemKindType[];
@@ -39,7 +40,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         if (internal != null) {
             const message = Boolean(internal.text) ? `: ${internal.text}` : "";
             builder
-                .Bold(`Internal${message}`)
+                .Bold(`Internal ${message}`.trim())
                 .EmptyLine();
         }
 
@@ -59,7 +60,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
     }
 
     // TODO: Escape string!
-    protected RenderTypeParameters(typeParameters: ApiTypeParameter[]): PluginResultData | undefined {
+    protected RenderTypeParameters(extractedData: ExtractDto, typeParameters: ApiTypeParameter[]): PluginResultData | undefined {
         if (typeParameters.length === 0) {
             return undefined;
         }
@@ -71,29 +72,19 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
             // ConstraintType
             let constraintType: string;
             if (typeParameter.ConstraintType != null) {
-                constraintType = typeParameter.ConstraintType.ToInlineText();
-                GeneratorHelpers.MergePluginResultData(pluginResult, {
-                    // FIXME: References.
-                    // UsedReferences: constraintType.References
-                });
+                constraintType = typeParameter.ConstraintType
+                    .ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences));
             } else {
                 constraintType = "";
-                // FIXME: References.
-                // constraintType = { References: [], Text: "" };
             }
 
             // DefaultType
             let defaultType: string;
             if (typeParameter.DefaultType != null) {
-                defaultType = typeParameter.DefaultType.ToInlineText();
-                GeneratorHelpers.MergePluginResultData(pluginResult, {
-                    // FIXME: References.
-                    // UsedReferences: defaultType.References
-                });
+                defaultType = typeParameter.DefaultType
+                    .ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences));
             } else {
-                // FIXME: References.
                 defaultType = "";
-                // defaultType = { References: [], Text: "" };
             }
 
             return [
@@ -113,13 +104,13 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         return pluginResult;
     }
 
-    protected RenderType(type: ApiTypes | undefined): PluginResultData | undefined {
+    protected RenderType(extractedData: ExtractDto, type: ApiTypes | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
 
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        const parsedReturnType = type.ToInlineText();
+        const parsedReturnType = type.ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences));
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
@@ -128,9 +119,27 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
             .Text(parsedReturnType)
             .GetOutput();
 
-        // FIXME: Reference
-        // pluginResult.UsedReferences = parsedReturnType.References;
         return pluginResult;
+    }
+
+    /**
+     * Default reference rending with markdown links.
+     * @param usedReferences populates given array with used references.
+     */
+    protected RenderReferences(extractedData: ExtractDto, usedReferences: string[]): ReferenceRenderHandler {
+        return (name, reference) => {
+            if (reference == null) {
+                return name;
+            }
+            const apiItem = extractedData.Registry[reference];
+            if (apiItem.ApiKind === Contracts.ApiItemKinds.TypeParameter) {
+                return name;
+            }
+
+            usedReferences.push(reference);
+
+            return MarkdownGenerator.Link(name, reference, true);
+        };
     }
 
     public abstract Render(options: PluginOptions, apiItem: TKind): PluginResult;

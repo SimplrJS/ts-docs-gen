@@ -1,5 +1,6 @@
-import { Contracts } from "ts-extractor";
+import { Contracts, TSHelpers } from "ts-extractor";
 import { ApiTypeReferenceBase } from "../api-type-reference-base";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export type TypeDefinitions = Contracts.TypeLiteralType |
     Contracts.MappedType |
@@ -8,12 +9,15 @@ export type TypeDefinitions = Contracts.TypeLiteralType |
     Contracts.ConstructorType;
 
 export class ApiTypeDefinition<TKind extends Contracts.ApiReferenceBaseType = TypeDefinitions> extends ApiTypeReferenceBase<TKind> {
-    public ToText(): string[] {
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         if (this.ReferenceItem == null) {
-            // TODO: Add log for missing reference.
-            return ["???"];
+            return [this.ApiItem.Text];
         }
 
-        return this.ReferenceItem.ToText();
+        if (TSHelpers.IsInternalSymbolName(this.ReferenceItem.ApiItem.Name)) {
+            return this.ReferenceItem.ToText(render);
+        }
+
+        return [render(this.ReferenceItem.Name, this.ApiItem.ReferenceId)];
     }
 }

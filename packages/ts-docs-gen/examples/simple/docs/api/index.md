@@ -1,41 +1,56 @@
 # Table of contents
 
-* [index.ts][SourceFile-1]
+* [index.ts][SourceFile-0]
     * Interfaces
-        * [Foo][InterfaceDeclaration-7]
-    * Types
-        * [SelectedNumbers][TypeAliasDeclaration-5]
+        * [Start][InterfaceDeclaration-1]
 
 # index.ts
 
 ## Interfaces
 
-### Foo
+### Start
 
 ```typescript
-interface Foo {
-    A: string;
+interface Start {
+    HandleMessage(message: string): string;
 }
 ```
-
-**Properties**
-
-| Name | Type   | Optional |
-| ---- | ------ | -------- |
-| A    | string | false    |
-
-## Types
-
-### SelectedNumbers
+#### Method
 
 ```typescript
-type SelectedNumbers = Readonly<Foo>;
+HandleMessage(message: string): string;
 ```
 
-**Type**
+**Parameters**
 
-Readonly<Foo>
+| Name    | Type   |
+| ------- | ------ |
+| message | string |
 
-[SourceFile-1]: index.md#indexts
-[InterfaceDeclaration-7]: index.md#foo
-[TypeAliasDeclaration-5]: index.md#selectednumbers
+**Return type**
+
+string
+
+
+## Classes
+
+### [Foo][ClassDeclaration-0]
+
+General comment about class Foo.
+
+
+----------
+
+### [FooStart][ClassDeclaration-1]
+
+
+----------
+
+### [BooStart][ClassDeclaration-2]
+
+
+[SourceFile-0]: index.md#indexts
+[InterfaceDeclaration-1]: index.md#start
+[ClassDeclaration-0]: index/foo.md#foo
+[ClassDeclaration-1]: index/foostart.md#foostart
+[ClassDeclaration-2]: index/boostart.md#boostart
