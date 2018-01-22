@@ -40,9 +40,9 @@ public constructor(suffix: string | undefined);
 
 **Parameters**
 
-| Name   | Type               | Description        |
-| ------ | ------------------ | ------------------ |
-| suffix | string | undefined | Suffix of message. |
+| Name   | Type                    | Description        |
+| ------ | ----------------------- | ------------------ |
+| suffix | string &#124; undefined | Suffix of message. |
 
 ## Methods
 
@@ -88,10 +88,10 @@ private resolveMessageDto<T = {}>(message: T, time?: string | undefined): Messag
 
 **Parameters**
 
-| Name    | Type               |
-| ------- | ------------------ |
-| message | T                  |
-| time    | string | undefined |
+| Name    | Type                    |
+| ------- | ----------------------- |
+| message | T                       |
+| time    | string &#124; undefined |
 
 **Return type**
 
