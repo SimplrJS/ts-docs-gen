@@ -99,7 +99,7 @@ interface PluginOptions<TKind = ApiItemDto> {
 | Name                 | Type                                                  | Optional |
 | -------------------- | ----------------------------------------------------- | -------- |
 | Reference            | [ApiItemReference][InterfaceDeclaration-0]            | false    |
-| ApiItem              | [TKind][TypeParameter-1]                              | false    |
+| ApiItem              | TKind                                                 | false    |
 | ExtractedData        | ExtractDto                                            | false    |
 | GetItemPluginResult  | [GetItemPluginResultHandler][TypeAliasDeclaration-1]  | false    |
 | IsPluginResultExists | [IsPluginResultExistsHandler][TypeAliasDeclaration-2] | false    |
@@ -152,7 +152,7 @@ interface PluginResult<TKind = ApiItemDto> extends PluginResultData {
 | Name      | Type                                       | Optional |
 | --------- | ------------------------------------------ | -------- |
 | Reference | [ApiItemReference][InterfaceDeclaration-0] | false    |
-| ApiItem   | [TKind][TypeParameter-0]                   | false    |
+| ApiItem   | TKind                                      | false    |
 
 ----------
 
@@ -187,9 +187,9 @@ CheckApiItem(item: TKind): boolean;
 
 **Parameters**
 
-| Name | Type                     |
-| ---- | ------------------------ |
-| item | [TKind][TypeParameter-2] |
+| Name | Type  |
+| ---- | ----- |
+| item | TKind |
 
 **Return type**
 
@@ -201,9 +201,9 @@ Render(options: PluginOptions<TKind>): PluginResult<ApiItemDto>;
 
 **Parameters**
 
-| Name    | Type                                                              |
-| ------- | ----------------------------------------------------------------- |
-| options | [PluginOptions][InterfaceDeclaration-5]<[TKind][TypeParameter-2]> |
+| Name    | Type                                           |
+| ------- | ---------------------------------------------- |
+| options | [PluginOptions][InterfaceDeclaration-5]<TKind> |
 
 **Return type**
 
@@ -215,12 +215,12 @@ Render(options: PluginOptions<TKind>): PluginResult<ApiItemDto>;
 ### SupportedApiItemKindType
 
 ```typescript
-type SupportedApiItemKindType = ApiItemKinds | Any;
+type SupportedApiItemKindType = ApiItemKinds | ApiItemKindsAdditional.Any;
 ```
 
 **Type**
 
-ApiItemKinds | [Any][EnumMember-0]
+ApiItemKinds | [ApiItemKindsAdditional.Any][EnumMember-0]
 
 ----------
 
@@ -258,7 +258,7 @@ type MappedType = {
 
 **Type**
 
-{ [[K][TypeParameter-3] extends "a-b-c"]: number }
+{ [K extends "a-b-c"]: number }
 
 ----------
 
@@ -297,7 +297,6 @@ enum ApiItemKindsAdditional {
 [InterfaceDeclaration-3]: contracts.md#pluginresult
 [InterfaceDeclaration-5]: contracts.md#pluginoptions
 [InterfaceDeclaration-0]: contracts.md#apiitemreference
-[TypeParameter-1]: #__error
 [TypeAliasDeclaration-1]: contracts.md#getitempluginresulthandler
 [TypeAliasDeclaration-2]: contracts.md#ispluginresultexistshandler
 [InterfaceDeclaration-4]: contracts.md#pluginresultdata
@@ -306,19 +305,15 @@ enum ApiItemKindsAdditional {
 [InterfaceDeclaration-3]: contracts.md#pluginresult
 [InterfaceDeclaration-4]: contracts.md#pluginresultdata
 [InterfaceDeclaration-0]: contracts.md#apiitemreference
-[TypeParameter-0]: #__error
 [InterfaceDeclaration-6]: contracts.md#plugin
 [TypeAliasDeclaration-0]: contracts.md#supportedapiitemkindtype
-[TypeParameter-2]: #__error
-[TypeParameter-2]: #__error
 [InterfaceDeclaration-5]: contracts.md#pluginoptions
 [InterfaceDeclaration-3]: contracts.md#pluginresult
 [TypeAliasDeclaration-0]: contracts.md#supportedapiitemkindtype
-[EnumMember-0]: #__error
+[EnumMember-0]: contracts.md#apiitemkindsadditional
 [TypeAliasDeclaration-1]: contracts.md#getitempluginresulthandler
 [InterfaceDeclaration-3]: contracts.md#pluginresult
 [TypeAliasDeclaration-2]: contracts.md#ispluginresultexistshandler
 [TypeAliasDeclaration-3]: contracts.md#mappedtype
-[TypeParameter-3]: #__error
 [TypeAliasDeclaration-4]: contracts.md#footuple
 [EnumDeclaration-0]: contracts.md#apiitemkindsadditional

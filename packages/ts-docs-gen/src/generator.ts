@@ -13,7 +13,7 @@ import { ApiItemReferenceRegistry } from "./registries/api-item-reference-regist
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
-        this.fileManager = new FileManager(configuration.ExtractedData.Registry);
+        this.fileManager = new FileManager(configuration.ExtractedData);
         this.pluginResultRegistry = new ApiItemReferenceRegistry<PluginResult>();
         const { ExtractedData } = this.configuration;
 
