@@ -25,8 +25,6 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
     }
 
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer, mapped?: boolean): string[] {
-        const name = render(this.Name, this.Reference.Id);
-
         const constraintKeyword = mapped ? "in" : "extends";
 
         let constraintString: string;
@@ -45,7 +43,7 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
             defaultTypeString = "";
         }
 
-        return [`${name}${constraintString}${defaultTypeString}`];
+        return [`${this.Name}${constraintString}${defaultTypeString}`];
     }
 
     public ToHeadingText(): string {

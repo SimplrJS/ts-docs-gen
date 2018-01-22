@@ -4,10 +4,8 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiFunction extends ApiCallable<Contracts.ApiFunctionDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = render(this.Name, this.Reference.Id);
-
         return [
-            `function ${name}${this.CallableToString(render)}`
+            `function ${this.Name}${this.CallableToString(render)};`
         ];
     }
 

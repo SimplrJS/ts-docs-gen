@@ -15,7 +15,7 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
         }
 
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        const header = ["Name", "Type", "Description"];
+        const header = ["Name", "Type", "Default value", "Description"];
 
         const content = parameters.map(parameter => {
             const type = parameter.Type
@@ -25,6 +25,7 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
             return [
                 parameter.Name,
                 type,
+                parameter.ApiItem.Initializer || "",
                 parameter.ApiItem.Metadata.DocumentationComment
             ];
         });

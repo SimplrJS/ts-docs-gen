@@ -4,8 +4,6 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiClassProperty extends ApiDefinitionWithType<Contracts.ApiClassPropertyDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = render(this.Name, this.Reference.Id);
-
         const optional = this.ApiItem.IsOptional ? "?" : "";
         const readOnly = this.ApiItem.IsReadonly ? " readonly" : "";
         const $abstract = this.ApiItem.IsAbstract ? " abstract" : "";
@@ -14,7 +12,7 @@ export class ApiClassProperty extends ApiDefinitionWithType<Contracts.ApiClassPr
         const accessModifier = this.ApiItem.AccessModifier;
         const type = this.SerializedTypeToString(render, this.Type);
 
-        return [`${accessModifier}${$static}${$abstract}${readOnly} ${name}${optional}: ${type};`];
+        return [`${accessModifier}${$static}${$abstract}${readOnly} ${this.Name}${optional}: ${type};`];
     }
 
     public ToHeadingText(): string {

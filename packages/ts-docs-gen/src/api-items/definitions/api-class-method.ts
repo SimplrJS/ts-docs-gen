@@ -4,8 +4,6 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiClassMethod extends ApiCallable<Contracts.ApiClassMethodDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = render(this.Name, this.Reference.Id);
-
         const optional = this.ApiItem.IsOptional ? "?" : "";
         const $abstract = this.ApiItem.IsAbstract ? " abstract" : "";
         const async = this.ApiItem.IsAsync ? " async" : "";
@@ -14,7 +12,7 @@ export class ApiClassMethod extends ApiCallable<Contracts.ApiClassMethodDto> {
 
         const accessModifier = this.ApiItem.AccessModifier;
 
-        return [`${accessModifier}${$static}${$abstract}${async} ${name}${functionHeader}`.trim()];
+        return [`${accessModifier}${$static}${$abstract}${async} ${this.Name}${functionHeader};`];
 
     }
 

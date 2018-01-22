@@ -48,7 +48,7 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
         }
 
         const members = apiTypeParameters
-            .map(x => x.ToInlineText())
+            .map(x => x.ToInlineText(render))
             .join(", ");
 
         return `<${members}>`;

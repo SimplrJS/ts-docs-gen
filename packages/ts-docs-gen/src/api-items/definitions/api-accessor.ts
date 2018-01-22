@@ -36,7 +36,6 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
     }
 
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = render(this.Name, this.Reference.Id);
         const $abstract = this.ApiItem.IsAbstract ? " abstract" : "";
         const $static = this.ApiItem.IsStatic ? " static" : "";
 
@@ -48,7 +47,7 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
             accessorType = "get";
         }
 
-        return [`${this.ApiItem.AccessModifier}${$static}${$abstract} ${accessorType} ${name}: ${typeString};`];
+        return [`${this.ApiItem.AccessModifier}${$static}${$abstract} ${accessorType} ${this.Name}: ${typeString};`];
     }
 
     public ToHeadingText(): string {

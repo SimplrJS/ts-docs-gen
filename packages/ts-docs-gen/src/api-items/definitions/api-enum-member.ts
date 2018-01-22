@@ -13,7 +13,7 @@ export class ApiEnumMember extends ApiDefinitionBase<Contracts.ApiEnumMemberDto>
     }
 
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = render(this.ApiItem.Name, this.Reference.Id);
+        const name = this.ApiItem.Name;
 
         let value: string;
         if (this.ApiItem.Value !== "") {

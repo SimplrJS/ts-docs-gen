@@ -105,7 +105,7 @@ export class FileManager {
         }
     }
 
-    private resolveReferenceFile(referenceId: string): string {
+    private resolveReferenceFile(referenceId: string): string | undefined {
         const apiItem = this.extractedData.Registry[referenceId];
         const serializedApiItem = GeneratorHelpers
             .SerializeApiDefinition(this.extractedData, apiItem, { Alias: apiItem.Name, Id: referenceId });
@@ -114,7 +114,7 @@ export class FileManager {
             return this.resolveReferenceFile(serializedApiItem.ParentItem.Reference.Id);
         }
 
-        return this.referenceToFile.get(referenceId) || "__error";
+        return this.referenceToFile.get(referenceId);
     }
 
     public AddItem(itemResult: PluginResult<ApiContainer>, filePath: string): void {

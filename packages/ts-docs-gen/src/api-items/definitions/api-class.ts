@@ -35,8 +35,6 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
     }
 
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = render(this.Name, this.Reference.Id);
-
         // Abstract
         const $abstract = this.ApiItem.IsAbstract ? "abstract " : "";
 
@@ -62,7 +60,7 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
         }
 
         return [
-            `${$abstract}class ${name}${typeParameters}${extendsString}${implementsString}`
+            `${$abstract}class ${this.Name}${typeParameters}${extendsString}${implementsString}`
         ];
     }
 

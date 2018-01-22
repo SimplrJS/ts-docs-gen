@@ -5,15 +5,13 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiParameter extends ApiDefinitionWithType<Contracts.ApiParameterDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = render(this.Name, this.Reference.Id);
-
         const initializerString = this.ApiItem.Initializer ? ` = ${this.ApiItem.Initializer}` : "";
         const isOptionalString = this.ApiItem.IsOptional ? "?" : "";
 
         const type = this.SerializedTypeToString(render, this.Type);
 
         return [
-            `${name}${isOptionalString}: ${type}${initializerString}`
+            `${this.Name}${isOptionalString}: ${type}${initializerString}`
         ];
     }
 

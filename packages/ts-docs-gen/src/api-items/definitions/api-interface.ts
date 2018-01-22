@@ -29,8 +29,6 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
     }
 
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
-        const name = render(this.Name, this.Reference.Id);
-
         // TypeParameters
         const typeParameters: string = this.TypeParametersToString(render, this.TypeParameters);
 
@@ -48,7 +46,7 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
         const members = this.MembersToText(render, this.Members, 1);
 
         return [
-            `interface ${name}${typeParameters}${extendsString} {`,
+            `interface ${this.Name}${typeParameters}${extendsString} {`,
             ...members,
             `}`
         ];

@@ -5,7 +5,7 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 export class ApiCall extends ApiCallable<Contracts.ApiCallDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         return [
-            this.CallableToString(render)
+            `${this.CallableToString(render)};`
         ];
     }
 
