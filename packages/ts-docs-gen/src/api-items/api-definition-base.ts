@@ -1,4 +1,5 @@
 import { Contracts, ExtractDto } from "ts-extractor";
+import { LogLevel } from "simplr-logger";
 
 import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
@@ -69,7 +70,7 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto =
 
     protected SerializedTypeToString(render: ReferenceRenderHandler, apiType: ApiTypes | undefined): string {
         if (apiType == null) {
-            // TODO: Add Log for missing type.
+            GeneratorHelpers.LogWithApiItemPosition(LogLevel.Warning, this.ApiItem, "Missing type.");
             return "???";
         }
 

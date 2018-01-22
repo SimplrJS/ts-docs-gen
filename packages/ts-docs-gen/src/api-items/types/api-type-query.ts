@@ -1,6 +1,7 @@
 import { Contracts } from "ts-extractor";
 import { ApiTypeReferenceBase } from "../api-type-reference-base";
 import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
+import { Logger } from "../../utils/logger";
 
 /**
  * Example: `typeof Foo`
@@ -11,7 +12,8 @@ export class ApiTypeQuery extends ApiTypeReferenceBase<Contracts.TypeQueryType> 
         if (this.ReferenceItem != null) {
             name = this.ReferenceItem.Name;
         } else {
-            // TODO: Add Log for missing reference.
+            // TODO: Upgrade ts-extractor, so we could add informative warning.
+            Logger.Warn("Missing reference!");
             name = "???";
         }
 

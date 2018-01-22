@@ -59,7 +59,6 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         return builder.GetOutput();
     }
 
-    // TODO: Escape string!
     protected RenderTypeParameters(extractedData: ExtractDto, typeParameters: ApiTypeParameter[]): PluginResultData | undefined {
         if (typeParameters.length === 0) {
             return undefined;

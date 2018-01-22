@@ -37,7 +37,7 @@ export namespace GeneratorHelpers {
             }
         }
 
-        // TODO: Add logger: "This kind is not supported".
+        LogWithApiItemPosition(LogLevel.Warning, apiItem, `"${apiItem.ApiKind}" is not supported!`);
         return new ApiDefinitionDefault(extractedData, apiItem, reference);
     }
 
@@ -51,8 +51,8 @@ export namespace GeneratorHelpers {
                 }
             }
         }
-
-        // TODO: Add logger: "This kind is not supported".
+        // TODO: Upgrade ts-extractor, so we could add informative warning.
+        Logger.Warn(`"${apiType.ApiTypeKind}" is not supported`);
         return new ApiTypeDefault(extractedData, apiType);
     }
 
@@ -150,7 +150,7 @@ export namespace GeneratorHelpers {
         return overallReferences;
     }
 
-    export function LogWithApiItemPosition(logLevel: LogLevel, apiItem: Contracts.ApiItemDto, message: string): void {
+    export function LogWithApiItemPosition(logLevel: LogLevel, apiItem: Contracts.ApiBaseItemDto, message: string): void {
         const { FileName, Line, Character } = apiItem.Location;
         const linePrefix = `${FileName}[${Line}:${Character + 1}]`;
         Logger.Log(logLevel, `${linePrefix}: ${message}`);

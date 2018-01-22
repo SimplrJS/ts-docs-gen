@@ -34,7 +34,6 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
         }
     ];
 
-    // TODO: Add TypeParameters render.
     public Render(options: PluginOptions, apiItem: Contracts.ApiClassDto): PluginResult {
         const serializedApiItem = new ApiClass(options.ExtractedData, apiItem, options.Reference);
 
@@ -53,6 +52,10 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
             .Text(this.RenderApiItemMetadata(apiItem))
             .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
+
+        // TypeParameters
+        const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, serializedApiItem.TypeParameters);
+        GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
         // ApiMembers
         const membersResult = this.RenderMemberGroups(options, ApiClassPlugin.MemberKindsList, serializedApiItem.Members);

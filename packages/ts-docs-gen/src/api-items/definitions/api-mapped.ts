@@ -1,4 +1,5 @@
 import { Contracts } from "ts-extractor";
+import { LogLevel } from "simplr-logger";
 
 import { ApiTypeParameter } from "./api-type-parameter";
 import { ApiDefinitionWithType } from "../api-definition-with-type";
@@ -24,7 +25,7 @@ export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
         if (this.TypeParameter != null) {
             typeParameterString = this.TypeParameter.ToInlineText(render);
         } else {
-            // TODO: Add logger for missing TypeParameter.
+            GeneratorHelpers.LogWithApiItemPosition(LogLevel.Warning, this.ApiItem, "A type parameter is missing!");
             typeParameterString = "???";
         }
 

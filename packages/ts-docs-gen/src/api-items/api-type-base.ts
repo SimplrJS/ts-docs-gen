@@ -3,6 +3,7 @@ import { SerializedApiType, ReferenceRenderHandler } from "../contracts/serializ
 import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiDefinitions } from "./api-definition-list";
+import { Logger } from "../utils/logger";
 
 export abstract class ApiTypeBase<TKind extends Contracts.ApiBaseType> extends BaseApiItemClass<TKind> implements SerializedApiType<TKind> {
     protected GetSerializedApiDefinition(referenceId: string): ApiDefinitions {
@@ -12,7 +13,8 @@ export abstract class ApiTypeBase<TKind extends Contracts.ApiBaseType> extends B
 
     protected SerializedTypeToString(render: ReferenceRenderHandler, apiType: SerializedApiType | undefined): string {
         if (apiType == null) {
-            // TODO: Add Log for missing type.
+            // TODO: Upgrade ts-extractor, so we could add informative warning.
+            Logger.Warn("Missing type!");
             return "???";
         }
 
