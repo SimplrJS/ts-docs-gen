@@ -1458,12 +1458,12 @@ let FooLet: Boo | ExtendedBar;
 ### GetFooConst
 
 ```typescript
-const GetFooConst: function GetFoo(): Promise<void>;;
+const GetFooConst: GetFoo;
 ```
 
 **Type**
 
-function GetFoo(): Promise<void>;
+[GetFoo][FunctionDeclaration-0]
 
 ----------
 
@@ -1598,6 +1598,7 @@ const FunctionConst: () => NameResolver;
 [InterfaceDeclaration-2]: index.md#boo
 [InterfaceDeclaration-0]: index.md#extendedbar
 [VariableDeclaration-14]: index.md#getfooconst
+[FunctionDeclaration-0]: index.md#getfoo
 [VariableDeclaration-15]: index.md#nameresolverconst
 [TypeAliasDeclaration-10]: index.md#nameresolver
 [VariableDeclaration-16]: index.md#stringornull
