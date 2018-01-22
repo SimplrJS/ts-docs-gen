@@ -18,29 +18,30 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         const builder = new MarkdownBuilder();
 
         // Optimise?
-        const isBeta = apiItem.Metadata.JSDocTags.findIndex(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Beta) !== -1;
+        const beta = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Deprecated);
         const deprecated = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Deprecated);
         const internal = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Internal);
         const summary = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Summary);
         const jSDocComment = apiItem.Metadata.DocumentationComment;
 
-        if (isBeta) {
+        if (beta != null) {
+            const message = Boolean(beta.text) ? `: ${beta.text}` : "";
             builder
-                .Text(`<span style="color: #d2d255;">Warning: Beta!</span>`)
+                .Bold(`Warning Beta${message}!`)
                 .EmptyLine();
         }
 
         if (deprecated != null) {
             const message = Boolean(deprecated.text) ? `: ${deprecated.text}` : "";
             builder
-                .Text(`<span style="color: red;">Deprecated${message}!</span>`)
+                .Text(`Deprecated${message}!</span>`)
                 .EmptyLine();
         }
 
         if (internal != null) {
             const message = Boolean(internal.text) ? `: ${internal.text}` : "";
             builder
-                .Bold(`Internal ${message}`.trim())
+                .Bold(`Internal${message}!`)
                 .EmptyLine();
         }
 
