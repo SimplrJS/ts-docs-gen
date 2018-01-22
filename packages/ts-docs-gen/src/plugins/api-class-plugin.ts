@@ -14,22 +14,28 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
     public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
         {
             Heading: "Index",
-            Kinds: [Contracts.ApiItemKinds.Index]
+            Kinds: [GeneratorHelpers.ApiItemKinds.Index]
         },
         {
             Heading: "Constructor",
-            Kinds: [Contracts.ApiItemKinds.ClassConstructor]
+            Kinds: [GeneratorHelpers.ApiItemKinds.ClassConstructor]
         },
         {
             Heading: "Methods",
-            Kinds: [Contracts.ApiItemKinds.ClassMethod]
+            Kinds: [GeneratorHelpers.ApiItemKinds.ClassMethod]
         },
         {
             Heading: "Properties",
             Kinds: [
-                Contracts.ApiItemKinds.ClassProperty,
-                Contracts.ApiItemKinds.GetAccessor,
-                Contracts.ApiItemKinds.SetAccessor,
+                GeneratorHelpers.ApiItemKinds.ClassProperty,
+                GeneratorHelpers.ApiItemKinds.GetAccessor,
+                GeneratorHelpers.ApiItemKinds.SetAccessor,
+            ]
+        },
+        {
+            Heading: "Other",
+            Kinds: [
+                GeneratorHelpers.ApiItemKinds.Any
             ]
         }
     ];

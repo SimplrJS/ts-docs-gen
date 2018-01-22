@@ -22,19 +22,19 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
     public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
         {
             Heading: "Construct",
-            Kinds: [Contracts.ApiItemKinds.Construct]
+            Kinds: [GeneratorHelpers.ApiItemKinds.Construct]
         },
         {
             Heading: "Call",
-            Kinds: [Contracts.ApiItemKinds.Call]
+            Kinds: [GeneratorHelpers.ApiItemKinds.Call]
         },
         {
             Heading: "Index",
-            Kinds: [Contracts.ApiItemKinds.Index]
+            Kinds: [GeneratorHelpers.ApiItemKinds.Index]
         },
         {
             Heading: "Method",
-            Kinds: [Contracts.ApiItemKinds.Method]
+            Kinds: [GeneratorHelpers.ApiItemKinds.Method]
         }
     ];
 
@@ -128,7 +128,6 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
             serializedApiItem.Members,
             {
                 IncludeHr: false,
-                ShouldRenderUnlistedMembers: false,
                 StartingHeadingLevel: 4
             }
         );
