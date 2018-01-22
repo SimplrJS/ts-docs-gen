@@ -2,14 +2,14 @@
 
 * [Foo][ClassDeclaration-0]
     * Constructor
-        * [__constructor][Constructor-0]
+        * [constructor(suffix)][Constructor-0]
     * Methods
-        * [getTimeString][MethodDeclaration-0]
-        * [DefaultMessageTypeString][MethodDeclaration-1]
-        * [resolveMessageDto][MethodDeclaration-2]
-        * [GetMessage][MethodDeclaration-3]
-        * [PrintMessage][MethodDeclaration-4]
-        * [ResolveSimpleMessageObject][MethodDeclaration-5]
+        * [getTimeString()][MethodDeclaration-0]
+        * [DefaultMessageTypeString()][MethodDeclaration-1]
+        * [resolveMessageDto(message, time)][MethodDeclaration-2]
+        * [GetMessage(message)][MethodDeclaration-3]
+        * [PrintMessage(messageDto)][MethodDeclaration-4]
+        * [ResolveSimpleMessageObject(message)][MethodDeclaration-5]
     * Properties
         * [Name][PropertyDeclaration-0]
         * [internalName][PropertyDeclaration-1]
@@ -30,12 +30,12 @@ class Foo
 ```
 ## Constructor
 
-### __constructor
+### constructor(suffix)
 
 Some constructor.
 
 ```typescript
-public constructor(suffix: string | undefined): ???;
+public constructor(suffix: string | undefined);
 ```
 
 **Parameters**
@@ -46,7 +46,7 @@ public constructor(suffix: string | undefined): ???;
 
 ## Methods
 
-### getTimeString
+### getTimeString()
 
 private static method `getTimeString` comment.
 
@@ -60,7 +60,7 @@ string
 
 ----------
 
-### DefaultMessageTypeString
+### DefaultMessageTypeString()
 
 public static method `DefaultMessageTypeString` comment.
 
@@ -74,7 +74,7 @@ string
 
 ----------
 
-### resolveMessageDto
+### resolveMessageDto(message, time)
 
 ```typescript
 private resolveMessageDto<T = {}>(message: T, time?: string | undefined): MessageDto<T>;
@@ -99,7 +99,7 @@ private resolveMessageDto<T = {}>(message: T, time?: string | undefined): Messag
 
 ----------
 
-### GetMessage
+### GetMessage(message)
 
 ```typescript
 public GetMessage(message: string): string;
@@ -117,7 +117,7 @@ string
 
 ----------
 
-### PrintMessage
+### PrintMessage(messageDto)
 
 ```typescript
 public PrintMessage<T extends Object>(messageDto: MessageDto<T>): void;
@@ -141,7 +141,7 @@ void
 
 ----------
 
-### ResolveSimpleMessageObject
+### ResolveSimpleMessageObject(message)
 
 ```typescript
 public ResolveSimpleMessageObject<T>(message: T): { Message: T; };
@@ -236,43 +236,59 @@ boolean | undefined
 ### DefaultMessage
 
 ```typescript
-public get DefaultMessage: ???;
+public get DefaultMessage: string;
 ```
+
+**Type**
+
+string
 
 ----------
 
 ### getMessageSuffix
 
 ```typescript
-private get getMessageSuffix: ???;
+private get getMessageSuffix: string;
 ```
+
+**Type**
+
+string
 
 ----------
 
 ### setMessageSuffix
 
 ```typescript
-private set setMessageSuffix: ???;
+private set setMessageSuffix: string | undefined;
 ```
+
+**Type**
+
+string | undefined
 
 ----------
 
 ### SetDefaultSuffix
 
 ```typescript
-public set SetDefaultSuffix: ???;
+public set SetDefaultSuffix: string;
 ```
 
+**Type**
+
+string
+
 [ClassDeclaration-0]: foo.md#foo
-[Constructor-0]: foo.md#__constructor
+[Constructor-0]: foo.md#constructorsuffix
 [MethodDeclaration-0]: foo.md#gettimestring
 [MethodDeclaration-1]: foo.md#defaultmessagetypestring
-[MethodDeclaration-2]: foo.md#resolvemessagedto
+[MethodDeclaration-2]: foo.md#resolvemessagedtomessage-time
 [InterfaceDeclaration-0]: ../#__error
-[MethodDeclaration-3]: foo.md#getmessage
-[MethodDeclaration-4]: foo.md#printmessage
+[MethodDeclaration-3]: foo.md#getmessagemessage
+[MethodDeclaration-4]: foo.md#printmessagemessagedto
 [InterfaceDeclaration-0]: ../#__error
-[MethodDeclaration-5]: foo.md#resolvesimplemessageobject
+[MethodDeclaration-5]: foo.md#resolvesimplemessageobjectmessage
 [PropertyDeclaration-0]: foo.md#name
 [PropertyDeclaration-1]: foo.md#internalname
 [PropertyDeclaration-2]: foo.md#defaultmessage

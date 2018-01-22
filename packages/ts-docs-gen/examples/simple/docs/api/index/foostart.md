@@ -2,7 +2,7 @@
 
 * [FooStart][ClassDeclaration-1]
     * Methods
-        * [HandleMessage][MethodDeclaration-6]
+        * [HandleMessage(message)][MethodDeclaration-6]
 
 # FooStart
 
@@ -11,7 +11,7 @@ class FooStart implements Start
 ```
 ## Methods
 
-### HandleMessage
+### HandleMessage(message)
 
 ```typescript
 public HandleMessage(message: string): string;
@@ -28,4 +28,4 @@ public HandleMessage(message: string): string;
 string
 
 [ClassDeclaration-1]: foostart.md#foostart
-[MethodDeclaration-6]: foostart.md#handlemessage
+[MethodDeclaration-6]: foostart.md#handlemessagemessage

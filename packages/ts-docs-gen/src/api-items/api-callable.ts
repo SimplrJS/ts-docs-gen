@@ -57,7 +57,7 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
 
     /**
      * Example: `<TValue>(arg: TValue): void`
-     * @param typeDefChar If undefined, return type is not shown. @default ": "
+     * @param typeDefChar If empty string, return type is not shown. @default ": "
      */
     protected CallableToString(render: ReferenceRenderHandler, typeDefChar: string = ": "): string {
         // TypeParameters
@@ -68,8 +68,14 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extend
 
         // ReturnType
         const type = this.SerializedTypeToString(render, this.ReturnType);
-        const returnTypeString = typeDefChar != null && type != null ? `${typeDefChar}${type}` : "";
+        const returnTypeString = typeDefChar !== "" && type != null ? `${typeDefChar}${type}` : "";
 
         return `${typeParametersString}(${parametersString})${returnTypeString}`;
+    }
+
+    protected CallableToSimpleString(): string {
+        const parameters = this.Parameters.map(x => x.Name);
+
+        return `(${parameters.join(", ")})`;
     }
 }

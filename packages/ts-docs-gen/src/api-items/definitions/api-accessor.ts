@@ -10,7 +10,7 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
     private type: ApiTypes | undefined;
 
     public get Type(): ApiTypes | undefined {
-        if (this.type != null) {
+        if (this.type == null) {
             const resolvedType = this.resolveType();
             if (resolvedType != null) {
                 this.type = GeneratorHelpers.SerializeApiType(this.ExtractedData, resolvedType);

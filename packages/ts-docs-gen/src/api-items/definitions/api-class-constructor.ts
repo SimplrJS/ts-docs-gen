@@ -6,11 +6,11 @@ export class ApiClassConstructor extends ApiCallable<Contracts.ApiClassConstruct
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
 
         return [
-            `${this.ApiItem.AccessModifier} constructor${this.CallableToString(render, undefined)};`
+            `${this.ApiItem.AccessModifier} constructor${this.CallableToString(render, "")};`
         ];
     }
 
     public ToHeadingText(): string {
-        return this.Name;
+        return `constructor${this.CallableToSimpleString()}`;
     }
 }
