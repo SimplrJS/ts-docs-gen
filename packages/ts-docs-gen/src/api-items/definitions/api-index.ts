@@ -2,6 +2,7 @@ import { Contracts } from "ts-extractor";
 
 import { ApiParameter } from "./api-parameter";
 import { ApiDefinitionWithType } from "../api-definition-with-type";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiIndex extends ApiDefinitionWithType<Contracts.ApiIndexDto> {
     private parameter: ApiParameter;
@@ -14,9 +15,9 @@ export class ApiIndex extends ApiDefinitionWithType<Contracts.ApiIndexDto> {
         return this.parameter;
     }
 
-    public ToText(): string[] {
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const readonly: string = this.ApiItem.IsReadonly ? "readonly " : "";
-        const type: string = this.SerializedTypeToString(this.Type);
+        const type: string = this.SerializedTypeToString(render, this.Type);
 
         return [`${readonly}[${this.Parameter.ToInlineText()}]: ${type}`];
     }

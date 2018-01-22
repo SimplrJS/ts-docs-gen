@@ -3,6 +3,7 @@ import { Contracts } from "ts-extractor";
 import { ApiTypeParameter } from "./api-type-parameter";
 import { ApiDefinitionWithType } from "../api-definition-with-type";
 import { GeneratorHelpers } from "../../generator-helpers";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
     private typeParameter: ApiTypeParameter | undefined;
@@ -15,7 +16,7 @@ export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
         return this.typeParameter;
     }
 
-    public ToText(): string[] {
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const readonly = this.ApiItem.IsReadonly ? "readonly " : "";
         const optional = this.ApiItem.IsOptional ? "?" : "";
 
@@ -27,7 +28,7 @@ export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
             typeParameterString = "???";
         }
 
-        const type = this.SerializedTypeToString(this.Type);
+        const type = this.SerializedTypeToString(render, this.Type);
 
         return [
             `{`,

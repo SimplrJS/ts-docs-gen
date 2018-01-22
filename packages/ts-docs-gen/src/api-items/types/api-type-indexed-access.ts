@@ -1,7 +1,7 @@
 import { Contracts } from "ts-extractor";
 import { ApiTypeBase } from "../api-type-base";
 import { GeneratorHelpers } from "../../generator-helpers";
-import { SerializedApiType } from "../../contracts/serialized-api-item";
+import { SerializedApiType, ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 /**
  * Example: `Foo[T]`
@@ -25,9 +25,9 @@ export class ApiIndexedAccess extends ApiTypeBase<Contracts.IndexedAccessType> {
         return this.indexType;
     }
 
-    public ToText(): string[] {
-        const objectType: string = this.SerializedTypeToString(this.ObjectType);
-        const indexType: string = this.SerializedTypeToString(this.IndexType);
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
+        const objectType: string = this.SerializedTypeToString(render, this.ObjectType);
+        const indexType: string = this.SerializedTypeToString(render, this.IndexType);
 
         return [
             `${objectType}[${indexType}]`

@@ -3,6 +3,7 @@ import { Contracts } from "ts-extractor";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiDefinitionBase } from "../api-definition-base";
 import { ApiTypes } from "../api-type-list";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParameterDto> {
     private constraintType: ApiTypes | undefined;
@@ -23,14 +24,14 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
         return this.defaultType;
     }
 
-    public ToText(mapped?: boolean): string[] {
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer, mapped?: boolean): string[] {
         const name = this.Name;
 
         const constraintKeyword = mapped ? "in" : "extends";
 
         let constraintString: string;
         if (this.ApiItem.ConstraintType != null) {
-            const type = this.SerializedTypeToString(this.ConstraintType);
+            const type = this.SerializedTypeToString(render, this.ConstraintType);
             constraintString = ` ${constraintKeyword} ${type}`;
         } else {
             constraintString = "";
@@ -38,7 +39,7 @@ export class ApiTypeParameter extends ApiDefinitionBase<Contracts.ApiTypeParamet
 
         let defaultTypeString: string;
         if (this.ApiItem.DefaultType != null) {
-            const type = this.SerializedTypeToString(this.DefaultType);
+            const type = this.SerializedTypeToString(render, this.DefaultType);
             defaultTypeString = ` = ${type}`;
         } else {
             defaultTypeString = "";

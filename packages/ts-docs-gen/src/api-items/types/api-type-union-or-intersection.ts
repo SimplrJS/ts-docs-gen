@@ -1,5 +1,6 @@
 import { Contracts } from "ts-extractor";
 import { ApiTypeMembersBase } from "../api-type-members-base";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 /**
  * Examples:
@@ -7,11 +8,11 @@ import { ApiTypeMembersBase } from "../api-type-members-base";
  * - `Foo & Bar`
  */
 export class ApiTypeUnionOrIntersection extends ApiTypeMembersBase<Contracts.ApiUnionOrIntersectionType> {
-    public ToText(): string[] {
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const character = this.ApiItem.ApiTypeKind === Contracts.ApiTypeKind.Union ? "|" : "&";
 
         return [
-            this.Members.map(x => x.ToInlineText()).join(` ${character} `)
+            this.Members.map(x => x.ToInlineText(render)).join(` ${character} `)
         ];
     }
 }

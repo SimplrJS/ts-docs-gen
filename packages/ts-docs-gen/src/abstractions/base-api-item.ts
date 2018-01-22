@@ -1,5 +1,5 @@
 import { ExtractDto } from "ts-extractor";
-import { SerializedApiItem } from "../contracts/serialized-api-item";
+import { SerializedApiItem, ReferenceRenderHandler } from "../contracts/serialized-api-item";
 
 export abstract class BaseApiItemClass<TKind> implements SerializedApiItem<TKind> {
     constructor(private extractedData: ExtractDto, private apiItem: TKind) { }
@@ -12,10 +12,12 @@ export abstract class BaseApiItemClass<TKind> implements SerializedApiItem<TKind
         return this.apiItem;
     }
 
-    public abstract ToText(): string[];
+    protected DefaultReferenceRenderer: ReferenceRenderHandler = name => name;
 
-    public ToInlineText(): string {
-        return this.ToText()
+    public abstract ToText(render?: ReferenceRenderHandler): string[];
+
+    public ToInlineText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string {
+        return this.ToText(render)
             .map(x => x.trim())
             .join(" ");
     }

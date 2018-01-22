@@ -3,6 +3,7 @@ import { ApiTypeBase } from "./api-type-base";
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiDefinitions } from "./api-definition-list";
 import { ApiTypes } from "./api-type-list";
+import { ReferenceRenderHandler } from "../contracts/serialized-api-item";
 
 export abstract class ApiTypeReferenceBase<TKind extends Contracts.ApiReferenceBaseType> extends ApiTypeBase<TKind> {
     private referenceItem: ApiDefinitions | undefined;
@@ -24,13 +25,13 @@ export abstract class ApiTypeReferenceBase<TKind extends Contracts.ApiReferenceB
             .filter((x): x is ApiTypes => x != null);
     }
 
-    protected TypeParametersToString(apiItem: ApiTypes[] | undefined): string {
+    protected TypeParametersToString(render: ReferenceRenderHandler, apiItem: ApiTypes[] | undefined): string {
         if (apiItem == null) {
             return "";
         }
 
         const members = apiItem
-            .map(x => x.ToInlineText())
+            .map(x => x.ToInlineText(render))
             .join(", ");
 
         return `<${members}>`;

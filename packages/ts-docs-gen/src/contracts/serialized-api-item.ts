@@ -5,10 +5,12 @@ import { ApiItemReference } from "./api-item-reference";
 import { ApiDefinitions } from "../api-items/api-definition-list";
 import { ApiTypes } from "../api-items/api-type-list";
 
+export type ReferenceRenderHandler = (name: string, reference: ApiItemReference) => string;
+
 export interface SerializedApiItem<TKind> {
     ApiItem: TKind;
-    ToText(): string[];
-    ToInlineText(): string;
+    ToText(render?: ReferenceRenderHandler): string[];
+    ToInlineText(render?: ReferenceRenderHandler): string;
 }
 
 export interface SerializedApiDefinitionConstructor<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> {
@@ -18,7 +20,6 @@ export interface SerializedApiDefinitionConstructor<TKind extends Contracts.ApiB
 export interface SerializedApiDefinition<TKind extends Contracts.ApiBaseItemDto>
     extends SerializedApiItem<TKind> {
     Name: string;
-    ToText(): string[];
     ToHeadingText(): string;
 }
 

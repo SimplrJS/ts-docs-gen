@@ -1,8 +1,9 @@
 import { Contracts } from "ts-extractor";
 import { ApiDefinitionWithType } from "../api-definition-with-type";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiClassProperty extends ApiDefinitionWithType<Contracts.ApiClassPropertyDto> {
-    public ToText(): string[] {
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const name = this.Name;
 
         const optional = this.ApiItem.IsOptional ? "?" : "";
@@ -11,7 +12,7 @@ export class ApiClassProperty extends ApiDefinitionWithType<Contracts.ApiClassPr
         const $static = this.ApiItem.IsStatic ? " static" : "";
 
         const accessModifier = this.ApiItem.AccessModifier;
-        const type = this.SerializedTypeToString(this.Type);
+        const type = this.SerializedTypeToString(render, this.Type);
 
         return [`${accessModifier}${$static}${$abstract}${readOnly} ${name}${optional}: ${type};`];
     }

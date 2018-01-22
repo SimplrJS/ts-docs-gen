@@ -1,8 +1,9 @@
 import { Contracts } from "ts-extractor";
 import { ApiDefinitionBase } from "../api-definition-base";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiEnumMember extends ApiDefinitionBase<Contracts.ApiEnumMemberDto> {
-    public ToText(): string[] {
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const name = this.Name;
 
         let value: string;

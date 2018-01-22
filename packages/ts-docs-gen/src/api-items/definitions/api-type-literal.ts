@@ -1,10 +1,11 @@
 import { Contracts } from "ts-extractor";
 import { ApiDefinitionContainer } from "../api-definition-container";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiTypeLiteral extends ApiDefinitionContainer<Contracts.ApiTypeLiteralDto> {
-    public ToText(): string[] {
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         // Members
-        const members = this.MembersToText(this.Members, 1);
+        const members = this.MembersToText(render, this.Members, 1);
 
         return [
             `{`,

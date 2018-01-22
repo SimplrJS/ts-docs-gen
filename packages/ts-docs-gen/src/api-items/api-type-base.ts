@@ -1,5 +1,5 @@
 import { Contracts } from "ts-extractor";
-import { SerializedApiType } from "../contracts/serialized-api-item";
+import { SerializedApiType, ReferenceRenderHandler } from "../contracts/serialized-api-item";
 import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiDefinitions } from "./api-definition-list";
@@ -10,12 +10,12 @@ export abstract class ApiTypeBase<TKind extends Contracts.ApiBaseType> extends B
         return GeneratorHelpers.SerializeApiDefinition(this.ExtractedData, apiItem, { Alias: "", Id: referenceId });
     }
 
-    protected SerializedTypeToString(apiType: SerializedApiType | undefined): string {
+    protected SerializedTypeToString(render: ReferenceRenderHandler, apiType: SerializedApiType | undefined): string {
         if (apiType == null) {
             // TODO: Add Log for missing type.
             return "???";
         }
 
-        return apiType.ToInlineText();
+        return apiType.ToInlineText(render);
     }
 }

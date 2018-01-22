@@ -3,6 +3,7 @@ import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiTypes } from "../api-type-list";
 import { ApiDefinitionContainer } from "../api-definition-container";
 import { ApiTypeParameter } from "./api-type-parameter";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
     private typeParameters: ApiTypeParameter[];
@@ -33,14 +34,14 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
         return this.implements;
     }
 
-    public ToText(): string[] {
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const name = this.Name;
 
         // Abstract
         const $abstract = this.ApiItem.IsAbstract ? "abstract " : "";
 
         // TypeParameters
-        const typeParameters: string = this.TypeParametersToString(this.TypeParameters);
+        const typeParameters: string = this.TypeParametersToString(render, this.TypeParameters);
 
         // Extends
         let extendsString: string;
@@ -53,7 +54,7 @@ export class ApiClass extends ApiDefinitionContainer<Contracts.ApiClassDto> {
         // Implements
         let implementsString: string;
         if (this.Implements.length > 0) {
-            const implementsList = this.Implements.map(x => this.SerializedTypeToString(x));
+            const implementsList = this.Implements.map(x => this.SerializedTypeToString(render, x));
 
             implementsString = ` implements ${implementsList.join(", ")}`;
         } else {

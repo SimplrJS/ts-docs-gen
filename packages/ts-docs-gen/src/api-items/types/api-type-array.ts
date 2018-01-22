@@ -2,6 +2,7 @@ import { Contracts } from "ts-extractor";
 import { ApiTypeBase } from "../api-type-base";
 import { GeneratorHelpers } from "../../generator-helpers";
 import { ApiTypes } from "../api-type-list";
+import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 /**
  * Example: `Foo[]`
@@ -16,8 +17,8 @@ export class ApiTypeArray extends ApiTypeBase<Contracts.ArrayType> {
         return this.type;
     }
 
-    public ToText(): string[] {
-        const type: string = this.SerializedTypeToString(this.Type);
+    public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
+        const type: string = this.SerializedTypeToString(render, this.Type);
 
         return [
             `${type}[]`
