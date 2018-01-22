@@ -69,10 +69,10 @@ interface PluginMember {
 
 **Properties**
 
-| Name         | Type                     | Optional |
-| ------------ | ------------------------ | -------- |
-| Reference    | ApiItemReference         | false    |
-| PluginResult | PluginResult<ApiItemDto> | false    |
+| Name         | Type                                               | Optional |
+| ------------ | -------------------------------------------------- | -------- |
+| Reference    | [ApiItemReference][InterfaceDeclaration-0]         | false    |
+| PluginResult | [PluginResult][InterfaceDeclaration-3]<ApiItemDto> | false    |
 
 ----------
 
@@ -96,13 +96,13 @@ interface PluginOptions<TKind = ApiItemDto> {
 
 **Properties**
 
-| Name                 | Type                        | Optional |
-| -------------------- | --------------------------- | -------- |
-| Reference            | ApiItemReference            | false    |
-| ApiItem              | TKind                       | false    |
-| ExtractedData        | ExtractDto                  | false    |
-| GetItemPluginResult  | GetItemPluginResultHandler  | false    |
-| IsPluginResultExists | IsPluginResultExistsHandler | false    |
+| Name                 | Type                                                  | Optional |
+| -------------------- | ----------------------------------------------------- | -------- |
+| Reference            | [ApiItemReference][InterfaceDeclaration-0]            | false    |
+| ApiItem              | [TKind][TypeParameter-1]                              | false    |
+| ExtractedData        | ExtractDto                                            | false    |
+| GetItemPluginResult  | [GetItemPluginResultHandler][TypeAliasDeclaration-1]  | false    |
+| IsPluginResultExists | [IsPluginResultExistsHandler][TypeAliasDeclaration-2] | false    |
 
 ----------
 
@@ -119,12 +119,12 @@ interface PluginResultData {
 
 **Properties**
 
-| Name           | Type            | Optional |
-| -------------- | --------------- | -------- |
-| Headings       | PluginHeading[] | false    |
-| UsedReferences | string[]        | false    |
-| Result         | string[]        | false    |
-| Members        | PluginMember[]  | false    |
+| Name           | Type                                      | Optional |
+| -------------- | ----------------------------------------- | -------- |
+| Headings       | [PluginHeading][InterfaceDeclaration-1][] | false    |
+| UsedReferences | string[]                                  | false    |
+| Result         | string[]                                  | false    |
+| Members        | [PluginMember][InterfaceDeclaration-2][]  | false    |
 
 ----------
 
@@ -145,14 +145,14 @@ interface PluginResult<TKind = ApiItemDto> extends PluginResultData {
 
 **Extends**
 
-PluginResultData
+[PluginResultData][InterfaceDeclaration-4]
 
 **Properties**
 
-| Name      | Type             | Optional |
-| --------- | ---------------- | -------- |
-| Reference | ApiItemReference | false    |
-| ApiItem   | TKind            | false    |
+| Name      | Type                                       | Optional |
+| --------- | ------------------------------------------ | -------- |
+| Reference | [ApiItemReference][InterfaceDeclaration-0] | false    |
+| ApiItem   | [TKind][TypeParameter-0]                   | false    |
 
 ----------
 
@@ -179,7 +179,7 @@ SupportedApiItemKinds(): SupportedApiItemKindType[];
 
 **Return type**
 
-SupportedApiItemKindType[]
+[SupportedApiItemKindType][TypeAliasDeclaration-0][]
 
 ```typescript
 CheckApiItem(item: TKind): boolean;
@@ -187,9 +187,9 @@ CheckApiItem(item: TKind): boolean;
 
 **Parameters**
 
-| Name | Type  |
-| ---- | ----- |
-| item | TKind |
+| Name | Type                     |
+| ---- | ------------------------ |
+| item | [TKind][TypeParameter-2] |
 
 **Return type**
 
@@ -201,13 +201,13 @@ Render(options: PluginOptions<TKind>): PluginResult<ApiItemDto>;
 
 **Parameters**
 
-| Name    | Type                 |
-| ------- | -------------------- |
-| options | PluginOptions<TKind> |
+| Name    | Type                                                              |
+| ------- | ----------------------------------------------------------------- |
+| options | [PluginOptions][InterfaceDeclaration-5]<[TKind][TypeParameter-2]> |
 
 **Return type**
 
-PluginResult<ApiItemDto>
+[PluginResult][InterfaceDeclaration-3]<ApiItemDto>
 
 
 ## Types
@@ -220,7 +220,7 @@ type SupportedApiItemKindType = ApiItemKinds | Any;
 
 **Type**
 
-ApiItemKinds | Any
+ApiItemKinds | [Any][EnumMember-0]
 
 ----------
 
@@ -232,7 +232,7 @@ type GetItemPluginResultHandler = (reference: ApiItemReference) => PluginResult<
 
 **Type**
 
-(reference: ApiItemReference) => PluginResult<ApiItemDto>
+(reference: ApiItemReference) => [PluginResult][InterfaceDeclaration-3]<ApiItemDto>
 
 ----------
 
@@ -258,7 +258,7 @@ type MappedType = {
 
 **Type**
 
-{     [K extends "a-b-c"]: number }
+{ [[K][TypeParameter-3] extends "a-b-c"]: number }
 
 ----------
 
@@ -293,13 +293,32 @@ enum ApiItemKindsAdditional {
 [InterfaceDeclaration-0]: contracts.md#apiitemreference
 [InterfaceDeclaration-1]: contracts.md#pluginheading
 [InterfaceDeclaration-2]: contracts.md#pluginmember
-[InterfaceDeclaration-5]: contracts.md#pluginoptions
-[InterfaceDeclaration-4]: contracts.md#pluginresultdata
+[InterfaceDeclaration-0]: contracts.md#apiitemreference
 [InterfaceDeclaration-3]: contracts.md#pluginresult
-[InterfaceDeclaration-6]: contracts.md#plugin
-[TypeAliasDeclaration-0]: contracts.md#supportedapiitemkindtype
+[InterfaceDeclaration-5]: contracts.md#pluginoptions
+[InterfaceDeclaration-0]: contracts.md#apiitemreference
+[TypeParameter-1]: #__error
 [TypeAliasDeclaration-1]: contracts.md#getitempluginresulthandler
 [TypeAliasDeclaration-2]: contracts.md#ispluginresultexistshandler
+[InterfaceDeclaration-4]: contracts.md#pluginresultdata
+[InterfaceDeclaration-1]: contracts.md#pluginheading
+[InterfaceDeclaration-2]: contracts.md#pluginmember
+[InterfaceDeclaration-3]: contracts.md#pluginresult
+[InterfaceDeclaration-4]: contracts.md#pluginresultdata
+[InterfaceDeclaration-0]: contracts.md#apiitemreference
+[TypeParameter-0]: #__error
+[InterfaceDeclaration-6]: contracts.md#plugin
+[TypeAliasDeclaration-0]: contracts.md#supportedapiitemkindtype
+[TypeParameter-2]: #__error
+[TypeParameter-2]: #__error
+[InterfaceDeclaration-5]: contracts.md#pluginoptions
+[InterfaceDeclaration-3]: contracts.md#pluginresult
+[TypeAliasDeclaration-0]: contracts.md#supportedapiitemkindtype
+[EnumMember-0]: #__error
+[TypeAliasDeclaration-1]: contracts.md#getitempluginresulthandler
+[InterfaceDeclaration-3]: contracts.md#pluginresult
+[TypeAliasDeclaration-2]: contracts.md#ispluginresultexistshandler
 [TypeAliasDeclaration-3]: contracts.md#mappedtype
+[TypeParameter-3]: #__error
 [TypeAliasDeclaration-4]: contracts.md#footuple
 [EnumDeclaration-0]: contracts.md#apiitemkindsadditional

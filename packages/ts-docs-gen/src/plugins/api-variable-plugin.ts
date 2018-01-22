@@ -33,11 +33,11 @@ export class ApiVariablePlugin extends BasePlugin<Contracts.ApiVariableDto> {
             .EmptyLine()
             .Text(this.RenderApiItemMetadata(apiItem))
             .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
-            .EmptyLine()
-            .Bold("Type")
-            .EmptyLine()
-            .Text(serializedApiItem.ToInlineText())
             .GetOutput();
+
+        // Type
+        const typeResult = this.RenderType(serializedApiItem.Type);
+        GeneratorHelpers.MergePluginResultData(pluginResult, typeResult);
 
         return pluginResult;
     }

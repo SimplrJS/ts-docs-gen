@@ -34,8 +34,9 @@ type SelectedNumbers = Readonly<Foo>;
 
 **Type**
 
-Readonly<Foo>
+Readonly<[Foo][InterfaceDeclaration-7]>
 
 [SourceFile-1]: index.md#indexts
 [InterfaceDeclaration-7]: index.md#foo
 [TypeAliasDeclaration-5]: index.md#selectednumbers
+[InterfaceDeclaration-7]: index.md#foo

@@ -18,12 +18,14 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
         const header = ["Name", "Type", "Description"];
 
         const content = parameters.map(parameter => {
-            GeneratorHelpers.MergePluginResultData(pluginResult, {
-                // UsedReferences: parameterTypeDto.References
-            });
+            const type = parameter.Type.ToInlineText(this.RenderReferences(pluginResult.UsedReferences));
 
             // TODO: Add Resolving simple metadata.
-            return [parameter.Name, parameter.Type.ToInlineText(), parameter.ApiItem.Metadata.DocumentationComment];
+            return [
+                parameter.Name,
+                type,
+                parameter.ApiItem.Metadata.DocumentationComment
+            ];
         });
 
         pluginResult.Result = new MarkdownBuilder()
@@ -46,10 +48,9 @@ export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto 
             .EmptyLine()
             .Bold("Return type")
             .EmptyLine()
-            .Text(type.ToInlineText())
+            .Text(type.ToInlineText(this.RenderReferences(pluginResult.UsedReferences)))
             .GetOutput();
 
-        // pluginResult.UsedReferences = parsedReturnType.References;
         return pluginResult;
     }
 }

@@ -54,7 +54,7 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
             //references.push(...typeDto.References);
             builder
                 .EmptyLine()
-                .Text(type.ToInlineText());
+                .Text(type.ToInlineText(this.RenderReferences(references)));
         }
 
         return {
@@ -75,7 +75,11 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
 
         const headers = ["Name", "Type", "Optional"];
         const content = properties
-            .map(x => [x.Name, x.Type.ToInlineText(), String(x.ApiItem.IsOptional)]);
+            .map(x => [
+                x.Name,
+                x.Type.ToInlineText(this.RenderReferences(pluginResult.UsedReferences)),
+                String(x.ApiItem.IsOptional)
+            ]);
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
