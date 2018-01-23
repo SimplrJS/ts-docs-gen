@@ -152,7 +152,7 @@ export namespace GeneratorHelpers {
 
     export function LogWithApiItemPosition(logLevel: LogLevel, apiItem: Contracts.ApiBaseItemDto, message: string): void {
         const { FileName, Line, Character } = apiItem.Location;
-        const linePrefix = `${FileName}[${Line}:${Character + 1}]`;
+        const linePrefix = `${FileName}(${Line},${Character + 1})`;
         Logger.Log(logLevel, `${linePrefix}: ${message}`);
     }
 
