@@ -78,6 +78,9 @@ export const ApiDefinitionList: Array<[Contracts.ApiItemKinds, SerializedApiDefi
     [Contracts.ApiItemKinds.Construct, ApiConstruct],
     [Contracts.ApiItemKinds.TypeParameter, ApiTypeParameter],
     [Contracts.ApiItemKinds.TypeLiteral, ApiTypeLiteral],
+    [Contracts.ApiItemKinds.ObjectLiteral, ApiTypeLiteral],
     [Contracts.ApiItemKinds.FunctionType, ApiFunctionType],
+    [Contracts.ApiItemKinds.ArrowFunction, ApiFunctionType],
+    [Contracts.ApiItemKinds.FunctionExpression, ApiFunctionType],
     [Contracts.ApiItemKinds.Mapped, ApiMapped]
 ];
