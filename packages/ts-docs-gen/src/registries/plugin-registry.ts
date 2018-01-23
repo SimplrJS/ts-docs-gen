@@ -17,19 +17,18 @@ export class PluginRegistry {
     }
 
     public Register(plugin: Plugin): void {
-        const supportedKinds = plugin.SupportedApiItemKinds();
+        const supportedKinds: SupportedApiItemKindType[] = plugin.SupportedApiItemKinds();
 
         if (this.isSupportedKindsHasAny(supportedKinds)) {
             for (const [key, value] of this.registeredPlugins) {
                 this.registeredPlugins.set(key, [plugin, ...value]);
             }
             return;
-        }
-
-        // FIXME: Remove `as`. Somehow it doesn't work.
-        for (const kind of supportedKinds as Contracts.ApiItemKinds[]) {
-            const registeredPluginsOfKind = this.registeredPlugins.get(kind) || [];
-            this.registeredPlugins.set(kind, [plugin, ...registeredPluginsOfKind]);
+        } else {
+            for (const kind of supportedKinds as Contracts.ApiItemKinds[]) {
+                const registeredPluginsOfKind = this.registeredPlugins.get(kind) || [];
+                this.registeredPlugins.set(kind, [plugin, ...registeredPluginsOfKind]);
+            }
         }
     }
 
