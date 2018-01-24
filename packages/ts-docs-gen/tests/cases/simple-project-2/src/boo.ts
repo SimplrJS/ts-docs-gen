@@ -1,5 +1,4 @@
 export abstract class AbstractBoo {
-    // TODO: Maybe implement default value of property.
     public readonly abstract DefaultBooMessage: string = "Some string with a BooMessage...";
 
     constructor() {
@@ -26,6 +25,5 @@ export class Boo extends AbstractBoo {
         return this.BooMessage;
     }
 
-    // TODO: fix reverted order of union types.
     public AbstractBooMember?: string | undefined;
 }

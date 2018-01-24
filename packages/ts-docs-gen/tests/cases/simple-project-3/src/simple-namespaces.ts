@@ -7,7 +7,6 @@ export namespace SimpleNamespace {
         Property2: string;
     }
 
-    // TODO: Append used references in ApiVariablePlugin with type reference.
     export const SimpleObject: AnotherSimpleNamespace.SimpleInterface = {
         Property1: "1",
         Property2: "2",
