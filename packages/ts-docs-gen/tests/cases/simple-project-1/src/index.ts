@@ -5,7 +5,6 @@ export type SimpleTypeParameters = keyof SimpleType;
 
 export type GenericType<T> = { Property: T; };
 
-// TODO: fix GeneratorHelpers.ApiTypeToString to generate correct type in code block.
 /**
  * General comment about UnionType type.
  */
@@ -28,7 +27,6 @@ export type Numbers = 1 | 2 | 3 | 4 | 5 | 6;
 
 export type Name = string;
 
-// TODO: fix wrong type resolved.
 export type NameResolver = () => string;
 
 export type NameOrResolver = Name | NameResolver;
@@ -39,7 +37,6 @@ export type Tree<T> = {
     right: Tree<T>;
 };
 
-// TODO: add link to type from type literal (LinkedList in this case).
 export type LinkedList<T> = T & { next: LinkedList<T> };
 
 export type Negative = void | never;
@@ -48,7 +45,6 @@ export type IndexType = { [key: string]: number; };
 
 export type SelectedNumbers = Readonly<Numbers>;
 
-// TODO: fix wrong symbols escaped.
 export type PartialSimpleType = Partial<SimpleType>;
 
 export type Proxy<T> = {
@@ -56,7 +52,6 @@ export type Proxy<T> = {
     set(value: T): void;
 };
 
-// TODO: fix invalid output in return type.
 export type TypeWithMultipleTypeParameters<T, V, U> = {
     PropertyT: T;
     PropertyV: V;
@@ -65,31 +60,29 @@ export type TypeWithMultipleTypeParameters<T, V, U> = {
 
 // #region Integrated types
 
-// TODO: uncomment when supported (MappedType).
+export type Readonly<T> = {
+    readonly [P in keyof T]: T[P];
+};
 
-// export type Readonly<T> = {
-//     readonly [P in keyof T]: T[P];
-// };
+export type Partial<T> = {
+    [P in keyof T]?: T[P];
+};
 
-// export type Partial<T> = {
-//     [P in keyof T]?: T[P];
-// };
+export type Nullable<T> = {
+    [P in keyof T]: T[P] | null;
+};
 
-// export type Nullable<T> = {
-//     [P in keyof T]: T[P] | null;
-// };
+export type Proxify<T> = {
+    [P in keyof T]: Proxy<T[P]>;
+};
 
-// export type Proxify<T> = {
-//     [P in keyof T]: Proxy<T[P]>;
-// };
+export type Pick<T, K extends keyof T> = {
+    [P in K]: T[P];
+};
 
-// export type Pick<T, K extends keyof T> = {
-//     [P in K]: T[P];
-// };
-
-// export type Record<K extends string, T> = {
-//     [P in K]: T;
-// };
+export type Record<K extends string, T> = {
+    [P in K]: T;
+};
 
 // #endregion Integrated types
 
@@ -229,22 +222,19 @@ export enum EnumListWithStringValues {
 
 export const SampleConst: string = "sample-const";
 
-// TODO: uncomment when supported (ArrowFunction).
-// export const ArrowFunctionConst = (a: string) => `return-${a}`;
+export const ArrowFunctionConst = (a: string) => `return-${a}`;
 
 export let letString = "let";
 
 // tslint:disable-next-line:no-var-keyword
 export var varString = "var";
 
-// TODO: uncomment when supported (FunctionExpression).
-// // tslint:disable-next-line:no-var-keyword only-arrow-functions
-// export var functionVar = function(): string {
-//     return "functionVar";
-// };
+// tslint:disable-next-line:no-var-keyword only-arrow-functions
+export var functionVar = function(): string {
+    return "functionVar";
+};
 
-// TODO: uncomment when supported (ObjectLiteralExpression).
-// export const ObjectLiteralConst = { Property: "value" };
+export const ObjectLiteralConst = { Property: "value" };
 
 export const SymbolConst = Symbol("Some description");
 
@@ -278,12 +268,10 @@ export let FooLet: Boo | ExtendedBar = {
 
 export const GetFooConst = GetFoo;
 
-// TODO: check why no reference to `NameResolver` in Types section.
 export const NameResolverConst: NameResolver = () => "resolved";
 
 export const StringOrNull: string | null = null;
 
-// TODO: check why no reference to `NameResolver` in Types section.
 export const FunctionConst: () => NameResolver = () => () => "string";
 
 // #endregion Variables
