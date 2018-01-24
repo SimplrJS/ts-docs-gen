@@ -66,7 +66,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         }
 
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        const header = ["Name", "Constraint type", "Default type"];
+        const header = ["Name", "Constraint", "Default"];
 
         const content = typeParameters.map(typeParameter => {
             // ConstraintType
