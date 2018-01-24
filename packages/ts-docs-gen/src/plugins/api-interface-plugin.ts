@@ -71,19 +71,20 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
         }
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-        const headers = ["Name", "Type", "Optional"];
+        const headers = ["Name", "Type", "Optional", "Description"];
         const content = properties
             .map(x => [
                 x.Name,
                 x.Type.ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences)),
-                String(x.ApiItem.IsOptional)
+                String(x.ApiItem.IsOptional),
+                x.ApiItem.Metadata.DocumentationComment
             ]);
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
             .Bold("Properties")
             .EmptyLine()
-            .Table(headers, content, { removeColumnIfEmpty: true, removeRowIfEmpty: true })
+            .Table(headers, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
             .GetOutput();
 
         return pluginResult;
