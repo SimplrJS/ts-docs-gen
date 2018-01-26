@@ -53,7 +53,6 @@ export type ApiDefinitions = ApiDefinitionDefault |
     ApiFunctionExpression |
     ApiMapped;
 
-// TODO: Add tests from Contracts.ApiDefinitionKind
 // TODO: Fix any.
 export const ApiDefinitionList: Array<[Contracts.ApiDefinitionKind, SerializedApiDefinitionConstructor<any>]> = [
     [Contracts.ApiDefinitionKind.SourceFile, ApiSourceFile],

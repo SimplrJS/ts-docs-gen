@@ -28,7 +28,6 @@ export type ApiTypes = ApiTypeDefault |
     ApiTypeParenthesized |
     ApiTypeQuery;
 
-// TODO: Add tests from Contracts.ApiTypeKind
 // TODO: Fix any.
 export const ApiTypeList: Array<[Contracts.ApiTypeKind, SerializedApiTypeConstructor<any>]> = [
     [Contracts.ApiTypeKind.Basic, ApiTypeBasic],
