@@ -57,7 +57,7 @@ export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseDefinitio
     protected SerializedTypeToString(render: ReferenceRenderHandler, apiType: ApiTypes | undefined): string {
         if (apiType == null) {
             GeneratorHelpers.LogWithApiItemPosition(LogLevel.Warning, this.ApiItem, "Missing type.");
-            return "???";
+            return Contracts.TypeKeywords.Unknown;
         }
 
         return apiType.ToInlineText(render);

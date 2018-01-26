@@ -14,7 +14,7 @@ export abstract class ApiTypeBase<TKind extends Contracts.ApiBaseType> extends B
     protected SerializedTypeToString(render: ReferenceRenderHandler, apiType: SerializedApiType | undefined): string {
         if (apiType == null) {
             GeneratorHelpers.LogWithApiItemPosition(LogLevel.Error, this.ApiItem, "Missing type!");
-            return "???";
+            return Contracts.TypeKeywords.Unknown;
         }
 
         return apiType.ToInlineText(render);

@@ -14,7 +14,7 @@ export class ApiTypeQuery extends ApiTypeReferenceBase<Contracts.TypeQueryTypeDt
             name = this.ReferenceItem.Name;
         } else {
             GeneratorHelpers.LogWithApiItemPosition(LogLevel.Error, this.ApiItem, "Missing reference!");
-            name = "???";
+            name = Contracts.TypeKeywords.Unknown;
         }
 
         return [

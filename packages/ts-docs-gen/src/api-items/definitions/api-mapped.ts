@@ -26,7 +26,7 @@ export class ApiMapped extends ApiDefinitionWithType<Contracts.ApiMappedDto> {
             typeParameterString = this.TypeParameter.ToInlineText(render);
         } else {
             GeneratorHelpers.LogWithApiItemPosition(LogLevel.Warning, this.ApiItem, "A type parameter is missing!");
-            typeParameterString = "???";
+            typeParameterString = Contracts.TypeKeywords.Unknown;
         }
 
         const type = this.SerializedTypeToString(render, this.Type);
