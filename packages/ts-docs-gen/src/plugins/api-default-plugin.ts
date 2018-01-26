@@ -7,11 +7,11 @@ import { BasePlugin } from "../abstractions/base-plugin";
 import { ApiDefinitionDefault } from "../api-items/api-definition-default";
 
 export class ApiDefaultPlugin extends BasePlugin {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Any];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Any];
     }
 
-    public Render(options: PluginOptions, apiItem: Contracts.ApiItemDto): PluginResult {
+    public Render(options: PluginOptions, apiItem: Contracts.ApiDefinition): PluginResult {
         const serializedApiItem = new ApiDefinitionDefault(options.ExtractedData, apiItem, options.Reference);
 
         const heading = serializedApiItem.ToHeadingText();

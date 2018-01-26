@@ -7,42 +7,42 @@ import { ContainerPlugin, ContainerMembersKindsGroup } from "../abstractions/con
 import { ApiSourceFile } from "../api-items/definitions/api-source-file";
 
 export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFileDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.SourceFile];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.SourceFile];
     }
 
     public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
         {
             Heading: "Functions",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Function]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Function]
         },
         {
             Heading: "Interfaces",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Interface]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Interface]
         },
         {
             Heading: "Types",
-            Kinds: [GeneratorHelpers.ApiItemKinds.TypeAlias]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.TypeAlias]
         },
         {
             Heading: "Enums",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Enum]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Enum]
         },
         {
             Heading: "Classes",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Class]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Class]
         },
         {
             Heading: "Namespaces",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Namespace]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Namespace]
         },
         {
             Heading: "Variables",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Variable]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Variable]
         },
         {
             Heading: "Other",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Any]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Any]
         }
     ];
 

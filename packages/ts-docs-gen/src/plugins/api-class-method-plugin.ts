@@ -7,11 +7,11 @@ import { FunctionLikePlugin } from "../abstractions/function-like-plugin";
 import { ApiClassMethod } from "../api-items/definitions/api-class-method";
 
 export class ApiClassMethodPlugin extends FunctionLikePlugin<Contracts.ApiClassMethodDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.ClassMethod];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.ClassMethod];
     }
 
-    public CheckApiItem(item: Contracts.ApiItemDto): boolean {
+    public CheckApiItem(item: Contracts.ApiDefinition): boolean {
         return true;
     }
 

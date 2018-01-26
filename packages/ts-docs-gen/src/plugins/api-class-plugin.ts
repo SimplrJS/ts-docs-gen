@@ -7,35 +7,35 @@ import { ContainerPlugin, ContainerMembersKindsGroup } from "../abstractions/con
 import { ApiClass } from "../api-items/definitions/api-class";
 
 export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Class];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Class];
     }
 
     public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
         {
             Heading: "Index",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Index]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Index]
         },
         {
             Heading: "Constructor",
-            Kinds: [GeneratorHelpers.ApiItemKinds.ClassConstructor]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.ClassConstructor]
         },
         {
             Heading: "Methods",
-            Kinds: [GeneratorHelpers.ApiItemKinds.ClassMethod]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.ClassMethod]
         },
         {
             Heading: "Properties",
             Kinds: [
-                GeneratorHelpers.ApiItemKinds.ClassProperty,
-                GeneratorHelpers.ApiItemKinds.GetAccessor,
-                GeneratorHelpers.ApiItemKinds.SetAccessor,
+                GeneratorHelpers.ApiDefinitionKind.ClassProperty,
+                GeneratorHelpers.ApiDefinitionKind.GetAccessor,
+                GeneratorHelpers.ApiDefinitionKind.SetAccessor,
             ]
         },
         {
             Heading: "Other",
             Kinds: [
-                GeneratorHelpers.ApiItemKinds.Any
+                GeneratorHelpers.ApiDefinitionKind.Any
             ]
         }
     ];

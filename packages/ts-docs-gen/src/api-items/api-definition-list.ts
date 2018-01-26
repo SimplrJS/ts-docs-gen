@@ -53,34 +53,34 @@ export type ApiDefinitions = ApiDefinitionDefault |
     ApiFunctionType |
     ApiMapped;
 
-// TODO: Add tests from Contracts.ApiItemKinds
+// TODO: Add tests from Contracts.ApiDefinitionKind
 // TODO: Fix any.
-export const ApiDefinitionList: Array<[Contracts.ApiItemKinds, SerializedApiDefinitionConstructor<any>]> = [
-    [Contracts.ApiItemKinds.SourceFile, ApiSourceFile],
-    [Contracts.ApiItemKinds.Enum, ApiEnum],
-    [Contracts.ApiItemKinds.EnumMember, ApiEnumMember],
-    [Contracts.ApiItemKinds.Function, ApiFunction],
-    [Contracts.ApiItemKinds.Interface, ApiInterface],
-    [Contracts.ApiItemKinds.Method, ApiMethod],
-    [Contracts.ApiItemKinds.Namespace, ApiNamespace],
-    [Contracts.ApiItemKinds.Parameter, ApiParameter],
-    [Contracts.ApiItemKinds.Property, ApiProperty],
-    [Contracts.ApiItemKinds.Variable, ApiVariable],
-    [Contracts.ApiItemKinds.TypeAlias, ApiTypeAlias],
-    [Contracts.ApiItemKinds.Class, ApiClass],
-    [Contracts.ApiItemKinds.ClassConstructor, ApiClassConstructor],
-    [Contracts.ApiItemKinds.ClassProperty, ApiClassProperty],
-    [Contracts.ApiItemKinds.ClassMethod, ApiClassMethod],
-    [Contracts.ApiItemKinds.GetAccessor, ApiAccessor],
-    [Contracts.ApiItemKinds.SetAccessor, ApiAccessor],
-    [Contracts.ApiItemKinds.Index, ApiIndex],
-    [Contracts.ApiItemKinds.Call, ApiCall],
-    [Contracts.ApiItemKinds.Construct, ApiConstruct],
-    [Contracts.ApiItemKinds.TypeParameter, ApiTypeParameter],
-    [Contracts.ApiItemKinds.TypeLiteral, ApiTypeLiteral],
-    [Contracts.ApiItemKinds.ObjectLiteral, ApiTypeLiteral],
-    [Contracts.ApiItemKinds.FunctionType, ApiFunctionType],
-    [Contracts.ApiItemKinds.ArrowFunction, ApiFunctionType],
-    [Contracts.ApiItemKinds.FunctionExpression, ApiFunctionType],
-    [Contracts.ApiItemKinds.Mapped, ApiMapped]
+export const ApiDefinitionList: Array<[Contracts.ApiDefinitionKind, SerializedApiDefinitionConstructor<any>]> = [
+    [Contracts.ApiDefinitionKind.SourceFile, ApiSourceFile],
+    [Contracts.ApiDefinitionKind.Enum, ApiEnum],
+    [Contracts.ApiDefinitionKind.EnumMember, ApiEnumMember],
+    [Contracts.ApiDefinitionKind.Function, ApiFunction],
+    [Contracts.ApiDefinitionKind.Interface, ApiInterface],
+    [Contracts.ApiDefinitionKind.Method, ApiMethod],
+    [Contracts.ApiDefinitionKind.Namespace, ApiNamespace],
+    [Contracts.ApiDefinitionKind.Parameter, ApiParameter],
+    [Contracts.ApiDefinitionKind.Property, ApiProperty],
+    [Contracts.ApiDefinitionKind.Variable, ApiVariable],
+    [Contracts.ApiDefinitionKind.TypeAlias, ApiTypeAlias],
+    [Contracts.ApiDefinitionKind.Class, ApiClass],
+    [Contracts.ApiDefinitionKind.ClassConstructor, ApiClassConstructor],
+    [Contracts.ApiDefinitionKind.ClassProperty, ApiClassProperty],
+    [Contracts.ApiDefinitionKind.ClassMethod, ApiClassMethod],
+    [Contracts.ApiDefinitionKind.GetAccessor, ApiAccessor],
+    [Contracts.ApiDefinitionKind.SetAccessor, ApiAccessor],
+    [Contracts.ApiDefinitionKind.Index, ApiIndex],
+    [Contracts.ApiDefinitionKind.Call, ApiCall],
+    [Contracts.ApiDefinitionKind.Construct, ApiConstruct],
+    [Contracts.ApiDefinitionKind.TypeParameter, ApiTypeParameter],
+    [Contracts.ApiDefinitionKind.TypeLiteral, ApiTypeLiteral],
+    [Contracts.ApiDefinitionKind.ObjectLiteral, ApiTypeLiteral],
+    [Contracts.ApiDefinitionKind.FunctionType, ApiFunctionType],
+    [Contracts.ApiDefinitionKind.ArrowFunction, ApiFunctionType],
+    [Contracts.ApiDefinitionKind.FunctionExpression, ApiFunctionType],
+    [Contracts.ApiDefinitionKind.Mapped, ApiMapped]
 ];

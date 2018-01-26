@@ -8,7 +8,7 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
  * - `Foo`
  * - `Foo<string>`
  */
-export class ApiTypeReference extends ApiTypeReferenceBase<Contracts.ApiReferenceType> {
+export class ApiTypeReference extends ApiTypeReferenceBase<Contracts.ApiReferenceTypeDto> {
     private typeParameters: ApiTypes[] | undefined;
 
     public get TypeParameters(): ApiTypes[] | undefined {

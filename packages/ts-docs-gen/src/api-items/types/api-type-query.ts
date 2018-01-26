@@ -6,7 +6,7 @@ import { Logger } from "../../utils/logger";
 /**
  * Example: `typeof Foo`
  */
-export class ApiTypeQuery extends ApiTypeReferenceBase<Contracts.TypeQueryType> {
+export class ApiTypeQuery extends ApiTypeReferenceBase<Contracts.TypeQueryTypeDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         let name: string;
         if (this.ReferenceItem != null) {

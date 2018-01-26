@@ -7,14 +7,14 @@ import { ApiTypeParameter } from "../api-items/definitions/api-type-parameter";
 import { ApiTypes } from "../api-items/api-type-list";
 import { ReferenceRenderHandler } from "../contracts/serialized-api-item";
 
-export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> implements Plugin<TKind> {
-    public abstract SupportedApiItemKinds(): SupportedApiItemKindType[];
+export abstract class BasePlugin<TKind extends Contracts.ApiBaseDefinition = Contracts.ApiDefinition> implements Plugin<TKind> {
+    public abstract SupportedApiDefinitionKind(): SupportedApiItemKindType[];
 
     public CheckApiItem(item: TKind): boolean {
         return true;
     }
 
-    protected RenderApiItemMetadata(apiItem: Contracts.ApiItemDto): string[] {
+    protected RenderApiItemMetadata(apiItem: Contracts.ApiDefinition): string[] {
         const builder = new MarkdownBuilder();
 
         // Optimise?
@@ -132,7 +132,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
                 return name;
             }
             const apiItem = extractedData.Registry[reference];
-            if (apiItem.ApiKind === Contracts.ApiItemKinds.TypeParameter) {
+            if (apiItem.ApiKind === Contracts.ApiDefinitionKind.TypeParameter) {
                 return name;
             }
 

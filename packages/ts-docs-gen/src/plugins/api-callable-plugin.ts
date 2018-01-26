@@ -13,11 +13,11 @@ import { ApiCallable } from "../api-items/api-callable";
 export type CallableApiItem = Contracts.ApiCallDto | Contracts.ApiMethodDto | Contracts.ApiConstructDto;
 
 export class ApiCallablePlugin extends FunctionLikePlugin<CallableApiItem> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
         return [
-            GeneratorHelpers.ApiItemKinds.Construct,
-            GeneratorHelpers.ApiItemKinds.Call,
-            GeneratorHelpers.ApiItemKinds.Method
+            GeneratorHelpers.ApiDefinitionKind.Construct,
+            GeneratorHelpers.ApiDefinitionKind.Call,
+            GeneratorHelpers.ApiDefinitionKind.Method
         ];
     }
 
@@ -27,13 +27,14 @@ export class ApiCallablePlugin extends FunctionLikePlugin<CallableApiItem> {
         reference: ApiItemReference
     ): ApiCallable<CallableApiItem> {
         switch (apiItem.ApiKind) {
-            case Contracts.ApiItemKinds.Construct: {
+            case Contracts.ApiDefinitionKind.ConstructorType:
+            case Contracts.ApiDefinitionKind.Construct: {
                 return new ApiConstruct(extractedData, apiItem, reference);
             }
-            case Contracts.ApiItemKinds.Call: {
+            case Contracts.ApiDefinitionKind.Call: {
                 return new ApiCall(extractedData, apiItem, reference);
             }
-            case Contracts.ApiItemKinds.Method: {
+            case Contracts.ApiDefinitionKind.Method: {
                 return new ApiMethod(extractedData, apiItem, reference);
             }
         }

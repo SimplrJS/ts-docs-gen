@@ -9,10 +9,10 @@ import { ApiAccessor } from "../api-items/definitions/api-accessor";
 export type Kind = Contracts.ApiSetAccessorDto | Contracts.ApiGetAccessorDto;
 
 export class ApiClassAccessorPlugin extends BasePlugin<Kind> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
         return [
-            GeneratorHelpers.ApiItemKinds.GetAccessor,
-            GeneratorHelpers.ApiItemKinds.SetAccessor,
+            GeneratorHelpers.ApiDefinitionKind.GetAccessor,
+            GeneratorHelpers.ApiDefinitionKind.SetAccessor,
         ];
     }
 

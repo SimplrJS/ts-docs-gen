@@ -7,7 +7,7 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
  * - `Foo | Bar`
  * - `Foo & Bar`
  */
-export class ApiTypeUnionOrIntersection extends ApiTypeMembersBase<Contracts.ApiUnionOrIntersectionType> {
+export class ApiTypeUnionOrIntersection extends ApiTypeMembersBase<Contracts.ApiUnionOrIntersectionTypeDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         const character = this.ApiItem.ApiTypeKind === Contracts.ApiTypeKind.Union ? "|" : "&";
 

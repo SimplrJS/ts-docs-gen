@@ -7,8 +7,8 @@ import { FunctionLikePlugin } from "../abstractions/function-like-plugin";
 import { ApiClassConstructor } from "../api-items/definitions/api-class-constructor";
 
 export class ApiClassConstructorPlugin extends FunctionLikePlugin<Contracts.ApiClassConstructorDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.ClassConstructor];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.ClassConstructor];
     }
 
     public Render(options: PluginOptions, apiItem: Contracts.ApiClassConstructorDto): PluginResult {

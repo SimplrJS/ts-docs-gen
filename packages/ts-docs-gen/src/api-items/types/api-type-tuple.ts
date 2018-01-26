@@ -5,7 +5,7 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 /**
  * Example: `[string, number]`.
  */
-export class ApiTypeTuple extends ApiTypeMembersBase<Contracts.TupleType> {
+export class ApiTypeTuple extends ApiTypeMembersBase<Contracts.TupleTypeDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         return [
             `[${this.Members.map(x => x.ToInlineText(render)).join(`, `)}]`

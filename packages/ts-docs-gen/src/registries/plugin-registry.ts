@@ -1,23 +1,23 @@
 import { Contracts } from "ts-extractor";
-import { Plugin, SupportedApiItemKindType, ApiItemKindsAdditional } from "../contracts/plugin";
+import { Plugin, SupportedApiItemKindType, ApiDefinitionKindAdditional } from "../contracts/plugin";
 
 export class PluginRegistry {
     constructor() {
 
         // Initialize Plugins map.
-        for (const [, kindValue] of Object.entries(Contracts.ApiItemKinds)) {
-            this.registeredPlugins.set(kindValue as Contracts.ApiItemKinds, []);
+        for (const [, kindValue] of Object.entries(Contracts.ApiDefinitionKind)) {
+            this.registeredPlugins.set(kindValue as Contracts.ApiDefinitionKind, []);
         }
     }
 
-    private registeredPlugins: Map<Contracts.ApiItemKinds, Plugin[]> = new Map();
+    private registeredPlugins: Map<Contracts.ApiDefinitionKind, Plugin[]> = new Map();
 
-    private isSupportedKindsHasAny(kinds: SupportedApiItemKindType[]): kinds is ApiItemKindsAdditional[] {
-        return Boolean(kinds.find(x => x === ApiItemKindsAdditional.Any));
+    private isSupportedKindsHasAny(kinds: SupportedApiItemKindType[]): kinds is ApiDefinitionKindAdditional[] {
+        return Boolean(kinds.find(x => x === ApiDefinitionKindAdditional.Any));
     }
 
     public Register(plugin: Plugin): void {
-        const supportedKinds: SupportedApiItemKindType[] = plugin.SupportedApiItemKinds();
+        const supportedKinds: SupportedApiItemKindType[] = plugin.SupportedApiDefinitionKind();
 
         if (this.isSupportedKindsHasAny(supportedKinds)) {
             for (const [key, value] of this.registeredPlugins) {
@@ -25,14 +25,14 @@ export class PluginRegistry {
             }
             return;
         } else {
-            for (const kind of supportedKinds as Contracts.ApiItemKinds[]) {
+            for (const kind of supportedKinds as Contracts.ApiDefinitionKind[]) {
                 const registeredPluginsOfKind = this.registeredPlugins.get(kind) || [];
                 this.registeredPlugins.set(kind, [plugin, ...registeredPluginsOfKind]);
             }
         }
     }
 
-    public GetPluginsByKind(kind: Contracts.ApiItemKinds): Plugin[] {
+    public GetPluginsByKind(kind: Contracts.ApiDefinitionKind): Plugin[] {
         return this.registeredPlugins.get(kind) || [];
     }
 }

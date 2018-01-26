@@ -15,26 +15,26 @@ import { ApiDefinitions } from "../api-items/api-definition-list";
 import { ApiProperty } from "../api-items/definitions/api-property";
 
 export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Interface];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Interface];
     }
 
     public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
         {
             Heading: "Construct",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Construct]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Construct]
         },
         {
             Heading: "Call",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Call]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Call]
         },
         {
             Heading: "Index",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Index]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Index]
         },
         {
             Heading: "Method",
-            Kinds: [GeneratorHelpers.ApiItemKinds.Method]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Method]
         }
     ];
 
@@ -64,7 +64,7 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
 
     private renderPropertyMembers(extractedData: ExtractDto, members: ApiDefinitions[]): PluginResultData | undefined {
         const properties: ApiProperty[] = members
-            .filter((x): x is ApiProperty => x.ApiItem.ApiKind === Contracts.ApiItemKinds.Property);
+            .filter((x): x is ApiProperty => x.ApiItem.ApiKind === Contracts.ApiDefinitionKind.Property);
 
         if (properties.length === 0) {
             return undefined;

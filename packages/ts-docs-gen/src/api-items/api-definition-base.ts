@@ -11,8 +11,8 @@ import { ApiTypes } from "./api-type-list";
 /**
  * Base definition class with helper functions.
  */
-export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> extends BaseApiItemClass<TKind>
-    implements SerializedApiDefinition<TKind> {
+export abstract class ApiDefinitionBase<TKind extends Contracts.ApiBaseDefinition = Contracts.ApiBaseDefinition>
+    extends BaseApiItemClass<TKind> implements SerializedApiDefinition<TKind> {
 
     constructor(extractedData: ExtractDto, apiItem: TKind, private reference: ApiItemReference) {
         super(extractedData, apiItem);

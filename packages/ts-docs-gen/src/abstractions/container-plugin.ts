@@ -6,7 +6,7 @@ import { PluginResultData, PluginOptions, SupportedApiItemKindType } from "../co
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiDefinitions } from "../api-items/api-definition-list";
 
-export interface ApiContainer extends Contracts.ApiBaseItemDto {
+export interface ApiContainer extends Contracts.ApiBaseDefinition {
     Members: Contracts.ApiItemReference[];
 }
 
@@ -37,7 +37,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
             // Filter item references by kind
             const serializedApiItems = membersList
                 .filter(x => item.Kinds.indexOf(x.ApiItem.ApiKind) !== -1 ||
-                    item.Kinds.indexOf(GeneratorHelpers.ApiItemKinds.Any) !== -1);
+                    item.Kinds.indexOf(GeneratorHelpers.ApiDefinitionKind.Any) !== -1);
             // Remove references that was used
             membersList = membersList.filter(x => serializedApiItems.indexOf(x) === -1);
 
@@ -81,8 +81,8 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                             .EmptyLine();
                     } else {
                         switch (member.ApiItem.ApiKind) {
-                            case Contracts.ApiItemKinds.Namespace:
-                            case Contracts.ApiItemKinds.Class: {
+                            case Contracts.ApiDefinitionKind.Namespace:
+                            case Contracts.ApiDefinitionKind.Class: {
                                 const renderedItem = pluginOptions.GetItemPluginResult(member.Reference);
                                 pluginResultData.Members.push({
                                     Reference: member.Reference,

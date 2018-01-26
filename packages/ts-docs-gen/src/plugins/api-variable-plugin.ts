@@ -7,8 +7,8 @@ import { BasePlugin } from "../abstractions/base-plugin";
 import { ApiVariable } from "../api-items/definitions/api-variable";
 
 export class ApiVariablePlugin extends BasePlugin<Contracts.ApiVariableDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Variable];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Variable];
     }
 
     public Render(options: PluginOptions, apiItem: Contracts.ApiVariableDto): PluginResult {
