@@ -5,16 +5,16 @@ import { GeneratorHelpers } from "@src/generator-helpers";
 import { MarkdownBuilder } from "@simplrjs/markdown";
 
 export class VariablePlugin extends BasePlugin<Contracts.ApiVariableDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Variable];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Variable];
     }
 
-    public Render(options: PluginOptions<Contracts.ApiVariableDto>): PluginResult<Contracts.ApiVariableDto> {
+    public Render(options: PluginOptions, apiItem: Contracts.ApiVariableDto): PluginResult<Contracts.ApiVariableDto> {
         const heading: string = `My variable ${options.Reference.Alias}`;
 
         const pluginResult: PluginResult<Contracts.ApiVariableDto> = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: options.ApiItem,
+            ApiItem: apiItem,
             Reference: options.Reference,
             Headings: [
                 {

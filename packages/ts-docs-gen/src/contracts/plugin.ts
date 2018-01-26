@@ -2,11 +2,11 @@ import { Contracts, ExtractDto } from "ts-extractor";
 
 import { ApiItemReference } from "./api-item-reference";
 
-export enum ApiItemKindsAdditional {
+export enum ApiDefinitionKindAdditional {
     Any = "any"
 }
 
-export type SupportedApiItemKindType = Contracts.ApiItemKinds | ApiItemKindsAdditional;
+export type SupportedApiItemKindType = Contracts.ApiDefinitionKind | ApiDefinitionKindAdditional;
 
 export interface PluginHeading {
     Heading: string;
@@ -29,7 +29,7 @@ export interface PluginOptions {
     IsPluginResultExists: IsPluginResultExistsHandler;
 }
 
-export interface PluginResultData<TKind = Contracts.ApiItemDto> {
+export interface PluginResultData<TKind = Contracts.ApiDefinition> {
     /**
      * All headings used in `Result` with ApiItemIds.
      */
@@ -45,13 +45,13 @@ export interface PluginResultData<TKind = Contracts.ApiItemDto> {
     Members: Array<PluginMember<TKind>>;
 }
 
-export interface PluginResult<TKind = Contracts.ApiItemDto> extends PluginResultData<TKind> {
+export interface PluginResult<TKind = Contracts.ApiDefinition> extends PluginResultData<TKind> {
     Reference: ApiItemReference;
     ApiItem: TKind;
 }
 
-export interface Plugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> {
-    SupportedApiItemKinds(): SupportedApiItemKindType[];
+export interface Plugin<TKind extends Contracts.ApiBaseDefinition = Contracts.ApiDefinition> {
+    SupportedApiDefinitionKind(): SupportedApiItemKindType[];
     CheckApiItem(item: TKind): boolean;
     Render(options: PluginOptions, apiItem: TKind): PluginResult;
 }

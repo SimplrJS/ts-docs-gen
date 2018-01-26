@@ -3,7 +3,7 @@ import { ApiDefinitionBase } from "./api-definition-base";
 import { GeneratorHelpers } from "../generator-helpers";
 import { ApiTypes } from "./api-type-list";
 
-export type ApiBaseItemWithTypeDto = Contracts.ApiBaseItemDto & { Type: Contracts.ApiType };
+export type ApiBaseItemWithTypeDto = Contracts.ApiBaseDefinition & { Type: Contracts.ApiType };
 
 export abstract class ApiDefinitionWithType<TKind extends ApiBaseItemWithTypeDto = ApiBaseItemWithTypeDto>
     extends ApiDefinitionBase<TKind> {

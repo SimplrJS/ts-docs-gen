@@ -7,38 +7,42 @@ import { ContainerPlugin, ContainerMembersKindsGroup } from "../abstractions/con
 import { ApiNamespace } from "../api-items/definitions/api-namespace";
 
 export class ApiNamespacePlugin extends ContainerPlugin<Contracts.ApiNamespaceDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Namespace];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Namespace];
     }
 
     public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
         {
             Heading: "Functions",
-            Kinds: [Contracts.ApiItemKinds.Function]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Function]
         },
         {
             Heading: "Interfaces",
-            Kinds: [Contracts.ApiItemKinds.Interface]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Interface]
         },
         {
             Heading: "Types",
-            Kinds: [Contracts.ApiItemKinds.TypeAlias]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.TypeAlias]
         },
         {
             Heading: "Enums",
-            Kinds: [Contracts.ApiItemKinds.Enum]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Enum]
         },
         {
             Heading: "Classes",
-            Kinds: [Contracts.ApiItemKinds.Class]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Class]
         },
         {
             Heading: "Namespaces",
-            Kinds: [Contracts.ApiItemKinds.Namespace]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Namespace]
         },
         {
             Heading: "Variables",
-            Kinds: [Contracts.ApiItemKinds.Variable]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Variable]
+        },
+        {
+            Heading: "Other",
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Any]
         }
     ];
 

@@ -8,8 +8,8 @@ import { ApiEnum } from "../api-items/definitions/api-enum";
 import { ApiEnumMember } from "../api-items/definitions/api-enum-member";
 
 export class ApiEnumPlugin extends BasePlugin<Contracts.ApiEnumDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Enum];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Enum];
     }
 
     public CheckApiItem(item: Contracts.ApiEnumDto): boolean {

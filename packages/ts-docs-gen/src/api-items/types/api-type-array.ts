@@ -7,7 +7,7 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 /**
  * Example: `Foo[]`
  */
-export class ApiTypeArray extends ApiTypeBase<Contracts.ArrayType> {
+export class ApiTypeArray extends ApiTypeBase<Contracts.ArrayTypeDto> {
     private type: ApiTypes;
 
     public get Type(): ApiTypes {

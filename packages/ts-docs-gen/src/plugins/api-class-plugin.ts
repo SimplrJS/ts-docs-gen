@@ -7,34 +7,39 @@ import { ContainerPlugin, ContainerMembersKindsGroup } from "../abstractions/con
 import { ApiClass } from "../api-items/definitions/api-class";
 
 export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Class];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Class];
     }
 
     public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
         {
             Heading: "Index",
-            Kinds: [Contracts.ApiItemKinds.Index]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Index]
         },
         {
             Heading: "Constructor",
-            Kinds: [Contracts.ApiItemKinds.ClassConstructor]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.ClassConstructor]
         },
         {
             Heading: "Methods",
-            Kinds: [Contracts.ApiItemKinds.ClassMethod]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.ClassMethod]
         },
         {
             Heading: "Properties",
             Kinds: [
-                Contracts.ApiItemKinds.ClassProperty,
-                Contracts.ApiItemKinds.GetAccessor,
-                Contracts.ApiItemKinds.SetAccessor,
+                GeneratorHelpers.ApiDefinitionKind.ClassProperty,
+                GeneratorHelpers.ApiDefinitionKind.GetAccessor,
+                GeneratorHelpers.ApiDefinitionKind.SetAccessor,
+            ]
+        },
+        {
+            Heading: "Other",
+            Kinds: [
+                GeneratorHelpers.ApiDefinitionKind.Any
             ]
         }
     ];
 
-    // TODO: Add TypeParameters render.
     public Render(options: PluginOptions, apiItem: Contracts.ApiClassDto): PluginResult {
         const serializedApiItem = new ApiClass(options.ExtractedData, apiItem, options.Reference);
 
@@ -53,6 +58,10 @@ export class ApiClassPlugin extends ContainerPlugin<Contracts.ApiClassDto> {
             .Text(this.RenderApiItemMetadata(apiItem))
             .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
+
+        // TypeParameters
+        const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, serializedApiItem.TypeParameters);
+        GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
         // ApiMembers
         const membersResult = this.RenderMemberGroups(options, ApiClassPlugin.MemberKindsList, serializedApiItem.Members);

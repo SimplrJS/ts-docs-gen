@@ -10,7 +10,7 @@ import { ReferenceRenderHandler } from "../contracts/serialized-api-item";
 /**
  * Base class for callable api items.
  */
-export abstract class ApiCallable<TKind extends Contracts.ApiCallableDto> extends ApiDefinitionBase<TKind> {
+export abstract class ApiCallable<TKind extends Contracts.ApiCallableBaseDefinition> extends ApiDefinitionBase<TKind> {
     private parameters: ApiParameter[];
 
     public get Parameters(): ApiParameter[] {

@@ -24,15 +24,15 @@ export class FileManager {
      */
     private referenceToFile: Map<string, string> = new Map();
 
-    private resolveMemberKindsList(apiItemKind: Contracts.ApiItemKinds): ContainerMembersKindsGroup[] | undefined {
+    private resolveMemberKindsList(apiItemKind: Contracts.ApiDefinitionKind): ContainerMembersKindsGroup[] | undefined {
         switch (apiItemKind) {
-            case Contracts.ApiItemKinds.Class: {
+            case Contracts.ApiDefinitionKind.Class: {
                 return ApiClassPlugin.MemberKindsList;
             }
-            case Contracts.ApiItemKinds.Namespace: {
+            case Contracts.ApiDefinitionKind.Namespace: {
                 return ApiNamespacePlugin.MemberKindsList;
             }
-            case Contracts.ApiItemKinds.SourceFile: {
+            case Contracts.ApiDefinitionKind.SourceFile: {
                 return ApiSourceFilePlugin.MemberKindsList;
             }
         }

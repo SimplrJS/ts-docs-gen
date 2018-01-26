@@ -68,7 +68,7 @@ export class Generator {
 
     private renderApiItem(
         apiItemReference: ApiItemReference,
-        apiItem: Contracts.ApiItemDto
+        apiItem: Contracts.ApiDefinition
     ): PluginResult {
         const plugins = this.configuration.PluginManager.GetPluginsByKind(apiItem.ApiKind);
 

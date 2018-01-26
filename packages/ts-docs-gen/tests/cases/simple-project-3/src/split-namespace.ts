@@ -1,4 +1,3 @@
-// TODO: implement merge declarations.
 // https://www.typescriptlang.org/docs/handbook/declaration-merging.html
 export namespace Validation {
     export interface StringValidator {

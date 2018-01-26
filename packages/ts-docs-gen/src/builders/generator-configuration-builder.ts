@@ -8,7 +8,6 @@ import { Plugin } from "../contracts/plugin";
 import { PluginRegistry } from "../registries/plugin-registry";
 import { DefaultPlugins } from "../default-plugins";
 
-// TODO: Add method to read compiler options from tsconfig.
 export class GeneratorConfigurationBuilder {
     constructor(private projectDirectory: string) {
         this.configuration.ProjectDirectory = projectDirectory;
@@ -16,9 +15,19 @@ export class GeneratorConfigurationBuilder {
 
     private configuration: Partial<WorkingGeneratorConfiguration> = {};
     private compilerOptions: Partial<ts.CompilerOptions>;
+    private tsConfigLocation: string | undefined;
 
     private resolveProjectDirectory(): string {
         return this.configuration.ProjectDirectory || this.projectDirectory;
+    }
+
+    /**
+     * @param tsconfigLocation Relative `tsconfig.json` location from `projectDirectory`.
+     */
+    public SetTsConfigLocation(tsconfigLocation: string): this {
+        this.tsConfigLocation = tsconfigLocation;
+
+        return this;
     }
 
     public OverrideCompilerOptions(compilerOptions: Partial<ts.CompilerOptions>): this {
@@ -66,7 +75,6 @@ export class GeneratorConfigurationBuilder {
         }
 
         if (this.configuration.Plugins != null) {
-            // TODO: Register default plugins.
             // Registering given plugins.
             for (const plugin of this.configuration.Plugins) {
                 pluginManager.Register(plugin);
@@ -77,7 +85,8 @@ export class GeneratorConfigurationBuilder {
         // Resolve tsconfig
         let compilerOptions = this.compilerOptions;
         if (compilerOptions == null) {
-            compilerOptions = await GetCompilerOptions(path.join(this.resolveProjectDirectory(), "tsconfig.json"));
+            const tsconfigLocation = this.tsConfigLocation || path.join(this.resolveProjectDirectory(), "tsconfig.json");
+            compilerOptions = await GetCompilerOptions(tsconfigLocation);
         }
 
         // Extractor

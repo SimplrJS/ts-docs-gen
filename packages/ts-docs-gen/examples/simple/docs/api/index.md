@@ -1,56 +1,17 @@
-# Table of contents
-
-* [index.ts][SourceFile-0]
-    * Interfaces
-        * [Start][InterfaceDeclaration-1]
-
 # index.ts
 
-## Interfaces
+## Namespaces
 
-### Start
+### [SimpleNamespace][ModuleDeclaration-0]
 
-```typescript
-interface Start {
-    HandleMessage(message: string): string;
-}
-```
-#### Method
-
-```typescript
-HandleMessage(message: string): string;
-```
-
-**Parameters**
-
-| Name    | Type   |
-| ------- | ------ |
-| message | string |
-
-**Return type**
-
-string
-
-
-## Classes
-
-### [Foo][ClassDeclaration-0]
-
-General comment about class Foo.
+General comment about SimpleNamespace.
 
 
 ----------
 
-### [FooStart][ClassDeclaration-1]
-
-
-----------
-
-### [BooStart][ClassDeclaration-2]
+### [AnotherSimpleNamespace][ModuleDeclaration-1]
 
 
 [SourceFile-0]: index.md#indexts
-[InterfaceDeclaration-1]: index.md#start
-[ClassDeclaration-0]: index/foo.md#foo
-[ClassDeclaration-1]: index/foostart.md#foostart
-[ClassDeclaration-2]: index/boostart.md#boostart
+[ModuleDeclaration-0]: index/simplenamespace.md#simplenamespace
+[ModuleDeclaration-1]: index/anothersimplenamespace.md#anothersimplenamespace

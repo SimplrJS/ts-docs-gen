@@ -1,4 +1,5 @@
 import { Contracts } from "ts-extractor";
+import { LogLevel } from "simplr-logger";
 import { SerializedApiType, ReferenceRenderHandler } from "../contracts/serialized-api-item";
 import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { GeneratorHelpers } from "../generator-helpers";
@@ -12,8 +13,8 @@ export abstract class ApiTypeBase<TKind extends Contracts.ApiBaseType> extends B
 
     protected SerializedTypeToString(render: ReferenceRenderHandler, apiType: SerializedApiType | undefined): string {
         if (apiType == null) {
-            // TODO: Add Log for missing type.
-            return "???";
+            GeneratorHelpers.LogWithApiItemPosition(LogLevel.Error, this.ApiItem, "Missing type!");
+            return Contracts.TypeKeywords.Unknown;
         }
 
         return apiType.ToInlineText(render);

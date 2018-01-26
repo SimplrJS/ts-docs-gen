@@ -7,40 +7,41 @@ import { ApiTypeParameter } from "../api-items/definitions/api-type-parameter";
 import { ApiTypes } from "../api-items/api-type-list";
 import { ReferenceRenderHandler } from "../contracts/serialized-api-item";
 
-export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> implements Plugin<TKind> {
-    public abstract SupportedApiItemKinds(): SupportedApiItemKindType[];
+export abstract class BasePlugin<TKind extends Contracts.ApiBaseDefinition = Contracts.ApiDefinition> implements Plugin<TKind> {
+    public abstract SupportedApiDefinitionKind(): SupportedApiItemKindType[];
 
     public CheckApiItem(item: TKind): boolean {
         return true;
     }
 
-    protected RenderApiItemMetadata(apiItem: Contracts.ApiItemDto): string[] {
+    protected RenderApiItemMetadata(apiItem: Contracts.ApiDefinition): string[] {
         const builder = new MarkdownBuilder();
 
         // Optimise?
-        const isBeta = apiItem.Metadata.JSDocTags.findIndex(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Beta) !== -1;
+        const beta = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Deprecated);
         const deprecated = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Deprecated);
         const internal = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Internal);
         const summary = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Summary);
         const jSDocComment = apiItem.Metadata.DocumentationComment;
 
-        if (isBeta) {
+        if (beta != null) {
+            const message = Boolean(beta.text) ? `: ${beta.text}` : "";
             builder
-                .Text(`<span style="color: #d2d255;">Warning: Beta!</span>`)
+                .Bold(`Warning Beta${message}!`)
                 .EmptyLine();
         }
 
         if (deprecated != null) {
             const message = Boolean(deprecated.text) ? `: ${deprecated.text}` : "";
             builder
-                .Text(`<span style="color: red;">Deprecated${message}!</span>`)
+                .Text(`Deprecated${message}!</span>`)
                 .EmptyLine();
         }
 
         if (internal != null) {
             const message = Boolean(internal.text) ? `: ${internal.text}` : "";
             builder
-                .Bold(`Internal ${message}`.trim())
+                .Bold(`Internal${message}!`)
                 .EmptyLine();
         }
 
@@ -59,14 +60,13 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
         return builder.GetOutput();
     }
 
-    // TODO: Escape string!
     protected RenderTypeParameters(extractedData: ExtractDto, typeParameters: ApiTypeParameter[]): PluginResultData | undefined {
         if (typeParameters.length === 0) {
             return undefined;
         }
 
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        const header = ["Name", "Constraint type", "Default type"];
+        const header = ["Name", "Constraint", "Default"];
 
         const content = typeParameters.map(typeParameter => {
             // ConstraintType
@@ -132,7 +132,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseItemDto = Contra
                 return name;
             }
             const apiItem = extractedData.Registry[reference];
-            if (apiItem.ApiKind === Contracts.ApiItemKinds.TypeParameter) {
+            if (apiItem.ApiKind === Contracts.ApiDefinitionKind.TypeParameter) {
                 return name;
             }
 

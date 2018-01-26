@@ -6,7 +6,7 @@ import { SerializedApiType, ReferenceRenderHandler } from "../../contracts/seria
 /**
  * Example: `Foo[T]`
  */
-export class ApiIndexedAccess extends ApiTypeBase<Contracts.IndexedAccessType> {
+export class ApiIndexedAccess extends ApiTypeBase<Contracts.IndexedAccessTypeDto> {
     private objectType: SerializedApiType;
 
     public get ObjectType(): SerializedApiType {

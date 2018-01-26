@@ -7,8 +7,8 @@ import { FunctionLikePlugin } from "../abstractions/function-like-plugin";
 import { ApiFunction } from "../api-items/definitions/api-function";
 
 export class ApiFunctionPlugin extends FunctionLikePlugin<Contracts.ApiFunctionDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Function];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Function];
     }
 
     public Render(options: PluginOptions, apiItem: Contracts.ApiFunctionDto): PluginResult {

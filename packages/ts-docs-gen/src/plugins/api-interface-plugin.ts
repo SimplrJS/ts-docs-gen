@@ -15,26 +15,26 @@ import { ApiDefinitions } from "../api-items/api-definition-list";
 import { ApiProperty } from "../api-items/definitions/api-property";
 
 export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Interface];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Interface];
     }
 
     public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
         {
             Heading: "Construct",
-            Kinds: [Contracts.ApiItemKinds.Construct]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Construct]
         },
         {
             Heading: "Call",
-            Kinds: [Contracts.ApiItemKinds.Call]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Call]
         },
         {
             Heading: "Index",
-            Kinds: [Contracts.ApiItemKinds.Index]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Index]
         },
         {
             Heading: "Method",
-            Kinds: [Contracts.ApiItemKinds.Method]
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Method]
         }
     ];
 
@@ -64,26 +64,27 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
 
     private renderPropertyMembers(extractedData: ExtractDto, members: ApiDefinitions[]): PluginResultData | undefined {
         const properties: ApiProperty[] = members
-            .filter((x): x is ApiProperty => x.ApiItem.ApiKind === Contracts.ApiItemKinds.Property);
+            .filter((x): x is ApiProperty => x.ApiItem.ApiKind === Contracts.ApiDefinitionKind.Property);
 
         if (properties.length === 0) {
             return undefined;
         }
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-        const headers = ["Name", "Type", "Optional"];
+        const headers = ["Name", "Type", "Optional", "Description"];
         const content = properties
             .map(x => [
                 x.Name,
                 x.Type.ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences)),
-                String(x.ApiItem.IsOptional)
+                String(x.ApiItem.IsOptional),
+                x.ApiItem.Metadata.DocumentationComment
             ]);
 
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
             .Bold("Properties")
             .EmptyLine()
-            .Table(headers, content, { removeColumnIfEmpty: true, removeRowIfEmpty: true })
+            .Table(headers, content, GeneratorHelpers.DEFAULT_TABLE_OPTIONS)
             .GetOutput();
 
         return pluginResult;
@@ -128,7 +129,6 @@ export class ApiInterfacePlugin extends ContainerPlugin<Contracts.ApiInterfaceDt
             serializedApiItem.Members,
             {
                 IncludeHr: false,
-                ShouldRenderUnlistedMembers: false,
                 StartingHeadingLevel: 4
             }
         );

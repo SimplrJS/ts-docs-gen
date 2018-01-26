@@ -1,19 +1,22 @@
-// TODO: add classes to table of contents.
-
-export { Foo } from "./foo";
-
-export interface Start {
-    HandleMessage(message: string): string;
-}
-
-// TODO: add link of implemented interfaces.
-export class FooStart implements Start {
-    public HandleMessage(message: string): string {
-        return message;
+/**
+ * General comment about SimpleNamespace.
+ */
+export namespace SimpleNamespace {
+    export interface SimpleInterface {
+        Property1: string;
+        Property2: string;
     }
+
+    // TODO: Append used references in ApiVariablePlugin with type reference.
+    export const SimpleObject: AnotherSimpleNamespace.SimpleInterface = {
+        Property1: "1",
+        Property2: "2",
+        Property3: "3"
+    };
 }
 
-// TODO: add link of extended class
-export class BooStart extends FooStart {
-    private defaultMessage: string = "This is a default message.";
+export namespace AnotherSimpleNamespace {
+    export interface SimpleInterface extends SimpleNamespace.SimpleInterface {
+        Property3: string;
+    }
 }

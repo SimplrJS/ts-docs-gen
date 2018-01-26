@@ -7,8 +7,8 @@ import { BasePlugin } from "../abstractions/base-plugin";
 import { ApiClassProperty } from "../api-items/definitions/api-class-property";
 
 export class ApiClassPropertyPlugin extends BasePlugin<Contracts.ApiClassPropertyDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.ClassProperty];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.ClassProperty];
     }
 
     public Render(options: PluginOptions, apiItem: Contracts.ApiClassPropertyDto): PluginResult {

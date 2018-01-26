@@ -13,13 +13,15 @@ export interface SerializedApiItem<TKind> {
     ToInlineText(render?: ReferenceRenderHandler): string;
 }
 
-export interface SerializedApiDefinitionConstructor<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiBaseItemDto> {
+export interface SerializedApiDefinitionConstructor<TKind extends Contracts.ApiBaseDefinition = Contracts.ApiBaseDefinition> {
     new(extractedData: ExtractDto, apiItem: TKind, reference: ApiItemReference): ApiDefinitions;
 }
 
-export interface SerializedApiDefinition<TKind extends Contracts.ApiBaseItemDto>
+export interface SerializedApiDefinition<TKind extends Contracts.ApiBaseDefinition>
     extends SerializedApiItem<TKind> {
+    ParentItem?: SerializedApiItem<Contracts.ApiBaseDefinition>;
     Name: string;
+    Reference: ApiItemReference;
     ToHeadingText(): string;
 }
 

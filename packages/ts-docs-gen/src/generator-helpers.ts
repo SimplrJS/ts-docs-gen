@@ -4,7 +4,7 @@ import { Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import * as path from "path";
 
 import { ApiItemReference } from "./contracts/api-item-reference";
-import { ApiItemKindsAdditional, PluginResultData } from "./contracts/plugin";
+import { ApiDefinitionKindAdditional, PluginResultData } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
 import { SerializedApiDefinitionConstructor, SerializedApiTypeConstructor } from "./contracts/serialized-api-item";
 import { ApiDefinitionList, ApiDefinitions } from "./api-items/api-definition-list";
@@ -17,7 +17,7 @@ export namespace GeneratorHelpers {
     //#region Serialize ApiItem
     const serializedReferenceRegistry = new ApiItemReferenceRegistry<ApiDefinitions>();
 
-    export function SerializeApiDefinition<TKind extends Contracts.ApiBaseItemDto>(
+    export function SerializeApiDefinition<TKind extends Contracts.ApiBaseDefinition>(
         extractedData: ExtractDto,
         apiItem: TKind,
         reference: ApiItemReference
@@ -37,7 +37,7 @@ export namespace GeneratorHelpers {
             }
         }
 
-        // TODO: Add logger: "This kind is not supported".
+        LogWithApiItemPosition(LogLevel.Warning, apiItem, `"${apiItem.ApiKind}" is not supported!`);
         return new ApiDefinitionDefault(extractedData, apiItem, reference);
     }
 
@@ -52,7 +52,7 @@ export namespace GeneratorHelpers {
             }
         }
 
-        // TODO: Add logger: "This kind is not supported".
+        LogWithApiItemPosition(LogLevel.Error, apiType, `"${apiType.ApiTypeKind}" is not supported`);
         return new ApiTypeDefault(extractedData, apiType);
     }
 
@@ -68,8 +68,8 @@ export namespace GeneratorHelpers {
 
     export const MARKDOWN_EXT = ".md";
 
-    export const ApiItemKinds: typeof ApiItemKindsAdditional & typeof Contracts.ApiItemKinds =
-        Object.assign(ApiItemKindsAdditional, Contracts.ApiItemKinds);
+    export const ApiDefinitionKind: typeof ApiDefinitionKindAdditional & typeof Contracts.ApiDefinitionKind =
+        Object.assign(ApiDefinitionKindAdditional, Contracts.ApiDefinitionKind);
 
     export const DEFAULT_CODE_OPTIONS = {
         lang: "typescript"
@@ -84,8 +84,8 @@ export namespace GeneratorHelpers {
 
     // #region General helpers
 
-    export function GetApiItemKinds(): typeof Contracts.ApiItemKinds & typeof ApiItemKindsAdditional {
-        return Object.assign(Contracts.ApiItemKinds, ApiItemKindsAdditional);
+    export function GetApiDefinitionKind(): typeof Contracts.ApiDefinitionKind & typeof ApiDefinitionKindAdditional {
+        return Object.assign(Contracts.ApiDefinitionKind, ApiDefinitionKindAdditional);
     }
 
     export function GetApiItemReferences(
@@ -100,7 +100,7 @@ export namespace GeneratorHelpers {
                 const apiItem = extractedData.Registry[referenceId];
 
                 switch (apiItem.ApiKind) {
-                    case Contracts.ApiItemKinds.Export: {
+                    case Contracts.ApiDefinitionKind.Export: {
                         if (apiItem.SourceFileId != null) {
                             const sourceFileReference = { Alias: apiItem.Name, Ids: [apiItem.SourceFileId] };
                             const referencesList = GetApiItemReferences(extractedData, [sourceFileReference]);
@@ -108,8 +108,8 @@ export namespace GeneratorHelpers {
                         }
                         break;
                     }
-                    case Contracts.ApiItemKinds.ImportSpecifier:
-                    case Contracts.ApiItemKinds.ExportSpecifier: {
+                    case Contracts.ApiDefinitionKind.ImportSpecifier:
+                    case Contracts.ApiDefinitionKind.ExportSpecifier: {
                         if (apiItem.ApiItems == null) {
                             LogWithApiItemPosition(
                                 LogLevel.Warning,
@@ -124,7 +124,7 @@ export namespace GeneratorHelpers {
                         overallReferences = overallReferences.concat(referencesList);
                         break;
                     }
-                    case Contracts.ApiItemKinds.SourceFile: {
+                    case Contracts.ApiDefinitionKind.SourceFile: {
                         if (apiItem.Members == null) {
                             LogWithApiItemPosition(
                                 LogLevel.Warning,
@@ -150,9 +150,13 @@ export namespace GeneratorHelpers {
         return overallReferences;
     }
 
-    export function LogWithApiItemPosition(logLevel: LogLevel, apiItem: Contracts.ApiItemDto, message: string): void {
+    export function LogWithApiItemPosition(
+        logLevel: LogLevel,
+        apiItem: Contracts.ApiBaseDefinition | Contracts.ApiBaseType,
+        message: string
+    ): void {
         const { FileName, Line, Character } = apiItem.Location;
-        const linePrefix = `${FileName}[${Line}:${Character + 1}]`;
+        const linePrefix = `${FileName}(${Line},${Character + 1})`;
         Logger.Log(logLevel, `${linePrefix}: ${message}`);
     }
 
@@ -160,9 +164,9 @@ export namespace GeneratorHelpers {
         return pathString.split(path.sep).join("/");
     }
 
-    export function IsApiItemKind<TKindDto extends Contracts.ApiItemDto>(
-        itemKind: Contracts.ApiItemKinds,
-        apiItem: Contracts.ApiItemDto): apiItem is TKindDto {
+    export function IsApiItemKind<TKindDto extends Contracts.ApiDefinition>(
+        itemKind: Contracts.ApiDefinitionKind,
+        apiItem: Contracts.ApiDefinition): apiItem is TKindDto {
         return apiItem.ApiKind === itemKind;
     }
 
@@ -179,7 +183,7 @@ export namespace GeneratorHelpers {
         return a;
     }
 
-    export function GetDefaultPluginResultData<TKind = Contracts.ApiItemDto>(): PluginResultData<TKind> {
+    export function GetDefaultPluginResultData<TKind = Contracts.ApiDefinition>(): PluginResultData<TKind> {
         return {
             Headings: [],
             Result: [],

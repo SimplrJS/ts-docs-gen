@@ -7,7 +7,7 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 /**
  * Example: `arg is string`
  */
-export class ApiTypePredicate extends ApiTypeBase<Contracts.TypePredicateType> {
+export class ApiTypePredicate extends ApiTypeBase<Contracts.TypePredicateTypeDto> {
     private type: ApiTypes;
 
     public get Type(): ApiTypes {

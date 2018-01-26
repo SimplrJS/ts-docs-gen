@@ -7,7 +7,7 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 /**
  * Example: `(string | number)`
  */
-export class ApiTypeParenthesized extends ApiTypeBase<Contracts.ParenthesizedType> {
+export class ApiTypeParenthesized extends ApiTypeBase<Contracts.ParenthesizedTypeDto> {
     private type: ApiTypes;
 
     public get Type(): ApiTypes {

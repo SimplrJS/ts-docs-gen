@@ -7,8 +7,7 @@ import { GeneratorHelpers } from "../generator-helpers";
 import { ApiTypes } from "../api-items/api-type-list";
 import { ApiParameter } from "../api-items/definitions/api-parameter";
 
-export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseItemDto = Contracts.ApiItemDto> extends BasePlugin<TKind> {
-    // TODO: Escape string!
+export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseDefinition = Contracts.ApiDefinition> extends BasePlugin<TKind> {
     protected RenderParameters(extractedData: ExtractDto, parameters: ApiParameter[]): PluginResultData | undefined {
         if (parameters.length === 0) {
             return undefined;

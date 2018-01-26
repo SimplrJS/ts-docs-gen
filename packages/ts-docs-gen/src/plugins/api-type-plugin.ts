@@ -7,8 +7,8 @@ import { BasePlugin } from "../abstractions/base-plugin";
 import { ApiTypeAlias } from "../api-items/definitions/api-type-alias";
 
 export class ApiTypePlugin extends BasePlugin<Contracts.ApiTypeAliasDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.TypeAlias];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.TypeAlias];
     }
 
     public Render(options: PluginOptions, apiItem: Contracts.ApiTypeAliasDto): PluginResult {

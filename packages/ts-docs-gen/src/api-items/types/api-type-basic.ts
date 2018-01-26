@@ -5,7 +5,7 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 /**
  * Example: `string`
  */
-export class ApiTypeBasic extends ApiTypeBase<Contracts.ApiBasicType> {
+export class ApiTypeBasic extends ApiTypeBase<Contracts.ApiBasicTypeDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         return [
             this.ApiItem.Text

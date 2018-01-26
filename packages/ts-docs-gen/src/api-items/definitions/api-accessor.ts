@@ -21,7 +21,7 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
 
     private resolveType(): Contracts.ApiType | undefined {
         let type: Contracts.ApiType | undefined;
-        if (this.ApiItem.ApiKind === Contracts.ApiItemKinds.GetAccessor) {
+        if (this.ApiItem.ApiKind === Contracts.ApiDefinitionKind.GetAccessor) {
             // GetAccessor
             type = this.ApiItem.Type;
         } else if (this.ApiItem.Parameter != null) {
@@ -41,7 +41,7 @@ export class ApiAccessor extends ApiDefinitionBase<ApiAccessorKinds> {
 
         const typeString = this.SerializedTypeToString(render, this.Type);
         let accessorType: string;
-        if (this.ApiItem.ApiKind === Contracts.ApiItemKinds.SetAccessor) {
+        if (this.ApiItem.ApiKind === Contracts.ApiDefinitionKind.SetAccessor) {
             accessorType = "set";
         } else {
             accessorType = "get";

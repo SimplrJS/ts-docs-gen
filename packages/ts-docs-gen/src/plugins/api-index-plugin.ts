@@ -7,8 +7,8 @@ import { BasePlugin } from "../abstractions/base-plugin";
 import { ApiIndex } from "../api-items/definitions/api-index";
 
 export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Index];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Index];
     }
 
     public Render(options: PluginOptions, apiItem: Contracts.ApiIndexDto): PluginResult<Contracts.ApiIndexDto> {

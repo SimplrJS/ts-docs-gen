@@ -2,7 +2,7 @@ import { Contracts } from "ts-extractor";
 import { ApiCallable } from "../api-callable";
 import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
-export class ApiFunctionType extends ApiCallable<Contracts.ApiFunctionTypeDto> {
+export class ApiFunctionExpression extends ApiCallable<Contracts.ApiFunctionExpressionDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         return [
             this.CallableToString(render, " => ")

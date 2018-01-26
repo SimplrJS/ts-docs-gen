@@ -1,12 +1,13 @@
-import { Contracts, TSHelpers } from "ts-extractor";
+import { Contracts } from "ts-extractor";
+import { TsHelpers } from "ts-extractor/dist/internal";
 import { ApiTypeReferenceBase } from "../api-type-reference-base";
 import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
-export type TypeDefinitions = Contracts.TypeLiteralType |
-    Contracts.MappedType |
-    Contracts.FunctionTypeType |
-    Contracts.ThisType |
-    Contracts.ConstructorType;
+export type TypeDefinitions = Contracts.TypeLiteralTypeDto |
+    Contracts.MappedTypeDto |
+    Contracts.FunctionTypeTypeDto |
+    Contracts.ThisTypeDto |
+    Contracts.ConstructorTypeDto;
 
 export class ApiTypeDefinition<TKind extends Contracts.ApiReferenceBaseType = TypeDefinitions> extends ApiTypeReferenceBase<TKind> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
@@ -14,7 +15,7 @@ export class ApiTypeDefinition<TKind extends Contracts.ApiReferenceBaseType = Ty
             return [this.ApiItem.Text];
         }
 
-        if (TSHelpers.IsInternalSymbolName(this.ReferenceItem.ApiItem.Name)) {
+        if (TsHelpers.IsInternalSymbolName(this.ReferenceItem.ApiItem.Name)) {
             return this.ReferenceItem.ToText(render);
         }
 
