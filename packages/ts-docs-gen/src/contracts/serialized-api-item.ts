@@ -19,6 +19,7 @@ export interface SerializedApiDefinitionConstructor<TKind extends Contracts.ApiB
 
 export interface SerializedApiDefinition<TKind extends Contracts.ApiBaseDefinition>
     extends SerializedApiItem<TKind> {
+    ParentItem?: SerializedApiItem<Contracts.ApiBaseDefinition>;
     Name: string;
     Reference: ApiItemReference;
     ToHeadingText(): string;
