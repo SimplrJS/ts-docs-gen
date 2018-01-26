@@ -3,7 +3,7 @@ import { ApiCallable } from "../api-callable";
 import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 // TODO: Rename it.
-export class ApiFunctionType extends ApiCallable<Contracts.ApiFunctionExpressionDto> {
+export class ApiFunctionExpression extends ApiCallable<Contracts.ApiFunctionExpressionDto> {
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         return [
             this.CallableToString(render, " => ")

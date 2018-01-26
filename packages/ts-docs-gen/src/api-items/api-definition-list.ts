@@ -10,7 +10,7 @@ import { ApiConstruct } from "./definitions/api-construct";
 import { ApiEnum } from "./definitions/api-enum";
 import { ApiEnumMember } from "./definitions/api-enum-member";
 import { ApiFunction } from "./definitions/api-function";
-import { ApiFunctionType } from "./definitions/api-function-type";
+import { ApiFunctionExpression } from "./definitions/api-function-expression";
 import { ApiIndex } from "./definitions/api-index";
 import { ApiInterface } from "./definitions/api-interface";
 import { ApiMapped } from "./definitions/api-mapped";
@@ -50,7 +50,7 @@ export type ApiDefinitions = ApiDefinitionDefault |
     ApiConstruct |
     ApiTypeParameter |
     ApiTypeLiteral |
-    ApiFunctionType |
+    ApiFunctionExpression |
     ApiMapped;
 
 // TODO: Add tests from Contracts.ApiDefinitionKind
@@ -79,8 +79,8 @@ export const ApiDefinitionList: Array<[Contracts.ApiDefinitionKind, SerializedAp
     [Contracts.ApiDefinitionKind.TypeParameter, ApiTypeParameter],
     [Contracts.ApiDefinitionKind.TypeLiteral, ApiTypeLiteral],
     [Contracts.ApiDefinitionKind.ObjectLiteral, ApiTypeLiteral],
-    [Contracts.ApiDefinitionKind.FunctionType, ApiFunctionType],
-    [Contracts.ApiDefinitionKind.ArrowFunction, ApiFunctionType],
-    [Contracts.ApiDefinitionKind.FunctionExpression, ApiFunctionType],
+    [Contracts.ApiDefinitionKind.FunctionType, ApiFunctionExpression],
+    [Contracts.ApiDefinitionKind.ArrowFunction, ApiFunctionExpression],
+    [Contracts.ApiDefinitionKind.FunctionExpression, ApiFunctionExpression],
     [Contracts.ApiDefinitionKind.Mapped, ApiMapped]
 ];
