@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import * as path from "path";
 
 import { ArgsHandler, CliArguments } from "./arguments";
 import { Logger } from "../utils/logger";
@@ -6,32 +7,53 @@ import { GeneratorConfigurationBuilder } from "../builders/generator-configurati
 import { Plugin } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 import { Generator } from "../generator";
+import { Helpers } from "../utils/helpers";
 
-async function resolvePlugin(pluginName: string): Promise<Plugin[]> {
-    const module: { [key: string]: any } = await import(pluginName);
+/**
+ * Resolves plugins from given file.
+ * @param file Plugin name or path to plugin.
+ */
+async function resolvePlugin(file: string): Promise<Plugin[]> {
+    const $module: { [key: string]: any } = await import(file);
     const result: Plugin[] = [];
 
-    for (const [, value] of Object.values(module)) {
-        if (GeneratorHelpers.IsPluginClass(value)) {
-            result.push(new value());
+    if ($module == null) {
+        return [];
+    }
+
+    for (const key in $module) {
+        if ($module.hasOwnProperty(key)) {
+            const value = $module[key];
+
+            if (GeneratorHelpers.IsPluginClass(value)) {
+                result.push(new value());
+            }
         }
     }
 
     return result;
 }
 
-// TODO: Add logging.
+// TODO: Add logger
 (async (args: CliArguments) => {
     const builder = new GeneratorConfigurationBuilder(args.project);
 
     // Plugins
     if (args.plugin != null) {
         for (const pluginName of args.plugin) {
+            // Resolve module location
+            let moduleLocation: string;
+            if (Helpers.IsPackageName(pluginName)) {
+                moduleLocation = pluginName;
+            } else {
+                moduleLocation = path.resolve(process.cwd(), pluginName);
+            }
+
             try {
-                const plugins = await resolvePlugin(pluginName);
+                const plugins = await resolvePlugin(moduleLocation);
                 builder.AddPlugins(plugins);
             } catch (error) {
-                Logger.Error("An error has occured while processing plugins.", error);
+                Logger.Error(`An error has occured while processing plugins. Resolved location:"${moduleLocation}".`, error);
             }
         }
     }
