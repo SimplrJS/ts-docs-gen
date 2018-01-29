@@ -4,34 +4,35 @@ import { Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import * as path from "path";
 
 import { ApiItemReference } from "./contracts/api-item-reference";
-import { ApiDefinitionKindAdditional, PluginResultData } from "./contracts/plugin";
+import { ApiDefinitionKindAdditional, PluginResultData, Plugin } from "./contracts/plugin";
 import { Logger } from "./utils/logger";
 import { SerializedApiDefinitionConstructor, SerializedApiTypeConstructor } from "./contracts/serialized-api-item";
 import { ApiDefinitionList, ApiDefinitions } from "./api-items/api-definition-list";
 import { ApiTypeList, ApiTypes } from "./api-items/api-type-list";
 import { ApiDefinitionDefault } from "./api-items/api-definition-default";
 import { ApiTypeDefault } from "./api-items/api-type-default";
-import { ApiItemReferenceRegistry } from "./registries/api-item-reference-registry";
 
 export namespace GeneratorHelpers {
-    //#region Serialize ApiItem
-    const serializedReferenceRegistry = new ApiItemReferenceRegistry<ApiDefinitions>();
+    export interface PluginConstructor {
+        new(): Plugin;
+    }
+    /**
+     * Checks if object has `TsDocsGenPlugin` static function.
+     */
+    export function IsPluginClass(arg: any): arg is PluginConstructor {
+        return arg.TsDocsGenPlugin != null;
+    }
 
+    //#region Serialize ApiItem
     export function SerializeApiDefinition<TKind extends Contracts.ApiBaseDefinition>(
         extractedData: ExtractDto,
         apiItem: TKind,
         reference: ApiItemReference
     ): ApiDefinitions {
-        if (serializedReferenceRegistry.Exists(reference)) {
-            return serializedReferenceRegistry.GetItem(reference)!;
-        }
-
         for (const [kind, constructorItem] of ApiDefinitionList) {
             if (kind === apiItem.ApiKind) {
                 const $constructor: SerializedApiDefinitionConstructor<TKind> = constructorItem;
                 const serializedApiItem = new $constructor(extractedData, apiItem, reference);
-
-                serializedReferenceRegistry.AddItem(reference, serializedApiItem);
 
                 return serializedApiItem;
             }
