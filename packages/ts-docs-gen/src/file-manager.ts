@@ -160,13 +160,14 @@ export class FileManager {
                 const filePath = path.dirname(fileLocation);
 
                 const referenceString = this.resolveReferenceFile(referenceId);
-                const resolvePath = GeneratorHelpers.StandardisePath(path.relative(filePath, referenceString || "#__error"));
+                // referenceString is not falsy.
+                if (referenceString) {
+                    const resolvePath = GeneratorHelpers.StandardisePath(path.relative(filePath, referenceString));
 
-                linkDefinitions.push(
-                    MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
-                );
-
-                if (!referenceString) {
+                    linkDefinitions.push(
+                        MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
+                    );
+                } else {
                     // Removes broken links.
                     pluginResult = this.removeBrokenLinks(pluginResult, referenceId);
                     const apiItem = this.extractedData.Registry[referenceId];
