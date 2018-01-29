@@ -4,8 +4,7 @@ import { BaseApiItemClass } from "../abstractions/base-api-item";
 import { ApiItemReference } from "../contracts/api-item-reference";
 import { GeneratorHelpers } from "../generator-helpers";
 
-// Because of circular dependency we had to
-// implement interface and not extend ApiDefinitionBase.
+// Because of circular dependency we had to implement interface and not extend ApiDefinitionBase.
 export class ApiDefinitionDefault<TKind extends Contracts.ApiBaseDefinition = Contracts.ApiBaseDefinition>
     extends BaseApiItemClass<TKind> implements SerializedApiDefinition<TKind> {
 
@@ -35,10 +34,6 @@ export class ApiDefinitionDefault<TKind extends Contracts.ApiBaseDefinition = Co
 
     public get Name(): string {
         return this.ApiItem.Name;
-    }
-
-    public get ApiItem(): TKind {
-        return this.ApiItem;
     }
 
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {

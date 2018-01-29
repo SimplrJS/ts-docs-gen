@@ -1,5 +1,6 @@
 import { Contracts, ExtractDto } from "ts-extractor";
 import { MarkdownGenerator, MarkdownBuilder, Contracts as MarkdownContracts } from "@simplrjs/markdown";
+import { LogLevel } from "simplr-logger";
 import * as path from "path";
 
 import { Helpers } from "./utils/helpers";
@@ -117,6 +118,11 @@ export class FileManager {
         return this.referenceToFile.get(referenceId);
     }
 
+    private removeBrokenLinks(result: string[], referenceId: string): string[] {
+        const linkDefinition = new RegExp(`\\[(.+)\\]\\[${referenceId}\\]`, "g");
+        return result.map(x => x.replace(linkDefinition, "$1"));
+    }
+
     public AddItem(itemResult: PluginResult<ApiContainer>, filePath: string): void {
         if (this.filesList.get(filePath) == null) {
             this.filesList.set(filePath, itemResult);
@@ -148,28 +154,37 @@ export class FileManager {
 
             // Link definitions to file location.
             const linkDefinitions: string[] = [];
+            // Plugin result.
+            let pluginResult = item.Result;
+            item.UsedReferences.forEach(referenceId => {
+                const filePath = path.dirname(fileLocation);
 
-            item.UsedReferences
-                .forEach(referenceId => {
-                    const filePath = path.dirname(fileLocation);
-
-                    const referenceString = this.resolveReferenceFile(referenceId);
-                    const resolvePath = GeneratorHelpers.StandardisePath(path.relative(filePath, referenceString || "#__error"));
+                const referenceString = this.resolveReferenceFile(referenceId);
+                // referenceString is not falsy.
+                if (referenceString) {
+                    const resolvePath = GeneratorHelpers.StandardizePath(path.relative(filePath, referenceString));
 
                     linkDefinitions.push(
                         MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
                     );
+                } else {
+                    // Removes broken links.
+                    pluginResult = this.removeBrokenLinks(pluginResult, referenceId);
+                    const apiItem = this.extractedData.Registry[referenceId];
 
-                    if (!referenceString) {
-                        console.warn(`Reference "${referenceId}" not found. Check ${fileLocation}.`);
-                    }
-                });
+                    GeneratorHelpers.LogWithApiItemPosition(
+                        LogLevel.Warning,
+                        apiItem,
+                        "Declaration is used as type and not exported in entry files."
+                    );
+                }
+            });
 
             files.push({
-                FileLocation: GeneratorHelpers.StandardisePath(fileLocation),
+                FileLocation: GeneratorHelpers.StandardizePath(fileLocation),
                 Result: [
                     ...this.renderTableOfContents(item),
-                    ...item.Result,
+                    ...pluginResult,
                     ...linkDefinitions
                 ]
             });

@@ -36,8 +36,8 @@ test("{{caseName}}", async done => {
             .AddPlugins([new VariablePlugin])
             .OverrideCompilerOptions(myCompilerOptions)
             .OverrideConfiguration({
-                ProjectDirectory: path.join(projectDirectory, "src/project-to-doc/custom"),
-                Exclude: ["./to-exclude.ts"]
+                projectDirectory: path.join(projectDirectory, "src/project-to-doc/custom"),
+                exclude: ["./to-exclude.ts"]
             })
             .SetOutputDirectory("./docs")
             .Build(entryFiles);

@@ -8,7 +8,10 @@ import { ApiNamespace } from "../api-items/definitions/api-namespace";
 
 export class ApiNamespacePlugin extends ContainerPlugin<Contracts.ApiNamespaceDto> {
     public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiDefinitionKind.Namespace];
+        return [
+            GeneratorHelpers.ApiDefinitionKind.Namespace,
+            GeneratorHelpers.ApiDefinitionKind.ImportNamespace
+        ];
     }
 
     public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
@@ -34,7 +37,10 @@ export class ApiNamespacePlugin extends ContainerPlugin<Contracts.ApiNamespaceDt
         },
         {
             Heading: "Namespaces",
-            Kinds: [GeneratorHelpers.ApiDefinitionKind.Namespace]
+            Kinds: [
+                GeneratorHelpers.ApiDefinitionKind.Namespace,
+                GeneratorHelpers.ApiDefinitionKind.ImportNamespace
+            ]
         },
         {
             Heading: "Variables",

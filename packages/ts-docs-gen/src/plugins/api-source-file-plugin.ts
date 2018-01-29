@@ -34,7 +34,10 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
         },
         {
             Heading: "Namespaces",
-            Kinds: [GeneratorHelpers.ApiDefinitionKind.Namespace]
+            Kinds: [
+                GeneratorHelpers.ApiDefinitionKind.Namespace,
+                GeneratorHelpers.ApiDefinitionKind.ImportNamespace
+            ]
         },
         {
             Heading: "Variables",

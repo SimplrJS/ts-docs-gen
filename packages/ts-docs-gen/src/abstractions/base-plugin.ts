@@ -8,6 +8,12 @@ import { ApiTypes } from "../api-items/api-type-list";
 import { ReferenceRenderHandler } from "../contracts/serialized-api-item";
 
 export abstract class BasePlugin<TKind extends Contracts.ApiBaseDefinition = Contracts.ApiDefinition> implements Plugin<TKind> {
+    /**
+     * Used to identify class as Plugin.
+     */
+    // tslint:disable-next-line:no-empty
+    public static TsDocsGenPlugin(): void { }
+
     public abstract SupportedApiDefinitionKind(): SupportedApiItemKindType[];
 
     public CheckApiItem(item: TKind): boolean {

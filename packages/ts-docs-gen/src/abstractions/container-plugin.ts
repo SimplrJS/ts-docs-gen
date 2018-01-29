@@ -82,6 +82,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                     } else {
                         switch (member.ApiItem.ApiKind) {
                             case Contracts.ApiDefinitionKind.Namespace:
+                            case Contracts.ApiDefinitionKind.ImportNamespace:
                             case Contracts.ApiDefinitionKind.Class: {
                                 const renderedItem = pluginOptions.GetItemPluginResult(member.Reference);
                                 pluginResultData.Members.push({

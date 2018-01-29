@@ -67,8 +67,13 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableBaseDefinit
         const parametersString = this.ParametersToString(render);
 
         // ReturnType
-        const type = this.SerializedTypeToString(render, this.ReturnType);
-        const returnTypeString = typeDefChar !== "" && type != null ? `${typeDefChar}${type}` : "";
+        let returnTypeString: string;
+        if (typeDefChar !== "" && this.ReturnType != null) {
+            const type = this.SerializedTypeToString(render, this.ReturnType);
+            returnTypeString = `${typeDefChar}${type}`;
+        } else {
+            returnTypeString = "";
+        }
 
         return `${typeParametersString}(${parametersString})${returnTypeString}`;
     }
