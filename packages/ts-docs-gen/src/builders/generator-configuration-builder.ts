@@ -40,7 +40,7 @@ export class GeneratorConfigurationBuilder {
     }
 
     /**
-     * Override configuration with new configuration object.
+     * Override configuration with a new configuration object.
      *
      * @param configuration Partial configuration object.
      */
