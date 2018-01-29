@@ -8,6 +8,10 @@ export enum ApiDefinitionKindAdditional {
 
 export type SupportedApiItemKindType = Contracts.ApiDefinitionKind | ApiDefinitionKindAdditional;
 
+export interface PluginConstructor {
+    new(): Plugin;
+}
+
 export interface PluginHeading {
     Heading: string;
     ApiItemId: string;

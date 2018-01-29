@@ -4,7 +4,12 @@ import { Contracts as MarkdownContracts } from "@simplrjs/markdown";
 import * as path from "path";
 
 import { ApiItemReference } from "./contracts/api-item-reference";
-import { ApiDefinitionKindAdditional, PluginResultData, Plugin } from "./contracts/plugin";
+import {
+    ApiDefinitionKindAdditional,
+    PluginResultData,
+    Plugin,
+    PluginConstructor
+} from "./contracts/plugin";
 import { Logger } from "./utils/logger";
 import { SerializedApiDefinitionConstructor, SerializedApiTypeConstructor } from "./contracts/serialized-api-item";
 import { ApiDefinitionList, ApiDefinitions } from "./api-items/api-definition-list";
@@ -13,9 +18,6 @@ import { ApiDefinitionDefault } from "./api-items/api-definition-default";
 import { ApiTypeDefault } from "./api-items/api-type-default";
 
 export namespace GeneratorHelpers {
-    export interface PluginConstructor {
-        new(): Plugin;
-    }
     /**
      * Checks if object has `TsDocsGenPlugin` static function.
      */
