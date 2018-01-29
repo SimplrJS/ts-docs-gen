@@ -162,7 +162,7 @@ export class FileManager {
                 const referenceString = this.resolveReferenceFile(referenceId);
                 // referenceString is not falsy.
                 if (referenceString) {
-                    const resolvePath = GeneratorHelpers.StandardisePath(path.relative(filePath, referenceString));
+                    const resolvePath = GeneratorHelpers.StandardizePath(path.relative(filePath, referenceString));
 
                     linkDefinitions.push(
                         MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
@@ -181,7 +181,7 @@ export class FileManager {
             });
 
             files.push({
-                FileLocation: GeneratorHelpers.StandardisePath(fileLocation),
+                FileLocation: GeneratorHelpers.StandardizePath(fileLocation),
                 Result: [
                     ...this.renderTableOfContents(item),
                     ...pluginResult,

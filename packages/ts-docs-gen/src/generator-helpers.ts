@@ -188,7 +188,7 @@ export namespace GeneratorHelpers {
         Logger.Log(logLevel, `${linePrefix}: ${message}`);
     }
 
-    export function StandardisePath(pathString: string): string {
+    export function StandardizePath(pathString: string): string {
         return pathString.split(path.sep).join("/");
     }
 
