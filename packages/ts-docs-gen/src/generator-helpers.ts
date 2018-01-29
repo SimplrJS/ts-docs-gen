@@ -23,6 +23,31 @@ export namespace GeneratorHelpers {
         return arg.TsDocsGenPlugin != null;
     }
 
+    /**
+     * Resolves plugins from given file.
+     * @param file Plugin name or path to plugin.
+     */
+    export async function ResolvePlugin(file: string): Promise<Plugin[]> {
+        const $module: { [key: string]: any } = await import(file);
+        const result: Plugin[] = [];
+
+        if ($module == null) {
+            return [];
+        }
+
+        for (const key in $module) {
+            if ($module.hasOwnProperty(key)) {
+                const value = $module[key];
+
+                if (GeneratorHelpers.IsPluginClass(value)) {
+                    result.push(new value());
+                }
+            }
+        }
+
+        return result;
+    }
+
     //#region Serialize ApiItem
     export function SerializeApiDefinition<TKind extends Contracts.ApiBaseDefinition>(
         extractedData: ExtractDto,

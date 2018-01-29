@@ -10,10 +10,9 @@ export interface GeneratorConfiguration {
 }
 
 export interface WorkingGeneratorConfiguration {
-    OutputDirectory: string;
-    ProjectDirectory: string;
-    Plugins: Plugin[];
-
-    Exclude: string[];
-    OutputPathSeparator: string;
+    outputDirectory: string;
+    projectDirectory: string;
+    plugins: Plugin[];
+    exclude: string[];
+    outputPathSeparator: string;
 }

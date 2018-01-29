@@ -10,7 +10,7 @@ import { DefaultPlugins } from "../default-plugins";
 
 export class GeneratorConfigurationBuilder {
     constructor(private projectDirectory: string) {
-        this.configuration.ProjectDirectory = projectDirectory;
+        this.configuration.projectDirectory = projectDirectory;
     }
 
     private configuration: Partial<WorkingGeneratorConfiguration> = {};
@@ -18,7 +18,7 @@ export class GeneratorConfigurationBuilder {
     private tsConfigLocation: string | undefined;
 
     private resolveProjectDirectory(): string {
-        return this.configuration.ProjectDirectory || this.projectDirectory;
+        return this.configuration.projectDirectory || this.projectDirectory;
     }
 
     /**
@@ -54,14 +54,14 @@ export class GeneratorConfigurationBuilder {
     }
 
     public SetOutputDirectory(outputDirectory: string): this {
-        this.configuration.OutputDirectory = outputDirectory;
+        this.configuration.outputDirectory = outputDirectory;
 
         return this;
     }
 
     public AddPlugins(plugins: Plugin[]): this {
-        const currentPlugins = this.configuration.Plugins || [];
-        this.configuration.Plugins = [...plugins, ...currentPlugins];
+        const currentPlugins = this.configuration.plugins || [];
+        this.configuration.plugins = [...plugins, ...currentPlugins];
 
         return this;
     }
@@ -74,9 +74,9 @@ export class GeneratorConfigurationBuilder {
             pluginManager.Register(item);
         }
 
-        if (this.configuration.Plugins != null) {
+        if (this.configuration.plugins != null) {
             // Registering given plugins.
-            for (const plugin of this.configuration.Plugins) {
+            for (const plugin of this.configuration.plugins) {
                 pluginManager.Register(plugin);
             }
 
@@ -93,11 +93,11 @@ export class GeneratorConfigurationBuilder {
         const extractor = new Extractor({
             CompilerOptions: compilerOptions,
             ProjectDirectory: this.resolveProjectDirectory(),
-            Exclude: this.configuration.Exclude,
-            OutputPathSeparator: this.configuration.OutputPathSeparator
+            Exclude: this.configuration.exclude,
+            OutputPathSeparator: this.configuration.outputPathSeparator
         });
 
-        const outputDirectory = this.configuration.OutputDirectory || path.join(this.resolveProjectDirectory(), "/docs/");
+        const outputDirectory = this.configuration.outputDirectory || path.join(this.resolveProjectDirectory(), "/docs/");
 
         return {
             PluginManager: pluginManager,
