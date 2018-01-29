@@ -1,4 +1,3 @@
 {
-    "project": ".",
     "entryFile": "./src/index.ts"
 }

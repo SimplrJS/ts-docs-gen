@@ -20,6 +20,7 @@ export const ArgsHandler = yargs
     // CLI options
     .option("project", {
         describe: "Project location.",
+        default: ".",
         type: "string"
     })
     .alias("p", "project")
