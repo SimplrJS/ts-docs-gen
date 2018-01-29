@@ -182,7 +182,7 @@ export namespace GeneratorHelpers {
         ...message: string[]
     ): void {
         const { FileName, Line, Character } = apiItem.Location;
-        const linePrefix = `${FileName}(${Line},${Character + 1})`;
+        const linePrefix = `${FileName}(${Line + 1},${Character})`;
         Logger.Log(logLevel, `${linePrefix}: ${message}`);
     }
 

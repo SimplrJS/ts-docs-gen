@@ -174,7 +174,7 @@ export class FileManager {
                     GeneratorHelpers.LogWithApiItemPosition(
                         LogLevel.Warning,
                         apiItem,
-                        "Declaration is not exported in entry files."
+                        "Declaration is used as type and not exported in entry files."
                     );
                 }
             });
