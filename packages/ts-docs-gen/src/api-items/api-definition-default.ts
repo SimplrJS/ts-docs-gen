@@ -37,10 +37,6 @@ export class ApiDefinitionDefault<TKind extends Contracts.ApiBaseDefinition = Co
         return this.ApiItem.Name;
     }
 
-    public get ApiItem(): TKind {
-        return this.ApiItem;
-    }
-
     public ToText(render: ReferenceRenderHandler = this.DefaultReferenceRenderer): string[] {
         return [this.Name];
     }
