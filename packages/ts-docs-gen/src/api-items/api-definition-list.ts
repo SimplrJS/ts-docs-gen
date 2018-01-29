@@ -27,6 +27,32 @@ import { ApiClassProperty } from "./definitions/api-class-property";
 import { ApiClassMethod } from "./definitions/api-class-method";
 import { ApiAccessor } from "./definitions/api-accessor";
 
+export {
+    ApiSourceFile,
+    ApiCall,
+    ApiClass,
+    ApiConstruct,
+    ApiEnum,
+    ApiEnumMember,
+    ApiFunction,
+    ApiFunctionExpression,
+    ApiIndex,
+    ApiInterface,
+    ApiMapped,
+    ApiMethod,
+    ApiNamespace,
+    ApiParameter,
+    ApiProperty,
+    ApiTypeAlias,
+    ApiTypeParameter,
+    ApiVariable,
+    ApiTypeLiteral,
+    ApiClassConstructor,
+    ApiClassProperty,
+    ApiClassMethod,
+    ApiAccessor
+};
+
 export type ApiDefinitions = ApiDefinitionDefault |
     ApiSourceFile |
     ApiEnum |

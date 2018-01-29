@@ -15,6 +15,20 @@ import { ApiIndexedAccess } from "./types/api-type-indexed-access";
 import { ApiTypeParenthesized } from "./types/api-type-parenthesized";
 import { ApiTypeQuery } from "./types/api-type-query";
 
+export {
+    ApiTypeBasic,
+    ApiTypeReference,
+    ApiTypeUnionOrIntersection,
+    ApiTypeArray,
+    ApiTypeTuple,
+    ApiTypeDefinition,
+    ApiTypePredicate,
+    ApiTypeOperator,
+    ApiIndexedAccess,
+    ApiTypeParenthesized,
+    ApiTypeQuery
+};
+
 export type ApiTypes = ApiTypeDefault |
     ApiTypeBasic |
     ApiTypeReference |
