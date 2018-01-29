@@ -14,6 +14,7 @@ export const ArgsHandler = yargs
     .showHelpOnFail(true)
     .help("h", "Show help")
     .alias("h", "help")
+    .config()
     .version()
     .alias("v", "version")
     // CLI options
