@@ -5,6 +5,7 @@ export interface CliArguments extends yargs.Arguments {
     output?: string;
     entryFile: string[];
     plugin?: string[];
+    exclude?: string[];
 }
 
 /**
@@ -27,6 +28,10 @@ export const ArgsHandler = yargs
     .required("p", "Project location is required.")
     .option("entryFile", {
         describe: "Entry file or files to generate documentation from.",
+        type: "array"
+    })
+    .option("exclude", {
+        describe: "File locations that should not be included generated documentation.",
         type: "array"
     })
     .option("output", {
