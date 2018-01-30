@@ -4,41 +4,36 @@ import { MarkdownBuilder, MarkdownGenerator as md } from "@simplrjs/markdown";
 import { SupportedApiItemKindType, PluginResult, PluginOptions } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 import { BasePlugin } from "../abstractions/base-plugin";
+import { ApiIndex } from "../api-items/definitions/api-index";
 
 export class ApiIndexPlugin extends BasePlugin<Contracts.ApiIndexDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.Index];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.Index];
     }
 
-    public Render(options: PluginOptions<Contracts.ApiIndexDto>): PluginResult<Contracts.ApiIndexDto> {
+    public Render(options: PluginOptions, apiItem: Contracts.ApiIndexDto): PluginResult<Contracts.ApiIndexDto> {
+        const serializedApiItem = new ApiIndex(options.ExtractedData, apiItem, options.Reference);
+
         const pluginResult: PluginResult<Contracts.ApiIndexDto> = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: options.ApiItem,
+            ApiItem: apiItem,
             Reference: options.Reference
         };
-        // Parameter
-        const parameter = options.ExtractedData.Registry[options.ApiItem.Parameter] as Contracts.ApiParameterDto;
+
+        const parameter = serializedApiItem.Parameter;
 
         // Types
-        const parameterType = GeneratorHelpers.TypeDtoToMarkdownString(parameter.Type);
-        const indexType = GeneratorHelpers.TypeDtoToMarkdownString(options.ApiItem.Type);
-        GeneratorHelpers.MergePluginResultData(pluginResult, {
-            UsedReferences: [
-                ...parameterType.References,
-                ...indexType.References
-            ]
-        });
+        const parameterTypeString = parameter.Type
+            .ToInlineText(this.RenderReferences(options.ExtractedData, pluginResult.UsedReferences));
+        const typeString = serializedApiItem.Type
+            .ToInlineText(this.RenderReferences(options.ExtractedData, pluginResult.UsedReferences));
 
-        // Header
-        const indexDeclarationString = GeneratorHelpers.ApiIndexToString(parameter, options.ApiItem.Type, options.ApiItem.IsReadonly);
-        const builder = new MarkdownBuilder()
-            .Code(indexDeclarationString, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
-            .EmptyLine();
-
-        pluginResult.Result = builder
+        pluginResult.Result = new MarkdownBuilder()
+            .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .EmptyLine()
             .UnorderedList([
-                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Name)} - ${parameterType.Text}`,
-                `${md.Italic("Type")} ${indexType.Text}`
+                `${md.Italic("Parameter")} ${md.InlineCode(parameter.Name)} - ${parameterTypeString}`,
+                `${md.Italic("Type")} ${typeString}`
             ])
             .GetOutput();
 

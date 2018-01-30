@@ -1,6 +1,7 @@
 {
     "EntryFiles": [
-        "./index.ts",
-        "./foo.ts"
+        "./src/index.ts",
+        "./src/foo.ts",
+        "./src/boo.ts"
     ]
 }

@@ -2,34 +2,38 @@ import { Contracts, ExtractDto } from "ts-extractor";
 
 import { ApiItemReference } from "./api-item-reference";
 
-export enum ApiItemKindsAdditional {
+export enum ApiDefinitionKindAdditional {
     Any = "any"
 }
 
-export type SupportedApiItemKindType = Contracts.ApiItemKinds | ApiItemKindsAdditional;
+export type SupportedApiItemKindType = Contracts.ApiDefinitionKind | ApiDefinitionKindAdditional;
+
+export interface PluginConstructor {
+    new(): Plugin;
+}
 
 export interface PluginHeading {
     Heading: string;
     ApiItemId: string;
+    Members?: PluginHeading[];
 }
 
-export interface PluginMember {
+export interface PluginMember<TKind> {
     Reference: ApiItemReference;
-    PluginResult: PluginResult;
+    PluginResult: PluginResult<TKind>;
 }
 
 export type GetItemPluginResultHandler = (reference: ApiItemReference) => PluginResult;
 export type IsPluginResultExistsHandler = (reference: ApiItemReference) => boolean;
 
-export interface PluginOptions<TKind = Contracts.ApiItemDto> {
+export interface PluginOptions {
     Reference: ApiItemReference;
-    ApiItem: TKind;
     ExtractedData: ExtractDto;
     GetItemPluginResult: GetItemPluginResultHandler;
     IsPluginResultExists: IsPluginResultExistsHandler;
 }
 
-export interface PluginResultData {
+export interface PluginResultData<TKind = Contracts.ApiDefinition> {
     /**
      * All headings used in `Result` with ApiItemIds.
      */
@@ -42,16 +46,16 @@ export interface PluginResultData {
      * Plugin rendered result.
      */
     Result: string[];
-    Members: PluginMember[];
+    Members: Array<PluginMember<TKind>>;
 }
 
-export interface PluginResult<TKind = Contracts.ApiItemDto> extends PluginResultData {
+export interface PluginResult<TKind = Contracts.ApiDefinition> extends PluginResultData<TKind> {
     Reference: ApiItemReference;
     ApiItem: TKind;
 }
 
-export interface Plugin<TKind = Contracts.ApiItemDto> {
-    SupportedApiItemKinds(): SupportedApiItemKindType[];
+export interface Plugin<TKind extends Contracts.ApiBaseDefinition = Contracts.ApiDefinition> {
+    SupportedApiDefinitionKind(): SupportedApiItemKindType[];
     CheckApiItem(item: TKind): boolean;
-    Render(options: PluginOptions<TKind>): PluginResult;
+    Render(options: PluginOptions, apiItem: TKind): PluginResult;
 }

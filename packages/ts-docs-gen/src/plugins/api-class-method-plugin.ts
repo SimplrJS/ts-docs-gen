@@ -4,60 +4,52 @@ import { MarkdownBuilder } from "@simplrjs/markdown";
 import { SupportedApiItemKindType, PluginOptions, PluginResult } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
 import { FunctionLikePlugin } from "../abstractions/function-like-plugin";
+import { ApiClassMethod } from "../api-items/definitions/api-class-method";
 
 export class ApiClassMethodPlugin extends FunctionLikePlugin<Contracts.ApiClassMethodDto> {
-    public SupportedApiItemKinds(): SupportedApiItemKindType[] {
-        return [GeneratorHelpers.ApiItemKinds.ClassMethod];
+    public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
+        return [GeneratorHelpers.ApiDefinitionKind.ClassMethod];
     }
 
-    public CheckApiItem(item: Contracts.ApiItemDto): boolean {
+    public CheckApiItem(item: Contracts.ApiDefinition): boolean {
         return true;
     }
 
-    public Render(options: PluginOptions<Contracts.ApiClassMethodDto>): PluginResult {
-        // Parameters
-        const apiParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiParameterDto>(options.ApiItem.Parameters, options.ExtractedData);
-        // TypeParameters
-        const apiTypeParameters = GeneratorHelpers
-            .GetApiItemsFromReference<Contracts.ApiTypeParameterDto>(options.ApiItem.TypeParameters, options.ExtractedData);
+    public Render(options: PluginOptions, apiItem: Contracts.ApiClassMethodDto): PluginResult {
+        const serializedApiItem = new ApiClassMethod(options.ExtractedData, apiItem, options.Reference);
 
-        const heading = GeneratorHelpers.MethodToSimpleString(options.Reference.Alias, apiParameters);
+        const heading = serializedApiItem.ToHeadingText();
         const pluginResult: PluginResult = {
             ...GeneratorHelpers.GetDefaultPluginResultData(),
-            ApiItem: options.ApiItem,
+            ApiItem: apiItem,
             Reference: options.Reference,
             Headings: [
                 {
                     Heading: heading,
                     ApiItemId: options.Reference.Id
                 }
-            ]
+            ],
+            UsedReferences: [options.Reference.Id]
         };
 
         // Header
         pluginResult.Result = new MarkdownBuilder()
             .Header(heading, 3)
             .EmptyLine()
-            .Text(GeneratorHelpers.RenderApiItemMetadata(options.ApiItem))
-            .Code(GeneratorHelpers.ApiClassMethodToString(
-                options.ApiItem,
-                apiTypeParameters,
-                apiParameters,
-                options.Reference.Alias
-            ), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+            .Text(this.RenderApiItemMetadata(apiItem))
+            .Code(serializedApiItem.ToText(), GeneratorHelpers.DEFAULT_CODE_OPTIONS)
             .GetOutput();
 
         // TypeParameters
-        const typeParametersResult = this.RenderTypeParameters(apiTypeParameters);
+        const typeParametersResult = this.RenderTypeParameters(options.ExtractedData, serializedApiItem.TypeParameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, typeParametersResult);
 
         // Parameters
-        const parametersResult = this.RenderParameters(apiParameters);
+        const parametersResult = this.RenderParameters(options.ExtractedData, serializedApiItem.Parameters);
         GeneratorHelpers.MergePluginResultData(pluginResult, parametersResult);
 
         // ReturnType
-        const returnTypeResult = this.RenderReturnType(options.ApiItem.ReturnType);
+        const returnTypeResult = this.RenderReturnType(options.ExtractedData, serializedApiItem.ReturnType);
         GeneratorHelpers.MergePluginResultData(pluginResult, returnTypeResult);
 
         return pluginResult;

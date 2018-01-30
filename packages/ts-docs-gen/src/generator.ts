@@ -9,13 +9,12 @@ import { ApiDefaultPlugin } from "./plugins/api-default-plugin";
 import { ApiItemReference } from "./contracts/api-item-reference";
 import { PluginResult, PluginOptions, GetItemPluginResultHandler } from "./contracts/plugin";
 import { FileResult } from "./contracts/file-result";
-import { PluginResultRegistry } from "./contracts/plugin-result-registry";
-import { PluginResultRegistry as PluginResultRegistryClass } from "./registries/plugin-result-registry";
+import { ApiItemReferenceRegistry } from "./registries/api-item-reference-registry";
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
-        this.fileManager = new FileManager();
-        this.pluginResultRegistry = new PluginResultRegistryClass();
+        this.fileManager = new FileManager(configuration.ExtractedData);
+        this.pluginResultRegistry = new ApiItemReferenceRegistry<PluginResult>();
         const { ExtractedData } = this.configuration;
 
         for (const entryFile of ExtractedData.EntryFiles) {
@@ -29,7 +28,7 @@ export class Generator {
         this.outputData = this.fileManager.ToFilesOutput();
     }
 
-    private pluginResultRegistry: PluginResultRegistry;
+    private pluginResultRegistry: ApiItemReferenceRegistry<PluginResult>;
     private fileManager: FileManager;
     private outputData: FileResult[];
 
@@ -69,25 +68,24 @@ export class Generator {
 
     private renderApiItem(
         apiItemReference: ApiItemReference,
-        apiItem: Contracts.ApiItemDto
+        apiItem: Contracts.ApiDefinition
     ): PluginResult {
         const plugins = this.configuration.PluginManager.GetPluginsByKind(apiItem.ApiKind);
 
         const pluginOptions: PluginOptions = {
             ExtractedData: this.configuration.ExtractedData,
             Reference: apiItemReference,
-            ApiItem: apiItem,
             GetItemPluginResult: this.getItemPluginResult,
             IsPluginResultExists: reference => this.pluginResultRegistry.Exists(reference)
         };
 
         for (const plugin of plugins) {
             if (plugin.CheckApiItem(apiItem)) {
-                return plugin.Render(pluginOptions);
+                return plugin.Render(pluginOptions, apiItem);
             }
         }
 
         const defaultPlugin = new ApiDefaultPlugin();
-        return defaultPlugin.Render(pluginOptions);
+        return defaultPlugin.Render(pluginOptions, apiItem);
     }
 }

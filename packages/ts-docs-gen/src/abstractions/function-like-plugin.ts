@@ -1,27 +1,32 @@
-import { Contracts } from "ts-extractor";
-import { MarkdownGenerator, MarkdownBuilder } from "@simplrjs/markdown";
+import { Contracts, ExtractDto } from "ts-extractor";
+import { MarkdownBuilder } from "@simplrjs/markdown";
 
 import { BasePlugin } from "./base-plugin";
 import { PluginResultData } from "../contracts/plugin";
 import { GeneratorHelpers } from "../generator-helpers";
+import { ApiTypes } from "../api-items/api-type-list";
+import { ApiParameter } from "../api-items/definitions/api-parameter";
 
-export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends BasePlugin<TKind> {
-    // TODO: Escape string!
-    protected RenderParameters(parameters: Contracts.ApiParameterDto[]): PluginResultData | undefined {
+export abstract class FunctionLikePlugin<TKind extends Contracts.ApiBaseDefinition = Contracts.ApiDefinition> extends BasePlugin<TKind> {
+    protected RenderParameters(extractedData: ExtractDto, parameters: ApiParameter[]): PluginResultData | undefined {
         if (parameters.length === 0) {
             return undefined;
         }
 
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
-        const header = ["Name", "Type", "Description"];
+        const header = ["Name", "Type", "Default value", "Description"];
 
         const content = parameters.map(parameter => {
-            const parameterTypeDto = GeneratorHelpers.TypeDtoToMarkdownString(parameter.Type);
-            GeneratorHelpers.MergePluginResultData(pluginResult, {
-                UsedReferences: parameterTypeDto.References
-            });
+            const type = parameter.Type
+                .ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences));
 
-            return [parameter.Name, MarkdownGenerator.EscapeString(parameterTypeDto.Text), parameter.Metadata.DocumentationComment];
+            // TODO: Add Resolving simple metadata.
+            return [
+                parameter.Name,
+                type,
+                parameter.ApiItem.Initializer || "",
+                parameter.ApiItem.Metadata.DocumentationComment
+            ];
         });
 
         pluginResult.Result = new MarkdownBuilder()
@@ -34,22 +39,19 @@ export abstract class FunctionLikePlugin<TKind = Contracts.ApiItemDto> extends B
         return pluginResult;
     }
 
-    protected RenderReturnType(type?: Contracts.TypeDto): PluginResultData | undefined {
+    protected RenderReturnType(extractedData: ExtractDto, type: ApiTypes | undefined): PluginResultData | undefined {
         if (type == null) {
             return undefined;
         }
         const pluginResult = GeneratorHelpers.GetDefaultPluginResultData();
 
-        const parsedReturnType = GeneratorHelpers.TypeDtoToMarkdownString(type);
-
         pluginResult.Result = new MarkdownBuilder()
             .EmptyLine()
             .Bold("Return type")
             .EmptyLine()
-            .Text(parsedReturnType.Text)
+            .Text(type.ToInlineText(this.RenderReferences(extractedData, pluginResult.UsedReferences)))
             .GetOutput();
 
-        pluginResult.UsedReferences = parsedReturnType.References;
         return pluginResult;
     }
 }
