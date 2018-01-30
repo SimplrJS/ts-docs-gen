@@ -2,7 +2,8 @@
   "name": "ts-docs-gen",
   "version": "0.1.0",
   "description": "Generating documentation for TypeScript code",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "scripts": {
     "pretest": "npm run build -- --noEmit && npm run build-tests",
     "test": "npm run tslint && jest && echo All tests passed successfully.",
