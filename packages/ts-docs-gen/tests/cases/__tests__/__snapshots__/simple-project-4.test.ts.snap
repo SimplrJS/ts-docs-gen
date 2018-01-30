@@ -26,22 +26,9 @@ Array [
   Object {
     "FileLocation": "to-exclude.md",
     "Result": Array [
-      "# Table of contents",
-      "",
-      "* [to-exclude.ts][SourceFile-1]",
-      "    * Variables",
-      "        * [My variable ExcludedFileValue][VariableDeclaration-1]",
-      "",
       "# to-exclude.ts",
       "",
-      "## Variables",
-      "",
-      "### My variable ExcludedFileValue",
-      "",
-      "Variable plugin result.",
-      "",
       "[SourceFile-1]: to-exclude.md#to-excludets",
-      "[VariableDeclaration-1]: to-exclude.md#my-variable-excludedfilevalue",
     ],
   },
 ]

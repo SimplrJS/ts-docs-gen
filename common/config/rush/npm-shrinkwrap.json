@@ -16,12 +16,12 @@
     },
     "@rush-temp/ts-docs-gen": {
       "version": "file:projects/ts-docs-gen.tgz",
-      "integrity": "sha1-JJgnrkpS5ldY/1uxFDaiLD/StW0=",
+      "integrity": "sha1-ELxjGtKC3CkijkONj/wPj7siK9E=",
       "requires": {
         "@simplrjs/markdown": "1.1.0",
         "@simplrjs/test-generator-cli": "0.1.3",
         "@types/fs-extra": "5.0.0",
-        "@types/jest": "22.1.0",
+        "@types/jest": "22.1.1",
         "@types/sinon": "4.1.3",
         "@types/yargs": "10.0.1",
         "fs-extra": "5.0.0",
@@ -29,8 +29,8 @@
         "simplr-logger": "1.0.1",
         "simplr-tslint": "0.0.1",
         "sinon": "4.2.2",
-        "ts-extractor": "4.0.0-beta.8",
-        "ts-jest": "22.0.1",
+        "ts-extractor": "4.0.0-rc.1",
+        "ts-jest": "22.0.2",
         "tslint": "5.9.1",
         "typescript": "2.6.2",
         "yargs": "11.0.0"
@@ -96,9 +96,9 @@
       "integrity": "sha512-LjNiTX7TY7wtuC6y3QwC93hKMuqYhgV9A1uXBKNvZtVC8ZvyWAjZkJ5BvT0K7RKqORRYRLMrqCxpw5RgS+MdrQ=="
     },
     "@types/jest": {
-      "version": "22.1.0",
-      "resolved": "https://registry.npmjs.org/@types/jest/-/jest-22.1.0.tgz",
-      "integrity": "sha512-9Qi+ty8PNH+x6GrwjF+d5jo+FVZG473Qzo94ZVimLIHwrFNyw58L2cJev4z3WSNtTK05t+fPVecrrxJlTm6djw=="
+      "version": "22.1.1",
+      "resolved": "https://registry.npmjs.org/@types/jest/-/jest-22.1.1.tgz",
+      "integrity": "sha512-JSh6yk+GkeSkucPa3DllFtpDXe0BMxDTFqCxoryzGKvZiusdb97Sb7X5gnMiKdFGkHbTMjSH+HbE9wrBIzrUTA=="
     },
     "@types/node": {
       "version": "9.4.0",
@@ -2366,7 +2366,7 @@
       "requires": {
         "jest-mock": "22.1.0",
         "jest-util": "22.1.4",
-        "jsdom": "11.6.1"
+        "jsdom": "11.6.2"
       }
     },
     "jest-environment-node": {
@@ -2846,9 +2846,9 @@
       }
     },
     "jsdom": {
-      "version": "11.6.1",
-      "resolved": "https://registry.npmjs.org/jsdom/-/jsdom-11.6.1.tgz",
-      "integrity": "sha512-x1vDo5CQuwsuP0w3kuU04vQdem9Q8apRV2PXp8GeSFQpgtYvSwbcypIbNgRrXu82O4TMroGYSAbu9wyVZHcehw==",
+      "version": "11.6.2",
+      "resolved": "https://registry.npmjs.org/jsdom/-/jsdom-11.6.2.tgz",
+      "integrity": "sha512-pAeZhpbSlUp5yQcS6cBQJwkbzmv4tWFaYxHbFVSxzXefqjvtRA851Z5N2P+TguVG9YeUDcgb8pdeVQRJh0XR3Q==",
       "requires": {
         "abab": "1.0.4",
         "acorn": "5.3.0",
@@ -4655,9 +4655,9 @@
       "integrity": "sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM="
     },
     "ts-extractor": {
-      "version": "4.0.0-beta.8",
-      "resolved": "https://registry.npmjs.org/ts-extractor/-/ts-extractor-4.0.0-beta.8.tgz",
-      "integrity": "sha512-yoniNRxDHw2uqotHWDSRxtJqtpwf3TXp993dxMNYMox3OC6zIMMKSP3a0fHDJkAYAqCNu22X5vY0lK5uRXm+0w==",
+      "version": "4.0.0-rc.1",
+      "resolved": "https://registry.npmjs.org/ts-extractor/-/ts-extractor-4.0.0-rc.1.tgz",
+      "integrity": "sha512-4PFeaYNg3m5m4MHHOWVBQiqbz95hpgGXr2cNnd8rw0q2Qpq6pAmETn5+YwsJqwNdtoN0ASx+rte2EWY8UPXPLw==",
       "requires": {
         "@types/fs-extra": "5.0.0",
         "fs-extra": "5.0.0",
@@ -4667,9 +4667,9 @@
       }
     },
     "ts-jest": {
-      "version": "22.0.1",
-      "resolved": "https://registry.npmjs.org/ts-jest/-/ts-jest-22.0.1.tgz",
-      "integrity": "sha512-bc781gViU95lRZF0kzkHiincwmVu96jbC8MFk2SXUCrSj3Zx8sMC6c6gJnIluVQkm8yYaBl5ucqLnwHNRl5l0Q==",
+      "version": "22.0.2",
+      "resolved": "https://registry.npmjs.org/ts-jest/-/ts-jest-22.0.2.tgz",
+      "integrity": "sha512-11FP07YRE12atlByBq65uidNexL7/IZsdjaK36A9fSyirCy2zDmT1QGBgMrzd83KAn5bgE3CImdY4ery79H8yQ==",
       "requires": {
         "babel-core": "6.26.0",
         "babel-plugin-istanbul": "4.1.5",
@@ -4680,7 +4680,7 @@
         "jest-config": "22.1.4",
         "pkg-dir": "2.0.0",
         "source-map-support": "0.5.3",
-        "yargs": "10.1.2"
+        "yargs": "11.0.0"
       },
       "dependencies": {
         "fs-extra": {
@@ -4691,25 +4691,6 @@
             "graceful-fs": "4.1.11",
             "jsonfile": "4.0.0",
             "universalify": "0.1.1"
-          }
-        },
-        "yargs": {
-          "version": "10.1.2",
-          "resolved": "https://registry.npmjs.org/yargs/-/yargs-10.1.2.tgz",
-          "integrity": "sha512-ivSoxqBGYOqQVruxD35+EyCFDYNEFL/Uo6FcOnz+9xZdZzK0Zzw4r4KhbrME1Oo2gOggwJod2MnsdamSG7H9ig==",
-          "requires": {
-            "cliui": "4.0.0",
-            "decamelize": "1.2.0",
-            "find-up": "2.1.0",
-            "get-caller-file": "1.0.2",
-            "os-locale": "2.1.0",
-            "require-directory": "2.1.1",
-            "require-main-filename": "1.0.1",
-            "set-blocking": "2.0.0",
-            "string-width": "2.1.1",
-            "which-module": "2.0.0",
-            "y18n": "3.2.1",
-            "yargs-parser": "8.1.0"
           }
         }
       }
