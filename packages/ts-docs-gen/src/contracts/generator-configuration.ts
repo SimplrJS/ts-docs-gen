@@ -1,4 +1,5 @@
 import { ExtractDto } from "ts-extractor";
+import { LogLevel } from "simplr-logger";
 
 import { PluginRegistry } from "../registries/plugin-registry";
 import { Plugin } from "./plugin";
@@ -26,4 +27,5 @@ export interface WorkingGeneratorConfiguration {
      * Excludes items that has access modifier set to "private" or JSDoc tag "@private".
      */
     excludePrivateApi?: boolean;
+    verbosity?: LogLevel;
 }

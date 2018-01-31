@@ -2,6 +2,7 @@ import * as ts from "typescript";
 import * as path from "path";
 import { Extractor, GetCompilerOptions, Contracts } from "ts-extractor";
 import { ApiHelpers } from "ts-extractor/dist/internal";
+import { LogLevel } from "simplr-logger";
 
 import { GeneratorConfiguration, WorkingGeneratorConfiguration } from "../contracts/generator-configuration";
 import { Plugin } from "../contracts/plugin";
@@ -9,6 +10,7 @@ import { Plugin } from "../contracts/plugin";
 import { PluginRegistry } from "../registries/plugin-registry";
 import { DefaultPlugins } from "../default-plugins";
 import { GeneratorHelpers } from "../generator-helpers";
+import { Logger } from "../utils/logger";
 
 export class GeneratorConfigurationBuilder {
     constructor(private projectDirectory: string) {
@@ -87,6 +89,12 @@ export class GeneratorConfigurationBuilder {
         return this;
     }
 
+    public SetVerbosityLevel(level: LogLevel): this {
+        this.configuration.verbosity = level;
+
+        return this;
+    }
+
     public AddPlugins(plugins: Plugin[]): this {
         const currentPlugins = this.configuration.plugins || [];
         this.configuration.plugins = [...plugins, ...currentPlugins];
@@ -95,6 +103,12 @@ export class GeneratorConfigurationBuilder {
     }
 
     public async Build(entryFiles: string[]): Promise<GeneratorConfiguration> {
+        // Verbosity level
+        if (this.configuration.verbosity != null) {
+            const logLevel = this.configuration.verbosity;
+            Logger.UpdateConfiguration(updater => updater.SetDefaultLogLevel(logLevel).Build());
+        }
+
         // Register all plugins.
         const pluginManager = new PluginRegistry();
         // Register default plugins
@@ -127,6 +141,7 @@ export class GeneratorConfigurationBuilder {
             FilterApiItems: this.extractorFilterApiItem
         });
 
+        // Output directory
         const outputDirectory = this.configuration.outputDirectory || path.join(this.resolveProjectDirectory(), "/docs/");
 
         return {

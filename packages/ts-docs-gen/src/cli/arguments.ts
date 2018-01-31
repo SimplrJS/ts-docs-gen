@@ -1,4 +1,5 @@
 import * as yargs from "yargs";
+import { LogLevel } from "simplr-logger";
 
 export interface CliArguments extends yargs.Arguments {
     project: string;
@@ -50,4 +51,9 @@ export const ArgsHandler = yargs
         describe: "Package name or path to plugin.",
         type: "array"
     })
+    .option("verbosity", {
+        describe: "Set logger verbosity level.",
+        type: "string"
+    })
+    .choices("verbosity", Object.values(LogLevel))
     .argv as CliArguments;
