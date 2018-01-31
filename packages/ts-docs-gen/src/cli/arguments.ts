@@ -21,11 +21,9 @@ export const ArgsHandler = yargs
     // CLI options
     .option("project", {
         describe: "Project location.",
-        default: ".",
-        type: "string"
+        default: process.cwd(),
     })
     .alias("p", "project")
-    .required("p", "Project location is required.")
     .option("entryFile", {
         describe: "Entry file or files to generate documentation from.",
         type: "array"
