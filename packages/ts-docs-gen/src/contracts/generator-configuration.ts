@@ -1,5 +1,4 @@
 import { ExtractDto } from "ts-extractor";
-import { LogLevel } from "simplr-logger";
 
 import { PluginRegistry } from "../registries/plugin-registry";
 import { Plugin } from "./plugin";
