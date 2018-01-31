@@ -88,6 +88,7 @@ export namespace GeneratorHelpers {
 
     // #region Defaults and constants
     export enum JSDocTags {
+        Private = "private",
         Beta = "beta",
         Deprecated = "deprecated",
         Internal = "internal",

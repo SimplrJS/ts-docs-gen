@@ -36,6 +36,11 @@ export const ArgsHandler = yargs
         describe: "File locations that should not be included generated documentation.",
         type: "array"
     })
+    .option("excludePrivateApi", {
+        describe: `Excludes api items that has access modifier set to "private" or JSDoc tag "@private".`,
+        default: true,
+        type: "boolean"
+    })
     .option("output", {
         describe: "Documentation output directory.",
         type: "string"

@@ -22,4 +22,8 @@ export interface WorkingGeneratorConfiguration {
      */
     externalPackage: string[];
     outputPathSeparator: string;
+    /**
+     * Excludes items that has access modifier set to "private" or JSDoc tag "@private".
+     */
+    excludePrivateApi?: boolean;
 }
