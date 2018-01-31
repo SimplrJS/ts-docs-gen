@@ -8,5 +8,8 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "tests/cases/__tests__/**/*.test.ts": true
-    }
+    },
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false
 }
