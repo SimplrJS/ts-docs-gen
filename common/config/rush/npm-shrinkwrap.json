@@ -5,9 +5,9 @@
   "requires": true,
   "dependencies": {
     "@babel/code-frame": {
-      "version": "7.0.0-beta.38",
-      "resolved": "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.0.0-beta.38.tgz",
-      "integrity": "sha512-JNHofQND7Iiuy3f6RXSillN1uBe87DAp+1ktsBfSxfL3xWeGFyJC9jH5zu2zs7eqVGp2qXWvJZFiJIwOYnaCQw==",
+      "version": "7.0.0-beta.39",
+      "resolved": "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.0.0-beta.39.tgz",
+      "integrity": "sha512-PConL+YIK9BgNUWWC2q4fbltj1g475TofpNVNivSypcAAKElfpSS1cv7MrpLYRG8TzZvwcVu9M30hLA/WAp1HQ==",
       "requires": {
         "chalk": "2.3.0",
         "esutils": "2.0.2",
@@ -16,7 +16,7 @@
     },
     "@rush-temp/ts-docs-gen": {
       "version": "file:projects/ts-docs-gen.tgz",
-      "integrity": "sha1-ELxjGtKC3CkijkONj/wPj7siK9E=",
+      "integrity": "sha1-UqyPTt3j4eq5/JedQwOWxxdEoZU=",
       "requires": {
         "@simplrjs/markdown": "1.1.0",
         "@simplrjs/test-generator-cli": "0.1.3",
@@ -29,7 +29,7 @@
         "simplr-logger": "1.0.1",
         "simplr-tslint": "0.0.1",
         "sinon": "4.2.2",
-        "ts-extractor": "4.0.0-rc.1",
+        "ts-extractor": "4.0.0-rc.2",
         "ts-jest": "22.0.2",
         "tslint": "5.9.1",
         "typescript": "2.6.2",
@@ -2519,7 +2519,7 @@
       "resolved": "https://registry.npmjs.org/jest-message-util/-/jest-message-util-22.1.0.tgz",
       "integrity": "sha512-kftcoawOeOVUGuGWmMupJt7FGLK1pqOrh02FlJwtImmPGZ2yTWCTx2D+N/g95qD2jCbQ/ntH1goBixhAIIxL+g==",
       "requires": {
-        "@babel/code-frame": "7.0.0-beta.38",
+        "@babel/code-frame": "7.0.0-beta.39",
         "chalk": "2.3.0",
         "micromatch": "2.3.11",
         "slash": "1.0.0",
@@ -4655,9 +4655,9 @@
       "integrity": "sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM="
     },
     "ts-extractor": {
-      "version": "4.0.0-rc.1",
-      "resolved": "https://registry.npmjs.org/ts-extractor/-/ts-extractor-4.0.0-rc.1.tgz",
-      "integrity": "sha512-4PFeaYNg3m5m4MHHOWVBQiqbz95hpgGXr2cNnd8rw0q2Qpq6pAmETn5+YwsJqwNdtoN0ASx+rte2EWY8UPXPLw==",
+      "version": "4.0.0-rc.2",
+      "resolved": "https://registry.npmjs.org/ts-extractor/-/ts-extractor-4.0.0-rc.2.tgz",
+      "integrity": "sha512-NsdK6JH8A/D6R45Vj0wCcOx1/DC0m9+mm6DEdixQbOQe3K6tnSAqpUQSWuTsQ6ZDiUwIJQGuVuacLeHqosvNuw==",
       "requires": {
         "@types/fs-extra": "5.0.0",
         "fs-extra": "5.0.0",
