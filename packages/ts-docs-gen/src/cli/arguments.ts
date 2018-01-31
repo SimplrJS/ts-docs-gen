@@ -1,6 +1,4 @@
 import * as yargs from "yargs";
-import { LogLevel } from "simplr-logger";
-import { Helpers } from "../utils/helpers";
 
 export interface CliFlags {
     project: string;
@@ -8,7 +6,6 @@ export interface CliFlags {
     entryFile: string[];
     plugin?: string[];
     exclude?: string[];
-    verbosity?: string;
     externalPackage?: string[];
     excludePrivateApi?: boolean;
 }

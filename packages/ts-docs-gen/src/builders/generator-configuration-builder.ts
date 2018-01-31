@@ -2,7 +2,6 @@ import * as ts from "typescript";
 import * as path from "path";
 import { Extractor, GetCompilerOptions, Contracts } from "ts-extractor";
 import { ApiHelpers } from "ts-extractor/dist/internal";
-import { LogLevel } from "simplr-logger";
 
 import { GeneratorConfiguration, WorkingGeneratorConfiguration } from "../contracts/generator-configuration";
 import { Plugin } from "../contracts/plugin";
@@ -84,12 +83,6 @@ export class GeneratorConfigurationBuilder {
 
     public SetOutputDirectory(outputDirectory: string): this {
         this.configuration.outputDirectory = outputDirectory;
-
-        return this;
-    }
-
-    public SetVerbosityLevel(level: LogLevel): this {
-        this.configuration.verbosity = level;
 
         return this;
     }
