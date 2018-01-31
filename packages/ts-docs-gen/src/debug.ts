@@ -7,6 +7,7 @@ import { Generator } from "./generator";
 import { BasePlugin } from "./abstractions/base-plugin";
 import { PluginOptions, SupportedApiItemKindType, PluginResult } from "./contracts/plugin";
 import { GeneratorHelpers } from "./generator-helpers";
+import { LogLevel } from "simplr-logger";
 
 export class PluginDebug extends BasePlugin {
     public SupportedApiDefinitionKind(): SupportedApiItemKindType[] {
@@ -36,6 +37,7 @@ async function Main(): Promise<void> {
     // const entryFiles = ["./index.ts", "./exported-const-variables.ts", "./exported-functions.ts"];
 
     const configPromise = new GeneratorConfigurationBuilder(projectDirectory)
+        .SetVerbosityLevel(LogLevel.None)
         .Build(entryFiles);
     const config = await configPromise;
 

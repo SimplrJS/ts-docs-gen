@@ -1,12 +1,22 @@
 import * as yargs from "yargs";
 import { LogLevel } from "simplr-logger";
+import { Helpers } from "../utils/helpers";
 
-export interface CliArguments extends yargs.Arguments {
+export interface CliFlags {
     project: string;
     output?: string;
     entryFile: string[];
     plugin?: string[];
     exclude?: string[];
+    verbosity?: string;
+    externalPackage?: string[];
+    excludePrivateApi?: boolean;
+}
+
+export type CliArguments = CliFlags & yargs.Arguments;
+
+function flagName(name: keyof CliFlags): string {
+    return name;
 }
 
 /**
@@ -20,40 +30,36 @@ export const ArgsHandler = yargs
     .version()
     .alias("v", "version")
     // CLI options
-    .option("project", {
+    .option(flagName("project"), {
+        alias: "p",
         describe: "Project location.",
         default: process.cwd(),
     })
-    .alias("p", "project")
-    .option("entryFile", {
+    .option(flagName("entryFile"), {
         describe: "Entry file or files to generate documentation from.",
+        required: true,
         type: "array"
     })
-    .option("externalPackage", {
+    .option(flagName("externalPackage"), {
         describe: "Package names to include in extracted data.",
         type: "array"
     })
-    .option("exclude", {
+    .option(flagName("exclude"), {
         describe: "File locations that should not be included generated documentation.",
         type: "array"
     })
-    .option("excludePrivateApi", {
+    .option(flagName("excludePrivateApi"), {
         describe: `Excludes api items that has access modifier set to "private" or JSDoc tag "@private".`,
         default: true,
         type: "boolean"
     })
-    .option("output", {
+    .option(flagName("output"), {
+        alias: "o",
         describe: "Documentation output directory.",
         type: "string"
     })
-    .alias("o", "output")
-    .option("plugin", {
+    .option(flagName("plugin"), {
         describe: "Package name or path to plugin.",
         type: "array"
     })
-    .option("verbosity", {
-        describe: "Set logger verbosity level.",
-        type: "string"
-    })
-    .choices("verbosity", Object.values(LogLevel))
     .argv as CliArguments;

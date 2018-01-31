@@ -10,7 +10,6 @@ import { Plugin } from "../contracts/plugin";
 import { PluginRegistry } from "../registries/plugin-registry";
 import { DefaultPlugins } from "../default-plugins";
 import { GeneratorHelpers } from "../generator-helpers";
-import { Logger } from "../utils/logger";
 
 export class GeneratorConfigurationBuilder {
     constructor(private projectDirectory: string) {
@@ -103,11 +102,6 @@ export class GeneratorConfigurationBuilder {
     }
 
     public async Build(entryFiles: string[]): Promise<GeneratorConfiguration> {
-        // Verbosity level
-        if (this.configuration.verbosity != null) {
-            const logLevel = this.configuration.verbosity;
-            Logger.UpdateConfiguration(updater => updater.SetDefaultLogLevel(logLevel).Build());
-        }
 
         // Register all plugins.
         const pluginManager = new PluginRegistry();
@@ -121,7 +115,6 @@ export class GeneratorConfigurationBuilder {
             for (const plugin of this.configuration.plugins) {
                 pluginManager.Register(plugin);
             }
-
         }
 
         // Resolve tsconfig
