@@ -1,6 +1,6 @@
 {
     "name": "ts-docs-gen",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Generating documentation for TypeScript code",
     "main": "./dist/index.js",
     "typings": "./dist/index.d.ts",
@@ -15,6 +15,14 @@
     },
     "engine": "node >= 7.5.0",
     "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
+    "contributors": [
+        "Martynas Žilinskas <martynas@quatrodev.com> (https://github.com/MartynasZilinskas)",
+        "Deividas Bakanas <deividas@quatrodev.com> (https://github.com/DeividasBakanas)"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SimplrJS/ts-docs-gen"
+    },
     "dependencies": {
         "@simplrjs/markdown": "^1.1.0",
         "@types/fs-extra": "^5.0.0",
