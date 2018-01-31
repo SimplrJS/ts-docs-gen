@@ -15,7 +15,9 @@ export class GeneratorConfigurationBuilder {
         this.configuration.projectDirectory = projectDirectory;
     }
 
-    private configuration: Partial<WorkingGeneratorConfiguration> = {};
+    private configuration: Partial<WorkingGeneratorConfiguration> = {
+        excludePrivateApi: true
+    };
     private compilerOptions: Partial<ts.CompilerOptions>;
     private tsConfigLocation: string | undefined;
 
