@@ -13,6 +13,13 @@ export interface WorkingGeneratorConfiguration {
     outputDirectory: string;
     projectDirectory: string;
     plugins: Plugin[];
+    /**
+     * File locations that should not be included in extracted data.
+     */
     exclude: string[];
+    /**
+     * Package names to include in extracted data.
+     */
+    externalPackage: string[];
     outputPathSeparator: string;
 }

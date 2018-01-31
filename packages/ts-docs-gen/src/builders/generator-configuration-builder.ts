@@ -53,6 +53,12 @@ export class GeneratorConfigurationBuilder {
         return this;
     }
 
+    public SetExternalPackages(packages: string[]): this {
+        this.configuration.externalPackage = packages;
+
+        return this;
+    }
+
     public SetOutputDirectory(outputDirectory: string): this {
         this.configuration.outputDirectory = outputDirectory;
 
@@ -94,7 +100,8 @@ export class GeneratorConfigurationBuilder {
             CompilerOptions: compilerOptions,
             ProjectDirectory: this.resolveProjectDirectory(),
             Exclude: this.configuration.exclude,
-            OutputPathSeparator: this.configuration.outputPathSeparator
+            OutputPathSeparator: this.configuration.outputPathSeparator,
+            ExternalPackages: this.configuration.externalPackage
         });
 
         const outputDirectory = this.configuration.outputDirectory || path.join(this.resolveProjectDirectory(), "/docs/");

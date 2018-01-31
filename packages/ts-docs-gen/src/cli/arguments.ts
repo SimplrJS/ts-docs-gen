@@ -28,6 +28,10 @@ export const ArgsHandler = yargs
         describe: "Entry file or files to generate documentation from.",
         type: "array"
     })
+    .option("externalPackage", {
+        describe: "Package names to include in extracted data.",
+        type: "array"
+    })
     .option("exclude", {
         describe: "File locations that should not be included generated documentation.",
         type: "array"
