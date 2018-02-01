@@ -12,8 +12,8 @@ import { Helpers } from "../utils/helpers";
     const builder = new GeneratorConfigurationBuilder(project);
 
     // Verbosity level.
-    if (verbosity != null) {
-        const verbosityLogLevel = LoggerHelpers.ParseLogLevelKey(verbosity);
+    const verbosityLogLevel = verbosity != null ? LoggerHelpers.ParseLogLevelKey(verbosity) : undefined;
+    if (verbosityLogLevel != null) {
         LoggerHelpers.SetLogLevel(verbosityLogLevel);
     }
 
@@ -44,7 +44,10 @@ import { Helpers } from "../utils/helpers";
     }
 
     // Set rest of configuration
-    builder.OverrideConfiguration(rest);
+    builder.OverrideConfiguration({
+        ...rest,
+        verbosity: verbosityLogLevel
+    });
 
     const generator = new Generator(await builder.Build(entryFile));
     if (dryRun) {

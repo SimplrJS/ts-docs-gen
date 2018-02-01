@@ -19,7 +19,7 @@ export class GeneratorConfigurationBuilder {
     private configuration: Partial<WorkingGeneratorConfiguration> = {
         excludePrivateApi: true
     };
-    private compilerOptions: Partial<ts.CompilerOptions>;
+    private compilerOptions: Partial<ts.CompilerOptions> = {};
     private tsConfigLocation: string | undefined;
 
     private resolveProjectDirectory(): string {
@@ -129,7 +129,8 @@ export class GeneratorConfigurationBuilder {
             Exclude: this.configuration.exclude,
             OutputPathSeparator: this.configuration.outputPathSeparator,
             ExternalPackages: this.configuration.externalPackage,
-            FilterApiItems: this.extractorFilterApiItem
+            FilterApiItems: this.extractorFilterApiItem,
+            Verbosity: this.configuration.verbosity
         });
 
         // Output directory
