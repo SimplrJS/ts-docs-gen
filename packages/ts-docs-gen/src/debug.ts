@@ -1,5 +1,5 @@
 // This is debug file. DO NOT include in compiled package.
-import * as path from "path";
+// import * as path from "path";
 import { Contracts } from "ts-extractor";
 
 import { GeneratorConfigurationBuilder } from "./builders/generator-configuration-builder";
@@ -30,11 +30,13 @@ export class PluginDebug extends BasePlugin {
 }
 
 async function Main(): Promise<void> {
-    const projectDirectory = path.join(process.cwd(), "./examples/simple/");
+    const projectDirectory = process.cwd();
+    const entryFiles = ["./src/index.ts"];
+    // const projectDirectory = path.join(process.cwd(), "./examples/simple/");
     // const entryFiles = ["./index.ts", "./exported-const-variables.ts", "./exported-functions.ts"];
-    const entryFiles = ["./index.ts"];
 
-    const configPromise = new GeneratorConfigurationBuilder(projectDirectory).Build(entryFiles);
+    const configPromise = new GeneratorConfigurationBuilder(projectDirectory)
+        .Build(entryFiles);
     const config = await configPromise;
 
     const generator = new Generator(config);

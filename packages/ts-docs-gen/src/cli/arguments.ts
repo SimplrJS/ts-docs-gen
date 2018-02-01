@@ -1,11 +1,19 @@
 import * as yargs from "yargs";
 
-export interface CliArguments extends yargs.Arguments {
+export interface CliFlags {
     project: string;
     output?: string;
     entryFile: string[];
     plugin?: string[];
     exclude?: string[];
+    externalPackage?: string[];
+    excludePrivateApi?: boolean;
+}
+
+export type CliArguments = CliFlags & yargs.Arguments;
+
+function flagName(name: keyof CliFlags): string {
+    return name;
 }
 
 /**
@@ -19,27 +27,35 @@ export const ArgsHandler = yargs
     .version()
     .alias("v", "version")
     // CLI options
-    .option("project", {
+    .option(flagName("project"), {
+        alias: "p",
         describe: "Project location.",
-        default: ".",
-        type: "string"
+        default: process.cwd(),
     })
-    .alias("p", "project")
-    .required("p", "Project location is required.")
-    .option("entryFile", {
+    .option(flagName("entryFile"), {
         describe: "Entry file or files to generate documentation from.",
+        required: true,
         type: "array"
     })
-    .option("exclude", {
+    .option(flagName("externalPackage"), {
+        describe: "External package names to include in extracted data.",
+        type: "array"
+    })
+    .option(flagName("exclude"), {
         describe: "File locations that should not be included generated documentation.",
         type: "array"
     })
-    .option("output", {
+    .option(flagName("excludePrivateApi"), {
+        describe: `Excludes api items that has access modifier set to "private" or JSDoc tag "@private".`,
+        default: true,
+        type: "boolean"
+    })
+    .option(flagName("output"), {
+        alias: "o",
         describe: "Documentation output directory.",
         type: "string"
     })
-    .alias("o", "output")
-    .option("plugin", {
+    .option(flagName("plugin"), {
         describe: "Package name or path to plugin.",
         type: "array"
     })
