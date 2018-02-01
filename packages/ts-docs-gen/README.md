@@ -45,7 +45,7 @@ JSON config properties and CLI flags.
 | `entryFile`         | `--entryFile`         | _required_ | string[] |             | TypeScript project entry files.                                                       |
 | `project`           | `--project`, `-p`     | _optional_ | string   | cwd         | Full path to TypeScript project directory.                                            |
 | `output`            | `--output`, `-o`      | _optional_ | string   | ./docs/api/ | Documentation output directory.                                                       |
-| `plugin`            | `--plugin`            | _optional_ | string[] |             | Packagename or path to plugin.                                                        |
+| `plugin`            | `--plugin`            | _optional_ | string[] |             | Package name or path to plugin.                                                       |
 | `exclude`           | `--exclude`           | _optional_ | string[] |             | File locations that should not be included generated documentation.                   |
 | `externalPackage`   | `--externalPackage`   | _optional_ | string[] |             | External package names to include in extracted data.                                  |
 | `excludePrivateApi` | `--excludePrivateApi` | _optional_ | boolean  | `true`      | Excludes api items that has access modifier set to "private" or JSDoc tag "@private". |
