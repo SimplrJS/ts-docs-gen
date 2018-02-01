@@ -38,7 +38,7 @@ export const ArgsHandler = yargs
         type: "array"
     })
     .option(flagName("externalPackage"), {
-        describe: "Package names to include in extracted data.",
+        describe: "External package names to include in extracted data.",
         type: "array"
     })
     .option(flagName("exclude"), {
