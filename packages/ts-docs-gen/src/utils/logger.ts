@@ -23,4 +23,8 @@ export namespace LoggerHelpers {
 
         return logLevelEnum[key];
     }
+
+    export function SetLogLevel(level: LogLevel): void {
+        Logger.UpdateConfiguration(updater => updater.SetDefaultLogLevel(level).Build(), false);
+    }
 }

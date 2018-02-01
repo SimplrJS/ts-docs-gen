@@ -14,8 +14,7 @@ import { Helpers } from "../utils/helpers";
     // Verbosity level.
     if (verbosity != null) {
         const verbosityLogLevel = LoggerHelpers.ParseLogLevelKey(verbosity);
-        // It overrides logger configuration with new log level.
-        Logger.UpdateConfiguration(updater => updater.SetDefaultLogLevel(verbosityLogLevel).Build(), false);
+        LoggerHelpers.SetLogLevel(verbosityLogLevel);
     }
 
     // Plugins
