@@ -1,4 +1,6 @@
 import * as yargs from "yargs";
+import { LogLevel } from "simplr-logger";
+import { LoggerHelpers } from "../utils/logger";
 
 export interface CliFlags {
     project: string;
@@ -8,6 +10,7 @@ export interface CliFlags {
     exclude?: string[];
     externalPackage?: string[];
     excludePrivateApi?: boolean;
+    verbosity?: string;
 }
 
 export type CliArguments = CliFlags & yargs.Arguments;
@@ -58,5 +61,11 @@ export const ArgsHandler = yargs
     .option(flagName("plugin"), {
         describe: "Package name or path to plugin.",
         type: "array"
+    })
+    .option(flagName("verbosity"), {
+        describe: "Verbosity of output.",
+        type: "string",
+        choices: LoggerHelpers.GetLogLevelKeys(),
+        default: LogLevel[LogLevel.Information]
     })
     .argv as CliArguments;

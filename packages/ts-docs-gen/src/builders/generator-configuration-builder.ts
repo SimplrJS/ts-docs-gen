@@ -2,6 +2,7 @@ import * as ts from "typescript";
 import * as path from "path";
 import { Extractor, GetCompilerOptions, Contracts } from "ts-extractor";
 import { ApiHelpers } from "ts-extractor/dist/internal";
+import { LogLevel } from "simplr-logger";
 
 import { GeneratorConfiguration, WorkingGeneratorConfiguration } from "../contracts/generator-configuration";
 import { Plugin } from "../contracts/plugin";
@@ -9,6 +10,7 @@ import { Plugin } from "../contracts/plugin";
 import { PluginRegistry } from "../registries/plugin-registry";
 import { DefaultPlugins } from "../default-plugins";
 import { GeneratorHelpers } from "../generator-helpers";
+import { Logger } from "../utils/logger";
 
 export class GeneratorConfigurationBuilder {
     constructor(private projectDirectory: string) {
@@ -95,6 +97,12 @@ export class GeneratorConfigurationBuilder {
     }
 
     public async Build(entryFiles: string[]): Promise<GeneratorConfiguration> {
+        // Verbosity level.
+        if (this.configuration.verbosity != null) {
+            const verbosity = this.configuration.verbosity;
+            // It overrides logger configuration with new log level.
+            Logger.UpdateConfiguration(updater => updater.SetDefaultLogLevel(verbosity).Build(), false);
+        }
 
         // Register all plugins.
         const pluginManager = new PluginRegistry();
