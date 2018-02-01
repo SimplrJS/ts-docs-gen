@@ -2,15 +2,20 @@
 import * as path from "path";
 
 import { ArgsHandler, CliArguments } from "./arguments";
-import { Logger } from "../utils/logger";
+import { Logger, LoggerHelpers } from "../utils/logger";
 import { GeneratorConfigurationBuilder } from "../builders/generator-configuration-builder";
 import { GeneratorHelpers } from "../generator-helpers";
 import { Generator } from "../generator";
 import { Helpers } from "../utils/helpers";
 
-// TODO: Add logger
-(async ({ _, $0, project, plugin, output, entryFile, ...rest }: CliArguments) => {
+(async ({ _, $0, project, plugin, output, entryFile, verbosity, dryRun, ...rest }: CliArguments) => {
     const builder = new GeneratorConfigurationBuilder(project);
+
+    // Verbosity level.
+    const verbosityLogLevel = verbosity != null ? LoggerHelpers.ParseLogLevelKey(verbosity) : undefined;
+    if (verbosityLogLevel != null) {
+        LoggerHelpers.SetLogLevel(verbosityLogLevel);
+    }
 
     // Plugins
     if (plugin != null) {
@@ -25,9 +30,10 @@ import { Helpers } from "../utils/helpers";
 
             try {
                 const plugins = await GeneratorHelpers.ResolvePlugin(moduleLocation);
+                Logger.Debug(`${moduleLocation}: Resolved ${plugins.length} plugins.`);
                 builder.AddPlugins(plugins);
             } catch (error) {
-                Logger.Error(`An error has occured while processing plugins. Resolved location:"${moduleLocation}".`, error);
+                Logger.Error(`${moduleLocation}: Error while proccessing plugins.`, error);
             }
         }
     }
@@ -38,8 +44,15 @@ import { Helpers } from "../utils/helpers";
     }
 
     // Set rest of configuration
-    builder.OverrideConfiguration(rest);
+    builder.OverrideConfiguration({
+        ...rest,
+        verbosity: verbosityLogLevel
+    });
 
     const generator = new Generator(await builder.Build(entryFile));
-    await generator.WriteToFiles();
+    if (dryRun) {
+        Logger.Debug(generator.OutputData);
+    } else {
+        await generator.WriteToFiles();
+    }
 })(ArgsHandler);

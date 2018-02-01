@@ -10,6 +10,7 @@ import { ApiItemReference } from "./contracts/api-item-reference";
 import { PluginResult, PluginOptions, GetItemPluginResultHandler } from "./contracts/plugin";
 import { FileResult } from "./contracts/file-result";
 import { ApiItemReferenceRegistry } from "./registries/api-item-reference-registry";
+import { Logger } from "./utils/logger";
 
 export class Generator {
     constructor(private configuration: GeneratorConfiguration) {
@@ -39,6 +40,7 @@ export class Generator {
     public async WriteToFiles(): Promise<void> {
         for (const item of this.outputData) {
             const fullLocation = path.join(this.configuration.OutputDirectory, "api", item.FileLocation);
+            Logger.Debug(`${fullLocation}: Writing to file.`);
 
             try {
                 // Ensure output directory
@@ -46,7 +48,7 @@ export class Generator {
                 // Output file
                 await fs.writeFile(fullLocation, item.Result.join("\n"));
             } catch (error) {
-                console.error(error);
+                Logger.Error(`${fullLocation}: Failed to write to file.`, error);
             }
         }
     }

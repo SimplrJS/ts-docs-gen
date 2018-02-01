@@ -8,7 +8,7 @@ import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
  * Example: `keyof Foo`
  */
 export class ApiTypeOperator extends ApiTypeBase<Contracts.TypeOperatorTypeDto> {
-    private type: ApiTypes;
+    private type: ApiTypes | undefined;
 
     public get Type(): ApiTypes {
         if (this.type == null) {

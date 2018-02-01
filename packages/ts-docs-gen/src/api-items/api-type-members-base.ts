@@ -4,7 +4,7 @@ import { GeneratorHelpers } from "../generator-helpers";
 import { ApiTypes } from "./api-type-list";
 
 export abstract class ApiTypeMembersBase<TKind extends Contracts.ApiMembersBaseType> extends ApiTypeBase<TKind> {
-    private members: ApiTypes[];
+    private members: ApiTypes[] | undefined;
 
     public get Members(): ApiTypes[] {
         if (this.members == null) {

@@ -1,10 +1,6 @@
 export abstract class AbstractBoo {
     public readonly abstract DefaultBooMessage: string = "Some string with a BooMessage...";
 
-    constructor() {
-        this.BooMessage = this.DefaultBooMessage;
-    }
-
     public abstract BooMessage: string;
 
     public abstract BooTheMessage(): string;
@@ -17,7 +13,8 @@ export class Boo extends AbstractBoo {
 
     constructor() {
         super();
-        this.BooMessage += " And more...";
+        this.DefaultBooMessage = "Hello World";
+        this.BooMessage = " And more...";
     }
 
     public BooMessage: string;
