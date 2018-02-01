@@ -7,7 +7,7 @@ import { ApiItemReference } from "../../contracts/api-item-reference";
 import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiEnum extends ApiDefinitionBase<Contracts.ApiEnumDto> {
-    private enumMembers: ApiEnumMember[];
+    private enumMembers: ApiEnumMember[] | undefined;
 
     public get EnumMembers(): ApiEnumMember[] {
         if (this.enumMembers == null) {

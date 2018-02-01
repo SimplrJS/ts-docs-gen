@@ -7,7 +7,7 @@ import { SerializedApiType, ReferenceRenderHandler } from "../../contracts/seria
  * Example: `Foo[T]`
  */
 export class ApiIndexedAccess extends ApiTypeBase<Contracts.IndexedAccessTypeDto> {
-    private objectType: SerializedApiType;
+    private objectType: SerializedApiType | undefined;
 
     public get ObjectType(): SerializedApiType {
         if (this.objectType == null) {
@@ -16,7 +16,7 @@ export class ApiIndexedAccess extends ApiTypeBase<Contracts.IndexedAccessTypeDto
         return this.objectType;
     }
 
-    private indexType: SerializedApiType;
+    private indexType: SerializedApiType | undefined;
 
     public get IndexType(): SerializedApiType {
         if (this.indexType == null) {

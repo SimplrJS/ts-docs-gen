@@ -19,7 +19,7 @@ export class GeneratorConfigurationBuilder {
     private configuration: Partial<WorkingGeneratorConfiguration> = {
         excludePrivateApi: true
     };
-    private compilerOptions: Partial<ts.CompilerOptions> = {};
+    private compilerOptions: Partial<ts.CompilerOptions> | undefined;
     private tsConfigLocation: string | undefined;
 
     private resolveProjectDirectory(): string {

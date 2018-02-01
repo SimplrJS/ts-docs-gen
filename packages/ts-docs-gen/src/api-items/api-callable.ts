@@ -11,7 +11,7 @@ import { ReferenceRenderHandler } from "../contracts/serialized-api-item";
  * Base class for callable api items.
  */
 export abstract class ApiCallable<TKind extends Contracts.ApiCallableBaseDefinition> extends ApiDefinitionBase<TKind> {
-    private parameters: ApiParameter[];
+    private parameters: ApiParameter[] | undefined;
 
     public get Parameters(): ApiParameter[] {
         if (this.parameters == null) {
@@ -23,7 +23,7 @@ export abstract class ApiCallable<TKind extends Contracts.ApiCallableBaseDefinit
         return this.parameters;
     }
 
-    private typeParameters: ApiTypeParameter[];
+    private typeParameters: ApiTypeParameter[] | undefined;
 
     public get TypeParameters(): ApiTypeParameter[] {
         if (this.typeParameters == null) {
