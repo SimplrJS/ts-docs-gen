@@ -11,6 +11,7 @@ export interface CliFlags {
     externalPackage?: string[];
     excludePrivateApi?: boolean;
     verbosity?: string;
+    dryRun?: boolean;
 }
 
 export type CliArguments = CliFlags & yargs.Arguments;
@@ -67,5 +68,9 @@ export const ArgsHandler = yargs
         type: "string",
         choices: LoggerHelpers.GetLogLevelKeys(),
         default: LogLevel[LogLevel.Information]
+    })
+    .option(flagName("dryRun"), {
+        describe: "Generates markdown files but not writes them.",
+        type: "boolean"
     })
     .argv as CliArguments;

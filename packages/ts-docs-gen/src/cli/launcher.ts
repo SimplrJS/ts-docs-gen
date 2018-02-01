@@ -8,7 +8,7 @@ import { GeneratorHelpers } from "../generator-helpers";
 import { Generator } from "../generator";
 import { Helpers } from "../utils/helpers";
 
-(async ({ _, $0, project, plugin, output, entryFile, verbosity, ...rest }: CliArguments) => {
+(async ({ _, $0, project, plugin, output, entryFile, verbosity, dryRun, ...rest }: CliArguments) => {
     const builder = new GeneratorConfigurationBuilder(project);
 
     // Verbosity level.
@@ -47,5 +47,9 @@ import { Helpers } from "../utils/helpers";
     builder.OverrideConfiguration(rest);
 
     const generator = new Generator(await builder.Build(entryFile));
-    await generator.WriteToFiles();
+    if (dryRun) {
+        Logger.Trace(generator.OutputData);
+    } else {
+        await generator.WriteToFiles();
+    }
 })(ArgsHandler);
