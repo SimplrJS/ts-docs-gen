@@ -6,7 +6,7 @@ import { GeneratorHelpers } from "../../generator-helpers";
 import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiTypeAlias extends ApiDefinitionWithType<Contracts.ApiTypeAliasDto> {
-    private typeParameters: ApiTypeParameter[];
+    private typeParameters: ApiTypeParameter[] | undefined;
 
     public get TypeParameters(): ApiTypeParameter[] {
         if (this.typeParameters == null) {

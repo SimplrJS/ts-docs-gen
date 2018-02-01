@@ -11,7 +11,7 @@ export type ApiBaseItemContainerDto = Contracts.ApiBaseDefinition & { Members: C
 export abstract class ApiDefinitionContainer<TKind extends ApiBaseItemContainerDto = ApiBaseItemContainerDto>
     extends ApiDefinitionBase<TKind> {
 
-    private members: ApiDefinitions[];
+    private members: ApiDefinitions[] | undefined;
 
     public get Members(): ApiDefinitions[] {
         if (this.members == null) {

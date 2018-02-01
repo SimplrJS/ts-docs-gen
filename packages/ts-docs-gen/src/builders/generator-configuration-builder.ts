@@ -1,24 +1,47 @@
 import * as ts from "typescript";
 import * as path from "path";
-import { Extractor, GetCompilerOptions } from "ts-extractor";
+import { Extractor, GetCompilerOptions, Contracts } from "ts-extractor";
+import { ApiHelpers } from "ts-extractor/dist/internal";
 
 import { GeneratorConfiguration, WorkingGeneratorConfiguration } from "../contracts/generator-configuration";
 import { Plugin } from "../contracts/plugin";
 
 import { PluginRegistry } from "../registries/plugin-registry";
 import { DefaultPlugins } from "../default-plugins";
+import { GeneratorHelpers } from "../generator-helpers";
+import { LoggerHelpers } from "../utils/logger";
 
 export class GeneratorConfigurationBuilder {
     constructor(private projectDirectory: string) {
         this.configuration.projectDirectory = projectDirectory;
     }
 
-    private configuration: Partial<WorkingGeneratorConfiguration> = {};
-    private compilerOptions: Partial<ts.CompilerOptions>;
+    private configuration: Partial<WorkingGeneratorConfiguration> = {
+        excludePrivateApi: true
+    };
+    private compilerOptions: Partial<ts.CompilerOptions> | undefined;
     private tsConfigLocation: string | undefined;
 
     private resolveProjectDirectory(): string {
         return this.configuration.projectDirectory || this.projectDirectory;
+    }
+
+    private extractorFilterApiItem: Contracts.FilterApiItemsHandler = (apiItem): boolean => {
+        // Exclude private api.
+        if (this.configuration.excludePrivateApi) {
+            // Check Access Modifier.
+            const accessModifier = ApiHelpers.ResolveAccessModifierFromModifiers(apiItem.Declaration.modifiers);
+            if (accessModifier === Contracts.AccessModifier.Private) {
+                return false;
+            }
+
+            // Look for JSDocTag "@private"
+            const metadata = apiItem.GetItemMetadata();
+            if (metadata.JSDocTags.findIndex(x => x.name === GeneratorHelpers.JSDocTags.Private) !== -1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -53,6 +76,12 @@ export class GeneratorConfigurationBuilder {
         return this;
     }
 
+    public SetExternalPackages(packages: string[]): this {
+        this.configuration.externalPackage = packages;
+
+        return this;
+    }
+
     public SetOutputDirectory(outputDirectory: string): this {
         this.configuration.outputDirectory = outputDirectory;
 
@@ -67,6 +96,11 @@ export class GeneratorConfigurationBuilder {
     }
 
     public async Build(entryFiles: string[]): Promise<GeneratorConfiguration> {
+        // Verbosity level.
+        if (this.configuration.verbosity != null) {
+            LoggerHelpers.SetLogLevel(this.configuration.verbosity);
+        }
+
         // Register all plugins.
         const pluginManager = new PluginRegistry();
         // Register default plugins
@@ -79,7 +113,6 @@ export class GeneratorConfigurationBuilder {
             for (const plugin of this.configuration.plugins) {
                 pluginManager.Register(plugin);
             }
-
         }
 
         // Resolve tsconfig
@@ -94,9 +127,13 @@ export class GeneratorConfigurationBuilder {
             CompilerOptions: compilerOptions,
             ProjectDirectory: this.resolveProjectDirectory(),
             Exclude: this.configuration.exclude,
-            OutputPathSeparator: this.configuration.outputPathSeparator
+            OutputPathSeparator: this.configuration.outputPathSeparator,
+            ExternalPackages: this.configuration.externalPackage,
+            FilterApiItems: this.extractorFilterApiItem,
+            Verbosity: this.configuration.verbosity
         });
 
+        // Output directory
         const outputDirectory = this.configuration.outputDirectory || path.join(this.resolveProjectDirectory(), "/docs/");
 
         return {

@@ -8,7 +8,7 @@ export type ApiBaseItemWithTypeDto = Contracts.ApiBaseDefinition & { Type: Contr
 export abstract class ApiDefinitionWithType<TKind extends ApiBaseItemWithTypeDto = ApiBaseItemWithTypeDto>
     extends ApiDefinitionBase<TKind> {
 
-    private type: ApiTypes;
+    private type: ApiTypes | undefined;
 
     public get Type(): ApiTypes {
         if (this.type == null) {

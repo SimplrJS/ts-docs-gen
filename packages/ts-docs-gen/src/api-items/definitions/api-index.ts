@@ -5,7 +5,7 @@ import { ApiDefinitionWithType } from "../api-definition-with-type";
 import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiIndex extends ApiDefinitionWithType<Contracts.ApiIndexDto> {
-    private parameter: ApiParameter;
+    private parameter: ApiParameter | undefined;
 
     public get Parameter(): ApiParameter {
         if (this.parameter == null) {

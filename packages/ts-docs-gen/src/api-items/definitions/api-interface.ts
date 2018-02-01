@@ -6,7 +6,7 @@ import { ApiTypeParameter } from "./api-type-parameter";
 import { ReferenceRenderHandler } from "../../contracts/serialized-api-item";
 
 export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceDto> {
-    private typeParameters: ApiTypeParameter[];
+    private typeParameters: ApiTypeParameter[] | undefined;
 
     public get TypeParameters(): ApiTypeParameter[] {
         if (this.typeParameters == null) {
@@ -17,7 +17,7 @@ export class ApiInterface extends ApiDefinitionContainer<Contracts.ApiInterfaceD
         return this.typeParameters;
     }
 
-    private extends: ApiTypes[];
+    private extends: ApiTypes[] | undefined;
 
     public get Extends(): ApiTypes[] {
         if (this.extends == null) {
