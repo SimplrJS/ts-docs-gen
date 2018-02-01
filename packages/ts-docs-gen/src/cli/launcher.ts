@@ -48,7 +48,7 @@ import { Helpers } from "../utils/helpers";
 
     const generator = new Generator(await builder.Build(entryFile));
     if (dryRun) {
-        Logger.Trace(generator.OutputData);
+        Logger.Debug(generator.OutputData);
     } else {
         await generator.WriteToFiles();
     }
