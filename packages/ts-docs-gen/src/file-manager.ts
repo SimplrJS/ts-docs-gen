@@ -159,12 +159,15 @@ export class FileManager {
 
             // Plugin result.
             let pluginResult = item.Result;
-            item.UsedReferences.forEach(referenceId => {
+            for (const referenceId of item.UsedReferences) {
                 const filePath = path.dirname(fileLocation);
 
                 const referenceString = this.resolveReferenceFile(referenceId);
                 // referenceString is not falsy.
-                if (referenceString && generatedReferences.indexOf(referenceId) === -1) {
+                if (referenceString) {
+                    if (generatedReferences.indexOf(referenceId) !== -1) {
+                        continue;
+                    }
                     const resolvePath = GeneratorHelpers.StandardizePath(path.relative(filePath, referenceString));
 
                     linkDefinitions.push(
@@ -182,7 +185,7 @@ export class FileManager {
                         "Declaration is used as type and not exported in entry files."
                     );
                 }
-            });
+            }
 
             files.push({
                 FileLocation: GeneratorHelpers.StandardizePath(fileLocation),
