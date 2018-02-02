@@ -1,5 +1,6 @@
 import * as ts from "typescript";
 import * as path from "path";
+import * as fs from "fs-extra";
 import { Extractor, GetCompilerOptions, Contracts } from "ts-extractor";
 import { ApiHelpers } from "ts-extractor/dist/internal";
 
@@ -133,12 +134,18 @@ export class GeneratorConfigurationBuilder {
             Verbosity: this.configuration.verbosity
         });
 
+        const extractedData = extractor.Extract(entryFiles);
+        // extractorOutput
+        if (this.configuration.extractorOutput) {
+            await fs.writeJson(this.configuration.extractorOutput, extractedData, { spaces: 4 });
+        }
+
         // Output directory
         const outputDirectory = this.configuration.outputDirectory || path.join(this.resolveProjectDirectory(), "/docs/");
 
         return {
             PluginManager: pluginManager,
-            ExtractedData: extractor.Extract(entryFiles),
+            ExtractedData: extractedData,
             OutputDirectory: outputDirectory
         };
     }

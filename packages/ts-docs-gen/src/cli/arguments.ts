@@ -12,6 +12,7 @@ export interface CliFlags {
     excludePrivateApi?: boolean;
     verbosity?: string;
     dryRun?: boolean;
+    extractorOutput?: boolean;
 }
 
 export type CliArguments = CliFlags & yargs.Arguments;
@@ -72,5 +73,9 @@ export const ArgsHandler = yargs
     .option(flagName("dryRun"), {
         describe: "Generates markdown files but not writes them.",
         type: "boolean"
+    })
+    .option(flagName("extractorOutput"), {
+        describe: "Creates json from `ts-extractor` for debugging.",
+        type: "string"
     })
     .argv as CliArguments;

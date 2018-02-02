@@ -28,4 +28,8 @@ export interface WorkingGeneratorConfiguration {
      */
     excludePrivateApi: boolean;
     verbosity: LogLevel;
+    /**
+     * File location to write `ts-extractor` extracted data. For debugging.
+     */
+    extractorOutput: string;
 }
