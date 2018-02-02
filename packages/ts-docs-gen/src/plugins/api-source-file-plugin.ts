@@ -13,6 +13,17 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
 
     public static readonly MemberKindsList: ContainerMembersKindsGroup[] = [
         {
+            Heading: "Classes",
+            Kinds: [GeneratorHelpers.ApiDefinitionKind.Class]
+        },
+        {
+            Heading: "Namespaces",
+            Kinds: [
+                GeneratorHelpers.ApiDefinitionKind.Namespace,
+                GeneratorHelpers.ApiDefinitionKind.ImportNamespace
+            ]
+        },
+        {
             Heading: "Functions",
             Kinds: [GeneratorHelpers.ApiDefinitionKind.Function]
         },
@@ -27,17 +38,6 @@ export class ApiSourceFilePlugin extends ContainerPlugin<Contracts.ApiSourceFile
         {
             Heading: "Enums",
             Kinds: [GeneratorHelpers.ApiDefinitionKind.Enum]
-        },
-        {
-            Heading: "Classes",
-            Kinds: [GeneratorHelpers.ApiDefinitionKind.Class]
-        },
-        {
-            Heading: "Namespaces",
-            Kinds: [
-                GeneratorHelpers.ApiDefinitionKind.Namespace,
-                GeneratorHelpers.ApiDefinitionKind.ImportNamespace
-            ]
         },
         {
             Heading: "Variables",
