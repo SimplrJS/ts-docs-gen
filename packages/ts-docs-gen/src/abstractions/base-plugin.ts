@@ -40,7 +40,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseDefinition = Con
         if (deprecated != null) {
             const message = Boolean(deprecated.text) ? `: ${deprecated.text}` : "";
             builder
-                .Text(`Deprecated${message}!</span>`)
+                .Text(`Deprecated${message}!`)
                 .EmptyLine();
         }
 
