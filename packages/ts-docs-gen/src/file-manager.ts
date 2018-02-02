@@ -154,6 +154,9 @@ export class FileManager {
 
             // Link definitions to file location.
             const linkDefinitions: string[] = [];
+            // Generated references
+            const generatedReferences: string[] = [];
+
             // Plugin result.
             let pluginResult = item.Result;
             item.UsedReferences.forEach(referenceId => {
@@ -161,12 +164,13 @@ export class FileManager {
 
                 const referenceString = this.resolveReferenceFile(referenceId);
                 // referenceString is not falsy.
-                if (referenceString) {
+                if (referenceString && generatedReferences.indexOf(referenceId) === -1) {
                     const resolvePath = GeneratorHelpers.StandardizePath(path.relative(filePath, referenceString));
 
                     linkDefinitions.push(
                         MarkdownGenerator.LinkDefinition(referenceId, resolvePath)
                     );
+                    generatedReferences.push(referenceId);
                 } else {
                     // Removes broken links.
                     pluginResult = this.removeBrokenLinks(pluginResult, referenceId);
