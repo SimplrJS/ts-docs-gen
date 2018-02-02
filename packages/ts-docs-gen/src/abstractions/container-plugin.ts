@@ -74,11 +74,18 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
 
                 for (const member of MembersList) {
                     if (pluginOptions.IsPluginResultExists(member.Reference)) {
-                        const headingLink = MarkdownGenerator.Link(member.ToHeadingText(), member.Reference.Id, true);
+                        const heading = member.ToHeadingText();
+                        const headingLink = MarkdownGenerator.Link(heading, member.Reference.Id, true);
 
                         builder
                             .Text(md => md.Header(headingLink, resolvedOptions.StartingHeadingLevel + 1))
                             .EmptyLine();
+                        // References and Headings.
+                        pluginResultData.Headings.push({
+                            ApiItemId: member.Reference.Id,
+                            Heading: heading
+                        });
+                        pluginResultData.UsedReferences.push(member.Reference.Id);
                     } else {
                         switch (member.ApiItem.ApiKind) {
                             case Contracts.ApiDefinitionKind.Namespace:
@@ -90,12 +97,18 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                                     PluginResult: renderedItem
                                 });
 
-                                const headingLink = MarkdownGenerator.Link(member.ToHeadingText(), member.Reference.Id, true);
+                                const heading = member.ToHeadingText();
+                                const headingLink = MarkdownGenerator.Link(heading, member.Reference.Id, true);
                                 builder
                                     .Text(md => md.Header(headingLink, resolvedOptions.StartingHeadingLevel + 1))
                                     .EmptyLine()
                                     .Text(this.RenderApiItemMetadata(renderedItem.ApiItem))
                                     .EmptyLine();
+                                // References and Headings.
+                                pluginResultData.Headings.push({
+                                    ApiItemId: member.Reference.Id,
+                                    Heading: heading
+                                });
                                 pluginResultData.UsedReferences.push(member.Reference.Id);
                                 break;
                             }
@@ -104,7 +117,7 @@ export abstract class ContainerPlugin<TKind extends ApiContainer> extends BasePl
                                 builder
                                     .Text(renderedItem.Result)
                                     .EmptyLine();
-
+                                // References and Headings.
                                 GeneratorHelpers.MergePluginResultData(pluginResultData, {
                                     Headings: renderedItem.Headings,
                                     UsedReferences: renderedItem.UsedReferences
