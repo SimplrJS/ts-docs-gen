@@ -92,7 +92,8 @@ export namespace GeneratorHelpers {
         Beta = "beta",
         Deprecated = "deprecated",
         Internal = "internal",
-        Summary = "summary"
+        Summary = "summary",
+        Example = "example"
     }
 
     export const MARKDOWN_EXT = ".md";

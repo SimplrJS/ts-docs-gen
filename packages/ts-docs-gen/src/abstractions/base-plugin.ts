@@ -29,6 +29,7 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseDefinition = Con
         const internal = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Internal);
         const summary = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Summary);
         const jSDocComment = apiItem.Metadata.DocumentationComment;
+        const example = apiItem.Metadata.JSDocTags.find(x => x.name.toLowerCase() === GeneratorHelpers.JSDocTags.Example);
 
         if (beta != null) {
             const message = Boolean(beta.text) ? `: ${beta.text}` : "";
@@ -54,6 +55,14 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseDefinition = Con
         if (jSDocComment.length > 0) {
             builder
                 .Text(jSDocComment)
+                .EmptyLine();
+        }
+
+        if (example != null) {
+            const message = Boolean(example.text) ? `${example.text}` : "";
+            builder
+                .Bold("Example")
+                .Code(message, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
                 .EmptyLine();
         }
 
