@@ -13,6 +13,7 @@
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "noUnusedLocals": true,
+        "newLine": "LF",
         "lib": [
             "es6",
             "es2017.object"
