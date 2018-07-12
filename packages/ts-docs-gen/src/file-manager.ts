@@ -147,7 +147,7 @@ export class FileManager {
         }
     }
 
-    public ToFilesOutput(): FileResult[] {
+    public ToFilesOutput(skipTableOfContents: boolean): FileResult[] {
         const files: FileResult[] = [];
 
         for (const [fileLocation, item] of this.filesList) {
@@ -180,10 +180,12 @@ export class FileManager {
                 }
             });
 
+            const tabelOfContents = skipTableOfContents ? [] : this.renderTableOfContents(item);
+
             files.push({
                 FileLocation: GeneratorHelpers.StandardizePath(fileLocation),
                 Result: [
-                    ...this.renderTableOfContents(item),
+                    ...tabelOfContents,
                     ...pluginResult,
                     ...linkDefinitions
                 ]

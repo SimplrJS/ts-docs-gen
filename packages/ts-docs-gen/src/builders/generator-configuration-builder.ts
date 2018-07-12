@@ -136,10 +136,14 @@ export class GeneratorConfigurationBuilder {
         // Output directory
         const outputDirectory = this.configuration.outputDirectory || path.join(this.resolveProjectDirectory(), "/docs/");
 
+        // need table of contents
+        const skipTableOfContents = this.configuration.skipTableOfContents ? true : false;
+
         return {
             PluginManager: pluginManager,
             ExtractedData: extractor.Extract(entryFiles),
-            OutputDirectory: outputDirectory
+            OutputDirectory: outputDirectory,
+            SkipTableOfContents: skipTableOfContents
         };
     }
 }

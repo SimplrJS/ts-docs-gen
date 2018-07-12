@@ -26,7 +26,7 @@ export class Generator {
             this.fileManager.AddEntryFile(pluginResult);
         }
 
-        this.outputData = this.fileManager.ToFilesOutput();
+        this.outputData = this.fileManager.ToFilesOutput(configuration.SkipTableOfContents);
     }
 
     private pluginResultRegistry: ApiItemReferenceRegistry<PluginResult>;

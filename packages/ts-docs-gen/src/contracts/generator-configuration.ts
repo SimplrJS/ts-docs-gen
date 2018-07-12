@@ -8,6 +8,7 @@ export interface GeneratorConfiguration {
     OutputDirectory: string;
     PluginManager: PluginRegistry;
     ExtractedData: ExtractDto;
+    SkipTableOfContents: boolean;
 }
 
 export interface WorkingGeneratorConfiguration {
@@ -28,4 +29,8 @@ export interface WorkingGeneratorConfiguration {
      */
     excludePrivateApi: boolean;
     verbosity: LogLevel;
+    /**
+     * Don't create table of contents
+     */
+    skipTableOfContents: boolean;
 }

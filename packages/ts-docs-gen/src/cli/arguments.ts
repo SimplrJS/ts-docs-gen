@@ -12,6 +12,7 @@ export interface CliFlags {
     excludePrivateApi?: boolean;
     verbosity?: string;
     dryRun?: boolean;
+    skipTableOfContents?: boolean;
 }
 
 export type CliArguments = CliFlags & yargs.Arguments;
@@ -71,6 +72,10 @@ export const ArgsHandler = yargs
     })
     .option(flagName("dryRun"), {
         describe: "Generates markdown files but not writes them.",
+        type: "boolean"
+    })
+    .option(flagName("skipTableOfContents"), {
+        describe: "Don't create table of contents.",
         type: "boolean"
     })
     .argv as CliArguments;
