@@ -134,7 +134,7 @@ export class GeneratorConfigurationBuilder {
         });
 
         // Output directory
-        const outputDirectory = this.configuration.outputDirectory || path.join(this.resolveProjectDirectory(), "/docs/");
+        const outputDirectory = this.configuration.outputDirectory || path.join(this.resolveProjectDirectory(), "/docs/api/");
 
         // need table of contents
         const skipTableOfContents = this.configuration.skipTableOfContents ? true : false;

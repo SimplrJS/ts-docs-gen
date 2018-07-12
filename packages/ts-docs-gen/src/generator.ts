@@ -39,7 +39,7 @@ export class Generator {
 
     public async WriteToFiles(): Promise<void> {
         for (const item of this.outputData) {
-            const fullLocation = path.join(this.configuration.OutputDirectory, "api", item.FileLocation);
+            const fullLocation = path.join(this.configuration.OutputDirectory, item.FileLocation);
             Logger.Debug(`${fullLocation}: Writing to file.`);
 
             try {
