@@ -104,6 +104,9 @@ export namespace GeneratorHelpers {
     export const DEFAULT_CODE_OPTIONS = {
         lang: "typescript"
     };
+    export const HTML_CODE_OPTIONS = {
+        lang: "html"
+    };
 
     export const DEFAULT_TABLE_OPTIONS: MarkdownContracts.TableOptions = {
         removeColumnIfEmpty: true,

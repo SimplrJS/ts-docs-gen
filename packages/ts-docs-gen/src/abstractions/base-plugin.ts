@@ -60,9 +60,11 @@ export abstract class BasePlugin<TKind extends Contracts.ApiBaseDefinition = Con
 
         if (example != null) {
             const message = Boolean(example.text) ? `${example.text}` : "";
+            const isHTML = message.match("<(\\w+)( +.+)*>((.*))</\\1>");
+            const codeOption = isHTML ? GeneratorHelpers.HTML_CODE_OPTIONS : GeneratorHelpers.DEFAULT_CODE_OPTIONS;
             builder
                 .Bold("Example")
-                .Code(message, GeneratorHelpers.DEFAULT_CODE_OPTIONS)
+                .Code(message, codeOption)
                 .EmptyLine();
         }
 
