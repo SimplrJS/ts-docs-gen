@@ -1,6 +1,6 @@
 {
-    "name": "ts-docs-gen",
-    "version": "0.2.0",
+    "name": "@inova/ts-docs-gen",
+    "version": "0.2.1",
     "description": "Generating documentation for TypeScript code",
     "main": "./dist/index.js",
     "typings": "./dist/index.d.ts",
@@ -19,6 +19,7 @@
         "Martynas Žilinskas <martynas@quatrodev.com> (https://github.com/MartynasZilinskas)",
         "Deividas Bakanas <deividas@quatrodev.com> (https://github.com/DeividasBakanas)"
     ],
+    "private": false,
     "repository": {
         "type": "git",
         "url": "https://github.com/SimplrJS/ts-docs-gen"
